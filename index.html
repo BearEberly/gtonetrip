@@ -12,7 +12,7 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=7">
+    <link rel="stylesheet" href="styles.css?v=8">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -54,17 +54,6 @@
           </button>
         </nav>
 
-        <div class="profile-card is-hidden" id="profileCard">
-          <div>
-            <strong id="profileName">Signed in</strong>
-            <span id="profileMeta">Profile active</span>
-          </div>
-          <div class="profile-actions">
-            <button type="button" id="setupPasskey">Passkey</button>
-            <button type="button" id="logoutProfile">Sign out</button>
-          </div>
-        </div>
-
         <div class="sidebar-card">
           <span class="dot"></span>
           <div>
@@ -75,15 +64,17 @@
       </aside>
 
       <main class="main">
+        <div class="app-topbar">
+          <div class="app-session is-hidden" id="appSessionBar" aria-live="polite">
+            <span id="appSessionLabel">Logged in as Bear</span>
+            <button type="button" id="logoutProfile">Sign out</button>
+          </div>
+        </div>
+
         <section class="hero" id="dashboard" data-panel="dashboard">
           <div class="hero-media">
             <img src="assets/cabin-hero.png" alt="Mountain lake cabin in Arnold, California">
             <div class="hero-shade"></div>
-            <div class="hero-actions">
-              <div class="hero-user is-hidden" id="heroUserBadge" aria-live="polite">
-                <span id="heroUserName">Signed in</span>
-              </div>
-            </div>
             <div class="hero-copy">
               <h1>4th of July 2026</h1>
               <p>July 1 - 6, 2026</p>
@@ -159,7 +150,6 @@
           <div class="panel-heading">
             <div>
               <h1>Logistics</h1>
-              <p>Your login stays tied to your family. This page is only for your arrival and leaving timing.</p>
             </div>
           </div>
 
@@ -167,8 +157,7 @@
             <section class="board-panel">
               <div class="section-heading">
                 <div>
-                  <h2>Your timing</h2>
-                  <p>Your login and family are shown here, along with the timing currently on the calendar.</p>
+                  <h2>Family</h2>
                 </div>
               </div>
               <div class="bringing-groups" id="logisticsFamilyList"></div>
@@ -178,7 +167,6 @@
               <div class="section-heading">
                 <div>
                   <h2>Update timing</h2>
-                  <p>Change these any time. The calendar updates right away.</p>
                 </div>
               </div>
               <div class="question-list" id="logisticsPromptList"></div>
@@ -257,17 +245,6 @@
           <div class="activity-grid" id="activityGrid"></div>
         </section>
       </main>
-
-      <div class="mobile-profile-card is-hidden" id="mobileProfileCard" aria-live="polite">
-        <div>
-          <strong id="mobileProfileName">Signed in</strong>
-          <span id="mobileProfileMeta">Profile active</span>
-        </div>
-        <div class="mobile-profile-actions">
-          <button type="button" id="mobileSetupPasskey">Passkey</button>
-          <button type="button" id="mobileLogoutProfile">Sign out</button>
-        </div>
-      </div>
 
       <nav class="mobile-nav" aria-label="Mobile primary">
         <button class="mobile-nav-item is-active" type="button" data-tab="dashboard">
@@ -498,6 +475,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=11"></script>
+    <script src="script.js?v=12"></script>
   </body>
 </html>

@@ -22,7 +22,7 @@ const icons = {
 const families = [
   { id: "shell", name: "Shell", shortName: "Shell", color: "#d9512b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
   { id: "nick", name: "G6", shortName: "G6", color: "#b37224", status: "Needs timing", details: "Nick, Marissa, Luca, Sophia, Rocco, Gio" },
-  { id: "bear", name: "Jera", shortName: "Jera", color: "#5a9f3c", status: "Needs timing", details: "Bear and Jessica" },
+  { id: "bear", name: "Jear", shortName: "Jear", color: "#5a9f3c", status: "Needs timing", details: "Bear and Jessica" },
   { id: "nat", name: "Riggs", shortName: "Riggs", color: "#167fa6", status: "Needs timing", details: "Andy, Natalie, Oli, Viv" }
 ];
 
@@ -30,8 +30,8 @@ const attendees = [
   { id: "shell", name: "Shell", firstName: "Shell", familyId: "shell", note: "Michelle" },
   { id: "nick", name: "Nick", firstName: "Nick", familyId: "nick", note: "G6" },
   { id: "marissa", name: "Marissa", firstName: "Marissa", familyId: "nick", note: "G6" },
-  { id: "bear", name: "Bear", firstName: "Bear", familyId: "bear", note: "Jera" },
-  { id: "jessica", name: "Jessica", firstName: "Jessica", familyId: "bear", note: "Jera" },
+  { id: "bear", name: "Bear", firstName: "Bear", familyId: "bear", note: "Jear" },
+  { id: "jessica", name: "Jessica", firstName: "Jessica", familyId: "bear", note: "Jear" },
   { id: "andy", name: "Andy", firstName: "Andy", familyId: "nat", note: "Riggs" },
   { id: "natalie", name: "Natalie", firstName: "Natalie", familyId: "nat", note: "Riggs" }
 ];
@@ -60,12 +60,12 @@ const defaultSupplies = [
   { id: "orange-juice", name: "Orange juice", notes: "Breakfast drink.", type: "drink", owner: "nick", mealType: "breakfast", days: ["fri", "sat", "sun"] },
   { id: "smores", name: "S'mores ingredients", notes: "G6 has marshmallows, grahams, and chocolate.", type: "food", owner: "nick", mealType: "dessert", days: ["fri", "sat"] },
   { id: "bacon", name: "Bacon", notes: "Double pack.", type: "food", owner: "nick", mealType: "breakfast", days: ["fri", "sat"] },
-  { id: "eggs", name: "Eggs", notes: "Jera shared eggs.", type: "food", owner: "bear", mealType: "breakfast", days: ["fri", "sat", "sun"] },
-  { id: "steaks", name: "Steaks", notes: "Jera is covering Friday dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["fri"] },
-  { id: "other-meats", name: "Other meats", notes: "Jera may bring extra meat for another dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["sun"] },
-  { id: "hot-dogs-buns", name: "Hot dogs and buns", notes: "Jera is covering the July 4 cookout.", type: "food", owner: "bear", mealType: "dinner", days: ["sat"] },
+  { id: "eggs", name: "Eggs", notes: "Jear shared eggs.", type: "food", owner: "bear", mealType: "breakfast", days: ["fri", "sat", "sun"] },
+  { id: "steaks", name: "Steaks", notes: "Jear is covering Friday dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["fri"] },
+  { id: "other-meats", name: "Other meats", notes: "Jear may bring extra meat for another dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["sun"] },
+  { id: "hot-dogs-buns", name: "Hot dogs and buns", notes: "Jear is covering the July 4 cookout.", type: "food", owner: "bear", mealType: "dinner", days: ["sat"] },
   { id: "blackstone-two-burner", name: "Two-burner Blackstone", notes: "Bear can bring the smaller Blackstone.", type: "gear", owner: "bear", mealType: "any", days: ["fri", "sat", "sun"] },
-  { id: "cranium", name: "Cranium", notes: "Board game from Jera.", type: "gear", owner: "bear", mealType: "any", days: ["fri", "sat", "sun"] },
+  { id: "cranium", name: "Cranium", notes: "Board game from Jear.", type: "gear", owner: "bear", mealType: "any", days: ["fri", "sat", "sun"] },
   { id: "charades", name: "Charades", notes: "Riggs wants to bring charades.", type: "gear", owner: "nat", mealType: "any", days: ["fri", "sat", "sun"] }
 ];
 
@@ -286,7 +286,7 @@ const activities = [
 const defaultLogistics = {
   shell: { arrival: "Wednesday afternoon", leaving: "Monday morning", note: "Shell arrives first." },
   nick: { arrival: "Thursday afternoon", leaving: "Monday morning", note: "Nick and Marissa arrive Thursday." },
-  bear: { arrival: "Friday", leaving: "Monday morning", note: "Bear and Jessica arrive Friday." },
+  bear: { arrival: "Friday afternoon", leaving: "Monday morning", note: "Bear and Jessica arrive Friday afternoon." },
   nat: { arrival: "Friday", leaving: "Monday morning", note: "Andy and Natalie arrive Friday." }
 };
 
@@ -608,34 +608,14 @@ function applyProfile(user) {
 }
 
 function renderProfile() {
-  const card = document.querySelector("#profileCard");
-  const mobileCard = document.querySelector("#mobileProfileCard");
-  const name = document.querySelector("#profileName");
-  const mobileName = document.querySelector("#mobileProfileName");
-  const meta = document.querySelector("#profileMeta");
-  const mobileMeta = document.querySelector("#mobileProfileMeta");
-  const heroUserBadge = document.querySelector("#heroUserBadge");
-  const heroUserName = document.querySelector("#heroUserName");
-  const setupButton = document.querySelector("#setupPasskey");
-  const mobileSetupButton = document.querySelector("#mobileSetupPasskey");
+  const sessionBar = document.querySelector("#appSessionBar");
+  const sessionLabel = document.querySelector("#appSessionLabel");
   if (!api.user) {
-    card?.classList.add("is-hidden");
-    mobileCard?.classList.add("is-hidden");
-    heroUserBadge?.classList.add("is-hidden");
+    sessionBar?.classList.add("is-hidden");
     return;
   }
-  const family = familyById(api.user.familyId);
-  const metaText = family?.name || "Family not set";
-  card?.classList.remove("is-hidden");
-  mobileCard?.classList.remove("is-hidden");
-  heroUserBadge?.classList.remove("is-hidden");
-  if (setupButton) setupButton.hidden = true;
-  if (mobileSetupButton) mobileSetupButton.hidden = true;
-  if (name) name.textContent = api.user.firstName || "Profile";
-  if (mobileName) mobileName.textContent = api.user.firstName || "Profile";
-  if (heroUserName) heroUserName.textContent = api.user.firstName || "Profile";
-  if (meta) meta.textContent = metaText;
-  if (mobileMeta) mobileMeta.textContent = metaText;
+  sessionBar?.classList.remove("is-hidden");
+  if (sessionLabel) sessionLabel.textContent = `Logged in as ${api.user.firstName || "Profile"}`;
 }
 
 function applyTripInfo(info) {
@@ -1269,7 +1249,7 @@ function familyTravelLabel(familyId) {
   const labels = {
     shell: "Shell",
     nick: "G6",
-    bear: "Jera",
+    bear: "Jear",
     nat: "Riggs"
   };
   return labels[familyId] || familyById(familyId)?.name || "Family";
@@ -1522,7 +1502,6 @@ function renderLogistics() {
   const familyList = document.querySelector("#logisticsFamilyList");
   const promptList = document.querySelector("#logisticsPromptList");
   const familyId = activeFamilyId();
-  const signedInName = api.user?.firstName || familyTravelLabel(familyId);
   if (!familyId) {
     if (familyList) {
       familyList.innerHTML = `
@@ -1551,14 +1530,14 @@ function renderLogistics() {
       <section class="bringing-group">
         <header class="bringing-group-header">
           <div>
-            <strong>${escapeText(signedInName)}</strong>
-            <span>Family: ${escapeText(family?.name || "your household")} · This is the only timing this login can edit.</span>
+            <span>Family</span>
+            <strong>${escapeText(family?.name || "Your family")}</strong>
           </div>
           <i class="family-swatch" style="background:${family?.color || "#8aa57b"}" aria-hidden="true"></i>
         </header>
         <article class="bringing-row">
           <div>
-            <strong>Showing up</strong>
+            <strong>Arriving</strong>
             <span>${escapeText(logistics.arrival)}</span>
           </div>
         </article>
@@ -1574,18 +1553,18 @@ function renderLogistics() {
   if (promptList) {
     promptList.innerHTML = `
       <label>
-        <strong>What time are you showing up?</strong>
+        <strong>Arriving</strong>
         <select id="logisticsArrivalSelect">
           ${timingOptionsMarkup(logistics.arrival, arrivalOptions)}
         </select>
       </label>
       <label>
-        <strong>What time are you leaving?</strong>
+        <strong>Leaving</strong>
         <select id="logisticsLeavingSelect">
           ${timingOptionsMarkup(logistics.leaving, leavingOptions)}
         </select>
       </label>
-      <button class="primary-action compact-action" type="button" id="saveLogisticsTiming">Update timing</button>
+      <button class="primary-action compact-action" type="button" id="saveLogisticsTiming">Save timing</button>
     `;
   }
 }
