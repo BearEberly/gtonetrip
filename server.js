@@ -87,6 +87,7 @@ const activityIds = new Set([
   "ebbetts-pass-byway",
   "bear-valley-area"
 ]);
+const allDayCodes = ["wed", "thu", "fri", "sat", "sun", "mon"];
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -183,13 +184,79 @@ function normalizeState(state) {
   return {
     version: Number(state.version || 1),
     updatedAt: state.updatedAt || new Date().toISOString(),
-    meals: Array.isArray(state.meals) ? state.meals : [],
-    supplies: Array.isArray(state.supplies) ? state.supplies : [],
+    meals: Array.isArray(state.meals) ? state.meals.map(normalizeMealRecord).filter(Boolean) : [],
+    supplies: Array.isArray(state.supplies) ? state.supplies.map(normalizeSupplyRecord).filter(Boolean) : [],
     familyChecks: state.familyChecks && typeof state.familyChecks === "object" ? state.familyChecks : {},
     familyResponses: state.familyResponses && typeof state.familyResponses === "object" ? state.familyResponses : {},
     activityVotes: normalizeActivityVotes(state.activityVotes),
     activityVoters: normalizeActivityVoters(state.activityVoters),
     checklists: normalizeChecklists(state.checklists)
+  };
+}
+
+function legacyBringingDefaults(item = {}) {
+  const id = String(item.id || "");
+  const map = {
+    plates: { mealType: "any", days: allDayCodes, type: "table" },
+    napkins: { mealType: "any", days: allDayCodes, type: "table" },
+    smores: { mealType: "dessert", days: ["fri", "sat"], type: "food" },
+    bacon: { mealType: "breakfast", days: ["fri", "sat"], type: "food" },
+    eggs: { mealType: "breakfast", days: ["fri", "sat", "sun"], type: "food" },
+    steaks: { mealType: "dinner", days: ["fri"], type: "food" },
+    "other-meats": { mealType: "dinner", days: ["sun"], type: "food" },
+    "hot-dogs-buns": { mealType: "dinner", days: ["sat"], type: "food" },
+    "blackstone-two-burner": { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" },
+    cranium: { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" },
+    charades: { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" },
+    "sparkling-ice": { mealType: "any", days: ["fri", "sat", "sun"], type: "drink" },
+    "orange-juice": { mealType: "breakfast", days: ["fri", "sat", "sun"], type: "drink" }
+  };
+  const matched = map[id];
+  if (matched) return matched;
+  if (item.type === "gear") return { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" };
+  if (item.type === "cold") return { mealType: "any", days: ["fri", "sat", "sun"], type: "food" };
+  return { mealType: "any", days: [], type: "table" };
+}
+
+function normalizeMealRecord(meal) {
+  if (!meal || typeof meal !== "object") return null;
+  const day = daySafe(meal.day);
+  return {
+    id: textSafe(meal.id) || `meal-${Date.now()}`,
+    day,
+    dayLabel: textSafe(meal.dayLabel, dayLabelFor(day)),
+    type: textSafe(meal.type, "Meal"),
+    time: textSafe(meal.time, "Flexible"),
+    owner: familySafe(meal.owner),
+    idea: textSafe(meal.idea),
+    kids: textSafe(meal.kids),
+    cold: Array.isArray(meal.cold) ? meal.cold.map((item) => textSafe(item)).filter(Boolean).slice(0, 8) : [],
+    custom: Boolean(meal.custom),
+    createdBy: familySafe(meal.createdBy),
+    createdAt: textSafe(meal.createdAt, ""),
+    updatedAt: textSafe(meal.updatedAt, "")
+  };
+}
+
+function normalizeSupplyRecord(item) {
+  if (!item || typeof item !== "object") return null;
+  const legacy = legacyBringingDefaults(item);
+  const owner = familySafe(item.owner);
+  const notes = textSafe(item.notes || item.qty || "", "");
+  return {
+    id: textSafe(item.id) || `supply-${Date.now()}`,
+    name: textSafe(item.name),
+    notes,
+    qty: notes,
+    type: bringingTypeSafe(item.type || legacy.type),
+    owner,
+    mealType: mealTypeSafe(item.mealType || legacy.mealType),
+    days: dayListSafe(item.days, legacy.days),
+    image: imageDataUrlSafe(item.image || item.imageDataUrl || ""),
+    custom: Boolean(item.custom),
+    createdBy: familySafe(item.createdBy) || owner,
+    createdAt: textSafe(item.createdAt, ""),
+    updatedAt: textSafe(item.updatedAt, "")
   };
 }
 
@@ -283,7 +350,7 @@ function sharedStatePayload() {
   };
 }
 
-function readRequestBody(request, maxBytes = 64 * 1024) {
+function readRequestBody(request, maxBytes = 512 * 1024) {
   return new Promise((resolveBody, rejectBody) => {
     let body = "";
     request.on("data", (chunk) => {
@@ -328,6 +395,15 @@ function daySafe(value) {
   return ["wed", "thu", "fri", "sat", "sun", "mon"].includes(value) ? value : "sun";
 }
 
+function dayListSafe(value, fallback = []) {
+  const list = Array.isArray(value) ? value : fallback;
+  const next = [];
+  for (const day of allDayCodes) {
+    if (list.includes(day)) next.push(day);
+  }
+  return next;
+}
+
 function dayLabelFor(day) {
   return {
     wed: "Wed Jul 1",
@@ -339,8 +415,23 @@ function dayLabelFor(day) {
   }[daySafe(day)];
 }
 
-function supplyTypeSafe(value) {
-  return ["dry goods", "cold", "gear"].includes(value) ? value : "dry goods";
+function mealTypeSafe(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  return ["breakfast", "lunch", "dinner", "dessert", "pack-up", "any"].includes(normalized) ? normalized : "any";
+}
+
+function bringingTypeSafe(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (["food", "drink", "gear", "table"].includes(normalized)) return normalized;
+  if (normalized === "dry goods") return "table";
+  if (normalized === "cold") return "food";
+  return "food";
+}
+
+function imageDataUrlSafe(value) {
+  const raw = String(value || "").trim();
+  if (!raw.startsWith("data:image/")) return "";
+  return raw.length <= 400000 ? raw : "";
 }
 
 function isCustomMealId(id) {
@@ -905,6 +996,22 @@ function applyAction(action, actor = null) {
     return { changed: true, message: "Meal idea added." };
   }
 
+  if (action.type === "updateMealPlan") {
+    const meal = next.meals.find((item) => item.id === payload.id);
+    if (!meal) return { changed: false, message: "Meal not found." };
+    const idea = textSafe(payload.idea);
+    if (!idea) return { changed: false, message: "Meal idea is empty." };
+    const day = daySafe(payload.day);
+    meal.day = day;
+    meal.dayLabel = dayLabelFor(day);
+    meal.type = textSafe(payload.type, meal.type || "Meal");
+    meal.idea = idea;
+    meal.kids = textSafe(payload.kids, meal.kids || "");
+    meal.updatedAt = new Date().toISOString();
+    sharedState = next;
+    return { changed: true, message: "Meal updated." };
+  }
+
   if (action.type === "updateMealIdea") {
     const meal = next.meals.find((item) => item.id === payload.id);
     if (!meal || !isCustomMealId(meal.id)) return { changed: false, message: "Only added meal ideas can be edited." };
@@ -938,39 +1045,47 @@ function applyAction(action, actor = null) {
     next.supplies.push({
       id: `supply-${Date.now()}`,
       name,
-      qty: textSafe(payload.qty, "Quantity TBD"),
-      type: supplyTypeSafe(payload.type),
-      owner: "",
+      notes: textSafe(payload.notes),
+      qty: textSafe(payload.notes),
+      type: bringingTypeSafe(payload.type),
+      owner: actorFamilyId,
+      mealType: mealTypeSafe(payload.mealType),
+      days: dayListSafe(payload.days),
+      image: imageDataUrlSafe(payload.image),
       custom: true,
       createdBy: actorFamilyId,
       createdAt: new Date().toISOString()
     });
     sharedState = next;
-    return { changed: true, message: "Supply added." };
+    return { changed: true, message: "Bringing item added." };
   }
 
   if (action.type === "updateSupply") {
     const supply = next.supplies.find((item) => item.id === payload.id);
-    if (!supply || !isCustomSupplyId(supply.id)) return { changed: false, message: "Only added supply items can be edited." };
-    if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only the family that added or owns this supply can edit it." };
+    if (!supply) return { changed: false, message: "Bringing item not found." };
+    if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only your family can edit this bringing item." };
     const name = textSafe(payload.name);
-    if (!name) return { changed: false, message: "Supply item is empty." };
+    if (!name) return { changed: false, message: "Bringing item is empty." };
     supply.name = name;
-    supply.qty = textSafe(payload.qty, "Quantity TBD");
-    supply.type = supplyTypeSafe(payload.type);
+    supply.notes = textSafe(payload.notes);
+    supply.qty = textSafe(payload.notes);
+    supply.type = bringingTypeSafe(payload.type || supply.type);
+    supply.mealType = mealTypeSafe(payload.mealType || supply.mealType);
+    supply.days = dayListSafe(payload.days, supply.days);
+    supply.image = imageDataUrlSafe(payload.image);
     supply.updatedAt = new Date().toISOString();
     sharedState = next;
-    return { changed: true, message: "Supply updated." };
+    return { changed: true, message: "Bringing item updated." };
   }
 
   if (action.type === "deleteSupply") {
     const index = next.supplies.findIndex((item) => item.id === payload.id);
     const supply = index >= 0 ? next.supplies[index] : null;
-    if (!supply || !isCustomSupplyId(supply.id)) return { changed: false, message: "Only added supply items can be deleted." };
-    if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only the family that added or owns this supply can delete it." };
+    if (!supply) return { changed: false, message: "Bringing item not found." };
+    if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only your family can delete this bringing item." };
     next.supplies.splice(index, 1);
     sharedState = next;
-    return { changed: true, message: "Supply deleted." };
+    return { changed: true, message: "Bringing item deleted." };
   }
 
   if (action.type === "reset") {

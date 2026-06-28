@@ -6,16 +6,16 @@
 **Document created:** 2026-06-16  
 **Document purpose:** This file captures, in one place, exactly what has been built so far, what the user has been asking for, what the app is supposed to become, how the current implementation behaves, what has been verified, and what remains unfinished or risky.
 
-## Current Update - June 27, 2026
+## Current Update - June 28, 2026
 
-The user's preferred direction is now a normal public website URL, not an App Store app and not a Mac-hosted LAN-only app.
+The user's preferred direction remains a normal public website URL, but the backend architecture has changed.
 
 Current implementation status:
 
-- The app remains a small Node web service that serves the static app shell and owns the shared board APIs.
-- The app is ready to deploy as a public website/PWA using `render.yaml`.
-- Static-only hosting is not enough because shared edits require `/api/state`, `/api/action`, `/api/events`, persistent JSON state, and server-side profile/session logic.
-- Public static serving is restricted to the app shell and assets; `/data/*`, source files, Markdown docs, and server files are not public static files.
+- The app frontend is now intended to be served as a static site from Cloudflare Pages.
+- Shared board APIs now live in a Supabase Edge Function named `trip-api`.
+- Shared board state and simple session tokens are stored in Supabase Postgres.
+- Static-only hosting is now sufficient for the frontend because the shared backend moved out of the repo server and into Supabase.
 - The exact cabin address is not hardcoded in the public HTML shell. It is hidden behind sign-in-oriented copy.
 - The public app uses a profile login layer: trip invite code, tap-your-name attendee picker, first name, email, family/household, optional password, and optional Apple passkey / Face ID / Touch ID.
 - The attendee picker includes Michelle/Shell, Nick, Marissa, Luca, Sophia, Rocco, Gio, Bear, Jessica, Andy, Natalie, Oli, and Viv. Picking a person pre-fills first name and household.

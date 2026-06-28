@@ -4,18 +4,18 @@
 
 **Last captured:** 2026-06-27
 
-## Current Update - June 27, 2026
+## Current Update - June 28, 2026
 
-The app has moved from a LAN-first prototype toward a public website/PWA deployment model.
+The app has now moved off the local JSON/Node backend as the primary shared backend.
 
 Current public-URL expectations:
 
-- The app is still a small Node server plus static HTML/CSS/JS.
-- It should be hosted on a managed Node host with persistent storage, not static-only hosting.
-- `render.yaml` defines a Render web service with a persistent disk mounted at `/var/data`.
-- `NODE_ENV=production` with no `APP_PASSCODE` fails closed; API access requires an invite code.
-- Private shared trip data is served through API routes only. Static serving is restricted to the app shell and assets.
-- `/data/*`, source files, Markdown docs, and server files are not served publicly.
+- The frontend is a static HTML/CSS/JS site.
+- The intended production host is Cloudflare Pages.
+- Shared login and trip updates now flow through a Supabase Edge Function named `trip-api`.
+- Shared state and simple sessions are stored in Supabase Postgres.
+- `app-config.js` points the frontend at the Supabase project and publishable key.
+- The older Node server remains useful as a local static preview server and legacy fallback, but it is no longer the intended production backend.
 
 Current profile/auth model:
 

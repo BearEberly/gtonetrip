@@ -1188,6 +1188,41 @@ svg {
   background: var(--surface);
 }
 
+.bringing-row-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.bringing-row-main > div {
+  min-width: 0;
+}
+
+.bringing-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.bringing-thumb {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.bringing-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
 .bringing-row-empty {
   grid-template-columns: 1fr;
 }
@@ -1303,8 +1338,8 @@ svg {
 
 .meal-row {
   display: grid;
-  grid-template-columns: 30px minmax(90px, 1fr) 1fr auto;
-  align-items: center;
+  grid-template-columns: minmax(180px, 0.8fr) 1fr;
+  align-items: start;
   gap: 12px;
   padding: 12px 0;
   border-top: 1px solid var(--line);
@@ -2077,6 +2112,24 @@ svg {
   padding: 4px 22px 22px;
 }
 
+.item-image-preview {
+  display: grid;
+  gap: 12px;
+}
+
+.item-image-preview.is-hidden {
+  display: none;
+}
+
+.item-image-preview img {
+  width: 100%;
+  max-width: 220px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  object-fit: cover;
+}
+
 .form-step {
   flex: 1;
   padding: 24px 22px;
@@ -2145,6 +2198,43 @@ svg {
   color: var(--forest-900);
   font-size: 0.88rem;
   font-weight: 700;
+}
+
+.day-picker {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.day-picker legend {
+  padding: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.day-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.day-chip {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.day-chip.is-selected {
+  border-color: var(--forest-700);
+  background: #eef8ef;
+  color: var(--forest-800);
 }
 
 select,
