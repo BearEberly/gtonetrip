@@ -108,15 +108,16 @@
         <section class="content-panel is-hidden" id="checkin" data-panel="checkin">
           <div class="panel-heading">
             <div>
-              <h1>Who&apos;s Bringing What</h1>
-              <p>See what each household already has covered, plus your own claims in one place.</p>
+              <h1>What am I bringing?</h1>
+              <p>See what each household already has covered, plus your own items in one place.</p>
             </div>
+            <button class="primary-action compact-action" type="button" id="addSupply">Add what I&apos;m bringing</button>
           </div>
           <section class="board-panel">
             <div class="section-heading">
               <div>
-                <h2>My claims</h2>
-                <p>Anything your signed-in household has already claimed.</p>
+                <h2>My items</h2>
+                <p>Add what you&apos;re bringing, what meal it supports, and the days it can be used.</p>
               </div>
             </div>
             <div class="bringing-list" id="myClaimsList"></div>
@@ -125,7 +126,7 @@
             <div class="section-heading">
               <div>
                 <h2>By household</h2>
-                <p>Quick scan of what everyone else is already bringing.</p>
+                <p>Quick scan of what the other households have already added.</p>
               </div>
             </div>
             <div class="bringing-groups" id="bringingByFamily"></div>
@@ -136,16 +137,16 @@
           <div class="panel-heading">
             <div>
               <h1>Meals</h1>
-              <p>Family owners, meal ideas, kid backups, and cold ingredients in one view.</p>
+              <p>Tap a meal to set the recipe. Items from Bringing show up here automatically by meal and day.</p>
             </div>
-            <button class="primary-action compact-action" type="button" id="addMealIdea">Add meal idea</button>
+            <button class="primary-action compact-action" type="button" id="addMealIdea">Add meal slot</button>
           </div>
 
           <section class="board-panel open-meals-panel">
             <div class="section-heading">
               <div>
-                <h2>Open meals</h2>
-                <p>Claim one before adding more ideas.</p>
+                <h2>Meals to finish</h2>
+                <p>These are the meal slots that still need a clearer recipe or plan.</p>
               </div>
             </div>
             <div class="needed-list" id="openMealList"></div>
@@ -158,9 +159,8 @@
           <div class="panel-heading">
             <div>
               <h1>Logistics</h1>
-              <p>Your arrival and departure timing for the trip.</p>
+              <p>Your login stays tied to your family. This page is only for your arrival and leaving timing.</p>
             </div>
-            <button class="primary-action compact-action" type="button" id="openCheckin">Open full check-in</button>
           </div>
 
           <div class="two-column">
@@ -168,7 +168,7 @@
               <div class="section-heading">
                 <div>
                   <h2>Your timing</h2>
-                  <p>This is what your household currently shows on the calendar.</p>
+                  <p>Your login and family are shown here, along with the timing currently on the calendar.</p>
                 </div>
               </div>
               <div class="bringing-groups" id="logisticsFamilyList"></div>
@@ -178,7 +178,7 @@
               <div class="section-heading">
                 <div>
                   <h2>Update timing</h2>
-                  <p>Answer these two questions and the calendar updates.</p>
+                  <p>Change these any time. The calendar updates right away.</p>
                 </div>
               </div>
               <div class="question-list" id="logisticsPromptList"></div>
@@ -199,7 +199,7 @@
             <div class="section-heading">
               <div>
                 <h2>Extra views</h2>
-                <p>Open the detailed supply board or nearby reference list when you need them.</p>
+                <p>Jump back to bringing items or the nearby reference list when you need them.</p>
               </div>
             </div>
               <div class="trip-status">
@@ -410,21 +410,43 @@
 
         <section class="item-form-section is-hidden" data-item-section="supply">
           <label>
-            Item
-            <input id="supplyName" type="text" placeholder="Cups, ice, paper towels">
+            What are you bringing?
+            <input id="supplyName" type="text" placeholder="Eggs, bacon, sausage, drinks">
           </label>
           <label>
-            Amount
-            <input id="supplyQty" type="text" placeholder="Need 100, buy near cabin">
+            Notes
+            <input id="supplyQty" type="text" placeholder="Two dozen, one cooler, enough for everyone">
           </label>
           <label>
-            Type
-            <select id="supplyType">
-              <option value="dry goods">Dry goods</option>
-              <option value="cold">Cold</option>
-              <option value="gear">Gear</option>
+            Picture (optional)
+            <input id="supplyImage" type="file" accept="image/*">
+          </label>
+          <div class="item-image-preview is-hidden" id="supplyImagePreviewWrap">
+            <img id="supplyImagePreview" alt="Preview of what you are bringing">
+            <button class="secondary-action compact-action" type="button" id="clearSupplyImage">Remove picture</button>
+          </div>
+          <label>
+            What is it for?
+            <select id="supplyMealType">
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+              <option value="dessert">Dessert / Snacks</option>
+              <option value="pack-up">Pack-up</option>
+              <option value="any">Any meal / shared</option>
             </select>
           </label>
+          <fieldset class="day-picker">
+            <legend>Tap the days this can be used</legend>
+            <div class="day-chip-grid" id="supplyDayPicker">
+              <button type="button" class="day-chip" data-supply-day="wed">Wed</button>
+              <button type="button" class="day-chip" data-supply-day="thu">Thu</button>
+              <button type="button" class="day-chip" data-supply-day="fri">Fri</button>
+              <button type="button" class="day-chip" data-supply-day="sat">Sat</button>
+              <button type="button" class="day-chip" data-supply-day="sun">Sun</button>
+              <button type="button" class="day-chip" data-supply-day="mon">Mon</button>
+            </div>
+          </fieldset>
         </section>
 
         <div class="drawer-footer">
@@ -475,6 +497,7 @@
     </template>
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
-    <script src="script.js?v=10"></script>
+    <script src="app-config.js"></script>
+    <script src="script.js?v=11"></script>
   </body>
 </html>

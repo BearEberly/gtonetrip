@@ -20,18 +20,18 @@ const icons = {
 };
 
 const families = [
-  { id: "shell", name: "Michelle / Shell", shortName: "Shell", color: "#d9512b", status: "Needs check-in", details: "Arrives Wednesday · mom / grandmother" },
-  { id: "nick", name: "Nick & Marissa", shortName: "Nick", color: "#b37224", status: "Partial", details: "G6 · arrive Thursday · Luca, Sophia, Rocco, Gio" },
-  { id: "nat", name: "Natalie & Andy", shortName: "Nat", color: "#167fa6", status: "Partial", details: "Riggs · arrive Friday · Oli and Viv" },
-  { id: "bear", name: "Bear & Jessica", shortName: "Bear", color: "#5a9f3c", status: "Checked in", details: "Jear / Jer · arrive Friday · Bear is B-E-A-R" }
+  { id: "shell", name: "Shell", shortName: "Shell", color: "#d9512b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
+  { id: "nick", name: "G6", shortName: "G6", color: "#b37224", status: "Needs timing", details: "Nick, Marissa, Luca, Sophia, Rocco, Gio" },
+  { id: "bear", name: "Jera", shortName: "Jera", color: "#5a9f3c", status: "Needs timing", details: "Bear and Jessica" },
+  { id: "nat", name: "Riggs", shortName: "Riggs", color: "#167fa6", status: "Needs timing", details: "Andy, Natalie, Oli, Viv" }
 ];
 
 const attendees = [
   { id: "shell", name: "Shell", firstName: "Shell", familyId: "shell", note: "Michelle" },
   { id: "nick", name: "Nick", firstName: "Nick", familyId: "nick", note: "G6" },
   { id: "marissa", name: "Marissa", firstName: "Marissa", familyId: "nick", note: "G6" },
-  { id: "bear", name: "Bear", firstName: "Bear", familyId: "bear", note: "Jear" },
-  { id: "jessica", name: "Jessica", firstName: "Jessica", familyId: "bear", note: "Jear" },
+  { id: "bear", name: "Bear", firstName: "Bear", familyId: "bear", note: "Jera" },
+  { id: "jessica", name: "Jessica", firstName: "Jessica", familyId: "bear", note: "Jera" },
   { id: "andy", name: "Andy", firstName: "Andy", familyId: "nat", note: "Riggs" },
   { id: "natalie", name: "Natalie", firstName: "Natalie", familyId: "nat", note: "Riggs" }
 ];
@@ -54,39 +54,19 @@ const defaultMeals = [
 ];
 
 const defaultSupplies = [
-  { id: "plates", name: "Paper plates", qty: "Marissa: plenty purchased", type: "dry goods", owner: "nick" },
-  { id: "napkins", name: "Napkins", qty: "Marissa: plenty purchased", type: "dry goods", owner: "nick" },
-  { id: "cups", name: "Cups", qty: "Need 100", type: "dry goods", owner: "" },
-  { id: "utensils", name: "Utensils", qty: "Need 100", type: "dry goods", owner: "" },
-  { id: "paper-towels", name: "Paper towels", qty: "Need 4 rolls", type: "dry goods", owner: "" },
-  { id: "trash", name: "Trash bags", qty: "Need 1 box", type: "dry goods", owner: "" },
-  { id: "nacho-chips", name: "Large bag of chips", qty: "Marissa: for nachos one day", type: "dry goods", owner: "nick" },
-  { id: "kettle-corn", name: "Kettle corn", qty: "Marissa photo-confirmed", type: "dry goods", owner: "nick" },
-  { id: "goodles", name: "Goodles pasta boxes", qty: "Marissa photo-confirmed", type: "dry goods", owner: "nick" },
-  { id: "ice", name: "Ice", qty: "Buy near cabin", type: "cold", owner: "" },
-  { id: "water", name: "Water jugs", qty: "Need 3", type: "dry goods", owner: "" },
-  { id: "coffee", name: "Coffee and tea", qty: "Enough for 4 mornings", type: "dry goods", owner: "" },
-  { id: "smores", name: "S’mores ingredients", qty: "G6: marshmallows, grahams, chocolate", type: "dry goods", owner: "nick" },
-  { id: "bacon", name: "Bacon", qty: "Marissa: double pack", type: "cold", owner: "nick" },
-  { id: "eggs", name: "Eggs", qty: "Jear: shared eggs", type: "cold", owner: "bear" },
-  { id: "steaks", name: "Steaks", qty: "Jear: bringing steaks", type: "cold", owner: "bear" },
-  { id: "other-meats", name: "Possible other meats", qty: "Jear may add other meats", type: "cold", owner: "bear" },
-  { id: "hot-dogs-buns", name: "Hot dogs and buns", qty: "Jear: hot dogs; keep buns dry", type: "cold", owner: "bear" },
-  { id: "hamburgers-question", name: "Hamburgers", qty: "Open question: do we want hamburgers?", type: "cold", owner: "" },
-  { id: "steak-seasonings", name: "Steak seasonings", qty: "Needed for steaks", type: "dry goods", owner: "" },
-  { id: "milk", name: "Milk", qty: "Shared breakfast amount", type: "cold", owner: "" },
-  { id: "seltzers", name: "Seltzers and lemonade", qty: "Drinks cooler", type: "cold", owner: "" },
-  { id: "sparkling-ice", name: "Sparkling Ice drinks", qty: "Marissa: lemon pack", type: "cold", owner: "nick" },
-  { id: "orange-juice", name: "Orange juice", qty: "Marissa photo-confirmed", type: "cold", owner: "nick" },
-  { id: "propane", name: "Propane", qty: "Check tanks for grill/Blackstone", type: "gear", owner: "" },
-  { id: "coolers", name: "Extra coolers", qty: "Need 2", type: "gear", owner: "" },
-  { id: "blackstone-two-burner", name: "Two-burner Blackstone", qty: "Bear can bring the smaller Blackstone", type: "gear", owner: "bear" },
-  { id: "pizza-oven-question", name: "Pizza oven", qty: "Ask Nicholas if he wants it brought", type: "gear", owner: "" },
-  { id: "cabin-grill-type", name: "Cabin grill type", qty: "Assume propane until confirmed", type: "gear", owner: "" },
-  { id: "cranium", name: "Cranium", qty: "Board game from Jear", type: "gear", owner: "bear" },
-  { id: "charades", name: "Charades", qty: "Riggs want to bring", type: "gear", owner: "nat" },
-  { id: "games", name: "Extra board games", qty: "Beyond Cranium and charades", type: "gear", owner: "" },
-  { id: "gloves", name: "Baseball gloves", qty: "Outdoor play", type: "gear", owner: "" }
+  { id: "plates", name: "Paper plates", notes: "Marissa already bought plenty.", type: "table", owner: "nick", mealType: "any", days: ["wed", "thu", "fri", "sat", "sun", "mon"] },
+  { id: "napkins", name: "Napkins", notes: "Marissa already bought plenty.", type: "table", owner: "nick", mealType: "any", days: ["wed", "thu", "fri", "sat", "sun", "mon"] },
+  { id: "sparkling-ice", name: "Sparkling Ice drinks", notes: "Marissa photo-confirmed drinks.", type: "drink", owner: "nick", mealType: "any", days: ["fri", "sat", "sun"] },
+  { id: "orange-juice", name: "Orange juice", notes: "Breakfast drink.", type: "drink", owner: "nick", mealType: "breakfast", days: ["fri", "sat", "sun"] },
+  { id: "smores", name: "S'mores ingredients", notes: "G6 has marshmallows, grahams, and chocolate.", type: "food", owner: "nick", mealType: "dessert", days: ["fri", "sat"] },
+  { id: "bacon", name: "Bacon", notes: "Double pack.", type: "food", owner: "nick", mealType: "breakfast", days: ["fri", "sat"] },
+  { id: "eggs", name: "Eggs", notes: "Jera shared eggs.", type: "food", owner: "bear", mealType: "breakfast", days: ["fri", "sat", "sun"] },
+  { id: "steaks", name: "Steaks", notes: "Jera is covering Friday dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["fri"] },
+  { id: "other-meats", name: "Other meats", notes: "Jera may bring extra meat for another dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["sun"] },
+  { id: "hot-dogs-buns", name: "Hot dogs and buns", notes: "Jera is covering the July 4 cookout.", type: "food", owner: "bear", mealType: "dinner", days: ["sat"] },
+  { id: "blackstone-two-burner", name: "Two-burner Blackstone", notes: "Bear can bring the smaller Blackstone.", type: "gear", owner: "bear", mealType: "any", days: ["fri", "sat", "sun"] },
+  { id: "cranium", name: "Cranium", notes: "Board game from Jera.", type: "gear", owner: "bear", mealType: "any", days: ["fri", "sat", "sun"] },
+  { id: "charades", name: "Charades", notes: "Riggs wants to bring charades.", type: "gear", owner: "nat", mealType: "any", days: ["fri", "sat", "sun"] }
 ];
 
 const guideHighlights = [
@@ -318,6 +298,21 @@ const dayMeta = {
   sun: { dayLabel: "Sun Jul 5", fullLabel: "Sunday July 5" },
   mon: { dayLabel: "Mon Jul 6", fullLabel: "Monday July 6" }
 };
+const allDayCodes = ["wed", "thu", "fri", "sat", "sun", "mon"];
+const mealTypeLabels = {
+  breakfast: "Breakfast",
+  lunch: "Lunch",
+  dinner: "Dinner",
+  dessert: "Dessert / Snacks",
+  "pack-up": "Pack-up",
+  any: "Any meal / shared"
+};
+const bringingTypeLabels = {
+  food: "Food",
+  drink: "Drink",
+  gear: "Gear",
+  table: "Table"
+};
 const arrivalOptions = [
   "Wednesday morning",
   "Wednesday afternoon",
@@ -353,12 +348,15 @@ const calendarMealSlots = [
 const storageKey = "cabin-game-plan-v1";
 const selectedFamilyKey = "cabin-game-plan-selected-family-v1";
 const clientIdKey = "cabin-game-plan-client-id-v1";
-const authPasscodeKey = "cabin-game-plan-passcode-v1";
+const sessionTokenKey = "gtonetrip-session-token-v1";
 const installPromptDismissedKey = "cabin-game-plan-install-dismissed-v1";
-const authHeaderName = "x-cabin-passcode";
+const supabaseConfig = window.APP_CONFIG || {};
+const supabaseFunctionBase = `${supabaseConfig.supabaseUrl}/functions/v1/${supabaseConfig.tripApiFunction}`;
+const supabasePublishableKey = supabaseConfig.supabasePublishableKey || "";
 const api = {
   clientId: getClientId(),
   eventSource: null,
+  statePoller: null,
   hasLoadedSharedState: false,
   user: null,
   needsProfile: true
@@ -367,12 +365,13 @@ const api = {
 let state = loadLocalState();
 let selectedDay = "wed";
 let selectedFamily = loadSelectedFamily();
-let authPasscode = loadAuthPasscode();
+let sessionToken = loadSessionToken();
 let tripInfo = null;
 let drawerStep = 1;
 let lastFocusedElement = null;
 let itemMode = "meal";
 let editingItemId = "";
+let pendingSupplyImage = "";
 let deferredInstallPrompt = null;
 let waitingServiceWorker = null;
 let hasReloadedForServiceWorker = false;
@@ -380,11 +379,11 @@ let hasReloadedForServiceWorker = false;
 function loadLocalState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
-    if (saved && saved.meals && saved.supplies) return saved;
+    if (saved && saved.meals && saved.supplies) return normalizeClientState(saved);
   } catch {
     // Ignore corrupt local data and start clean.
   }
-  return {
+  return normalizeClientState({
     meals: defaultMeals,
     supplies: defaultSupplies,
     familyChecks: { bear: true },
@@ -392,7 +391,7 @@ function loadLocalState() {
     checklists: {},
     activityVotes: defaultActivityVotes(),
     activityVoters: {}
-  };
+  });
 }
 
 // iOS Safari Private Browsing (and storage-full states) throw on localStorage
@@ -424,16 +423,8 @@ function loadSelectedFamily() {
   return families.some((family) => family.id === saved) ? saved : "";
 }
 
-function loadAuthPasscode() {
-  const queryPasscode = new URLSearchParams(window.location.search).get("passcode");
-  const saved = safeGetItem(authPasscodeKey);
-  const next = (queryPasscode || saved || "").trim();
-  if (queryPasscode) {
-    const cleaned = new URL(window.location.href);
-    cleaned.searchParams.delete("passcode");
-    history.replaceState({}, "", cleaned.pathname + cleaned.search + cleaned.hash);
-  }
-  return next;
+function loadSessionToken() {
+  return safeGetItem(sessionTokenKey) || "";
 }
 
 function saveLocalState() {
@@ -448,19 +439,15 @@ function saveSelectedFamily() {
   }
 }
 
-function normalizePasscode(value) {
-  return String(value || "").trim().slice(0, 120);
-}
-
-function rememberAuthPasscode(value) {
-  const next = normalizePasscode(value);
+function rememberSessionToken(value) {
+  const next = String(value || "").trim();
   if (!next) {
-    safeRemoveItem(authPasscodeKey);
-    authPasscode = "";
+    safeRemoveItem(sessionTokenKey);
+    sessionToken = "";
     return false;
   }
-  safeSetItem(authPasscodeKey, next);
-  authPasscode = next;
+  safeSetItem(sessionTokenKey, next);
+  sessionToken = next;
   return true;
 }
 
@@ -683,34 +670,32 @@ function setAuthFieldsFromUser(user) {
   if (family && user.familyId) family.value = user.familyId;
 }
 
-function authBody(extra = {}) {
-  return {
-    ...extra,
-    passcode: authPasscode || document.querySelector("#authInvite")?.value.trim() || ""
-  };
+async function tripApiRequest(path, { method = "GET", body, cache = "no-store" } = {}) {
+  const headers = new Headers({ apikey: supabasePublishableKey });
+  if (sessionToken) headers.set("authorization", `Bearer ${sessionToken}`);
+  if (body !== undefined) headers.set("content-type", "application/json");
+  const response = await fetch(`${supabaseFunctionBase}${path}`, {
+    method,
+    headers,
+    cache,
+    body: body !== undefined ? JSON.stringify(body) : undefined
+  });
+  return response;
 }
 
 async function authPost(path, body = {}) {
-  const response = await fetch(path, {
+  const response = await tripApiRequest(path, {
     method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(authBody(body))
+    body
   });
   const payload = await response.json().catch(() => ({}));
-  if (response.status === 401 && payload.needsPasscode) {
-    showAuthScreen("Enter the family invite code to continue.");
-  }
   if (!response.ok) throw new Error(payload.message || "Request failed.");
   return payload;
 }
 
 async function loadProfile() {
-  const response = await authAwareRequest("/api/me", { cache: "no-store" });
+  const response = await authAwareRequest("/me", { cache: "no-store" });
   const payload = await response.json().catch(() => ({}));
-  if (response.status === 401 && payload.needsPasscode) {
-    showAuthScreen("Enter the family invite code to continue.");
-    return null;
-  }
   if (payload.user) {
     applyProfile(payload.user);
     setAuthFieldsFromUser(payload.user);
@@ -732,7 +717,6 @@ async function submitAuthForm(event) {
   event.preventDefault();
   const firstName = document.querySelector("#authFirstName")?.value.trim() || "";
   const password = document.querySelector("#authPassword")?.value || "";
-  rememberAuthPasscode(password);
   if (!firstName) {
     updateAuthMessage("Enter your first name.");
     document.querySelector("#authFirstName")?.focus();
@@ -740,11 +724,13 @@ async function submitAuthForm(event) {
   }
   try {
     updateAuthMessage("Signing in...");
-    const payload = await authPost("/api/auth/login", {
+    const payload = await authPost("/login", {
       firstName,
       password
     });
+    rememberSessionToken(payload.token || "");
     applyProfile(payload.user);
+    applyTripInfo(payload.tripInfo);
     hideAuthScreen();
     showToast("Signed in.");
     connectSharedState();
@@ -754,31 +740,7 @@ async function submitAuthForm(event) {
 }
 
 async function signInWithPasskey() {
-  const invite = document.querySelector("#authInvite")?.value.trim() || "";
-  if (invite) rememberAuthPasscode(invite);
-  const webauthn = window.SimpleWebAuthnBrowser;
-  if (!webauthn?.startAuthentication) {
-    updateAuthMessage("Passkeys are not available in this browser.");
-    return;
-  }
-  try {
-    updateAuthMessage("Waiting for passkey...");
-    const optionsPayload = await authPost("/api/passkey/auth/options", {
-      email: document.querySelector("#authEmail")?.value.trim() || "",
-      personId: document.querySelector("#authPersonId")?.value || ""
-    });
-    const response = await webauthn.startAuthentication(optionsPayload.options);
-    const verified = await authPost("/api/passkey/auth/verify", {
-      challengeId: optionsPayload.challengeId,
-      response
-    });
-    applyProfile(verified.user);
-    hideAuthScreen();
-    showToast("Signed in with passkey.");
-    connectSharedState();
-  } catch (error) {
-    updateAuthMessage(error.message || "Passkey sign-in failed.");
-  }
+  updateAuthMessage("Passkeys are turned off for this trip app.");
 }
 
 async function setupPasskey() {
@@ -787,27 +749,19 @@ async function setupPasskey() {
 
 async function logoutProfile() {
   try {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await authAwareRequest("/logout", { method: "POST" });
   } catch {
     /* ignore network logout failures */
   }
+  rememberSessionToken("");
   applyProfile(null);
-  if (api.eventSource) {
-    api.eventSource.close();
-    api.eventSource = null;
-  }
+  stopStatePolling();
   const firstName = document.querySelector("#authFirstName");
   const password = document.querySelector("#authPassword");
   if (firstName) firstName.value = "";
   if (password) password.value = "";
   setSyncStatus("offline", "Signed out");
   showAuthScreen("Signed out.");
-}
-
-function getRequestInit(base = {}) {
-  const headers = new Headers(base.headers || {});
-  if (authPasscode) headers.set(authHeaderName, authPasscode);
-  return { ...base, headers };
 }
 
 function getClientId() {
@@ -819,10 +773,104 @@ function getClientId() {
   return clientId;
 }
 
+function legacyBringingDefaults(item = {}) {
+  const id = String(item.id || "");
+  const map = {
+    plates: { mealType: "any", days: allDayCodes, type: "table" },
+    napkins: { mealType: "any", days: allDayCodes, type: "table" },
+    smores: { mealType: "dessert", days: ["fri", "sat"], type: "food" },
+    bacon: { mealType: "breakfast", days: ["fri", "sat"], type: "food" },
+    eggs: { mealType: "breakfast", days: ["fri", "sat", "sun"], type: "food" },
+    steaks: { mealType: "dinner", days: ["fri"], type: "food" },
+    "other-meats": { mealType: "dinner", days: ["sun"], type: "food" },
+    "hot-dogs-buns": { mealType: "dinner", days: ["sat"], type: "food" },
+    "blackstone-two-burner": { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" },
+    cranium: { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" },
+    charades: { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" },
+    "sparkling-ice": { mealType: "any", days: ["fri", "sat", "sun"], type: "drink" },
+    "orange-juice": { mealType: "breakfast", days: ["fri", "sat", "sun"], type: "drink" }
+  };
+  const matched = map[id];
+  if (matched) return matched;
+  if (item.type === "gear") return { mealType: "any", days: ["fri", "sat", "sun"], type: "gear" };
+  if (item.type === "cold") return { mealType: "any", days: ["fri", "sat", "sun"], type: "food" };
+  return { mealType: "any", days: [], type: "table" };
+}
+
+function mealTypeSafe(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  return Object.hasOwn(mealTypeLabels, normalized) ? normalized : "any";
+}
+
+function bringingTypeSafe(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (Object.hasOwn(bringingTypeLabels, normalized)) return normalized;
+  if (normalized === "cold") return "food";
+  if (normalized === "dry goods") return "table";
+  return "food";
+}
+
+function dayListSafe(value, fallback = []) {
+  const list = Array.isArray(value) ? value : fallback;
+  const unique = [];
+  allDayCodes.forEach((day) => {
+    if (list.includes(day)) unique.push(day);
+  });
+  return unique;
+}
+
+function imageDataUrlSafe(value) {
+  const raw = String(value || "").trim();
+  if (!raw.startsWith("data:image/")) return "";
+  return raw.length <= 400000 ? raw : "";
+}
+
+function normalizeMealItem(meal) {
+  const day = dayMeta[meal?.day] ? meal.day : "sun";
+  return {
+    ...meal,
+    day,
+    dayLabel: meal?.dayLabel || dayMeta[day].dayLabel,
+    type: String(meal?.type || "Meal").trim() || "Meal",
+    time: String(meal?.time || "Flexible").trim() || "Flexible",
+    owner: families.some((family) => family.id === meal?.owner) ? meal.owner : "",
+    idea: String(meal?.idea || "").trim(),
+    kids: String(meal?.kids || "").trim(),
+    cold: Array.isArray(meal?.cold) ? meal.cold.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 8) : [],
+    custom: Boolean(meal?.custom),
+    createdBy: families.some((family) => family.id === meal?.createdBy) ? meal.createdBy : "",
+    createdAt: meal?.createdAt || "",
+    updatedAt: meal?.updatedAt || ""
+  };
+}
+
+function normalizeSupplyItem(item) {
+  const fallback = legacyBringingDefaults(item);
+  const owner = families.some((family) => family.id === item?.owner) ? item.owner : "";
+  const days = dayListSafe(item?.days, fallback.days);
+  const notes = String(item?.notes || item?.qty || "").trim();
+  return {
+    ...item,
+    id: String(item?.id || `supply-${Date.now()}`),
+    name: String(item?.name || "").trim(),
+    notes: notes || "",
+    qty: notes || "",
+    type: bringingTypeSafe(item?.type || fallback.type),
+    owner,
+    mealType: mealTypeSafe(item?.mealType || fallback.mealType),
+    days,
+    image: imageDataUrlSafe(item?.image || item?.imageDataUrl || ""),
+    custom: Boolean(item?.custom),
+    createdBy: families.some((family) => family.id === item?.createdBy) ? item.createdBy : (owner || ""),
+    createdAt: item?.createdAt || "",
+    updatedAt: item?.updatedAt || ""
+  };
+}
+
 function normalizeClientState(nextState) {
   return {
-    meals: Array.isArray(nextState.meals) ? nextState.meals : defaultMeals,
-    supplies: Array.isArray(nextState.supplies) ? nextState.supplies : defaultSupplies,
+    meals: Array.isArray(nextState.meals) ? nextState.meals.map(normalizeMealItem) : defaultMeals.map(normalizeMealItem),
+    supplies: Array.isArray(nextState.supplies) ? nextState.supplies.map(normalizeSupplyItem).filter((item) => item.name) : defaultSupplies.map(normalizeSupplyItem),
     familyChecks: nextState.familyChecks && typeof nextState.familyChecks === "object" ? nextState.familyChecks : { bear: true },
     familyResponses: nextState.familyResponses && typeof nextState.familyResponses === "object" ? nextState.familyResponses : {},
     checklists: nextState.checklists && typeof nextState.checklists === "object" ? nextState.checklists : {},
@@ -889,20 +937,16 @@ function activityVoteButton(activity, compact = false) {
 }
 
 function authAwareRequest(path, init = {}) {
-  return fetch(path, getRequestInit(init));
+  return tripApiRequest(path, init);
 }
 
 async function fetchStateWithAuth() {
-  const response = await authAwareRequest("/api/state", { cache: "no-store" });
+  const response = await authAwareRequest("/state", { cache: "no-store" });
   if (response.status === 401 || response.status === 403) {
     const payload = await response.json().catch(() => ({}));
     if (payload.needsProfile) {
       showAuthScreen("Sign in to update the shared board.");
       throw new Error("PROFILE_REQUIRED");
-    }
-    if (payload.needsPasscode) {
-      showAuthScreen("Enter the family invite code to continue.");
-      throw new Error("PASSCODE_REQUIRED");
     }
     throw new Error(payload.message || "UNAUTHORIZED");
   }
@@ -924,12 +968,30 @@ function setSyncStatus(mode, label) {
   if (text) text.textContent = label;
 }
 
-async function connectSharedState() {
-  if (!location.protocol.startsWith("http")) {
-    setSyncStatus("offline", "Local only");
-    return;
+function stopStatePolling() {
+  if (api.statePoller) {
+    window.clearInterval(api.statePoller);
+    api.statePoller = null;
   }
+}
 
+function startStatePolling() {
+  stopStatePolling();
+  api.statePoller = window.setInterval(async () => {
+    if (!api.user) return;
+    try {
+      const response = await fetchStateWithAuth();
+      const payload = await response.json();
+      applyTripInfo(payload.tripInfo);
+      applySharedState(payload.state);
+      setSyncStatus("live", "Live sync");
+    } catch {
+      setSyncStatus("offline", "Sync error");
+    }
+  }, 15000);
+}
+
+async function connectSharedState() {
   if (!(await requireProfile())) {
     setSyncStatus("offline", "Sign in");
     return;
@@ -944,72 +1006,39 @@ async function connectSharedState() {
     applySharedState(payload.state);
     api.hasLoadedSharedState = true;
     setSyncStatus("live", "Live sync");
-    startEventStream();
+    startStatePolling();
   } catch {
     setSyncStatus("offline", api.user ? "Sync error" : "Sign in");
   }
 }
 
-function startEventStream() {
-  if (!window.EventSource || api.eventSource) return;
-  api.eventSource = new EventSource("/api/events");
-  api.eventSource.addEventListener("state", (event) => {
-    try {
-      applySharedState(JSON.parse(event.data));
-      setSyncStatus("live", "Live sync");
-    } catch {
-      setSyncStatus("offline", "Sync error");
-    }
-  });
-  api.eventSource.onerror = () => {
-    setSyncStatus("offline", "Reconnecting");
-  };
-  api.eventSource.onopen = () => {
-    setSyncStatus("live", "Live sync");
-  };
-}
-
 async function performAction(type, payload, fallback, successMessage) {
-  if (location.protocol.startsWith("http")) {
-    try {
-      const response = await authAwareRequest("/api/action", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ type, payload, clientId: api.clientId })
-      });
-      if (response.status === 401 || response.status === 403) {
-        const errorPayload = await response.json().catch(() => ({}));
-        if (errorPayload.needsProfile) {
-          showAuthScreen("Sign in to update the shared board.");
-          setSyncStatus("offline", "Sign in");
-          return false;
-        }
-        if (errorPayload.needsPasscode) {
-          showAuthScreen("Enter the family invite code to continue.");
-          setSyncStatus("offline", "Invite code required");
-          return false;
-        }
-        setSyncStatus("offline", "Passcode required");
-        showToast(errorPayload.message || "Sign in required.");
+  try {
+    const response = await authAwareRequest("/action", {
+      method: "POST",
+      body: { type, payload, clientId: api.clientId }
+    });
+    if (response.status === 401 || response.status === 403) {
+      const errorPayload = await response.json().catch(() => ({}));
+      if (errorPayload.needsProfile) {
+        showAuthScreen("Sign in to update the shared board.");
+        setSyncStatus("offline", "Sign in");
         return false;
       }
-      const result = await response.json();
-      if (result.tripInfo) applyTripInfo(result.tripInfo);
-      if (result.state) applySharedState(result.state);
-      showToast(response.ok ? (successMessage || result.message || "Saved for everyone.") : (result.message || "Could not save."));
-      return response.ok;
-    } catch {
-      setSyncStatus("offline", "Sync error");
-      showToast("Could not reach the shared board. Reconnect and try again.");
+      setSyncStatus("offline", "Sign in");
+      showToast(errorPayload.message || "Sign in required.");
       return false;
     }
+    const result = await response.json();
+    if (result.tripInfo) applyTripInfo(result.tripInfo);
+    if (result.state) applySharedState(result.state);
+    showToast(response.ok ? (successMessage || result.message || "Saved for everyone.") : (result.message || "Could not save."));
+    return response.ok;
+  } catch {
+    setSyncStatus("offline", "Sync error");
+    showToast("Could not reach the shared board. Reconnect and try again.");
+    return false;
   }
-
-  fallback();
-  saveLocalState();
-  renderAll();
-  showToast(successMessage ? `${successMessage} Saved on this device.` : "Saved on this device.");
-  return false;
 }
 
 function familyById(id) {
@@ -1026,6 +1055,81 @@ function canManageCustomItem(item) {
   const createdBy = item.createdBy || "";
   if (createdBy) return createdBy === familyId || item.owner === familyId;
   return !item.owner || item.owner === familyId;
+}
+
+function familyMembersLabel(familyId) {
+  const labels = {
+    shell: "Shell",
+    nick: "Nick and Marissa",
+    bear: "Bear and Jessica",
+    nat: "Andy and Natalie"
+  };
+  return labels[familyId] || familyById(familyId)?.name || "Family";
+}
+
+function dayLabelShort(day) {
+  return {
+    wed: "Wed",
+    thu: "Thu",
+    fri: "Fri",
+    sat: "Sat",
+    sun: "Sun",
+    mon: "Mon"
+  }[day] || day;
+}
+
+function daysSummary(days = []) {
+  if (!days.length) return "No days picked yet";
+  return days.map(dayLabelShort).join(" · ");
+}
+
+function mealTypeDisplay(mealType) {
+  return mealTypeLabels[mealTypeSafe(mealType)] || "Any meal / shared";
+}
+
+function bringingItemsForFamily(familyId) {
+  return state.supplies.filter((item) => item.owner === familyId);
+}
+
+function bringingItemsForMeal(meal) {
+  const mealType = meal.type.toLowerCase().includes("dessert")
+    ? "dessert"
+    : meal.type.toLowerCase().includes("breakfast")
+      ? "breakfast"
+      : meal.type.toLowerCase().includes("lunch")
+        ? "lunch"
+        : meal.type.toLowerCase().includes("pack")
+          ? "pack-up"
+          : "dinner";
+  return state.supplies.filter((item) => {
+    if (!item.owner) return false;
+    if (item.days.length && !item.days.includes(meal.day)) return false;
+    return item.mealType === "any" || item.mealType === mealType;
+  });
+}
+
+function bringingImageMarkup(item) {
+  if (!item.image) return "";
+  return `<img class="bringing-thumb" src="${item.image}" alt="${escapeText(item.name)}">`;
+}
+
+function bringingMetaMarkup(item) {
+  const note = item.notes ? `<span>${escapeText(item.notes)}</span>` : "";
+  return `
+    <div class="bringing-meta-chips">
+      <span class="meta-chip">${escapeText(mealTypeDisplay(item.mealType))}</span>
+      <span class="meta-chip">${escapeText(daysSummary(item.days))}</span>
+    </div>
+    ${note}
+  `;
+}
+
+function mealPlanningItemsMarkup(meal) {
+  const items = bringingItemsForMeal(meal);
+  if (!items.length) {
+    return `<span class="meta-chip">No bringing items linked yet</span>`;
+  }
+  return items.map((item) => `<span class="meta-chip">${escapeText(item.name)}</span>`).join("");
 }
 
 function insertIcons() {
@@ -1062,13 +1166,20 @@ function isCustomSupply(item) {
 }
 
 function itemManageActions(kind, item) {
-  const canManage = (kind === "meal" ? isCustomMeal(item) : isCustomSupply(item)) && canManageCustomItem(item);
-  if (!canManage) return "";
   const escapedId = escapeText(item.id);
+  if (kind === "meal") {
+    return `
+      <div class="item-manage-actions" aria-label="Manage meal">
+        <button class="text-mini-button" type="button" data-edit-meal="${escapedId}">Edit meal</button>
+        ${isCustomMeal(item) && canManageCustomItem(item) ? `<button class="text-mini-button danger" type="button" data-delete-meal="${escapedId}">Delete</button>` : ""}
+      </div>
+    `;
+  }
+  if (!canManageCustomItem(item)) return "";
   return `
-    <div class="item-manage-actions" aria-label="Manage ${kind}">
-      <button class="text-mini-button" type="button" data-edit-${kind}="${escapedId}">Edit</button>
-      <button class="text-mini-button danger" type="button" data-delete-${kind}="${escapedId}">Delete</button>
+    <div class="item-manage-actions" aria-label="Manage bringing item">
+      <button class="text-mini-button" type="button" data-edit-supply="${escapedId}">Edit</button>
+      <button class="text-mini-button danger" type="button" data-delete-supply="${escapedId}">Delete</button>
     </div>
   `;
 }
@@ -1119,16 +1230,14 @@ function renderMealBoard() {
       <article class="meal-row">
         <div class="meal-name">
           <strong>${escapeText(meal.type)}</strong>
-          <span>${escapeText(meal.idea)}</span>
+          <span>${escapeText(meal.idea || "No recipe set yet.")}</span>
           ${itemManageActions("meal", meal)}
         </div>
         <div class="meal-meta">
           <span class="meta-chip">${escapeText(meal.time)}</span>
-          <span class="meta-chip">Kids: ${escapeText(meal.kids)}</span>
-          <span class="meta-chip">${(meal.cold || []).length ? `Cold: ${(meal.cold || []).map((item) => escapeText(item)).join(", ")}` : "No fridge space"}</span>
+          ${meal.kids ? `<span class="meta-chip">Kids: ${escapeText(meal.kids)}</span>` : ""}
+          ${mealPlanningItemsMarkup(meal)}
         </div>
-        ${meal.owner ? ownerMarkup(meal.owner) : ""}
-        ${mealClaimAction(meal)}
       </article>
     `).join("");
     return `
@@ -1157,9 +1266,9 @@ function logisticsForFamily(familyId) {
 function familyTravelLabel(familyId) {
   const labels = {
     shell: "Shell",
-    nick: "Nick and Marissa",
-    bear: "Bear and Jessica",
-    nat: "Andy and Natalie"
+    nick: "G6",
+    bear: "Jera",
+    nat: "Riggs"
   };
   return labels[familyId] || familyById(familyId)?.name || "Family";
 }
@@ -1219,6 +1328,7 @@ function renderCalendarBoard() {
   ];
   container.innerHTML = days.map(([day, label, date]) => {
     const travelEntries = buildTravelEntries(day);
+    const mealEntries = state.meals.filter((meal) => meal.day === day);
     return `
       <section class="calendar-day-card">
         <header class="calendar-day-header">
@@ -1239,11 +1349,11 @@ function renderCalendarBoard() {
               <span class="calendar-slot-time">No arrival listed</span>
             </article>
           `}
-          ${calendarMealSlots.map((slot) => `
+          ${mealEntries.map((meal) => `
             <article class="calendar-slot">
-              <span class="calendar-slot-kind">${escapeText(slot.label)}</span>
-              <strong>${escapeText(slot.value)}</strong>
-              <span class="calendar-slot-time">${escapeText(slot.time)}</span>
+              <span class="calendar-slot-kind">${escapeText(meal.type)}</span>
+              <strong>${escapeText(meal.idea || "No meal plan yet")}</strong>
+              <span class="calendar-slot-time">${escapeText(meal.time)}${bringingItemsForMeal(meal).length ? ` · ${escapeText(bringingItemsForMeal(meal).map((item) => item.name).join(", "))}` : ""}</span>
             </article>
           `).join("")}
         </div>
@@ -1255,26 +1365,25 @@ function renderCalendarBoard() {
 function renderOpenMeals() {
   const container = document.querySelector("#openMealList");
   if (!container) return;
-  const openMeals = state.meals.filter((meal) => !meal.owner);
-  if (!openMeals.length) {
+  const mealsToFinish = state.meals.filter((meal) => !meal.idea || !bringingItemsForMeal(meal).length);
+  if (!mealsToFinish.length) {
     container.innerHTML = `
       <article class="needed-row">
         <div>
-          <strong>All meals are claimed</strong>
-          <span>The schedule is covered for now.</span>
+          <strong>Every meal has a plan</strong>
+          <span>The calendar and meal board are already filled in.</span>
         </div>
       </article>
     `;
     return;
   }
-  container.innerHTML = openMeals.map((meal) => `
+  container.innerHTML = mealsToFinish.map((meal) => `
     <article class="needed-row">
       <div>
         <strong>${escapeText(meal.dayLabel)} ${escapeText(meal.type)}</strong>
-        <span>${escapeText(meal.idea)} · Kids: ${escapeText(meal.kids)}</span>
-        ${itemManageActions("meal", meal)}
+        <span>${escapeText(meal.idea || "Recipe still blank")}${bringingItemsForMeal(meal).length ? ` · ${escapeText(bringingItemsForMeal(meal).map((item) => item.name).join(", "))}` : " · No bringing items linked yet"}</span>
       </div>
-      <button class="claim-button" type="button" data-claim-meal="${meal.id}">Claim</button>
+      <button class="claim-button" type="button" data-edit-meal="${meal.id}">Edit</button>
     </article>
   `).join("");
 }
@@ -1325,23 +1434,12 @@ function renderSupplies() {
 }
 
 function collectClaimsByFamily(familyId) {
-  const mealClaims = state.meals
-    .filter((meal) => meal.owner === familyId)
-    .map((meal) => ({
-      id: meal.id,
-      kind: "meal",
-      title: `${meal.dayLabel} ${meal.type}`,
-      detail: meal.idea
-    }));
-  const supplyClaims = state.supplies
-    .filter((item) => item.owner === familyId)
-    .map((item) => ({
-      id: item.id,
-      kind: "supply",
-      title: item.name,
-      detail: `${item.qty} · ${item.type}`
-    }));
-  return [...mealClaims, ...supplyClaims];
+  return bringingItemsForFamily(familyId).map((item) => ({
+    id: item.id,
+    title: item.name,
+    detail: `${mealTypeDisplay(item.mealType)} · ${daysSummary(item.days)}`,
+    note: item.notes || ""
+  }));
 }
 
 function renderBringingBoard() {
@@ -1355,23 +1453,24 @@ function renderBringingBoard() {
     myClaims.innerHTML = ownClaims.length
       ? ownClaims.map((item) => `
         <article class="bringing-row">
-          <div>
+          <div class="bringing-row-main">
+            ${bringingImageMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
+            <div>
             <strong>${escapeText(item.title)}</strong>
-            <span>${escapeText(item.detail)}</span>
+            ${bringingMetaMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
+            </div>
           </div>
-          <button
-            class="claim-button"
-            type="button"
-            ${item.kind === "meal" ? `data-claim-meal="${item.id}"` : `data-claim-supply="${item.id}"`}>
-            Unclaim
-          </button>
+          <div class="bringing-row-actions">
+            <button class="claim-button" type="button" data-edit-supply="${item.id}">Edit</button>
+            <button class="claim-button" type="button" data-delete-supply="${item.id}">Delete</button>
+          </div>
         </article>
       `).join("")
       : `
         <article class="bringing-row bringing-row-empty">
           <div>
-            <strong>No claims yet</strong>
-            <span>Claim something from the Still needed list.</span>
+            <strong>No items added yet</strong>
+            <span>Add what you are bringing and tag the days it supports.</span>
           </div>
         </article>
       `;
@@ -1385,7 +1484,7 @@ function renderBringingBoard() {
           <header class="bringing-group-header">
             <div>
               <strong>${escapeText(family.name)}</strong>
-              <span>${claims.length ? `${claims.length} claimed` : "Nothing claimed yet"}</span>
+              <span>${claims.length ? `${claims.length} item${claims.length === 1 ? "" : "s"}` : "Nothing added yet"}</span>
             </div>
             <i class="family-swatch" style="background:${family.color}" aria-hidden="true"></i>
           </header>
@@ -1393,17 +1492,20 @@ function renderBringingBoard() {
             ${claims.length
               ? claims.map((item) => `
                 <article class="bringing-row">
-                  <div>
+                  <div class="bringing-row-main">
+                    ${bringingImageMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
+                    <div>
                     <strong>${escapeText(item.title)}</strong>
-                    <span>${escapeText(item.detail)}</span>
+                    ${bringingMetaMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
+                    </div>
                   </div>
                 </article>
               `).join("")
               : `
                 <article class="bringing-row bringing-row-empty">
                   <div>
-                    <strong>Still open</strong>
-                    <span>No items claimed yet.</span>
+                    <strong>Nothing here yet</strong>
+                    <span>No bringing items added yet.</span>
                   </div>
                 </article>
               `}
@@ -1448,7 +1550,7 @@ function renderLogistics() {
         <header class="bringing-group-header">
           <div>
             <strong>${escapeText(signedInName)}</strong>
-            <span>This updates ${escapeText(family?.name || "your household")} on the shared calendar.</span>
+            <span>Family: ${escapeText(family?.name || "your household")} · This is the only timing this login can edit.</span>
           </div>
           <i class="family-swatch" style="background:${family?.color || "#8aa57b"}" aria-hidden="true"></i>
         </header>
@@ -1697,10 +1799,10 @@ function updateCounts() {
   const mealClaimed = state.meals.filter((meal) => meal.owner).length;
   const supplyClaimed = state.supplies.filter((item) => item.owner).length;
   const openMeals = state.meals.length - mealClaimed;
-  const openSupplies = state.supplies.length - supplyClaimed;
+  const openSupplies = 0;
   const claimedTotal = mealClaimed + supplyClaimed;
   const neededTotal = openMeals + openSupplies;
-  const myClaimTotal = activeFamilyId() ? collectClaimsByFamily(activeFamilyId()).length : 0;
+  const myClaimTotal = activeFamilyId() ? bringingItemsForFamily(activeFamilyId()).length : 0;
   const missingCheckins = families.filter((family) => !state.familyChecks[family.id]).length;
   const coldCount = state.supplies.filter((item) => item.type === "cold" && item.owner).length +
     state.meals.filter((meal) => meal.owner).reduce((count, meal) => count + Math.min((meal.cold || []).length, 2), 0);
@@ -1943,13 +2045,62 @@ function createSupplyItem(payload) {
   return {
     id: `supply-${Date.now()}`,
     name: payload.name,
-    qty: payload.qty || "Quantity TBD",
-    type: payload.type || "dry goods",
-    owner: "",
+    notes: payload.notes || "",
+    qty: payload.notes || "",
+    type: payload.type || "food",
+    owner: activeFamilyId(),
+    mealType: payload.mealType || "any",
+    days: dayListSafe(payload.days),
+    image: payload.image || "",
     custom: true,
     createdBy: activeFamilyId(),
     createdAt: new Date().toISOString()
   };
+}
+
+function setPendingSupplyImage(dataUrl) {
+  pendingSupplyImage = imageDataUrlSafe(dataUrl);
+  const wrap = document.querySelector("#supplyImagePreviewWrap");
+  const preview = document.querySelector("#supplyImagePreview");
+  if (preview) preview.src = pendingSupplyImage || "";
+  wrap?.classList.toggle("is-hidden", !pendingSupplyImage);
+}
+
+function setSupplyDaySelection(days = []) {
+  const selected = new Set(dayListSafe(days));
+  document.querySelectorAll("[data-supply-day]").forEach((button) => {
+    const active = selected.has(button.dataset.supplyDay);
+    button.classList.toggle("is-selected", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
+function selectedSupplyDays() {
+  return Array.from(document.querySelectorAll("[data-supply-day].is-selected")).map((button) => button.dataset.supplyDay);
+}
+
+async function compressImageFile(file) {
+  if (!file) return "";
+  const source = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = String(reader.result || "");
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+  const canvas = document.createElement("canvas");
+  const maxSize = 360;
+  const ratio = Math.min(1, maxSize / Math.max(source.width, source.height));
+  canvas.width = Math.max(1, Math.round(source.width * ratio));
+  canvas.height = Math.max(1, Math.round(source.height * ratio));
+  const context = canvas.getContext("2d");
+  if (!context) return "";
+  context.drawImage(source, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL("image/jpeg", 0.72);
 }
 
 function openItemDrawer(mode, itemId = "") {
@@ -1960,13 +2111,15 @@ function openItemDrawer(mode, itemId = "") {
   const help = document.querySelector("#itemDrawerHelp");
   const save = document.querySelector("#saveItem");
   const isEdit = Boolean(itemId);
-  if (title) title.textContent = mode === "meal" ? (isEdit ? "Edit meal idea" : "Add meal idea") : (isEdit ? "Edit supply" : "Add supply");
-  if (help) help.textContent = mode === "meal" ? "Keep the meal option clear and claimable." : "Keep the shared item clear and claimable.";
-  if (save) save.textContent = isEdit ? "Save changes" : (mode === "meal" ? "Add meal" : "Add item");
+  if (title) title.textContent = mode === "meal" ? (isEdit ? "Edit meal plan" : "Add meal slot") : (isEdit ? "Edit what I'm bringing" : "Add what I'm bringing");
+  if (help) help.textContent = mode === "meal" ? "Set the recipe for this meal. Bringing items link in automatically." : "Add the item, what meal it supports, and the days it can be used.";
+  if (save) save.textContent = isEdit ? "Save changes" : (mode === "meal" ? "Add meal" : "Save item");
   document.querySelectorAll("[data-item-section]").forEach((section) => {
     section.classList.toggle("is-hidden", section.dataset.itemSection !== mode);
   });
   document.querySelector("#itemForm")?.reset();
+  setPendingSupplyImage("");
+  setSupplyDaySelection([]);
   if (isEdit && mode === "meal") {
     const meal = state.meals.find((item) => item.id === itemId);
     if (meal) {
@@ -1980,8 +2133,10 @@ function openItemDrawer(mode, itemId = "") {
     const supply = state.supplies.find((item) => item.id === itemId);
     if (supply) {
       document.querySelector("#supplyName").value = supply.name || "";
-      document.querySelector("#supplyQty").value = supply.qty || "";
-      document.querySelector("#supplyType").value = supply.type || "dry goods";
+      document.querySelector("#supplyQty").value = supply.notes || supply.qty || "";
+      document.querySelector("#supplyMealType").value = supply.mealType || "any";
+      setSupplyDaySelection(supply.days || []);
+      setPendingSupplyImage(supply.image || "");
     }
   }
   document.body.classList.add("drawer-open");
@@ -2030,16 +2185,16 @@ function submitItemForm(event) {
     }
     if (editingItemId) {
       const meal = state.meals.find((item) => item.id === editingItemId);
-      performAction("updateMealIdea", { id: editingItemId, ...payload }, () => {
+      performAction("updateMealPlan", { id: editingItemId, ...payload }, () => {
         if (!meal) return;
         const day = dayMeta[payload.day] ? payload.day : "sun";
         meal.day = day;
         meal.dayLabel = dayMeta[day].dayLabel;
-        meal.type = payload.type || "Meal idea";
+        meal.type = payload.type || "Meal";
         meal.idea = payload.idea;
         meal.kids = payload.kids || "Add kid backup";
         meal.updatedAt = new Date().toISOString();
-      }, "Meal idea updated.");
+      }, "Meal updated.");
       closeItemDrawer();
       return;
     }
@@ -2052,11 +2207,18 @@ function submitItemForm(event) {
 
   const payload = {
     name: document.querySelector("#supplyName")?.value.trim() || "",
-    qty: document.querySelector("#supplyQty")?.value.trim() || "",
-    type: document.querySelector("#supplyType")?.value || "dry goods"
+    notes: document.querySelector("#supplyQty")?.value.trim() || "",
+    type: "food",
+    mealType: document.querySelector("#supplyMealType")?.value || "any",
+    days: selectedSupplyDays(),
+    image: pendingSupplyImage
   };
   if (!payload.name) {
     showToast("Add an item name first.");
+    return;
+  }
+  if (!payload.days.length) {
+    showToast("Pick at least one day for this item.");
     return;
   }
   if (editingItemId) {
@@ -2064,16 +2226,20 @@ function submitItemForm(event) {
     performAction("updateSupply", { id: editingItemId, ...payload }, () => {
       if (!supply) return;
       supply.name = payload.name;
-      supply.qty = payload.qty || "Quantity TBD";
-      supply.type = payload.type || "dry goods";
+      supply.notes = payload.notes || "";
+      supply.qty = payload.notes || "";
+      supply.type = supply.type || payload.type || "food";
+      supply.mealType = payload.mealType || "any";
+      supply.days = dayListSafe(payload.days);
+      supply.image = payload.image || "";
       supply.updatedAt = new Date().toISOString();
-    }, "Supply updated.");
+    }, "Bringing item updated.");
     closeItemDrawer();
     return;
   }
   performAction("addSupply", payload, () => {
     state.supplies.push(createSupplyItem(payload));
-  }, "Supply added.");
+  }, "Bringing item added.");
   closeItemDrawer();
 }
 
@@ -2087,11 +2253,7 @@ function addSupply() {
 
 function editMeal(id) {
   const meal = state.meals.find((item) => item.id === id);
-  if (!meal || !isCustomMeal(meal)) return;
-  if (!canManageCustomItem(meal)) {
-    showToast("Only the family that added or owns this meal can edit it.");
-    return;
-  }
+  if (!meal) return;
   openItemDrawer("meal", id);
 }
 
@@ -2110,9 +2272,9 @@ function deleteMeal(id) {
 
 function editSupply(id) {
   const supply = state.supplies.find((item) => item.id === id);
-  if (!supply || !isCustomSupply(supply)) return;
+  if (!supply) return;
   if (!canManageCustomItem(supply)) {
-    showToast("Only the family that added or owns this supply can edit it.");
+    showToast("Only your own family can edit this bringing item.");
     return;
   }
   openItemDrawer("supply", id);
@@ -2120,15 +2282,15 @@ function editSupply(id) {
 
 function deleteSupply(id) {
   const supply = state.supplies.find((item) => item.id === id);
-  if (!supply || !isCustomSupply(supply)) return;
+  if (!supply) return;
   if (!canManageCustomItem(supply)) {
-    showToast("Only the family that added or owns this supply can delete it.");
+    showToast("Only your own family can delete this bringing item.");
     return;
   }
   if (!window.confirm(`Delete "${supply.name}"?`)) return;
   performAction("deleteSupply", { id }, () => {
     state.supplies = state.supplies.filter((item) => item.id !== id);
-  }, "Supply deleted.");
+  }, "Bringing item deleted.");
 }
 
 function bindEvents() {
@@ -2191,6 +2353,13 @@ function bindEvents() {
 
     const authPerson = event.target.closest("[data-auth-person]");
     if (authPerson) selectAuthPerson(authPerson.dataset.authPerson, { force: true });
+
+    const supplyDay = event.target.closest("[data-supply-day]");
+    if (supplyDay) {
+      supplyDay.classList.toggle("is-selected");
+      const active = supplyDay.classList.contains("is-selected");
+      supplyDay.setAttribute("aria-pressed", active ? "true" : "false");
+    }
   });
 
   document.addEventListener("change", (event) => {
@@ -2232,6 +2401,25 @@ function bindEvents() {
     if (event.target.closest("#saveLogisticsTiming")) saveLogisticsTiming();
   });
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
+  document.querySelector("#clearSupplyImage")?.addEventListener("click", () => {
+    const input = document.querySelector("#supplyImage");
+    if (input) input.value = "";
+    setPendingSupplyImage("");
+  });
+  document.querySelector("#supplyImage")?.addEventListener("change", async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setPendingSupplyImage("");
+      return;
+    }
+    try {
+      const compressed = await compressImageFile(file);
+      setPendingSupplyImage(compressed);
+    } catch {
+      showToast("Could not load that picture.");
+      setPendingSupplyImage("");
+    }
+  });
   document.querySelector("#authForm")?.addEventListener("submit", submitAuthForm);
   document.querySelector("#authFamily")?.addEventListener("change", handleAuthFamilyChange);
   document.querySelector("#passkeySignIn")?.addEventListener("click", signInWithPasskey);
