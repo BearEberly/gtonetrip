@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+.env
+*.log
+data/cabin-state.json
+data/users.json

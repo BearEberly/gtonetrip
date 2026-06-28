@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: cabin-bring-board
+    runtime: node
+    plan: starter
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: APP_PASSCODE
+        sync: false
+      - key: APP_ADMIN_PASSCODE
+        sync: false
+      - key: PUBLIC_ORIGIN
+        sync: false
+    disk:
+      name: cabin-bring-board-data
+      mountPath: /var/data
+      sizeGB: 1

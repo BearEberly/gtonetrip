@@ -1,0 +1,2299 @@
+const icons = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg>',
+  people: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+  utensils: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v8"></path><path d="M8 3v8"></path><path d="M4 7h4"></path><path d="M6 11v10"></path><path d="M19 3v18"></path><path d="M15 3v5a4 4 0 0 0 4 4"></path></svg>',
+  bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8Z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>',
+  flame: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 7-3 7-7 0-3-2-5-4-7 .3 2-.8 3-2 3-2 0-3-2-2-5-3 2-6 5-6 9 0 4 3 7 7 7Z"></path></svg>',
+  mountain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 20 7-13 5 8 2-3 4 8H3Z"></path><path d="m10 7 2.5 4"></path></svg>',
+  share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 10.5 6.8-4"></path><path d="m8.6 13.5 6.8 4"></path></svg>',
+  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9L4.2 7a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 1 1 19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.1a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"></path></svg>',
+  pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+  calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path></svg>',
+  "arrow-right": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>',
+  alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.2 2.7 17.4A2 2 0 0 0 4.4 20h15.2a2 2 0 0 0 1.7-2.6L13.7 4.2a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
+  grill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14"></path><path d="M7 8a5 5 0 0 0 10 0"></path><path d="M12 13v8"></path><path d="m8 21 4-8 4 8"></path><path d="M8 4c0 1 1 1 1 2"></path><path d="M12 3c0 1 1 1 1 2"></path><path d="M16 4c0 1 1 1 1 2"></path></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.9 4.9 1.4 1.4"></path><path d="m17.7 17.7 1.4 1.4"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m4.9 19.1 1.4-1.4"></path><path d="m17.7 6.3 1.4-1.4"></path></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>',
+  dessert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14l-2 8H7l-2-8Z"></path><path d="M7 12c0-3 2-5 5-5s5 2 5 5"></path><path d="M12 7V3"></path><path d="M9 4h6"></path></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>'
+};
+
+const families = [
+  { id: "shell", name: "Michelle / Shell", shortName: "Shell", color: "#d9512b", status: "Needs check-in", details: "Arrives Wednesday · mom / grandmother" },
+  { id: "nick", name: "Nick & Marissa", shortName: "Nick", color: "#b37224", status: "Partial", details: "G6 · arrive Thursday · Luca, Sophia, Rocco, Gio" },
+  { id: "nat", name: "Natalie & Andy", shortName: "Nat", color: "#167fa6", status: "Partial", details: "Riggs · arrive Friday · Oli and Viv" },
+  { id: "bear", name: "Bear & Jessica", shortName: "Bear", color: "#5a9f3c", status: "Checked in", details: "Jear / Jer · arrive Friday · Bear is B-E-A-R" }
+];
+
+const attendees = [
+  { id: "shell", name: "Shell", firstName: "Shell", familyId: "shell", note: "Michelle" },
+  { id: "nick", name: "Nick", firstName: "Nick", familyId: "nick", note: "G6" },
+  { id: "marissa", name: "Marissa", firstName: "Marissa", familyId: "nick", note: "G6" },
+  { id: "bear", name: "Bear", firstName: "Bear", familyId: "bear", note: "Jear" },
+  { id: "jessica", name: "Jessica", firstName: "Jessica", familyId: "bear", note: "Jear" },
+  { id: "andy", name: "Andy", firstName: "Andy", familyId: "nat", note: "Riggs" },
+  { id: "natalie", name: "Natalie", firstName: "Natalie", familyId: "nat", note: "Riggs" }
+];
+
+const defaultMeals = [
+  { id: "fri-breakfast", day: "fri", dayLabel: "Fri Jul 3", type: "Breakfast", time: "7:00 - 10:00 AM", owner: "", idea: "Eggs, bacon, sausage", kids: "Pancakes, fruit", cold: ["eggs", "bacon", "milk"] },
+  { id: "fri-lunch", day: "fri", dayLabel: "Fri Jul 3", type: "Lunch", time: "12:00 - 2:00 PM", owner: "", idea: "Sandwiches or pasta salad", kids: "PB&J, fruit", cold: ["lunch meat", "cheese"] },
+  { id: "fri-dinner", day: "fri", dayLabel: "Fri Jul 3", type: "Dinner", time: "6:00 - 8:30 PM", owner: "bear", idea: "Steaks, possible other meats, and baked potatoes", kids: "Butter pasta, nuggets", cold: ["steaks", "possible other meats", "butter"] },
+  { id: "fri-dessert", day: "fri", dayLabel: "Fri Jul 3", type: "Dessert / Snacks", time: "After dinner", owner: "nick", idea: "S’mores and rice crispy treats", kids: "S’mores", cold: [] },
+  { id: "sat-breakfast", day: "sat", dayLabel: "Sat Jul 4", type: "Breakfast", time: "7:00 - 10:00 AM", owner: "", idea: "Breakfast tacos", kids: "Eggs, tortillas, fruit", cold: ["eggs", "cheese"] },
+  { id: "sat-lunch", day: "sat", dayLabel: "Sat Jul 4", type: "Lunch", time: "12:00 - 2:00 PM", owner: "", idea: "Lake sandwiches and snacks", kids: "Chips, fruit, yogurt tubes", cold: ["yogurt", "fruit"] },
+  { id: "sat-dinner", day: "sat", dayLabel: "Sat Jul 4", type: "Dinner", time: "6:00 - 8:30 PM", owner: "", idea: "Hot dogs and buns are covered by Jear; hamburgers TBD", kids: "Hot dogs, fruit", cold: ["hot dogs", "burgers TBD", "cheese"] },
+  { id: "sat-dessert", day: "sat", dayLabel: "Sat Jul 4", type: "Dessert / Snacks", time: "After dinner", owner: "", idea: "Ice cream or s’mores", kids: "Rice crispy treats", cold: ["ice cream"] },
+  { id: "sun-breakfast", day: "sun", dayLabel: "Sun Jul 5", type: "Breakfast", time: "7:00 - 10:00 AM", owner: "", idea: "Pancakes and fruit", kids: "Pancakes", cold: ["milk", "eggs"] },
+  { id: "sun-lunch", day: "sun", dayLabel: "Sun Jul 5", type: "Lunch", time: "12:00 - 2:00 PM", owner: "", idea: "Leftovers and quesadillas", kids: "Quesadillas", cold: ["cheese"] },
+  { id: "sun-dinner", day: "sun", dayLabel: "Sun Jul 5", type: "Dinner", time: "6:00 - 8:30 PM", owner: "", idea: "Dinner meat TBD; Jear may bring other meats", kids: "Nuggets, butter pasta", cold: ["meat TBD"] },
+  { id: "sun-dessert", day: "sun", dayLabel: "Sun Jul 5", type: "Dessert / Snacks", time: "After dinner", owner: "", idea: "Finish sweets", kids: "Fruit, treats", cold: [] },
+  { id: "mon-breakfast", day: "mon", dayLabel: "Mon Jul 6", type: "Breakfast", time: "Pack-up morning", owner: "", idea: "Coffee, pastries, leftovers", kids: "Cereal, fruit", cold: ["milk"] },
+  { id: "mon-cleanup", day: "mon", dayLabel: "Mon Jul 6", type: "Pack-up", time: "Before checkout", owner: "", idea: "Fridge clear-out and trash", kids: "Road snacks", cold: [] }
+];
+
+const defaultSupplies = [
+  { id: "plates", name: "Paper plates", qty: "Marissa: plenty purchased", type: "dry goods", owner: "nick" },
+  { id: "napkins", name: "Napkins", qty: "Marissa: plenty purchased", type: "dry goods", owner: "nick" },
+  { id: "cups", name: "Cups", qty: "Need 100", type: "dry goods", owner: "" },
+  { id: "utensils", name: "Utensils", qty: "Need 100", type: "dry goods", owner: "" },
+  { id: "paper-towels", name: "Paper towels", qty: "Need 4 rolls", type: "dry goods", owner: "" },
+  { id: "trash", name: "Trash bags", qty: "Need 1 box", type: "dry goods", owner: "" },
+  { id: "nacho-chips", name: "Large bag of chips", qty: "Marissa: for nachos one day", type: "dry goods", owner: "nick" },
+  { id: "kettle-corn", name: "Kettle corn", qty: "Marissa photo-confirmed", type: "dry goods", owner: "nick" },
+  { id: "goodles", name: "Goodles pasta boxes", qty: "Marissa photo-confirmed", type: "dry goods", owner: "nick" },
+  { id: "ice", name: "Ice", qty: "Buy near cabin", type: "cold", owner: "" },
+  { id: "water", name: "Water jugs", qty: "Need 3", type: "dry goods", owner: "" },
+  { id: "coffee", name: "Coffee and tea", qty: "Enough for 4 mornings", type: "dry goods", owner: "" },
+  { id: "smores", name: "S’mores ingredients", qty: "G6: marshmallows, grahams, chocolate", type: "dry goods", owner: "nick" },
+  { id: "bacon", name: "Bacon", qty: "Marissa: double pack", type: "cold", owner: "nick" },
+  { id: "eggs", name: "Eggs", qty: "Jear: shared eggs", type: "cold", owner: "bear" },
+  { id: "steaks", name: "Steaks", qty: "Jear: bringing steaks", type: "cold", owner: "bear" },
+  { id: "other-meats", name: "Possible other meats", qty: "Jear may add other meats", type: "cold", owner: "bear" },
+  { id: "hot-dogs-buns", name: "Hot dogs and buns", qty: "Jear: hot dogs; keep buns dry", type: "cold", owner: "bear" },
+  { id: "hamburgers-question", name: "Hamburgers", qty: "Open question: do we want hamburgers?", type: "cold", owner: "" },
+  { id: "steak-seasonings", name: "Steak seasonings", qty: "Needed for steaks", type: "dry goods", owner: "" },
+  { id: "milk", name: "Milk", qty: "Shared breakfast amount", type: "cold", owner: "" },
+  { id: "seltzers", name: "Seltzers and lemonade", qty: "Drinks cooler", type: "cold", owner: "" },
+  { id: "sparkling-ice", name: "Sparkling Ice drinks", qty: "Marissa: lemon pack", type: "cold", owner: "nick" },
+  { id: "orange-juice", name: "Orange juice", qty: "Marissa photo-confirmed", type: "cold", owner: "nick" },
+  { id: "propane", name: "Propane", qty: "Check tanks for grill/Blackstone", type: "gear", owner: "" },
+  { id: "coolers", name: "Extra coolers", qty: "Need 2", type: "gear", owner: "" },
+  { id: "blackstone-two-burner", name: "Two-burner Blackstone", qty: "Bear can bring the smaller Blackstone", type: "gear", owner: "bear" },
+  { id: "pizza-oven-question", name: "Pizza oven", qty: "Ask Nicholas if he wants it brought", type: "gear", owner: "" },
+  { id: "cabin-grill-type", name: "Cabin grill type", qty: "Assume propane until confirmed", type: "gear", owner: "" },
+  { id: "cranium", name: "Cranium", qty: "Board game from Jear", type: "gear", owner: "bear" },
+  { id: "charades", name: "Charades", qty: "Riggs want to bring", type: "gear", owner: "nat" },
+  { id: "games", name: "Extra board games", qty: "Beyond Cranium and charades", type: "gear", owner: "" },
+  { id: "gloves", name: "Baseball gloves", qty: "Outdoor play", type: "gear", owner: "" }
+];
+
+const guideHighlights = [
+  {
+    label: "Closest public swim",
+    value: "White Pines Lake",
+    detail: "Beaches, picnic tables, playground, disc golf, and non-motorized water play near Arnold."
+  },
+  {
+    label: "Best mountain swim",
+    value: "Lake Alpine",
+    detail: "Higher-elevation reservoir with swimming, boating, hiking, fishing, picnic areas, and day-use facilities."
+  },
+  {
+    label: "Closest overlook hike",
+    value: "Arnold Rim Trail - Valley View",
+    detail: "Shortest trail access toward Cougar Rock and Top of the World; dirt road access can be rough."
+  },
+  {
+    label: "Closest clubhouse",
+    value: "Sequoia Woods",
+    detail: "Private 18-hole golf course; clubhouse food and drinks are nearby, pool is members only."
+  }
+];
+
+const shellChecklist = [
+  { id: "shell-door-code", label: "Door code" },
+  { id: "shell-wifi", label: "Wi-Fi name and password" },
+  { id: "shell-fridge", label: "Fridge and freezer space" },
+  { id: "shell-grill-type", label: "Cabin grill type confirmed (assume propane until checked)" },
+  { id: "shell-pizza-oven", label: "Ask Nicholas about bringing the pizza oven" },
+  { id: "shell-sequoia-access", label: "Sequoia Woods pool / golf guest access" },
+  { id: "shell-checkout", label: "Checkout time Monday" },
+  { id: "shell-trash", label: "Trash and recycling instructions" }
+];
+
+const gearChecklist = [
+  { id: "gear-pizza-oven", label: "Ask Nicholas whether he wants the pizza oven" },
+  { id: "gear-blackstone", label: "Bear/Jessica two-burner Blackstone packed" },
+  { id: "gear-grill-type", label: "Cabin grill type confirmed" },
+  { id: "gear-propane", label: "Propane and lighter packed" },
+  { id: "gear-seasonings", label: "Steak seasonings packed" },
+  { id: "gear-board-games", label: "Board games: Cranium and Riggs charades" }
+];
+
+const activities = [
+  {
+    id: "white-pines-lake",
+    category: "Swimming",
+    rank: "Closest public swim",
+    name: "White Pines Lake",
+    notes: "Small Arnold lake with beaches, picnic tables, playground, disc golf, fishing, kayaking, paddleboarding, and no-motor boating.",
+    bestFor: "Kids, quick water time, picnic setup, paddleboards, casual fishing.",
+    access: "Public park near Arnold. No camping at the lake.",
+    tags: ["closest swim", "kid-friendly", "beach", "picnic"],
+    votes: 5,
+    icon: "lake"
+  },
+  {
+    id: "lake-alpine",
+    category: "Swimming",
+    rank: "Best mountain lake",
+    name: "Lake Alpine Recreation Area",
+    notes: "Scenic 7,300-foot reservoir near Bear Valley with swimming, boating, hiking, camping, fishing, picnicking, biking, and ranger programs.",
+    bestFor: "Bigger lake day, cooler air, scenery, non-motorized water time, mixed ages.",
+    access: "Forest Service day use; check road, fee, and weather conditions before heading up.",
+    tags: ["best swim", "scenic", "cooler", "longer drive"],
+    votes: 2,
+    icon: "lake"
+  },
+  {
+    id: "sequoia-woods-pool",
+    category: "Swimming",
+    rank: "Closest pool if access applies",
+    name: "Sequoia Woods Pool",
+    notes: "Country club pool is close to the house but listed as members only.",
+    bestFor: "A pool option only if the host/rental arrangement includes guest privileges.",
+    access: "Verify access before promising this to kids.",
+    tags: ["closest pool", "access dependent", "verify first"],
+    votes: 0,
+    icon: "lake"
+  },
+  {
+    id: "arnold-rim-valley-view",
+    category: "Hikes",
+    rank: "Closest overlook hike",
+    name: "Arnold Rim Trail - Valley View / Top of the World",
+    notes: "Valley View access is the shortest route toward Cougar Rock and Top of the World.",
+    bestFor: "Views, older kids, active adults, morning or evening hiking.",
+    access: "Dirt road access can be slick, rutted, or poor for low-clearance cars; no potable water at the trailhead.",
+    tags: ["closest hike", "views", "overlook", "rough road"],
+    votes: 2,
+    icon: "mountain"
+  },
+  {
+    id: "arnold-rim-logging-museum",
+    category: "Hikes",
+    rank: "Easiest starter hike",
+    name: "Arnold Rim Trail - Logging Museum access",
+    notes: "Northern terminus starts by the Sierra Nevada Logging Museum; first mile is paved and gently graded.",
+    bestFor: "Strollers, mixed ages, short out-and-back, pairing with White Pines Lake.",
+    access: "Park respectfully near the museum and follow trail signage.",
+    tags: ["easy", "paved first mile", "near lake", "museum"],
+    votes: 2,
+    icon: "mountain"
+  },
+  {
+    id: "calaveras-big-trees",
+    category: "Hikes",
+    rank: "Best destination hike",
+    name: "Calaveras Big Trees State Park",
+    notes: "State park preserving North Grove and South Grove giant sequoias, with hiking trails, picnic areas, exhibits, swimming, and day-use facilities.",
+    bestFor: "Iconic trees, shade, all-ages sightseeing, visitor center, low-stress nature time.",
+    access: "Day-use fee applies; dogs are restricted to developed areas and fire roads.",
+    tags: ["best hike", "giant sequoias", "shade", "visitor center"],
+    votes: 6,
+    icon: "trees"
+  },
+  {
+    id: "sequoia-woods-golf",
+    category: "Golf course",
+    rank: "Closest golf",
+    name: "Sequoia Woods Golf Course",
+    notes: "Private 18-hole mountain course at 1000 Cypress Point Drive with pro shop, putting green, driving range, and member/guest tee times.",
+    bestFor: "Golfers, range practice, putting, small adult group outing.",
+    access: "Members and guests; call or verify host privileges before planning golf.",
+    tags: ["closest golf", "private", "18 holes", "range"],
+    votes: 1,
+    icon: "grill"
+  },
+  {
+    id: "sequoia-woods-clubhouse",
+    category: "Golf course",
+    rank: "Closest clubhouse food",
+    name: "Sequoia Woods Clubhouse",
+    notes: "Clubhouse is listed as open to the public for food and drinks, with bar/lounge, deck seating in warm season, and dinner service windows.",
+    bestFor: "Nearby adult drinks, easy meal option, patio, checking course vibe.",
+    access: "Call for reservations and current food hours; pool remains members only.",
+    tags: ["clubhouse", "food", "drinks", "nearby"],
+    votes: 1,
+    icon: "utensils"
+  },
+  {
+    id: "white-pines-disc-golf",
+    category: "Golf course",
+    rank: "Closest casual game",
+    name: "White Pines Disc Golf",
+    notes: "9-hole disc golf course by White Pines Lake and the Arnold Rim Trail.",
+    bestFor: "Older kids, casual competition, low-cost outdoor activity.",
+    access: "Bring discs or pick up supplies in Arnold.",
+    tags: ["disc golf", "kids", "lake add-on", "casual"],
+    votes: 1,
+    icon: "mountain"
+  },
+  {
+    id: "sierra-logging-museum",
+    category: "Around town",
+    rank: "Closest low-effort stop",
+    name: "Sierra Nevada Logging Museum",
+    notes: "Museum near White Pines Lake and the Arnold Rim Trail trailhead.",
+    bestFor: "History stop, short visit, pairing with lake or easy trail walk.",
+    access: "Check open hours before relying on indoor access.",
+    tags: ["museum", "near lake", "short stop"],
+    votes: 1,
+    icon: "bag"
+  },
+  {
+    id: "big-trees-market",
+    category: "Food and errands",
+    rank: "Main grocery backup",
+    name: "Big Trees Market",
+    notes: "Arnold grocery backup for ice, sandwiches, forgotten staples, drinks, and quick cabin supplies.",
+    bestFor: "Errands, ice, deli/sandwich backup, forgotten groceries.",
+    access: "Good practical stop before driving farther up Highway 4.",
+    tags: ["grocery", "ice", "sandwiches", "errands"],
+    votes: 1,
+    icon: "bag"
+  },
+  {
+    id: "bistro-espresso",
+    category: "Food and errands",
+    rank: "Closest coffee / casual food",
+    name: "Bistro Espresso / Cedar Center",
+    notes: "Arnold coffee and casual food area; also near an Arnold Rim Trail kiosk access point.",
+    bestFor: "Coffee, breakfast pickup, casual food, trail access from town.",
+    access: "Check current hours before counting on it.",
+    tags: ["coffee", "casual food", "trail kiosk"],
+    votes: 1,
+    icon: "utensils"
+  },
+  {
+    id: "ebbetts-pass-byway",
+    category: "Scenic drives",
+    rank: "Best scenic corridor",
+    name: "Ebbetts Pass Scenic Byway",
+    notes: "Highway 4 scenic corridor through Arnold, Bear Valley, Lake Alpine, and higher mountain terrain.",
+    bestFor: "Views, cooler weather, photo stops, exploring without a fixed schedule.",
+    access: "Mountain road conditions can change; check before longer drives.",
+    tags: ["scenic", "views", "mountain road"],
+    votes: 1,
+    icon: "mountain"
+  },
+  {
+    id: "bear-valley-area",
+    category: "Scenic drives",
+    rank: "Higher-elevation base",
+    name: "Bear Valley",
+    notes: "Mountain village area near Lake Alpine with rental/support stops and high-country access.",
+    bestFor: "Lake Alpine support stop, cooler air, mountain scenery.",
+    access: "Longer drive from Arnold; useful when pairing with Lake Alpine.",
+    tags: ["Bear Valley", "rentals", "gas", "longer drive"],
+    votes: 1,
+    icon: "mountain"
+  }
+];
+
+const defaultLogistics = {
+  shell: { arrival: "Wednesday afternoon", leaving: "Monday morning", note: "Shell arrives first." },
+  nick: { arrival: "Thursday afternoon", leaving: "Monday morning", note: "Nick and Marissa arrive Thursday." },
+  bear: { arrival: "Friday", leaving: "Monday morning", note: "Bear and Jessica arrive Friday." },
+  nat: { arrival: "Friday", leaving: "Monday morning", note: "Andy and Natalie arrive Friday." }
+};
+
+const dayMeta = {
+  wed: { dayLabel: "Wed Jul 1", fullLabel: "Wednesday July 1" },
+  thu: { dayLabel: "Thu Jul 2", fullLabel: "Thursday July 2" },
+  fri: { dayLabel: "Fri Jul 3", fullLabel: "Friday July 3" },
+  sat: { dayLabel: "Sat Jul 4", fullLabel: "Saturday July 4" },
+  sun: { dayLabel: "Sun Jul 5", fullLabel: "Sunday July 5" },
+  mon: { dayLabel: "Mon Jul 6", fullLabel: "Monday July 6" }
+};
+const arrivalOptions = [
+  "Wednesday morning",
+  "Wednesday afternoon",
+  "Wednesday evening",
+  "Thursday morning",
+  "Thursday afternoon",
+  "Thursday evening",
+  "Friday morning",
+  "Friday afternoon",
+  "Friday evening",
+  "Saturday morning",
+  "Saturday afternoon",
+  "Saturday evening",
+  "Sunday morning",
+  "Sunday afternoon",
+  "Sunday evening",
+  "Not sure yet"
+];
+const leavingOptions = [
+  "Monday morning",
+  "Monday afternoon",
+  "Sunday afternoon",
+  "Sunday evening",
+  "Not sure yet"
+];
+const calendarMealSlots = [
+  { label: "Breakfast", time: "7:00 - 10:00", value: "?" },
+  { label: "Lunch", time: "12:00 - 2:00", value: "?" },
+  { label: "Dinner", time: "6:00 - 8:00", value: "?" },
+  { label: "Dessert / Snacks", time: "8:00 - 10:00", value: "?" }
+];
+
+const storageKey = "cabin-game-plan-v1";
+const selectedFamilyKey = "cabin-game-plan-selected-family-v1";
+const clientIdKey = "cabin-game-plan-client-id-v1";
+const authPasscodeKey = "cabin-game-plan-passcode-v1";
+const installPromptDismissedKey = "cabin-game-plan-install-dismissed-v1";
+const authHeaderName = "x-cabin-passcode";
+const api = {
+  clientId: getClientId(),
+  eventSource: null,
+  hasLoadedSharedState: false,
+  user: null,
+  needsProfile: true
+};
+
+let state = loadLocalState();
+let selectedDay = "wed";
+let selectedFamily = loadSelectedFamily();
+let authPasscode = loadAuthPasscode();
+let tripInfo = null;
+let drawerStep = 1;
+let lastFocusedElement = null;
+let itemMode = "meal";
+let editingItemId = "";
+let deferredInstallPrompt = null;
+let waitingServiceWorker = null;
+let hasReloadedForServiceWorker = false;
+
+function loadLocalState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey));
+    if (saved && saved.meals && saved.supplies) return saved;
+  } catch {
+    // Ignore corrupt local data and start clean.
+  }
+  return {
+    meals: defaultMeals,
+    supplies: defaultSupplies,
+    familyChecks: { bear: true },
+    familyResponses: {},
+    checklists: {},
+    activityVotes: defaultActivityVotes(),
+    activityVoters: {}
+  };
+}
+
+// iOS Safari Private Browsing (and storage-full states) throw on localStorage
+// access. Guard every read/write so the app never breaks because storage did.
+function safeGetItem(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+function safeSetItem(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* ignore storage failures */
+  }
+}
+function safeRemoveItem(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    /* ignore storage failures */
+  }
+}
+
+function loadSelectedFamily() {
+  const saved = safeGetItem(selectedFamilyKey);
+  return families.some((family) => family.id === saved) ? saved : "";
+}
+
+function loadAuthPasscode() {
+  const queryPasscode = new URLSearchParams(window.location.search).get("passcode");
+  const saved = safeGetItem(authPasscodeKey);
+  const next = (queryPasscode || saved || "").trim();
+  if (queryPasscode) {
+    const cleaned = new URL(window.location.href);
+    cleaned.searchParams.delete("passcode");
+    history.replaceState({}, "", cleaned.pathname + cleaned.search + cleaned.hash);
+  }
+  return next;
+}
+
+function saveLocalState() {
+  safeSetItem(storageKey, JSON.stringify(state));
+}
+
+function saveSelectedFamily() {
+  if (selectedFamily) {
+    safeSetItem(selectedFamilyKey, selectedFamily);
+  } else {
+    safeRemoveItem(selectedFamilyKey);
+  }
+}
+
+function normalizePasscode(value) {
+  return String(value || "").trim().slice(0, 120);
+}
+
+function rememberAuthPasscode(value) {
+  const next = normalizePasscode(value);
+  if (!next) {
+    safeRemoveItem(authPasscodeKey);
+    authPasscode = "";
+    return false;
+  }
+  safeSetItem(authPasscodeKey, next);
+  authPasscode = next;
+  return true;
+}
+
+function isStandaloneApp() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function isIosLike() {
+  const platform = navigator.platform || "";
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) || (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function installPromptDismissed() {
+  return safeGetItem(installPromptDismissedKey) === "true";
+}
+
+function renderInstallPrompt() {
+  const panel = document.querySelector("#installPrompt");
+  if (!panel) return;
+  const title = document.querySelector("#installPromptTitle");
+  const copy = document.querySelector("#installPromptCopy");
+  const action = document.querySelector("#installApp");
+  const dismiss = document.querySelector("#dismissInstallPrompt");
+  const shouldShowUpdate = Boolean(waitingServiceWorker);
+  const shouldShowInstall = Boolean(api.user && !isStandaloneApp() && !installPromptDismissed());
+
+  if (!shouldShowUpdate && !shouldShowInstall) {
+    panel.classList.add("is-hidden");
+    return;
+  }
+
+  panel.classList.remove("is-hidden");
+  if (shouldShowUpdate) {
+    if (title) title.textContent = "Update ready";
+    if (copy) copy.textContent = "A newer trip board is ready to load.";
+    if (action) action.textContent = "Update";
+    if (dismiss) dismiss.classList.add("is-hidden");
+    return;
+  }
+
+  if (title) title.textContent = deferredInstallPrompt ? "Install app" : "Install on iPhone";
+  if (copy) {
+    copy.textContent = isIosLike()
+      ? "Tap Share in Safari, then Add to Home Screen."
+      : "Add this trip board to your home screen after the URL is live.";
+  }
+  if (action) action.textContent = deferredInstallPrompt ? "Install" : "How to install";
+  if (dismiss) dismiss.classList.remove("is-hidden");
+}
+
+async function handleInstallAction() {
+  if (waitingServiceWorker) {
+    waitingServiceWorker.postMessage({ type: "SKIP_WAITING" });
+    return;
+  }
+  if (!deferredInstallPrompt) {
+    showToast(isIosLike() ? "Tap Share, then Add to Home Screen." : "Use your browser install menu.");
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  const choice = await deferredInstallPrompt.userChoice.catch(() => null);
+  deferredInstallPrompt = null;
+  if (choice?.outcome === "accepted") safeSetItem(installPromptDismissedKey, "true");
+  renderInstallPrompt();
+}
+
+function dismissInstallPrompt() {
+  safeSetItem(installPromptDismissedKey, "true");
+  renderInstallPrompt();
+}
+
+function updateAuthMessage(message) {
+  const node = document.querySelector("#authMessage");
+  if (node) node.textContent = message || "";
+}
+
+function attendeeById(id) {
+  return attendees.find((person) => person.id === id) || null;
+}
+
+function renderAuthPeople() {
+  const picker = document.querySelector("#authPersonPicker");
+  if (!picker) return;
+  const selectedPersonId = document.querySelector("#authPersonId")?.value || api.user?.personId || "";
+  picker.innerHTML = attendees.map((person) => {
+    const family = familyById(person.familyId);
+    const selected = selectedPersonId === person.id;
+    return `
+      <button
+        class="auth-person ${selected ? "is-selected" : ""}"
+        type="button"
+        data-auth-person="${person.id}"
+        aria-pressed="${selected ? "true" : "false"}">
+        <strong>${escapeText(person.name)}</strong>
+        <span>${escapeText(person.note || family?.shortName || family?.name || "")}</span>
+      </button>
+    `;
+  }).join("");
+}
+
+function selectAuthPerson(personId, options = {}) {
+  const person = attendeeById(personId);
+  if (!person) return;
+  const personInput = document.querySelector("#authPersonId");
+  const firstName = document.querySelector("#authFirstName");
+  const family = document.querySelector("#authFamily");
+  if (personInput) personInput.value = person.id;
+  if (firstName && (!firstName.value || options.force)) firstName.value = person.firstName;
+  if (family) family.value = person.familyId;
+  selectedFamily = person.familyId;
+  saveSelectedFamily();
+  renderAuthPeople();
+  renderFamilies();
+  if (options.focusPassword !== false) {
+    setTimeout(() => document.querySelector("#authPassword")?.focus(), 0);
+  }
+}
+
+function handleAuthFamilyChange() {
+  const family = document.querySelector("#authFamily")?.value || "";
+  const personInput = document.querySelector("#authPersonId");
+  const person = attendeeById(personInput?.value || "");
+  if (person && person.familyId !== family && personInput) personInput.value = "";
+  renderAuthPeople();
+}
+
+function showAuthScreen(message = "") {
+  const screen = document.querySelector("#authScreen");
+  if (!screen) return;
+  const family = document.querySelector("#authFamily");
+  if (family && selectedFamily && !family.value) family.value = selectedFamily;
+  screen.classList.remove("is-hidden");
+  updateAuthMessage(message);
+  setTimeout(() => {
+    const target = document.querySelector("#authFirstName") || document.querySelector("#authPassword");
+    target?.focus?.();
+  }, 0);
+}
+
+function hideAuthScreen() {
+  document.querySelector("#authScreen")?.classList.add("is-hidden");
+  updateAuthMessage("");
+}
+
+function applyProfile(user) {
+  api.user = user || null;
+  api.needsProfile = !user;
+  if (!user) tripInfo = null;
+  if (user?.familyId) {
+    selectedFamily = user.familyId;
+    saveSelectedFamily();
+  }
+  renderProfile();
+  renderTripInfo();
+  renderInstallPrompt();
+}
+
+function renderProfile() {
+  const card = document.querySelector("#profileCard");
+  const mobileCard = document.querySelector("#mobileProfileCard");
+  const name = document.querySelector("#profileName");
+  const mobileName = document.querySelector("#mobileProfileName");
+  const meta = document.querySelector("#profileMeta");
+  const mobileMeta = document.querySelector("#mobileProfileMeta");
+  const heroUserBadge = document.querySelector("#heroUserBadge");
+  const heroUserName = document.querySelector("#heroUserName");
+  const setupButton = document.querySelector("#setupPasskey");
+  const mobileSetupButton = document.querySelector("#mobileSetupPasskey");
+  if (!api.user) {
+    card?.classList.add("is-hidden");
+    mobileCard?.classList.add("is-hidden");
+    heroUserBadge?.classList.add("is-hidden");
+    return;
+  }
+  const family = familyById(api.user.familyId);
+  const metaText = family?.name || "Family not set";
+  card?.classList.remove("is-hidden");
+  mobileCard?.classList.remove("is-hidden");
+  heroUserBadge?.classList.remove("is-hidden");
+  if (setupButton) setupButton.hidden = true;
+  if (mobileSetupButton) mobileSetupButton.hidden = true;
+  if (name) name.textContent = api.user.firstName || "Profile";
+  if (mobileName) mobileName.textContent = api.user.firstName || "Profile";
+  if (heroUserName) heroUserName.textContent = api.user.firstName || "Profile";
+  if (meta) meta.textContent = metaText;
+  if (mobileMeta) mobileMeta.textContent = metaText;
+}
+
+function applyTripInfo(info) {
+  tripInfo = info && typeof info === "object" ? info : null;
+  renderTripInfo();
+}
+
+function renderTripInfo() {
+  const signedIn = Boolean(api.user);
+  const address = signedIn && tripInfo?.address ? tripInfo.address : "Sign in to view house address";
+  const city = tripInfo?.cityLabel || "Arnold, California";
+  const heroText = city;
+  const addressNode = document.querySelector("#cabinAddressValue");
+  const heroNode = document.querySelector("#heroLocationText");
+  const doorNode = document.querySelector("#doorCodeValue");
+  const wifiNode = document.querySelector("#wifiValue");
+  const checkoutNode = document.querySelector("#checkoutValue");
+  if (addressNode) addressNode.textContent = address;
+  if (heroNode) heroNode.textContent = heroText;
+  if (doorNode) doorNode.textContent = signedIn ? (tripInfo?.doorCode || "TBD") : "TBD";
+  if (wifiNode) wifiNode.textContent = signedIn ? (tripInfo?.wifi || "TBD") : "TBD";
+  if (checkoutNode) checkoutNode.textContent = tripInfo?.checkout || "Monday July 6 · time TBD";
+}
+
+function setAuthFieldsFromUser(user) {
+  if (!user) return;
+  const firstName = document.querySelector("#authFirstName");
+  const email = document.querySelector("#authEmail");
+  const family = document.querySelector("#authFamily");
+  const person = document.querySelector("#authPersonId");
+  if (person && user.personId) person.value = user.personId;
+  if (firstName && !firstName.value) firstName.value = user.firstName || "";
+  if (email && !email.value) email.value = user.email || "";
+  if (family && user.familyId) family.value = user.familyId;
+}
+
+function authBody(extra = {}) {
+  return {
+    ...extra,
+    passcode: authPasscode || document.querySelector("#authInvite")?.value.trim() || ""
+  };
+}
+
+async function authPost(path, body = {}) {
+  const response = await fetch(path, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(authBody(body))
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (response.status === 401 && payload.needsPasscode) {
+    showAuthScreen("Enter the family invite code to continue.");
+  }
+  if (!response.ok) throw new Error(payload.message || "Request failed.");
+  return payload;
+}
+
+async function loadProfile() {
+  const response = await authAwareRequest("/api/me", { cache: "no-store" });
+  const payload = await response.json().catch(() => ({}));
+  if (response.status === 401 && payload.needsPasscode) {
+    showAuthScreen("Enter the family invite code to continue.");
+    return null;
+  }
+  if (payload.user) {
+    applyProfile(payload.user);
+    setAuthFieldsFromUser(payload.user);
+    hideAuthScreen();
+    return payload.user;
+  }
+  applyProfile(null);
+  showAuthScreen();
+  return null;
+}
+
+async function requireProfile() {
+  if (api.user) return true;
+  await loadProfile();
+  return Boolean(api.user);
+}
+
+async function submitAuthForm(event) {
+  event.preventDefault();
+  const firstName = document.querySelector("#authFirstName")?.value.trim() || "";
+  const password = document.querySelector("#authPassword")?.value || "";
+  rememberAuthPasscode(password);
+  if (!firstName) {
+    updateAuthMessage("Enter your first name.");
+    document.querySelector("#authFirstName")?.focus();
+    return;
+  }
+  try {
+    updateAuthMessage("Signing in...");
+    const payload = await authPost("/api/auth/login", {
+      firstName,
+      password
+    });
+    applyProfile(payload.user);
+    hideAuthScreen();
+    showToast("Signed in.");
+    connectSharedState();
+  } catch (error) {
+    updateAuthMessage(error.message || "Could not sign in.");
+  }
+}
+
+async function signInWithPasskey() {
+  const invite = document.querySelector("#authInvite")?.value.trim() || "";
+  if (invite) rememberAuthPasscode(invite);
+  const webauthn = window.SimpleWebAuthnBrowser;
+  if (!webauthn?.startAuthentication) {
+    updateAuthMessage("Passkeys are not available in this browser.");
+    return;
+  }
+  try {
+    updateAuthMessage("Waiting for passkey...");
+    const optionsPayload = await authPost("/api/passkey/auth/options", {
+      email: document.querySelector("#authEmail")?.value.trim() || "",
+      personId: document.querySelector("#authPersonId")?.value || ""
+    });
+    const response = await webauthn.startAuthentication(optionsPayload.options);
+    const verified = await authPost("/api/passkey/auth/verify", {
+      challengeId: optionsPayload.challengeId,
+      response
+    });
+    applyProfile(verified.user);
+    hideAuthScreen();
+    showToast("Signed in with passkey.");
+    connectSharedState();
+  } catch (error) {
+    updateAuthMessage(error.message || "Passkey sign-in failed.");
+  }
+}
+
+async function setupPasskey() {
+  showToast("Passkeys are turned off for this trip app.");
+}
+
+async function logoutProfile() {
+  try {
+    await fetch("/api/auth/logout", { method: "POST" });
+  } catch {
+    /* ignore network logout failures */
+  }
+  applyProfile(null);
+  if (api.eventSource) {
+    api.eventSource.close();
+    api.eventSource = null;
+  }
+  const firstName = document.querySelector("#authFirstName");
+  const password = document.querySelector("#authPassword");
+  if (firstName) firstName.value = "";
+  if (password) password.value = "";
+  setSyncStatus("offline", "Signed out");
+  showAuthScreen("Signed out.");
+}
+
+function getRequestInit(base = {}) {
+  const headers = new Headers(base.headers || {});
+  if (authPasscode) headers.set(authHeaderName, authPasscode);
+  return { ...base, headers };
+}
+
+function getClientId() {
+  let clientId = safeGetItem(clientIdKey);
+  if (!clientId) {
+    clientId = crypto.randomUUID ? crypto.randomUUID() : `client-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    safeSetItem(clientIdKey, clientId);
+  }
+  return clientId;
+}
+
+function normalizeClientState(nextState) {
+  return {
+    meals: Array.isArray(nextState.meals) ? nextState.meals : defaultMeals,
+    supplies: Array.isArray(nextState.supplies) ? nextState.supplies : defaultSupplies,
+    familyChecks: nextState.familyChecks && typeof nextState.familyChecks === "object" ? nextState.familyChecks : { bear: true },
+    familyResponses: nextState.familyResponses && typeof nextState.familyResponses === "object" ? nextState.familyResponses : {},
+    checklists: nextState.checklists && typeof nextState.checklists === "object" ? nextState.checklists : {},
+    activityVotes: nextState.activityVotes && typeof nextState.activityVotes === "object"
+      ? { ...defaultActivityVotes(), ...nextState.activityVotes }
+      : defaultActivityVotes(),
+    activityVoters: normalizeActivityVoters(nextState.activityVoters),
+    version: Number(nextState.version || 1),
+    updatedAt: nextState.updatedAt || null
+  };
+}
+
+function normalizeActivityVoters(value) {
+  const next = {};
+  if (!value || typeof value !== "object") return next;
+  activities.forEach((activity) => {
+    const voters = value[activity.id];
+    if (!voters || typeof voters !== "object") return;
+    const safeVoters = {};
+    families.forEach((family) => {
+      if (voters[family.id]) safeVoters[family.id] = true;
+    });
+    if (Object.keys(safeVoters).length) next[activity.id] = safeVoters;
+  });
+  return next;
+}
+
+function escapeText(value) {
+  return String(value ?? "").replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function defaultActivityVotes() {
+  return Object.fromEntries(activities.map((item) => [item.id, item.votes]));
+}
+
+function activityVoteCount(id) {
+  const fallback = activities.find((item) => item.id === id)?.votes || 0;
+  const baseline = Number(state.activityVotes?.[id] ?? fallback);
+  const familyVotes = state.activityVoters?.[id] && typeof state.activityVoters[id] === "object"
+    ? Object.keys(state.activityVoters[id]).length
+    : 0;
+  return baseline + familyVotes;
+}
+
+function activityHasVote(id) {
+  const familyId = selectedFamily || api.user?.familyId || "";
+  return Boolean(familyId && state.activityVoters?.[id]?.[familyId]);
+}
+
+function activityVoteButton(activity, compact = false) {
+  const hasVote = activityHasVote(activity.id);
+  const count = activityVoteCount(activity.id);
+  const label = hasVote ? "Remove vote" : "Vote";
+  const countLabel = `${count} ${count === 1 ? "vote" : "votes"}`;
+  return `
+    <button class="vote-button ${hasVote ? "is-selected" : ""}" type="button" data-vote="${activity.id}" aria-pressed="${hasVote}">
+      ${compact ? escapeText(String(count)) : `<span>${escapeText(countLabel)}</span><span>${escapeText(label)}</span>`}
+    </button>
+  `;
+}
+
+function authAwareRequest(path, init = {}) {
+  return fetch(path, getRequestInit(init));
+}
+
+async function fetchStateWithAuth() {
+  const response = await authAwareRequest("/api/state", { cache: "no-store" });
+  if (response.status === 401 || response.status === 403) {
+    const payload = await response.json().catch(() => ({}));
+    if (payload.needsProfile) {
+      showAuthScreen("Sign in to update the shared board.");
+      throw new Error("PROFILE_REQUIRED");
+    }
+    if (payload.needsPasscode) {
+      showAuthScreen("Enter the family invite code to continue.");
+      throw new Error("PASSCODE_REQUIRED");
+    }
+    throw new Error(payload.message || "UNAUTHORIZED");
+  }
+  return response;
+}
+
+function applySharedState(nextState) {
+  state = normalizeClientState(nextState);
+  saveLocalState();
+  renderAll();
+}
+
+function setSyncStatus(mode, label) {
+  const status = document.querySelector("#syncStatus");
+  if (!status) return;
+  status.classList.remove("is-live", "is-offline", "is-connecting");
+  status.classList.add(`is-${mode}`);
+  const text = status.querySelector("span:last-child");
+  if (text) text.textContent = label;
+}
+
+async function connectSharedState() {
+  if (!location.protocol.startsWith("http")) {
+    setSyncStatus("offline", "Local only");
+    return;
+  }
+
+  if (!(await requireProfile())) {
+    setSyncStatus("offline", "Sign in");
+    return;
+  }
+
+  setSyncStatus("connecting", "Connecting");
+  try {
+    const response = await fetchStateWithAuth();
+    if (!response.ok) throw new Error("Shared state unavailable");
+    const payload = await response.json();
+    applyTripInfo(payload.tripInfo);
+    applySharedState(payload.state);
+    api.hasLoadedSharedState = true;
+    setSyncStatus("live", "Live sync");
+    startEventStream();
+  } catch {
+    setSyncStatus("offline", api.user ? "Sync error" : "Sign in");
+  }
+}
+
+function startEventStream() {
+  if (!window.EventSource || api.eventSource) return;
+  api.eventSource = new EventSource("/api/events");
+  api.eventSource.addEventListener("state", (event) => {
+    try {
+      applySharedState(JSON.parse(event.data));
+      setSyncStatus("live", "Live sync");
+    } catch {
+      setSyncStatus("offline", "Sync error");
+    }
+  });
+  api.eventSource.onerror = () => {
+    setSyncStatus("offline", "Reconnecting");
+  };
+  api.eventSource.onopen = () => {
+    setSyncStatus("live", "Live sync");
+  };
+}
+
+async function performAction(type, payload, fallback, successMessage) {
+  if (location.protocol.startsWith("http")) {
+    try {
+      const response = await authAwareRequest("/api/action", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ type, payload, clientId: api.clientId })
+      });
+      if (response.status === 401 || response.status === 403) {
+        const errorPayload = await response.json().catch(() => ({}));
+        if (errorPayload.needsProfile) {
+          showAuthScreen("Sign in to update the shared board.");
+          setSyncStatus("offline", "Sign in");
+          return false;
+        }
+        if (errorPayload.needsPasscode) {
+          showAuthScreen("Enter the family invite code to continue.");
+          setSyncStatus("offline", "Invite code required");
+          return false;
+        }
+        setSyncStatus("offline", "Passcode required");
+        showToast(errorPayload.message || "Sign in required.");
+        return false;
+      }
+      const result = await response.json();
+      if (result.tripInfo) applyTripInfo(result.tripInfo);
+      if (result.state) applySharedState(result.state);
+      showToast(response.ok ? (successMessage || result.message || "Saved for everyone.") : (result.message || "Could not save."));
+      return response.ok;
+    } catch {
+      setSyncStatus("offline", "Sync error");
+      showToast("Could not reach the shared board. Reconnect and try again.");
+      return false;
+    }
+  }
+
+  fallback();
+  saveLocalState();
+  renderAll();
+  showToast(successMessage ? `${successMessage} Saved on this device.` : "Saved on this device.");
+  return false;
+}
+
+function familyById(id) {
+  return families.find((family) => family.id === id);
+}
+
+function activeFamilyId() {
+  return api.user?.familyId || selectedFamily || "";
+}
+
+function canManageCustomItem(item) {
+  const familyId = activeFamilyId();
+  if (!item || !familyId) return false;
+  const createdBy = item.createdBy || "";
+  if (createdBy) return createdBy === familyId || item.owner === familyId;
+  return !item.owner || item.owner === familyId;
+}
+
+function insertIcons() {
+  document.querySelectorAll("[data-icon]").forEach((node) => {
+    const key = node.getAttribute("data-icon");
+    node.innerHTML = icons[key] || icons.plus;
+  });
+}
+
+function ownerMarkup(ownerId) {
+  if (!ownerId) return "";
+  const family = familyById(ownerId);
+  return `<span class="claimed-pill ${ownerId}">${escapeText(family?.name || "Claimed")}</span>`;
+}
+
+function mealClaimAction(meal) {
+  const owner = meal.owner ? familyById(meal.owner) : null;
+  const isOwnClaim = Boolean(meal.owner && meal.owner === activeFamilyId());
+  if (!meal.owner) {
+    return `<button class="claim-button" type="button" data-claim-meal="${meal.id}">Claim this meal</button>`;
+  }
+  if (isOwnClaim) {
+    return `<button class="claim-button" type="button" data-claim-meal="${meal.id}" aria-label="Unclaim ${escapeText(meal.type)}">Unclaim</button>`;
+  }
+  return `<button class="claim-button" type="button" disabled aria-label="Claimed by ${escapeText(owner?.name || "another family")}">Claimed</button>`;
+}
+
+function isCustomMeal(item) {
+  return /^meal-\d+/.test(String(item?.id || ""));
+}
+
+function isCustomSupply(item) {
+  return /^supply-\d+/.test(String(item?.id || ""));
+}
+
+function itemManageActions(kind, item) {
+  const canManage = (kind === "meal" ? isCustomMeal(item) : isCustomSupply(item)) && canManageCustomItem(item);
+  if (!canManage) return "";
+  const escapedId = escapeText(item.id);
+  return `
+    <div class="item-manage-actions" aria-label="Manage ${kind}">
+      <button class="text-mini-button" type="button" data-edit-${kind}="${escapedId}">Edit</button>
+      <button class="text-mini-button danger" type="button" data-delete-${kind}="${escapedId}">Delete</button>
+    </div>
+  `;
+}
+
+function mealIcon(type) {
+  const normalized = type.toLowerCase();
+  if (normalized.includes("breakfast") || normalized.includes("lunch")) return "sun";
+  if (normalized.includes("dinner")) return "moon";
+  if (normalized.includes("dessert")) return "dessert";
+  return "bag";
+}
+
+function renderMealPreview() {
+  const container = document.querySelector("#mealPreview");
+  if (!container) return;
+  const meals = state.meals.filter((meal) => meal.day === selectedDay);
+  container.innerHTML = meals.map((meal) => `
+    <article class="meal-row">
+      <span class="meal-icon" data-icon="${mealIcon(meal.type)}"></span>
+      <div class="meal-name">
+        <strong>${escapeText(meal.type)}</strong>
+        <span>${escapeText(meal.idea)}</span>
+      </div>
+      <div class="meal-time">
+        <strong>${escapeText(meal.time)}</strong>
+        <span>Kids: ${escapeText(meal.kids)}</span>
+      </div>
+      ${meal.owner ? ownerMarkup(meal.owner) : ""}
+      ${mealClaimAction(meal).replace("Claim this meal", "Claim this slot")}
+    </article>
+  `).join("");
+  insertIcons();
+}
+
+function renderMealBoard() {
+  const container = document.querySelector("#mealBoard");
+  if (!container) return;
+  const days = [
+    ["wed", "Wednesday", "July 1"],
+    ["thu", "Thursday", "July 2"],
+    ["fri", "Friday", "July 3"],
+    ["sat", "Saturday", "July 4"],
+    ["sun", "Sunday", "July 5"],
+    ["mon", "Monday", "July 6"]
+  ];
+  container.innerHTML = days.map(([day, label, date]) => {
+    const rows = state.meals.filter((meal) => meal.day === day).map((meal) => `
+      <article class="meal-row">
+        <div class="meal-name">
+          <strong>${escapeText(meal.type)}</strong>
+          <span>${escapeText(meal.idea)}</span>
+          ${itemManageActions("meal", meal)}
+        </div>
+        <div class="meal-meta">
+          <span class="meta-chip">${escapeText(meal.time)}</span>
+          <span class="meta-chip">Kids: ${escapeText(meal.kids)}</span>
+          <span class="meta-chip">${(meal.cold || []).length ? `Cold: ${(meal.cold || []).map((item) => escapeText(item)).join(", ")}` : "No fridge space"}</span>
+        </div>
+        ${meal.owner ? ownerMarkup(meal.owner) : ""}
+        ${mealClaimAction(meal)}
+      </article>
+    `).join("");
+    return `
+      <section class="meal-day-card">
+        <header class="meal-day-header">
+          <strong>${label}</strong>
+          <span>${date}</span>
+        </header>
+        ${rows || `<article class="meal-row meal-row-empty"><div class="meal-name"><strong>No meal yet</strong><span>This day is still open.</span></div></article>`}
+      </section>
+    `;
+  }).join("");
+  insertIcons();
+}
+
+function logisticsForFamily(familyId) {
+  const response = state.familyResponses?.[familyId] || {};
+  const fallback = defaultLogistics[familyId] || {};
+  return {
+    arrival: response.arrival || fallback.arrival || "Not set",
+    leaving: response.leaving || fallback.leaving || "Not set",
+    note: fallback.note || ""
+  };
+}
+
+function familyTravelLabel(familyId) {
+  const labels = {
+    shell: "Shell",
+    nick: "Nick and Marissa",
+    bear: "Bear and Jessica",
+    nat: "Andy and Natalie"
+  };
+  return labels[familyId] || familyById(familyId)?.name || "Family";
+}
+
+function matchesTravelDay(value, day) {
+  const normalized = String(value || "").trim().toLowerCase();
+  const dayWords = {
+    wed: "wednesday",
+    thu: "thursday",
+    fri: "friday",
+    sat: "saturday",
+    sun: "sunday",
+    mon: "monday"
+  };
+  return Boolean(normalized && dayWords[day] && normalized.includes(dayWords[day]));
+}
+
+function buildTravelEntries(day) {
+  const entries = [];
+  families.forEach((family) => {
+    const logistics = logisticsForFamily(family.id);
+    if (matchesTravelDay(logistics.arrival, day)) {
+      entries.push({
+        type: "arrival",
+        title: `${familyTravelLabel(family.id)} arrive`,
+        detail: logistics.arrival
+      });
+    }
+  });
+
+  if (day === "mon") {
+    entries.push({
+      type: "departure",
+      title: "Everyone leaves",
+      detail: "Monday morning"
+    });
+  }
+  return entries;
+}
+
+function timingOptionsMarkup(selected, options) {
+  return options.map((option) => `
+    <option value="${escapeText(option)}" ${selected === option ? "selected" : ""}>${escapeText(option)}</option>
+  `).join("");
+}
+
+function renderCalendarBoard() {
+  const container = document.querySelector("#calendarBoard");
+  if (!container) return;
+  const days = [
+    ["wed", "Wednesday", "July 1"],
+    ["thu", "Thursday", "July 2"],
+    ["fri", "Friday", "July 3"],
+    ["sat", "Saturday", "July 4"],
+    ["sun", "Sunday", "July 5"],
+    ["mon", "Monday", "July 6"]
+  ];
+  container.innerHTML = days.map(([day, label, date]) => {
+    const travelEntries = buildTravelEntries(day);
+    return `
+      <section class="calendar-day-card">
+        <header class="calendar-day-header">
+          <strong>${label}</strong>
+          <span>${date}</span>
+        </header>
+        <div class="calendar-day-grid">
+          ${travelEntries.length ? travelEntries.map((item) => `
+            <article class="calendar-slot calendar-slot-travel">
+              <span class="calendar-slot-kind">${item.type === "departure" ? "Departure" : "Arrival"}</span>
+              <strong>${escapeText(item.title)}</strong>
+              <span class="calendar-slot-time">${escapeText(item.detail)}</span>
+            </article>
+          `).join("") : `
+            <article class="calendar-slot calendar-slot-empty">
+              <span class="calendar-slot-kind">Travel</span>
+              <strong>?</strong>
+              <span class="calendar-slot-time">No arrival listed</span>
+            </article>
+          `}
+          ${calendarMealSlots.map((slot) => `
+            <article class="calendar-slot">
+              <span class="calendar-slot-kind">${escapeText(slot.label)}</span>
+              <strong>${escapeText(slot.value)}</strong>
+              <span class="calendar-slot-time">${escapeText(slot.time)}</span>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    `;
+  }).join("");
+}
+
+function renderOpenMeals() {
+  const container = document.querySelector("#openMealList");
+  if (!container) return;
+  const openMeals = state.meals.filter((meal) => !meal.owner);
+  if (!openMeals.length) {
+    container.innerHTML = `
+      <article class="needed-row">
+        <div>
+          <strong>All meals are claimed</strong>
+          <span>The schedule is covered for now.</span>
+        </div>
+      </article>
+    `;
+    return;
+  }
+  container.innerHTML = openMeals.map((meal) => `
+    <article class="needed-row">
+      <div>
+        <strong>${escapeText(meal.dayLabel)} ${escapeText(meal.type)}</strong>
+        <span>${escapeText(meal.idea)} · Kids: ${escapeText(meal.kids)}</span>
+        ${itemManageActions("meal", meal)}
+      </div>
+      <button class="claim-button" type="button" data-claim-meal="${meal.id}">Claim</button>
+    </article>
+  `).join("");
+}
+
+function renderChecklist(containerId, items) {
+  const container = document.querySelector(containerId);
+  if (!container) return;
+  container.innerHTML = items.map((item) => {
+    const checked = Boolean(state.checklists?.[item.id]);
+    return `
+      <label class="${checked ? "is-checked" : ""}">
+        <input type="checkbox" data-checklist="${item.id}" ${checked ? "checked" : ""}>
+        <span>${escapeText(item.label)}</span>
+      </label>
+    `;
+  }).join("");
+}
+
+function renderSupplies() {
+  const container = document.querySelector("#supplyList");
+  if (!container) return;
+  const sorted = [...state.supplies].sort((a, b) => {
+    if (!!a.owner === !!b.owner) return a.type.localeCompare(b.type);
+    return a.owner ? 1 : -1;
+  });
+  container.innerHTML = sorted.map((item) => {
+    const owner = item.owner ? familyById(item.owner) : null;
+    const isOwnClaim = Boolean(item.owner && item.owner === activeFamilyId());
+    return `
+      <article class="supply-row ${item.owner ? "is-claimed" : ""}">
+        <div>
+          <span class="supply-type">${escapeText(item.type)}</span>
+          <strong>${escapeText(item.name)}</strong>
+          <span>${escapeText(item.qty)}${owner ? ` · ${escapeText(owner.name)}` : ""}</span>
+          ${itemManageActions("supply", item)}
+        </div>
+        <button
+          class="claim-button"
+          type="button"
+          data-claim-supply="${item.id}"
+          ${owner && !isOwnClaim ? "disabled" : ""}
+          aria-label="${owner && !isOwnClaim ? `Claimed by ${owner.name}` : isOwnClaim ? "Unclaim item" : "Claim item"}">
+          ${isOwnClaim ? "Unclaim" : owner ? "Claimed" : "Claim"}
+        </button>
+      </article>
+    `;
+  }).join("");
+}
+
+function collectClaimsByFamily(familyId) {
+  const mealClaims = state.meals
+    .filter((meal) => meal.owner === familyId)
+    .map((meal) => ({
+      id: meal.id,
+      kind: "meal",
+      title: `${meal.dayLabel} ${meal.type}`,
+      detail: meal.idea
+    }));
+  const supplyClaims = state.supplies
+    .filter((item) => item.owner === familyId)
+    .map((item) => ({
+      id: item.id,
+      kind: "supply",
+      title: item.name,
+      detail: `${item.qty} · ${item.type}`
+    }));
+  return [...mealClaims, ...supplyClaims];
+}
+
+function renderBringingBoard() {
+  const myClaims = document.querySelector("#myClaimsList");
+  const byFamily = document.querySelector("#bringingByFamily");
+  if (!myClaims && !byFamily) return;
+
+  const familyId = activeFamilyId();
+  const ownClaims = familyId ? collectClaimsByFamily(familyId) : [];
+  if (myClaims) {
+    myClaims.innerHTML = ownClaims.length
+      ? ownClaims.map((item) => `
+        <article class="bringing-row">
+          <div>
+            <strong>${escapeText(item.title)}</strong>
+            <span>${escapeText(item.detail)}</span>
+          </div>
+          <button
+            class="claim-button"
+            type="button"
+            ${item.kind === "meal" ? `data-claim-meal="${item.id}"` : `data-claim-supply="${item.id}"`}>
+            Unclaim
+          </button>
+        </article>
+      `).join("")
+      : `
+        <article class="bringing-row bringing-row-empty">
+          <div>
+            <strong>No claims yet</strong>
+            <span>Claim something from the Still needed list.</span>
+          </div>
+        </article>
+      `;
+  }
+
+  if (byFamily) {
+    byFamily.innerHTML = families.map((family) => {
+      const claims = collectClaimsByFamily(family.id);
+      return `
+        <section class="bringing-group">
+          <header class="bringing-group-header">
+            <div>
+              <strong>${escapeText(family.name)}</strong>
+              <span>${claims.length ? `${claims.length} claimed` : "Nothing claimed yet"}</span>
+            </div>
+            <i class="family-swatch" style="background:${family.color}" aria-hidden="true"></i>
+          </header>
+          <div class="bringing-group-list">
+            ${claims.length
+              ? claims.map((item) => `
+                <article class="bringing-row">
+                  <div>
+                    <strong>${escapeText(item.title)}</strong>
+                    <span>${escapeText(item.detail)}</span>
+                  </div>
+                </article>
+              `).join("")
+              : `
+                <article class="bringing-row bringing-row-empty">
+                  <div>
+                    <strong>Still open</strong>
+                    <span>No items claimed yet.</span>
+                  </div>
+                </article>
+              `}
+          </div>
+        </section>
+      `;
+    }).join("");
+  }
+}
+
+function renderLogistics() {
+  const familyList = document.querySelector("#logisticsFamilyList");
+  const promptList = document.querySelector("#logisticsPromptList");
+  const familyId = activeFamilyId();
+  const signedInName = api.user?.firstName || familyTravelLabel(familyId);
+  if (!familyId) {
+    if (familyList) {
+      familyList.innerHTML = `
+        <article class="bringing-row bringing-row-empty">
+          <div>
+            <strong>Sign in first</strong>
+            <span>Log in so we know which household timing to update.</span>
+          </div>
+        </article>
+      `;
+    }
+    if (promptList) {
+      promptList.innerHTML = `
+        <label>
+          <strong>Not signed in</strong>
+          <span>Once you log in, this page will ask what time you are showing up and what time you are leaving.</span>
+        </label>
+      `;
+    }
+    return;
+  }
+  const logistics = logisticsForFamily(familyId);
+  if (familyList) {
+    const family = familyById(familyId);
+    familyList.innerHTML = `
+      <section class="bringing-group">
+        <header class="bringing-group-header">
+          <div>
+            <strong>${escapeText(signedInName)}</strong>
+            <span>This updates ${escapeText(family?.name || "your household")} on the shared calendar.</span>
+          </div>
+          <i class="family-swatch" style="background:${family?.color || "#8aa57b"}" aria-hidden="true"></i>
+        </header>
+        <article class="bringing-row">
+          <div>
+            <strong>Showing up</strong>
+            <span>${escapeText(logistics.arrival)}</span>
+          </div>
+        </article>
+        <article class="bringing-row">
+          <div>
+            <strong>Leaving</strong>
+            <span>${escapeText(logistics.leaving)}</span>
+          </div>
+        </article>
+      </section>
+    `;
+  }
+  if (promptList) {
+    promptList.innerHTML = `
+      <label>
+        <strong>What time are you showing up?</strong>
+        <select id="logisticsArrivalSelect">
+          ${timingOptionsMarkup(logistics.arrival, arrivalOptions)}
+        </select>
+      </label>
+      <label>
+        <strong>What time are you leaving?</strong>
+        <select id="logisticsLeavingSelect">
+          ${timingOptionsMarkup(logistics.leaving, leavingOptions)}
+        </select>
+      </label>
+      <button class="primary-action compact-action" type="button" id="saveLogisticsTiming">Update timing</button>
+    `;
+  }
+}
+
+function saveLogisticsTiming() {
+  const familyId = activeFamilyId();
+  if (!familyId) {
+    showToast("Sign in first.");
+    return;
+  }
+  const arrival = document.querySelector("#logisticsArrivalSelect")?.value || "";
+  const leaving = document.querySelector("#logisticsLeavingSelect")?.value || "";
+  const existing = state.familyResponses?.[familyId] || {};
+  performAction("checkin", {
+    familyId,
+    arrival,
+    leaving,
+    kidFood: existing.kidFood || "",
+    allergies: existing.allergies || "",
+    gear: existing.gear || []
+  }, () => {
+    state.familyChecks[familyId] = true;
+    state.familyResponses[familyId] = {
+      ...existing,
+      arrival,
+      leaving,
+      updatedAt: new Date().toISOString()
+    };
+  }, "Timing updated.");
+}
+
+function renderTopNeeded() {
+  const container = document.querySelector("#topNeeded");
+  if (!container) return;
+  const openMeals = state.meals.filter((meal) => !meal.owner).map((meal) => ({
+    id: meal.id,
+    title: `${meal.dayLabel} ${meal.type}`,
+    detail: meal.idea,
+    action: "meal"
+  }));
+  const openSupplies = state.supplies.filter((item) => !item.owner).map((item) => ({
+    id: item.id,
+    title: item.name,
+    detail: `${item.qty} · ${item.type}`,
+    action: "supply"
+  }));
+  const needed = [...openMeals, ...openSupplies];
+  if (!needed.length) {
+    container.innerHTML = `
+      <article class="needed-row">
+        <div>
+          <strong>Everything is covered</strong>
+          <span>No open meals or supplies right now.</span>
+        </div>
+      </article>
+    `;
+    return;
+  }
+  container.innerHTML = needed.map((item) => `
+    <article class="needed-row">
+      <div>
+        <strong>${escapeText(item.title)}</strong>
+        <span>${escapeText(item.detail)}</span>
+      </div>
+      ${item.action === "meal"
+        ? `<button class="claim-button" type="button" data-claim-meal="${item.id}">Claim</button>`
+        : `<button class="claim-button" type="button" data-claim-supply="${item.id}">Claim</button>`}
+    </article>
+  `).join("");
+}
+
+function activityIconMarkup(activity) {
+  const key = activity.icon === "lake" ? "mountain" : activity.icon === "trees" ? "mountain" : activity.icon;
+  return icons[key] || icons.mountain;
+}
+
+function renderGuideHighlights() {
+  const container = document.querySelector("#guideHighlights");
+  if (!container) return;
+  container.innerHTML = guideHighlights.map((item) => `
+    <article class="guide-highlight">
+      <span>${escapeText(item.label)}</span>
+      <strong>${escapeText(item.value)}</strong>
+      <p>${escapeText(item.detail)}</p>
+    </article>
+  `).join("");
+}
+
+function renderActivityPreview() {
+  const container = document.querySelector("#activityPreview");
+  if (!container) return;
+  container.innerHTML = activities.slice(0, 3).map((activity) => `
+    <article class="activity-card">
+      <span class="activity-thumb">${activityIconMarkup(activity)}</span>
+      <div>
+        <strong>${escapeText(activity.name)}</strong>
+        <span>${escapeText(activity.notes)}</span>
+      </div>
+      ${activityVoteButton(activity, true)}
+    </article>
+  `).join("");
+}
+
+function renderActivityGrid() {
+  const container = document.querySelector("#activityGrid");
+  if (!container) return;
+  const grouped = activities.reduce((groups, activity) => {
+    if (!groups.has(activity.category)) groups.set(activity.category, []);
+    groups.get(activity.category).push(activity);
+    return groups;
+  }, new Map());
+
+  container.innerHTML = Array.from(grouped.entries()).map(([category, items]) => `
+    <section class="activity-group" aria-label="${escapeText(category)}">
+      <div class="activity-group-heading">
+        <h2>${escapeText(category)}</h2>
+        <span>${items.length} options</span>
+      </div>
+      <div class="activity-group-grid">
+        ${items.map((activity) => `
+          <article class="activity-card">
+            <span class="activity-thumb">${activityIconMarkup(activity)}</span>
+            <div class="activity-copy">
+              <span class="activity-rank">${escapeText(activity.rank)}</span>
+              <strong>${escapeText(activity.name)}</strong>
+              <span>${escapeText(activity.notes)}</span>
+              <dl class="activity-meta">
+                <div>
+                  <dt>Best for</dt>
+                  <dd>${escapeText(activity.bestFor)}</dd>
+                </div>
+                <div>
+                  <dt>Access</dt>
+                  <dd>${escapeText(activity.access)}</dd>
+                </div>
+              </dl>
+              <div class="activity-tags">
+                ${activity.tags.map((tag) => `<span>${escapeText(tag)}</span>`).join("")}
+              </div>
+              ${activityVoteButton(activity)}
+            </div>
+          </article>
+        `).join("")}
+      </div>
+    </section>
+  `).join("");
+}
+
+function renderFamilies() {
+  const lockedFamilyId = api.user?.familyId || "";
+  const familyPanelTitle = document.querySelector("#familyPanelTitle");
+  const familyPanelCopy = document.querySelector("#familyPanelCopy");
+  const checkinFamilyTitle = document.querySelector("#checkinFamilyTitle");
+  if (familyPanelTitle) familyPanelTitle.textContent = lockedFamilyId ? "Signed in family" : "Choose family";
+  if (familyPanelCopy) {
+    familyPanelCopy.textContent = lockedFamilyId
+      ? "Claims, votes, and check-ins use your profile family. Sign out to switch."
+      : "Sign in, then confirm your household.";
+  }
+  if (checkinFamilyTitle) checkinFamilyTitle.textContent = lockedFamilyId ? "Confirm your signed-in family" : "Which family are you?";
+
+  const quickPicker = document.querySelector("#quickFamilyPicker");
+  if (quickPicker) {
+    quickPicker.innerHTML = families.map((family) => {
+      const isLockedOut = Boolean(lockedFamilyId && family.id !== lockedFamilyId);
+      return `
+      <button class="quick-family ${selectedFamily === family.id ? "is-selected" : ""} ${isLockedOut ? "is-locked" : ""}" type="button" data-family="${family.id}" ${isLockedOut ? "disabled" : ""}>
+        <i class="family-swatch" style="background:${family.color}" aria-hidden="true"></i>
+        <span>${escapeText(family.shortName || family.name)}</span>
+      </button>
+    `;
+    }).join("");
+  }
+
+  const grid = document.querySelector("#familiesGrid");
+  if (grid) {
+    grid.innerHTML = families.map((family) => {
+      const response = state.familyResponses?.[family.id];
+      const details = response
+        ? `${escapeText(response.arrival || "Arrival TBD")} · ${escapeText(response.leaving || "Leaving TBD")}`
+        : family.details;
+      const kidFood = response?.kidFood ? `<span>Kids: ${escapeText(response.kidFood)}</span>` : "";
+      return `
+        <article class="family-card">
+          <div class="family-color" style="background:${family.color}"></div>
+          <strong>${escapeText(family.name)}</strong>
+          <span>${escapeText(details)}</span>
+          ${kidFood}
+          <div class="family-status">${state.familyChecks[family.id] ? "Checked in" : family.status}</div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  const picker = document.querySelector("#familyPicker");
+  if (picker) {
+    picker.innerHTML = families.map((family) => {
+      const isLockedOut = Boolean(lockedFamilyId && family.id !== lockedFamilyId);
+      return `
+      <button class="family-option ${selectedFamily === family.id ? "is-selected" : ""} ${isLockedOut ? "is-locked" : ""}" type="button" data-family="${family.id}" ${isLockedOut ? "disabled" : ""}>
+        <span>
+          <strong>${escapeText(family.name)}</strong>
+          <span>${escapeText(isLockedOut ? "Sign out to switch to this family." : family.details)}</span>
+        </span>
+        <i class="family-swatch" style="background:${family.color}" aria-hidden="true"></i>
+      </button>
+    `;
+    }).join("");
+  }
+}
+
+function updateCounts() {
+  const mealClaimed = state.meals.filter((meal) => meal.owner).length;
+  const supplyClaimed = state.supplies.filter((item) => item.owner).length;
+  const openMeals = state.meals.length - mealClaimed;
+  const openSupplies = state.supplies.length - supplyClaimed;
+  const claimedTotal = mealClaimed + supplyClaimed;
+  const neededTotal = openMeals + openSupplies;
+  const myClaimTotal = activeFamilyId() ? collectClaimsByFamily(activeFamilyId()).length : 0;
+  const missingCheckins = families.filter((family) => !state.familyChecks[family.id]).length;
+  const coldCount = state.supplies.filter((item) => item.type === "cold" && item.owner).length +
+    state.meals.filter((meal) => meal.owner).reduce((count, meal) => count + Math.min((meal.cold || []).length, 2), 0);
+
+  document.querySelectorAll("#mealClaimedCount").forEach((node) => { node.textContent = mealClaimed; });
+  document.querySelectorAll("#supplyClaimedCount").forEach((node) => { node.textContent = supplyClaimed; });
+  document.querySelectorAll("#openMealCount").forEach((node) => { node.textContent = openMeals; });
+  document.querySelectorAll("#openSupplyCount").forEach((node) => { node.textContent = openSupplies; });
+  document.querySelectorAll("#missingCheckinCount").forEach((node) => { node.textContent = missingCheckins; });
+  document.querySelectorAll("#neededTotalCount").forEach((node) => { node.textContent = neededTotal; });
+  document.querySelectorAll("#coveredTotalCount").forEach((node) => { node.textContent = claimedTotal; });
+  document.querySelectorAll("#myClaimCount").forEach((node) => { node.textContent = myClaimTotal; });
+  const coldNode = document.querySelector("#coldCount");
+  if (coldNode) coldNode.textContent = coldCount;
+  const coldMeter = document.querySelector("#coldMeter");
+  if (coldMeter) coldMeter.style.width = `${Math.min(100, Math.round((coldCount / 18) * 100))}%`;
+}
+
+function renderAll() {
+  renderFamilies();
+  renderProfile();
+  renderTripInfo();
+  renderInstallPrompt();
+  renderCalendarBoard();
+  renderLogistics();
+  renderChecklist("#shellQuestionList", shellChecklist);
+  renderChecklist("#gearChecklistList", gearChecklist);
+  renderMealPreview();
+  renderOpenMeals();
+  renderMealBoard();
+  renderSupplies();
+  renderBringingBoard();
+  renderGuideHighlights();
+  renderActivityPreview();
+  renderActivityGrid();
+  updateCounts();
+}
+
+function setActivePanel(tab) {
+  document.querySelectorAll("[data-panel]").forEach((panel) => {
+    panel.classList.toggle("is-hidden", panel.dataset.panel !== tab);
+  });
+  document.querySelectorAll("[data-tab]").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.tab === tab);
+  });
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+}
+
+function registerServiceWorker() {
+  const isLocalPreview = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+  if (isLocalPreview) {
+    navigator.serviceWorker?.getRegistrations?.()
+      .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+      .catch(() => {});
+    return;
+  }
+  if (!("serviceWorker" in navigator) || !location.protocol.startsWith("http")) return;
+  navigator.serviceWorker.register("service-worker.js")
+    .then((registration) => {
+      if (registration.waiting) {
+        waitingServiceWorker = registration.waiting;
+        renderInstallPrompt();
+      }
+      registration.addEventListener("updatefound", () => {
+        const worker = registration.installing;
+        if (!worker) return;
+        worker.addEventListener("statechange", () => {
+          if (worker.state === "installed" && navigator.serviceWorker.controller) {
+            waitingServiceWorker = worker;
+            renderInstallPrompt();
+          }
+        });
+      });
+    })
+    .catch(() => {});
+
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (hasReloadedForServiceWorker) return;
+    hasReloadedForServiceWorker = true;
+    window.location.reload();
+  });
+}
+
+function showToast(message) {
+  const toast = document.querySelector("#toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove("is-hidden");
+  window.clearTimeout(showToast.timer);
+  showToast.timer = window.setTimeout(() => toast.classList.add("is-hidden"), 2300);
+}
+
+function claimMeal(id) {
+  const familyId = activeFamilyId();
+  if (!familyId) {
+    showToast("Sign in with your family first.");
+    document.querySelector("#quickFamilyPicker")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  const meal = state.meals.find((item) => item.id === id);
+  if (!meal) return;
+  if (meal.owner && meal.owner !== familyId) {
+    showToast(`${meal.type} is already claimed by ${familyById(meal.owner)?.name || "another family"}.`);
+    return;
+  }
+  const family = familyById(familyId);
+  const willClaim = !meal.owner;
+  performAction("claimMeal", { id, owner: familyId }, () => {
+    meal.owner = willClaim ? familyId : "";
+  }, willClaim ? `${family.name} claimed ${meal.type}.` : `${meal.type} moved back to open.`);
+}
+
+function claimSupply(id) {
+  const familyId = activeFamilyId();
+  if (!familyId) {
+    showToast("Sign in with your family first.");
+    document.querySelector("#quickFamilyPicker")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  const item = state.supplies.find((supply) => supply.id === id);
+  if (!item) return;
+  if (item.owner && item.owner !== familyId) {
+    showToast(`${item.name} is already claimed by ${familyById(item.owner)?.name || "another family"}.`);
+    return;
+  }
+  const willClaim = !item.owner;
+  performAction("toggleSupply", { id, owner: familyId }, () => {
+    item.owner = willClaim ? familyId : "";
+  }, willClaim ? `${familyById(familyId).name} claimed ${item.name}.` : `${item.name} moved back to still needed.`);
+}
+
+function voteActivity(id) {
+  const familyId = selectedFamily || api.user?.familyId || "";
+  if (!familyId) {
+    showToast("Pick your family first.");
+    return;
+  }
+  performAction("voteActivity", { id }, () => {
+    state.activityVoters = state.activityVoters || {};
+    state.activityVoters[id] = state.activityVoters[id] || {};
+    if (state.activityVoters[id][familyId]) {
+      delete state.activityVoters[id][familyId];
+      if (!Object.keys(state.activityVoters[id]).length) delete state.activityVoters[id];
+      return;
+    }
+    state.activityVoters[id][familyId] = true;
+  }, activityHasVote(id) ? "Vote removed." : "Vote added.");
+}
+
+function toggleChecklist(id, checked) {
+  state.checklists ||= {};
+  performAction("toggleChecklist", { id, checked }, () => {
+    state.checklists[id] = checked;
+  }, checked ? "Checklist item marked done." : "Checklist item reopened.");
+}
+
+function openDrawer() {
+  lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  drawerStep = 1;
+  updateDrawer();
+  document.body.classList.add("drawer-open");
+  document.querySelector("#drawerBackdrop").classList.remove("is-hidden");
+  document.querySelector("#checkinDrawer").classList.remove("is-hidden");
+  window.setTimeout(() => document.querySelector("#closeDrawer")?.focus(), 0);
+}
+
+function closeDrawer() {
+  document.body.classList.remove("drawer-open");
+  document.querySelector("#drawerBackdrop").classList.add("is-hidden");
+  document.querySelector("#checkinDrawer").classList.add("is-hidden");
+  lastFocusedElement?.focus?.();
+  lastFocusedElement = null;
+}
+
+function updateDrawer() {
+  document.querySelectorAll(".form-step").forEach((step) => {
+    step.classList.toggle("is-hidden", Number(step.dataset.step) !== drawerStep);
+  });
+  const stepNode = document.querySelector("#drawerStep");
+  const progress = document.querySelector("#drawerProgress");
+  const prev = document.querySelector("#prevStep");
+  const next = document.querySelector("#nextStep");
+  if (stepNode) stepNode.textContent = drawerStep;
+  if (progress) progress.style.width = `${drawerStep * 25}%`;
+  if (prev) prev.disabled = drawerStep === 1;
+  if (next) next.textContent = drawerStep === 4 ? "Submit check-in" : "Next";
+}
+
+function submitCheckin() {
+  const familyId = activeFamilyId();
+  if (!familyId) {
+    drawerStep = 1;
+    updateDrawer();
+    showToast("Sign in with your family first.");
+    return;
+  }
+  const gear = Array.from(document.querySelectorAll(".checkbox-grid input:checked")).map((input) => input.value);
+  const payload = {
+    familyId,
+    arrival: document.querySelector("#arrivalDay")?.value || "",
+    leaving: document.querySelector("#leavingDay")?.value || "",
+    kidFood: document.querySelector("#kidFood")?.value || "",
+    allergies: document.querySelector("#allergies")?.value || "",
+    gear
+  };
+  performAction("checkin", payload, () => {
+    state.familyChecks[familyId] = true;
+    state.familyResponses[familyId] = {
+      arrival: payload.arrival,
+      leaving: payload.leaving,
+      kidFood: payload.kidFood,
+      allergies: payload.allergies,
+      gear,
+      updatedAt: new Date().toISOString()
+    };
+  }, `${familyById(familyId).name} check-in saved for everyone.`);
+  closeDrawer();
+}
+
+function createMealIdea(payload) {
+  const day = dayMeta[payload.day] ? payload.day : "sun";
+  return {
+    id: `meal-${Date.now()}`,
+    day,
+    dayLabel: dayMeta[day].dayLabel,
+    type: payload.type || "Meal idea",
+    time: "Flexible",
+    owner: "",
+    idea: payload.idea,
+    kids: payload.kids || "Add kid backup",
+    cold: [],
+    custom: true,
+    createdBy: activeFamilyId(),
+    createdAt: new Date().toISOString()
+  };
+}
+
+function createSupplyItem(payload) {
+  return {
+    id: `supply-${Date.now()}`,
+    name: payload.name,
+    qty: payload.qty || "Quantity TBD",
+    type: payload.type || "dry goods",
+    owner: "",
+    custom: true,
+    createdBy: activeFamilyId(),
+    createdAt: new Date().toISOString()
+  };
+}
+
+function openItemDrawer(mode, itemId = "") {
+  itemMode = mode;
+  editingItemId = itemId;
+  lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const title = document.querySelector("#itemDrawerTitle");
+  const help = document.querySelector("#itemDrawerHelp");
+  const save = document.querySelector("#saveItem");
+  const isEdit = Boolean(itemId);
+  if (title) title.textContent = mode === "meal" ? (isEdit ? "Edit meal idea" : "Add meal idea") : (isEdit ? "Edit supply" : "Add supply");
+  if (help) help.textContent = mode === "meal" ? "Keep the meal option clear and claimable." : "Keep the shared item clear and claimable.";
+  if (save) save.textContent = isEdit ? "Save changes" : (mode === "meal" ? "Add meal" : "Add item");
+  document.querySelectorAll("[data-item-section]").forEach((section) => {
+    section.classList.toggle("is-hidden", section.dataset.itemSection !== mode);
+  });
+  document.querySelector("#itemForm")?.reset();
+  if (isEdit && mode === "meal") {
+    const meal = state.meals.find((item) => item.id === itemId);
+    if (meal) {
+      document.querySelector("#mealIdeaDay").value = meal.day || "sun";
+      document.querySelector("#mealIdeaType").value = meal.type || "Dinner";
+      document.querySelector("#mealIdeaText").value = meal.idea || "";
+      document.querySelector("#mealIdeaKids").value = meal.kids || "";
+    }
+  }
+  if (isEdit && mode === "supply") {
+    const supply = state.supplies.find((item) => item.id === itemId);
+    if (supply) {
+      document.querySelector("#supplyName").value = supply.name || "";
+      document.querySelector("#supplyQty").value = supply.qty || "";
+      document.querySelector("#supplyType").value = supply.type || "dry goods";
+    }
+  }
+  document.body.classList.add("drawer-open");
+  document.querySelector("#drawerBackdrop")?.classList.remove("is-hidden");
+  document.querySelector("#itemDrawer")?.classList.remove("is-hidden");
+  window.setTimeout(() => {
+    const firstField = mode === "meal" ? "#mealIdeaDay" : "#supplyName";
+    document.querySelector(firstField)?.focus();
+  }, 0);
+}
+
+function closeItemDrawer() {
+  document.querySelector("#itemDrawer")?.classList.add("is-hidden");
+  editingItemId = "";
+  const checkinOpen = !document.querySelector("#checkinDrawer")?.classList.contains("is-hidden");
+  if (!checkinOpen) {
+    document.body.classList.remove("drawer-open");
+    document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
+  }
+  lastFocusedElement?.focus?.();
+  lastFocusedElement = null;
+}
+
+function closeAllDrawers() {
+  document.querySelector("#checkinDrawer")?.classList.add("is-hidden");
+  document.querySelector("#itemDrawer")?.classList.add("is-hidden");
+  document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
+  document.body.classList.remove("drawer-open");
+  editingItemId = "";
+  lastFocusedElement?.focus?.();
+  lastFocusedElement = null;
+}
+
+function submitItemForm(event) {
+  event.preventDefault();
+  if (itemMode === "meal") {
+    const payload = {
+      day: document.querySelector("#mealIdeaDay")?.value || "sun",
+      type: document.querySelector("#mealIdeaType")?.value || "Meal idea",
+      idea: document.querySelector("#mealIdeaText")?.value.trim() || "",
+      kids: document.querySelector("#mealIdeaKids")?.value.trim() || ""
+    };
+    if (!payload.idea) {
+      showToast("Add a meal idea first.");
+      return;
+    }
+    if (editingItemId) {
+      const meal = state.meals.find((item) => item.id === editingItemId);
+      performAction("updateMealIdea", { id: editingItemId, ...payload }, () => {
+        if (!meal) return;
+        const day = dayMeta[payload.day] ? payload.day : "sun";
+        meal.day = day;
+        meal.dayLabel = dayMeta[day].dayLabel;
+        meal.type = payload.type || "Meal idea";
+        meal.idea = payload.idea;
+        meal.kids = payload.kids || "Add kid backup";
+        meal.updatedAt = new Date().toISOString();
+      }, "Meal idea updated.");
+      closeItemDrawer();
+      return;
+    }
+    performAction("addMealIdea", payload, () => {
+      state.meals.push(createMealIdea(payload));
+    }, "Meal idea added.");
+    closeItemDrawer();
+    return;
+  }
+
+  const payload = {
+    name: document.querySelector("#supplyName")?.value.trim() || "",
+    qty: document.querySelector("#supplyQty")?.value.trim() || "",
+    type: document.querySelector("#supplyType")?.value || "dry goods"
+  };
+  if (!payload.name) {
+    showToast("Add an item name first.");
+    return;
+  }
+  if (editingItemId) {
+    const supply = state.supplies.find((item) => item.id === editingItemId);
+    performAction("updateSupply", { id: editingItemId, ...payload }, () => {
+      if (!supply) return;
+      supply.name = payload.name;
+      supply.qty = payload.qty || "Quantity TBD";
+      supply.type = payload.type || "dry goods";
+      supply.updatedAt = new Date().toISOString();
+    }, "Supply updated.");
+    closeItemDrawer();
+    return;
+  }
+  performAction("addSupply", payload, () => {
+    state.supplies.push(createSupplyItem(payload));
+  }, "Supply added.");
+  closeItemDrawer();
+}
+
+function addMealIdea() {
+  openItemDrawer("meal");
+}
+
+function addSupply() {
+  openItemDrawer("supply");
+}
+
+function editMeal(id) {
+  const meal = state.meals.find((item) => item.id === id);
+  if (!meal || !isCustomMeal(meal)) return;
+  if (!canManageCustomItem(meal)) {
+    showToast("Only the family that added or owns this meal can edit it.");
+    return;
+  }
+  openItemDrawer("meal", id);
+}
+
+function deleteMeal(id) {
+  const meal = state.meals.find((item) => item.id === id);
+  if (!meal || !isCustomMeal(meal)) return;
+  if (!canManageCustomItem(meal)) {
+    showToast("Only the family that added or owns this meal can delete it.");
+    return;
+  }
+  if (!window.confirm(`Delete "${meal.idea}"?`)) return;
+  performAction("deleteMealIdea", { id }, () => {
+    state.meals = state.meals.filter((item) => item.id !== id);
+  }, "Meal idea deleted.");
+}
+
+function editSupply(id) {
+  const supply = state.supplies.find((item) => item.id === id);
+  if (!supply || !isCustomSupply(supply)) return;
+  if (!canManageCustomItem(supply)) {
+    showToast("Only the family that added or owns this supply can edit it.");
+    return;
+  }
+  openItemDrawer("supply", id);
+}
+
+function deleteSupply(id) {
+  const supply = state.supplies.find((item) => item.id === id);
+  if (!supply || !isCustomSupply(supply)) return;
+  if (!canManageCustomItem(supply)) {
+    showToast("Only the family that added or owns this supply can delete it.");
+    return;
+  }
+  if (!window.confirm(`Delete "${supply.name}"?`)) return;
+  performAction("deleteSupply", { id }, () => {
+    state.supplies = state.supplies.filter((item) => item.id !== id);
+  }, "Supply deleted.");
+}
+
+function bindEvents() {
+  document.addEventListener("click", (event) => {
+    const nav = event.target.closest("[data-tab]");
+    if (nav) setActivePanel(nav.dataset.tab);
+
+    const jump = event.target.closest("[data-tab-jump]");
+    if (jump) setActivePanel(jump.dataset.tabJump);
+
+    const mealButton = event.target.closest("[data-claim-meal]");
+    if (mealButton) claimMeal(mealButton.dataset.claimMeal);
+
+    const editMealButton = event.target.closest("[data-edit-meal]");
+    if (editMealButton) editMeal(editMealButton.dataset.editMeal);
+
+    const deleteMealButton = event.target.closest("[data-delete-meal]");
+    if (deleteMealButton) deleteMeal(deleteMealButton.dataset.deleteMeal);
+
+    const supplyButton = event.target.closest("[data-claim-supply]");
+    if (supplyButton) claimSupply(supplyButton.dataset.claimSupply);
+
+    const editSupplyButton = event.target.closest("[data-edit-supply]");
+    if (editSupplyButton) editSupply(editSupplyButton.dataset.editSupply);
+
+    const deleteSupplyButton = event.target.closest("[data-delete-supply]");
+    if (deleteSupplyButton) deleteSupply(deleteSupplyButton.dataset.deleteSupply);
+
+    const vote = event.target.closest("[data-vote]");
+    if (vote) voteActivity(vote.dataset.vote);
+
+    const family = event.target.closest("[data-family]");
+    if (family) {
+      if (api.user?.familyId && family.dataset.family !== api.user.familyId) {
+        showToast("Sign out to switch to another family.");
+        return;
+      }
+      selectedFamily = family.dataset.family;
+      saveSelectedFamily();
+      renderAll();
+    }
+
+    const familyCheckin = event.target.closest("[data-open-family-checkin]");
+    if (familyCheckin) {
+      if (api.user?.familyId && familyCheckin.dataset.openFamilyCheckin !== api.user.familyId) {
+        showToast("Sign out to check in another family.");
+        return;
+      }
+      selectedFamily = familyCheckin.dataset.openFamilyCheckin;
+      saveSelectedFamily();
+      renderAll();
+      openDrawer();
+    }
+
+    const focusFamily = event.target.closest("[data-focus-family]");
+    if (focusFamily) {
+      document.querySelector("#quickFamilyPicker")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      showToast("Pick your family first.");
+    }
+
+    const authPerson = event.target.closest("[data-auth-person]");
+    if (authPerson) selectAuthPerson(authPerson.dataset.authPerson, { force: true });
+  });
+
+  document.addEventListener("change", (event) => {
+    const checklist = event.target.closest("[data-checklist]");
+    if (checklist) toggleChecklist(checklist.dataset.checklist, checklist.checked);
+  });
+
+  document.querySelectorAll(".day-tabs button").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedDay = button.dataset.day;
+      document.querySelectorAll(".day-tabs button").forEach((node) => {
+        node.classList.toggle("is-selected", node === button);
+      });
+      renderMealPreview();
+    });
+  });
+
+  document.querySelector("#openCheckin")?.addEventListener("click", openDrawer);
+  document.querySelector("#openCheckinTwo")?.addEventListener("click", openDrawer);
+  document.querySelector("#closeDrawer")?.addEventListener("click", closeDrawer);
+  document.querySelector("#closeItemDrawer")?.addEventListener("click", closeItemDrawer);
+  document.querySelector("#cancelItem")?.addEventListener("click", closeItemDrawer);
+  document.querySelector("#drawerBackdrop")?.addEventListener("click", closeAllDrawers);
+  document.querySelector("#prevStep")?.addEventListener("click", () => {
+    drawerStep = Math.max(1, drawerStep - 1);
+    updateDrawer();
+  });
+  document.querySelector("#nextStep")?.addEventListener("click", () => {
+    if (drawerStep === 4) {
+      submitCheckin();
+      return;
+    }
+    drawerStep += 1;
+    updateDrawer();
+  });
+  document.querySelector("#addMealIdea")?.addEventListener("click", addMealIdea);
+  document.querySelector("#addSupply")?.addEventListener("click", addSupply);
+  document.addEventListener("click", (event) => {
+    if (event.target.closest("#saveLogisticsTiming")) saveLogisticsTiming();
+  });
+  document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
+  document.querySelector("#authForm")?.addEventListener("submit", submitAuthForm);
+  document.querySelector("#authFamily")?.addEventListener("change", handleAuthFamilyChange);
+  document.querySelector("#passkeySignIn")?.addEventListener("click", signInWithPasskey);
+  document.querySelector("#setupPasskey")?.addEventListener("click", setupPasskey);
+  document.querySelector("#mobileSetupPasskey")?.addEventListener("click", setupPasskey);
+  document.querySelector("#logoutProfile")?.addEventListener("click", logoutProfile);
+  document.querySelector("#mobileLogoutProfile")?.addEventListener("click", logoutProfile);
+  document.querySelector("#installApp")?.addEventListener("click", handleInstallAction);
+  document.querySelector("#dismissInstallPrompt")?.addEventListener("click", dismissInstallPrompt);
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    renderInstallPrompt();
+  });
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    safeSetItem(installPromptDismissedKey, "true");
+    renderInstallPrompt();
+  });
+  document.querySelector("#shareLink")?.addEventListener("click", async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+      await navigator.share({ title: "Cabin Bring Board", url });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+        showToast("Trip link copied.");
+      } else {
+        showToast(url);
+      }
+    } catch {
+      showToast("Share canceled.");
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const drawer = document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden)");
+    const isDrawerOpen = Boolean(drawer);
+    if (event.key === "Escape" && isDrawerOpen) closeAllDrawers();
+    if (event.key !== "Tab" || !isDrawerOpen) return;
+    const focusable = Array.from(drawer.querySelectorAll("button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex='-1'])"))
+      .filter((node) => node.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+}
+
+async function initializeSession() {
+  await loadProfile();
+  if (api.user) connectSharedState();
+}
+
+insertIcons();
+renderAll();
+bindEvents();
+registerServiceWorker();
+initializeSession();
