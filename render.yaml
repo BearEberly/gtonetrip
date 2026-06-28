@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: cabin-bring-board
+    name: gtonetrip
     runtime: node
     plan: starter
     buildCommand: npm ci
@@ -20,6 +20,6 @@ services:
       - key: PUBLIC_ORIGIN
         sync: false
     disk:
-      name: cabin-bring-board-data
+      name: gtonetrip-data
       mountPath: /var/data
       sizeGB: 1
