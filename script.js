@@ -579,6 +579,7 @@ function showAuthScreen(message = "") {
   if (!screen) return;
   const family = document.querySelector("#authFamily");
   if (family && selectedFamily && !family.value) family.value = selectedFamily;
+  document.body.classList.add("auth-open");
   screen.classList.remove("is-hidden");
   updateAuthMessage(message);
   setTimeout(() => {
@@ -588,6 +589,7 @@ function showAuthScreen(message = "") {
 }
 
 function hideAuthScreen() {
+  document.body.classList.remove("auth-open");
   document.querySelector("#authScreen")?.classList.add("is-hidden");
   updateAuthMessage("");
 }
@@ -2443,7 +2445,7 @@ function bindEvents() {
     const url = window.location.href;
     try {
       if (navigator.share) {
-      await navigator.share({ title: "Cabin Bring Board", url });
+      await navigator.share({ title: "4th of July 2026", url });
       } else if (navigator.clipboard) {
         await navigator.clipboard.writeText(url);
         showToast("Trip link copied.");

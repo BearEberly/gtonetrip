@@ -1,11 +1,11 @@
 {
-  "name": "Cabin Bring Board",
-  "short_name": "Bring Board",
+  "name": "4th of July 2026",
+  "short_name": "4th of July 2026",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f5f5f7",
   "theme_color": "#1b6f3e",
-  "description": "Shared phone-friendly claim board for family meals and supplies.",
+  "description": "Guantonio's Trip planning app for family timing, bringing lists, meals, and live updates.",
   "icons": [
     {
       "src": "assets/favicon.svg",

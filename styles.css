@@ -43,6 +43,15 @@ body {
   overflow-x: hidden;
 }
 
+body.auth-open {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body.auth-open .app-shell {
+  display: none;
+}
+
 body.drawer-open {
   overflow: hidden;
 }
@@ -234,8 +243,10 @@ svg {
   display: grid;
   place-items: center;
   padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
-  background: rgba(245, 245, 247, 0.94);
-  backdrop-filter: blur(20px);
+  background:
+    linear-gradient(180deg, rgba(8, 22, 14, 0.54), rgba(8, 22, 14, 0.7)),
+    url("assets/cabin-hero.png") center center / cover no-repeat;
+  overflow: hidden;
 }
 
 .auth-screen.is-hidden {
@@ -246,11 +257,12 @@ svg {
   width: min(100%, 520px);
   max-height: calc(100dvh - 40px);
   overflow: auto;
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  padding: 26px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
 }
 
 .auth-brand {
@@ -268,7 +280,7 @@ svg {
 
 .auth-brand p {
   margin: 6px 0 0;
-  color: var(--muted);
+  color: #4f5e53;
   line-height: 1.45;
 }
 
