@@ -433,6 +433,7 @@ const dayMeta = {
 };
 const allDayCodes = ["wed", "thu", "fri", "sat", "sun", "mon"];
 const mealTypeLabels = {
+  "non-food": "Non-food item",
   breakfast: "Breakfast",
   lunch: "Lunch",
   dinner: "Dinner",
@@ -1221,6 +1222,16 @@ function bringingMealToneClass(mealType) {
   return "is-shared";
 }
 
+function supplyPurposeValue(item = {}) {
+  if (item.type === "table") return "non-food";
+  return mealTypeSafe(item.mealType || "any");
+}
+
+function supplyPurposeLabel(item = {}) {
+  if (item.type === "table") return "Non-food item";
+  return mealTypeDisplay(item.mealType);
+}
+
 function bringingItemsForFamily(familyId) {
   return state.supplies.filter((item) => item.owner === familyId);
 }
@@ -1253,7 +1264,7 @@ function bringingMetaMarkup(item) {
   const toneClass = bringingMealToneClass(item.mealType);
   return `
     <div class="bringing-inline-meta">
-      <span class="bringing-chip ${toneClass}">${escapeText(mealTypeDisplay(item.mealType))}</span>
+      <span class="bringing-chip ${toneClass}">${escapeText(supplyPurposeLabel(item))}</span>
       <span class="bringing-inline-summary">${escapeText(daysSummary(item.days))}${note}</span>
     </div>
   `;
@@ -2349,7 +2360,7 @@ function openItemDrawer(mode, itemId = "") {
     if (supply) {
       document.querySelector("#supplyName").value = supply.name || "";
       document.querySelector("#supplyQty").value = supply.notes || supply.qty || "";
-      document.querySelector("#supplyMealType").value = supply.mealType || "any";
+      document.querySelector("#supplyMealType").value = supplyPurposeValue(supply);
       setSupplyDaySelection(supply.days || []);
       setPendingSupplyImage(supply.image || "");
     }
@@ -2428,10 +2439,17 @@ function submitItemForm(event) {
     name: document.querySelector("#supplyName")?.value.trim() || "",
     notes: document.querySelector("#supplyQty")?.value.trim() || "",
     type: "food",
-    mealType: document.querySelector("#supplyMealType")?.value || "any",
+    mealType: "any",
     days: selectedSupplyDays(),
     image: pendingSupplyImage
   };
+  const selectedPurpose = document.querySelector("#supplyMealType")?.value || "any";
+  if (selectedPurpose === "non-food") {
+    payload.type = "table";
+    payload.mealType = "any";
+  } else {
+    payload.mealType = selectedPurpose;
+  }
   if (!payload.name) {
     showToast("Add an item name first.");
     return;
