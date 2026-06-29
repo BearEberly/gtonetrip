@@ -2495,6 +2495,10 @@ svg {
   font-weight: 700;
 }
 
+.day-picker.is-disabled {
+  opacity: 0.5;
+}
+
 .day-chip-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2515,6 +2519,13 @@ svg {
   border-color: var(--forest-700);
   background: #eef8ef;
   color: var(--forest-800);
+}
+
+.day-chip:disabled {
+  cursor: default;
+  border-color: var(--line);
+  background: var(--surface-soft);
+  color: var(--muted);
 }
 
 select,

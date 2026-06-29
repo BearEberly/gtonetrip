@@ -2282,6 +2282,23 @@ function selectedSupplyDays() {
   return Array.from(document.querySelectorAll("[data-supply-day].is-selected")).map((button) => button.dataset.supplyDay);
 }
 
+function updateSupplyDayAvailability() {
+  const selectedPurpose = document.querySelector("#supplyMealType")?.value || "any";
+  const isNonFood = selectedPurpose === "non-food";
+  const picker = document.querySelector("#supplyDayPicker");
+  const fieldset = document.querySelector(".day-picker");
+  fieldset?.classList.toggle("is-disabled", isNonFood);
+  fieldset?.setAttribute("aria-disabled", isNonFood ? "true" : "false");
+  document.querySelectorAll("[data-supply-day]").forEach((button) => {
+    button.disabled = isNonFood;
+    if (isNonFood) {
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+    }
+  });
+  if (picker) picker.setAttribute("aria-disabled", isNonFood ? "true" : "false");
+}
+
 async function compressImageFile(file) {
   if (!file) return "";
   const source = await new Promise((resolve, reject) => {
@@ -2340,6 +2357,7 @@ function openItemDrawer(mode, itemId = "") {
   document.querySelector("#itemForm")?.reset();
   setPendingSupplyImage("");
   setSupplyDaySelection([]);
+  updateSupplyDayAvailability();
   if (typeWrap) typeWrap.classList.toggle("is-hidden", isEvent);
   if (typeLabel) typeLabel.textContent = "Meal";
   if (textLabel) textLabel.textContent = isEvent ? "Event name" : "Idea";
@@ -2362,6 +2380,7 @@ function openItemDrawer(mode, itemId = "") {
       document.querySelector("#supplyQty").value = supply.notes || supply.qty || "";
       document.querySelector("#supplyMealType").value = supplyPurposeValue(supply);
       setSupplyDaySelection(supply.days || []);
+      updateSupplyDayAvailability();
       setPendingSupplyImage(supply.image || "");
     }
   }
@@ -2447,6 +2466,7 @@ function submitItemForm(event) {
   if (selectedPurpose === "non-food") {
     payload.type = "table";
     payload.mealType = "any";
+    payload.days = [];
   } else {
     payload.mealType = selectedPurpose;
   }
@@ -2454,7 +2474,7 @@ function submitItemForm(event) {
     showToast("Add an item name first.");
     return;
   }
-  if (!payload.days.length) {
+  if (selectedPurpose !== "non-food" && !payload.days.length) {
     showToast("Pick at least one day for this item.");
     return;
   }
@@ -2597,6 +2617,7 @@ function bindEvents() {
 
     const supplyDay = event.target.closest("[data-supply-day]");
     if (supplyDay) {
+      if (supplyDay.disabled) return;
       supplyDay.classList.toggle("is-selected");
       const active = supplyDay.classList.contains("is-selected");
       supplyDay.setAttribute("aria-pressed", active ? "true" : "false");
@@ -2649,6 +2670,7 @@ function bindEvents() {
   document.querySelector("#addNonFoodEvent")?.addEventListener("click", addNonFoodEvent);
   document.querySelector("#addSupply")?.addEventListener("click", addSupply);
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
+  document.querySelector("#supplyMealType")?.addEventListener("change", updateSupplyDayAvailability);
   document.querySelector("#clearSupplyImage")?.addEventListener("click", () => {
     const input = document.querySelector("#supplyImage");
     if (input) input.value = "";
