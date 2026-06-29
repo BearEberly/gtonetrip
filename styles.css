@@ -37,7 +37,9 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background: var(--paper);
+  background:
+    linear-gradient(180deg, rgba(245, 245, 247, 0.76), rgba(245, 245, 247, 0.88)),
+    url("assets/cabin-hero.png") center center / cover fixed no-repeat;
   color: var(--text);
   max-width: 100%;
   overflow-x: hidden;
@@ -77,6 +79,7 @@ svg {
   display: block;
   min-height: 100vh;
   overflow-x: hidden;
+  background: transparent;
 }
 
 .sidebar {
@@ -446,7 +449,7 @@ svg {
   max-width: var(--content-max);
   margin: 0 auto;
   padding: 0 0 calc(108px + env(safe-area-inset-bottom));
-  background: var(--paper);
+  background: transparent;
 }
 
 .hero-session-wrap {
