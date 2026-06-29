@@ -264,9 +264,19 @@ svg {
 
 .auth-brand {
   display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  margin-bottom: 18px;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.auth-brand-mark {
+  flex: 0 0 auto;
+}
+
+.auth-brand-mark img {
+  width: 92px;
+  height: 92px;
+  display: block;
 }
 
 .auth-brand h1 {
