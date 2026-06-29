@@ -102,6 +102,117 @@ const guideHighlights = [
   }
 ];
 
+const cabinThingsToDo = [
+  {
+    id: "arnold-parade",
+    category: "Holiday weekend",
+    name: "Arnold Independence Day Parade",
+    note: "Small-town Fourth of July parade through Arnold and the best family-specific holiday event nearby.",
+    websiteUrl: "https://www.gocalaveras.com/business/festivals-events/arnold-independence-day-parade/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Independence+Day+Parade+Arnold+CA",
+    icon: "sun"
+  },
+  {
+    id: "arts-crafts",
+    category: "Holiday weekend",
+    name: "Sierra Nevada Arts & Crafts Festival",
+    note: "Holiday weekend arts-and-crafts event in Arnold if you want an easy family stop between meals and cabin time.",
+    websiteUrl: "https://www.gocalaveras.com/events/54th-annual-sierra-nevada-arts-crafts-festival/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Arts+and+Crafts+Festival+Arnold+CA",
+    icon: "bag"
+  },
+  {
+    id: "white-pines-lake-trip",
+    category: "Water",
+    name: "White Pines Lake",
+    note: "Closest easy lake option for beach time, picnics, paddling, and kid-friendly downtime.",
+    websiteUrl: "https://www.gocalaveras.com/business/outdoor-recreation/white-pines-lake/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=White+Pines+Lake+Arnold+CA",
+    icon: "mountain"
+  },
+  {
+    id: "big-trees-trip",
+    category: "Nature",
+    name: "Calaveras Big Trees State Park",
+    note: "Best all-ages redwood-style outing nearby with shaded walks, giant trees, and easy sightseeing.",
+    websiteUrl: "https://www.parks.ca.gov/?page_id=551",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Calaveras+Big+Trees+State+Park",
+    icon: "mountain"
+  },
+  {
+    id: "arnold-rim-trail-trip",
+    category: "Nature",
+    name: "Arnold Rim Trail",
+    note: "Best nearby trail system for scenic walks, overlook stops, and a more active family outing.",
+    websiteUrl: "https://arnoldrimtrail.org/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Rim+Trail+Arnold+CA",
+    icon: "mountain"
+  },
+  {
+    id: "logging-museum-trip",
+    category: "Nature",
+    name: "Sierra Nevada Logging Museum",
+    note: "Quick history stop that pairs well with White Pines Lake or the easier Arnold Rim Trail access.",
+    websiteUrl: "https://www.gocalaveras.com/business/attractions/sierra-nevada-logging-museum/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Logging+Museum+Arnold+CA",
+    icon: "bag"
+  },
+  {
+    id: "sequoia-woods-trip",
+    category: "Food and golf",
+    name: "Sequoia Woods Country Club",
+    note: "Closest golf and clubhouse option near the cabin if you want a low-drive adult outing or nearby meal stop.",
+    websiteUrl: "https://www.sequoiawoods.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sequoia+Woods+Country+Club+Arnold+CA",
+    icon: "grill"
+  },
+  {
+    id: "lake-alpine-trip",
+    category: "Scenic day trip",
+    name: "Lake Alpine",
+    note: "Higher-elevation lake day with cooler weather, mountain scenery, and a longer drive that feels like a real outing.",
+    websiteUrl: "https://www.gocalaveras.com/business/lakes-rivers/lake-alpine-recreation-area/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Lake+Alpine+California",
+    icon: "mountain"
+  },
+  {
+    id: "bear-valley-trip",
+    category: "Scenic day trip",
+    name: "Bear Valley Mountain",
+    note: "Mountain base area with summer events and activities if you want to pair it with Lake Alpine or a scenic drive.",
+    websiteUrl: "https://www.bearvalley.com/events-activities",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Bear+Valley+Mountain+Resort+CA",
+    icon: "mountain"
+  },
+  {
+    id: "moaning-caverns-trip",
+    category: "Adventure",
+    name: "Moaning Caverns Adventure Park",
+    note: "Good family detour for cave tours, zip lines, and something different from lake and trail time.",
+    websiteUrl: "https://moaningcaverns.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Moaning+Caverns+Adventure+Park",
+    icon: "flame"
+  },
+  {
+    id: "mercer-caverns-trip",
+    category: "Adventure",
+    name: "Mercer Caverns",
+    note: "Classic cave stop if the group wants a guided underground outing instead of more water or hiking.",
+    websiteUrl: "https://mercercaverns.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Mercer+Caverns+Murphys+CA",
+    icon: "flame"
+  },
+  {
+    id: "california-cavern-trip",
+    category: "Adventure",
+    name: "California Cavern",
+    note: "Another cave option in the county if you want a bigger outing beyond Arnold itself.",
+    websiteUrl: "https://www.gocalaveras.com/business/caves/california-cavern/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=California+Cavern+Mountain+Ranch+CA",
+    icon: "flame"
+  }
+];
+
 const shellChecklist = [
   { id: "shell-door-code", label: "Door code" },
   { id: "shell-wifi", label: "Wi-Fi name and password" },
@@ -1704,6 +1815,25 @@ function renderGuideHighlights() {
   `).join("");
 }
 
+function renderCabinActivityList() {
+  const container = document.querySelector("#cabinActivityList");
+  if (!container) return;
+  container.innerHTML = cabinThingsToDo.map((item) => `
+    <article class="cabin-activity-card">
+      <span class="activity-thumb cabin-activity-thumb">${activityIconMarkup(item)}</span>
+      <div class="cabin-activity-copy">
+        <span class="activity-rank">${escapeText(item.category)}</span>
+        <strong>${escapeText(item.name)}</strong>
+        <span>${escapeText(item.note)}</span>
+        <div class="cabin-activity-links">
+          <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
+          <a class="text-mini-button cabin-link-button" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
 function renderActivityPreview() {
   const container = document.querySelector("#activityPreview");
   if (!container) return;
@@ -1867,6 +1997,7 @@ function renderAll() {
   renderMealBoard();
   renderSupplies();
   renderBringingBoard();
+  renderCabinActivityList();
   renderGuideHighlights();
   renderActivityPreview();
   renderActivityGrid();

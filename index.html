@@ -12,7 +12,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=11">
+    <link rel="stylesheet" href="styles.css?v=12">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -60,17 +60,16 @@
       </aside>
 
       <main class="main">
-        <div class="app-topbar">
-          <div class="app-session is-hidden" id="appSessionBar" aria-live="polite">
-            <span id="appSessionLabel">Logged in as Bear</span>
-            <button type="button" id="logoutProfile">Sign out</button>
-          </div>
-        </div>
-
         <section class="hero" id="dashboard" data-panel="dashboard">
           <div class="hero-media">
             <img src="assets/cabin-hero.png" alt="Mountain lake cabin in Arnold, California">
             <div class="hero-shade"></div>
+            <div class="hero-session-wrap">
+              <div class="app-session is-hidden" id="appSessionBar" aria-live="polite">
+                <span id="appSessionLabel">Logged in as Bear</span>
+                <button type="button" id="logoutProfile">Sign out</button>
+              </div>
+            </div>
             <div class="hero-copy">
               <h1>4th of July 2026</h1>
               <p>July 1 - 6, 2026</p>
@@ -153,57 +152,29 @@
           <div class="panel-heading">
             <div>
               <h1>More</h1>
-              <p>Trip details, family check-in, cabin notes, and extra reference screens.</p>
             </div>
-            <button class="primary-action compact-action" type="button" id="openCheckinTwo">Open check-in</button>
           </div>
-
-          <section class="board-panel">
-            <div class="section-heading">
-              <div>
-                <h2>Extra views</h2>
-                <p>Jump back to bringing items or the nearby reference list when you need them.</p>
-              </div>
-            </div>
-              <div class="trip-status">
-              <button class="status-action" type="button" data-tab-jump="checkin">
-                <strong>Bringing</strong>
-                <span>who has what covered</span>
-              </button>
-              <button class="status-action" type="button" data-tab-jump="activities">
-                <strong>Nearby ideas</strong>
-                <span>reference only</span>
-              </button>
-            </div>
-          </section>
 
           <div class="two-column">
             <section class="board-panel">
               <div class="section-heading">
                 <div>
                   <h2>House details</h2>
-                  <p>Single source of truth for arrival and checkout.</p>
                 </div>
               </div>
               <div class="detail-list">
                 <div><span>Address</span><strong id="cabinAddressValue">Sign in to view house address</strong></div>
-                <div><span>Neighborhood</span><strong>Sequoia Woods · wooded half-acre lot</strong></div>
-                <div><span>House</span><strong>4 bed · 3 bath · about 2,430 sq ft</strong></div>
-                <div><span>Door code</span><strong id="doorCodeValue">TBD</strong></div>
-                <div><span>Wi-Fi</span><strong id="wifiValue">TBD</strong></div>
-                <div><span>Checkout</span><strong id="checkoutValue">Monday July 6 · time TBD</strong></div>
-                <div><span>Weather</span><strong>July days 80-90°F · evenings 50-60°F</strong></div>
               </div>
             </section>
 
             <section class="board-panel">
               <div class="section-heading">
                 <div>
-                  <h2>Gear checklist</h2>
-                  <p>Decide what to bring after we know what is already there.</p>
+                  <h2>Things to do</h2>
+                  <p>Official links plus Google Maps for the holiday weekend.</p>
                 </div>
               </div>
-              <div class="question-list" id="gearChecklistList"></div>
+              <div class="cabin-activity-list" id="cabinActivityList"></div>
             </section>
           </div>
         </section>
@@ -446,6 +417,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=15"></script>
+    <script src="script.js?v=16"></script>
   </body>
 </html>

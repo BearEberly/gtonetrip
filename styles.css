@@ -449,27 +449,25 @@ svg {
   background: var(--paper);
 }
 
-.app-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 25;
-  display: flex;
-  justify-content: flex-end;
-  padding: 14px 14px 0;
-  background: linear-gradient(180deg, rgba(245, 245, 247, 0.96), rgba(245, 245, 247, 0));
-  backdrop-filter: blur(14px);
+.hero-session-wrap {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
 }
 
 .app-session {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-height: 42px;
-  padding: 0 8px 0 14px;
-  border: 1px solid var(--line);
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 6px 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: var(--soft-shadow);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.14);
 }
 
 .app-session.is-hidden {
@@ -477,21 +475,25 @@ svg {
 }
 
 .app-session span {
-  font-size: 0.84rem;
+  font-size: 0.79rem;
   font-weight: 700;
-  color: var(--text);
+  color: #fff;
   white-space: nowrap;
 }
 
 .app-session button {
-  min-height: 30px;
-  padding: 0 11px;
-  border: 1px solid var(--line);
+  min-height: 26px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 999px;
-  background: var(--surface-soft);
-  color: var(--forest-800);
-  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.72rem;
   font-weight: 700;
+}
+
+.app-session button:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .hero-media {
@@ -2099,6 +2101,50 @@ svg {
 
 .detail-list strong {
   font-size: 0.94rem;
+}
+
+.cabin-activity-list {
+  display: grid;
+  gap: 10px;
+}
+
+.cabin-activity-card {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.cabin-activity-thumb {
+  width: 62px;
+  height: 62px;
+}
+
+.cabin-activity-copy strong,
+.cabin-activity-copy span {
+  display: block;
+}
+
+.cabin-activity-copy span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.83rem;
+  line-height: 1.35;
+}
+
+.cabin-activity-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cabin-link-button {
+  text-decoration: none;
 }
 
 .activity-grid {
