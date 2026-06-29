@@ -1649,7 +1649,10 @@ function renderBringingBoard() {
   }
 
   if (byFamily) {
-    byFamily.innerHTML = families.map((family) => {
+    const visibleFamilies = familyId
+      ? families.filter((family) => family.id !== familyId)
+      : families;
+    byFamily.innerHTML = visibleFamilies.map((family) => {
       const claims = collectClaimsByFamily(family.id);
       return `
         <section class="bringing-group">
