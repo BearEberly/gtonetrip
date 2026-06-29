@@ -496,6 +496,13 @@ const api = {
   user: null,
   needsProfile: true
 };
+const passkeyState = {
+  supportChecked: false,
+  supported: false,
+  platform: false,
+  status: null,
+  busy: false
+};
 
 let state = loadLocalState();
 let selectedDay = "wed";
@@ -662,6 +669,93 @@ function updateAuthMessage(message) {
   if (node) node.textContent = message || "";
 }
 
+function passkeyClient() {
+  return window.SimpleWebAuthnBrowser || null;
+}
+
+function passkeySetupLabel() {
+  return isIosLike() ? "Save Face ID" : "Save passkey";
+}
+
+function passkeySignInLabel() {
+  return isIosLike() ? "Use Face ID / passkey" : "Use saved passkey";
+}
+
+function passkeyHelpText() {
+  return isIosLike()
+    ? "After your first password sign-in, you can save Face ID on this phone for one-tap sign-in."
+    : "After your first password sign-in, you can save a passkey on this device for one-tap sign-in.";
+}
+
+async function ensurePasskeySupport() {
+  if (passkeyState.supportChecked) return passkeyState.supported;
+  passkeyState.supportChecked = true;
+  const client = passkeyClient();
+  if (!client?.browserSupportsWebAuthn) {
+    renderPasskeyUi();
+    return false;
+  }
+  try {
+    passkeyState.supported = await client.browserSupportsWebAuthn();
+    if (passkeyState.supported && client.platformAuthenticatorIsAvailable) {
+      passkeyState.platform = await client.platformAuthenticatorIsAvailable().catch(() => false);
+    }
+  } catch {
+    passkeyState.supported = false;
+    passkeyState.platform = false;
+  }
+  renderPasskeyUi();
+  return passkeyState.supported;
+}
+
+function renderPasskeyUi() {
+  const divider = document.querySelector("#passkeyDivider");
+  const actions = document.querySelector("#passkeyActions");
+  const signInButton = document.querySelector("#passkeySignIn");
+  const help = document.querySelector("#passkeyHelp");
+  const setupButton = document.querySelector("#setupPasskey");
+
+  if (help) help.textContent = passkeyHelpText();
+  if (signInButton) {
+    signInButton.textContent = passkeySignInLabel();
+    signInButton.disabled = passkeyState.busy;
+  }
+  if (setupButton) {
+    const statusCount = Number(passkeyState.status?.count || 0);
+    setupButton.textContent = statusCount > 0 ? "Add another passkey" : passkeySetupLabel();
+    setupButton.disabled = passkeyState.busy;
+  }
+
+  const supportsPasskeys = passkeyState.supported;
+  divider?.classList.toggle("is-hidden", !supportsPasskeys || Boolean(api.user));
+  actions?.classList.toggle("is-hidden", !supportsPasskeys || Boolean(api.user));
+  setupButton?.classList.toggle("is-hidden", !supportsPasskeys || !api.user);
+}
+
+async function refreshPasskeyStatus() {
+  const supported = await ensurePasskeySupport();
+  if (!supported || !api.user) {
+    passkeyState.status = null;
+    renderPasskeyUi();
+    return null;
+  }
+  try {
+    const response = await authAwareRequest("/passkey/status", { cache: "no-store" });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.message || "Passkey status unavailable.");
+    passkeyState.status = payload;
+  } catch {
+    passkeyState.status = null;
+  }
+  renderPasskeyUi();
+  return passkeyState.status;
+}
+
+function setPasskeyBusy(isBusy) {
+  passkeyState.busy = Boolean(isBusy);
+  renderPasskeyUi();
+}
+
 function attendeeById(id) {
   return attendees.find((person) => person.id === id) || null;
 }
@@ -720,6 +814,7 @@ function showAuthScreen(message = "") {
   document.body.classList.add("auth-open");
   screen.classList.remove("is-hidden");
   updateAuthMessage(message);
+  renderPasskeyUi();
   setTimeout(() => {
     const target = document.querySelector("#authFirstName") || document.querySelector("#authPassword");
     target?.focus?.();
@@ -743,6 +838,7 @@ function applyProfile(user) {
   renderProfile();
   renderTripInfo();
   renderInstallPrompt();
+  renderPasskeyUi();
 }
 
 function renderProfile() {
@@ -843,6 +939,7 @@ async function submitAuthForm(event) {
     return;
   }
   try {
+    setPasskeyBusy(true);
     updateAuthMessage("Signing in...");
     const payload = await authPost("/login", {
       firstName,
@@ -855,17 +952,96 @@ async function submitAuthForm(event) {
     setActivePanel("food");
     showToast("Signed in.");
     connectSharedState();
+    const status = await refreshPasskeyStatus();
+    if (passkeyState.supported && Number(status?.count || 0) === 0) {
+      showToast(`${passkeySetupLabel()} is ready if you want one-tap sign-in next time.`);
+    }
   } catch (error) {
     updateAuthMessage(error.message || "Could not sign in.");
+  } finally {
+    setPasskeyBusy(false);
   }
 }
 
 async function signInWithPasskey() {
-  updateAuthMessage("Passkeys are turned off for this trip app.");
+  const client = passkeyClient();
+  if (!(await ensurePasskeySupport()) || !client?.startAuthentication) {
+    updateAuthMessage("Passkeys are not available in this browser.");
+    return;
+  }
+  try {
+    setPasskeyBusy(true);
+    updateAuthMessage(isIosLike() ? "Checking Face ID..." : "Checking your saved passkey...");
+    const optionsResponse = await tripApiRequest("/passkey/auth/options", {
+      method: "POST",
+      body: {}
+    });
+    const optionsPayload = await optionsResponse.json().catch(() => ({}));
+    if (!optionsResponse.ok) throw new Error(optionsPayload.message || "Passkey sign-in is not ready.");
+    if (Number(optionsPayload.availableCount || 0) === 0) {
+      throw new Error("No saved passkeys yet. Sign in once with the password, then save Face ID.");
+    }
+    const credential = await client.startAuthentication({ optionsJSON: optionsPayload.options });
+    const verifyResponse = await tripApiRequest("/passkey/auth/verify", {
+      method: "POST",
+      body: {
+        challenge: optionsPayload.options?.challenge || "",
+        response: credential
+      }
+    });
+    const verifyPayload = await verifyResponse.json().catch(() => ({}));
+    if (!verifyResponse.ok) throw new Error(verifyPayload.message || "Face ID sign-in did not finish.");
+    rememberSessionToken(verifyPayload.token || "");
+    applyProfile(verifyPayload.user);
+    applyTripInfo(verifyPayload.tripInfo);
+    hideAuthScreen();
+    setActivePanel("food");
+    showToast("Signed in.");
+    connectSharedState();
+    await refreshPasskeyStatus();
+  } catch (error) {
+    updateAuthMessage(error.message || "Face ID sign-in did not finish.");
+  } finally {
+    setPasskeyBusy(false);
+  }
 }
 
 async function setupPasskey() {
-  showToast("Passkeys are turned off for this trip app.");
+  const client = passkeyClient();
+  if (!api.user) {
+    showAuthScreen("Sign in first, then save Face ID.");
+    return;
+  }
+  if (!(await ensurePasskeySupport()) || !client?.startRegistration) {
+    showToast("Passkeys are not available in this browser.");
+    return;
+  }
+  try {
+    setPasskeyBusy(true);
+    showToast(isIosLike() ? "Saving Face ID for this device..." : "Saving passkey...");
+    const optionsResponse = await authAwareRequest("/passkey/register/options", {
+      method: "POST",
+      body: {}
+    });
+    const optionsPayload = await optionsResponse.json().catch(() => ({}));
+    if (!optionsResponse.ok) throw new Error(optionsPayload.message || "Could not start passkey setup.");
+    const credential = await client.startRegistration({ optionsJSON: optionsPayload.options });
+    const verifyResponse = await authAwareRequest("/passkey/register/verify", {
+      method: "POST",
+      body: {
+        challenge: optionsPayload.options?.challenge || "",
+        response: credential
+      }
+    });
+    const verifyPayload = await verifyResponse.json().catch(() => ({}));
+    if (!verifyResponse.ok) throw new Error(verifyPayload.message || "Could not save that passkey.");
+    await refreshPasskeyStatus();
+    showToast(isIosLike() ? "Face ID saved for faster sign-in." : "Passkey saved for faster sign-in.");
+  } catch (error) {
+    showToast(error.message || "Could not save that passkey.");
+  } finally {
+    setPasskeyBusy(false);
+  }
 }
 
 async function logoutProfile() {
@@ -875,6 +1051,7 @@ async function logoutProfile() {
     /* ignore network logout failures */
   }
   rememberSessionToken("");
+  passkeyState.status = null;
   applyProfile(null);
   stopStatePolling();
   const firstName = document.querySelector("#authFirstName");
@@ -883,6 +1060,7 @@ async function logoutProfile() {
   if (password) password.value = "";
   setSyncStatus("offline", "Signed out");
   showAuthScreen("Signed out.");
+  renderPasskeyUi();
 }
 
 function getClientId() {
@@ -3060,12 +3238,19 @@ function bindEvents() {
 }
 
 async function initializeSession() {
+  await ensurePasskeySupport();
   await loadProfile();
-  if (api.user) connectSharedState();
+  if (api.user) {
+    await refreshPasskeyStatus();
+    connectSharedState();
+    return;
+  }
+  renderPasskeyUi();
 }
 
 insertIcons();
 renderAll();
+renderPasskeyUi();
 bindEvents();
 registerServiceWorker();
 initializeSession();

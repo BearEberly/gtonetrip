@@ -12,7 +12,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=32">
+    <link rel="stylesheet" href="styles.css?v=33">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -59,6 +59,7 @@
             <div class="hero-session-wrap">
               <div class="app-session is-hidden" id="appSessionBar" aria-live="polite">
                 <span id="appSessionLabel">Logged in as Bear</span>
+                <button type="button" class="is-hidden" id="setupPasskey">Save Face ID</button>
                 <button type="button" id="logoutProfile">Sign out</button>
               </div>
             </div>
@@ -392,6 +393,12 @@
       <input id="authFamily" type="hidden">
       <button class="primary-action auth-submit" type="submit">Sign in</button>
     </form>
+    <p class="auth-helper" id="authRememberedNote">This device stays signed in for 30 days after you log in.</p>
+    <div class="auth-divider is-hidden" id="passkeyDivider"><span>or</span></div>
+    <div class="auth-passkey-stack is-hidden" id="passkeyActions">
+      <button class="secondary-action auth-wide" type="button" id="passkeySignIn">Use Face ID / passkey</button>
+      <p class="auth-helper" id="passkeyHelp">After your first password sign-in, you can save Face ID on this phone for one-tap sign-in.</p>
+    </div>
     <p class="auth-message" id="authMessage" aria-live="polite"></p>
   </div>
 </section>
@@ -402,6 +409,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=34"></script>
+    <script src="script.js?v=35"></script>
   </body>
 </html>

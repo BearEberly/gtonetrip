@@ -425,6 +425,22 @@ svg {
   background: var(--surface);
 }
 
+.auth-helper {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.auth-passkey-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-passkey-stack .auth-helper {
+  margin-top: 0;
+}
+
 .auth-message {
   min-height: 20px;
   margin: 12px 0 0;
@@ -466,6 +482,8 @@ svg {
 .app-session {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 6px;
   min-height: 30px;
   padding: 0 5px 0 10px;
@@ -488,6 +506,10 @@ svg {
   white-space: nowrap;
 }
 
+.app-session #appSessionLabel {
+  margin-right: 2px;
+}
+
 .app-session button {
   min-height: 22px;
   padding: 0 8px;
@@ -501,6 +523,11 @@ svg {
 
 .app-session button:hover {
   background: rgba(255, 255, 255, 0.14);
+}
+
+.app-session button:disabled {
+  opacity: 0.7;
+  cursor: wait;
 }
 
 .hero-media {

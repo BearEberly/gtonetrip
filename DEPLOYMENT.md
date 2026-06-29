@@ -34,6 +34,11 @@ Pages serves the static files from the repo root. There is no Node server requir
 - `GET /me`
 - `GET /state`
 - `POST /action`
+- `GET /passkey/status`
+- `POST /passkey/register/options`
+- `POST /passkey/register/verify`
+- `POST /passkey/auth/options`
+- `POST /passkey/auth/verify`
 
 The function uses the shared password `1333` plus the selected adult name.
 
@@ -43,6 +48,8 @@ Supabase stores:
 
 - `public.trip_state`
 - `public.app_sessions`
+- `public.passkey_credentials`
+- `public.passkey_challenges`
 
 `trip_state` holds the singleton shared board state under key `primary`.
 
@@ -82,6 +89,8 @@ Current login flow:
 
 - choose one adult name
 - enter the shared password `1333`
+- the device stays signed in for about 30 days unless the user signs out
+- optionally save a passkey / Face ID after the first password sign-in for one-tap return visits
 
 Allowed login names are Shell, Nick, Marissa, Bear, Jessica, Andy, and Natalie. Kids do not log in.
 

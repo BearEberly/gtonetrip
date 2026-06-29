@@ -38,6 +38,8 @@ Current login flow:
 
 - choose one adult name
 - enter the shared password `1333`
+- the device stays signed in for about 30 days unless the user signs out
+- after the first password sign-in, the user can optionally save a passkey / Face ID for one-tap sign-in on that site and device family
 
 Login choices are limited to Shell, Nick, Marissa, Bear, Jessica, Andy, and Natalie. Kids do not log in. The selected adult is stored as `personId` so updates still stay tied to the right household.
 

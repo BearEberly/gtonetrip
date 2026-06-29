@@ -1,4 +1,10 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import {
+  generateAuthenticationOptions,
+  generateRegistrationOptions,
+  verifyAuthenticationResponse,
+  verifyRegistrationResponse
+} from "npm:@simplewebauthn/server@13.3.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,6 +20,8 @@ const client = createClient(supabaseUrl, serviceRoleKey, {
 
 const SHARED_LOGIN_PASSWORD = "1333";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
+const PASSKEY_CHALLENGE_TTL_MS = 1000 * 60 * 10;
+const PASSKEY_RP_NAME = "4th of July 2026";
 const tripInfo = Object.freeze({
   address: "1018 Wawona Way, Arnold, CA 95223",
   neighborhood: "Sequoia Woods",
@@ -68,6 +76,11 @@ const checklistIds = new Set([
   "gear-board-games"
 ]);
 const allDayCodes = ["wed", "thu", "fri", "sat", "sun", "mon"];
+const allowedPasskeyHosts = new Set([
+  "localhost",
+  "gtonetrip.beareberly.com",
+  "gtonetrip.pages.dev"
+]);
 
 function json(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
@@ -93,6 +106,11 @@ function familySafe(value: unknown) {
 
 function userFromFirstName(firstName: unknown) {
   const normalized = String(firstName || "").trim().toLowerCase();
+  return attendeeCatalog.get(normalized) || null;
+}
+
+function userFromPersonId(personId: unknown) {
+  const normalized = String(personId || "").trim().toLowerCase();
   return attendeeCatalog.get(normalized) || null;
 }
 
@@ -134,6 +152,47 @@ function imageDataUrlSafe(value: unknown) {
   const raw = String(value || "").trim();
   if (!raw.startsWith("data:image/")) return "";
   return raw.length <= 400000 ? raw : "";
+}
+
+function base64UrlFromBytes(value: Uint8Array) {
+  let binary = "";
+  for (const byte of value) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+}
+
+function bytesFromBase64Url(value: string) {
+  const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
+  const padded = normalized.padEnd(normalized.length + ((4 - normalized.length % 4) % 4), "=");
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+function passkeyOriginInfo(request: Request) {
+  const rawOrigin = String(request.headers.get("origin") || "").trim();
+  if (!rawOrigin) throw new Error("Passkeys require a browser origin.");
+  const parsed = new URL(rawOrigin);
+  const host = parsed.hostname.toLowerCase();
+  if (!allowedPasskeyHosts.has(host)) throw new Error("Passkeys are only available on the trip site.");
+  if (host === "localhost") {
+    if (!["http:", "https:"].includes(parsed.protocol)) throw new Error("Local passkeys require localhost.");
+  } else if (parsed.protocol !== "https:") {
+    throw new Error("Passkeys require HTTPS on the live site.");
+  }
+  return {
+    origin: `${parsed.protocol}//${parsed.host}`,
+    rpID: host
+  };
+}
+
+function parseTransportList(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value.map((item) => String(item || "").trim()).filter(Boolean);
+}
+
+function passkeyUserId(personId: string) {
+  return new TextEncoder().encode(personId);
 }
 
 function isCustomMealId(id: string) {
@@ -248,6 +307,123 @@ async function currentSession(request: Request) {
       familyId: data.family_id
     }
   };
+}
+
+async function cleanupExpiredPasskeyChallenges() {
+  await client.from("passkey_challenges").delete().lt("expires_at", new Date().toISOString());
+}
+
+async function savePasskeyChallenge(input: {
+  challenge: string;
+  flow: "register" | "authenticate";
+  personId?: string;
+  familyId?: string;
+  rpID: string;
+  origin: string;
+}) {
+  const expiresAt = new Date(Date.now() + PASSKEY_CHALLENGE_TTL_MS).toISOString();
+  const { error } = await client.from("passkey_challenges").upsert({
+    challenge: input.challenge,
+    flow: input.flow,
+    person_id: input.personId || null,
+    family_id: input.familyId || null,
+    rp_id: input.rpID,
+    origin: input.origin,
+    expires_at: expiresAt
+  });
+  if (error) throw error;
+  return expiresAt;
+}
+
+async function getPasskeyChallenge(challenge: string, flow: "register" | "authenticate") {
+  const { data, error } = await client.from("passkey_challenges")
+    .select("challenge, flow, person_id, family_id, rp_id, origin, expires_at")
+    .eq("challenge", challenge)
+    .eq("flow", flow)
+    .single();
+  if (error || !data) return null;
+  if (new Date(data.expires_at).getTime() < Date.now()) {
+    await client.from("passkey_challenges").delete().eq("challenge", challenge);
+    return null;
+  }
+  return data;
+}
+
+async function deletePasskeyChallenge(challenge: string) {
+  await client.from("passkey_challenges").delete().eq("challenge", challenge);
+}
+
+async function listPasskeysForPerson(personId: string, rpID: string) {
+  const { data, error } = await client.from("passkey_credentials")
+    .select("credential_id, public_key, counter, transports, device_type, backed_up")
+    .eq("person_id", personId)
+    .eq("rp_id", rpID)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return data || [];
+}
+
+async function countPasskeysForRp(rpID: string) {
+  const { count, error } = await client.from("passkey_credentials")
+    .select("credential_id", { count: "exact", head: true })
+    .eq("rp_id", rpID);
+  if (error) throw error;
+  return Number(count || 0);
+}
+
+async function getPasskeyCredential(credentialId: string, rpID: string) {
+  const { data, error } = await client.from("passkey_credentials")
+    .select("credential_id, person_id, family_id, public_key, counter, transports, device_type, backed_up")
+    .eq("credential_id", credentialId)
+    .eq("rp_id", rpID)
+    .single();
+  if (error || !data) return null;
+  return data;
+}
+
+async function upsertPasskeyCredential(input: {
+  credentialId: string;
+  personId: string;
+  familyId: string;
+  rpID: string;
+  publicKey: string;
+  counter: number;
+  transports: string[];
+  deviceType: string;
+  backedUp: boolean;
+}) {
+  const now = new Date().toISOString();
+  const { error } = await client.from("passkey_credentials").upsert({
+    credential_id: input.credentialId,
+    person_id: input.personId,
+    family_id: input.familyId,
+    rp_id: input.rpID,
+    public_key: input.publicKey,
+    counter: input.counter,
+    transports: input.transports,
+    device_type: input.deviceType,
+    backed_up: input.backedUp,
+    updated_at: now,
+    last_used_at: now
+  });
+  if (error) throw error;
+}
+
+async function touchPasskeyCredential(input: {
+  credentialId: string;
+  rpID: string;
+  counter: number;
+  deviceType: string;
+  backedUp: boolean;
+}) {
+  const { error } = await client.from("passkey_credentials").update({
+    counter: input.counter,
+    device_type: input.deviceType,
+    backed_up: input.backedUp,
+    updated_at: new Date().toISOString(),
+    last_used_at: new Date().toISOString()
+  }).eq("credential_id", input.credentialId).eq("rp_id", input.rpID);
+  if (error) throw error;
 }
 
 function applyAction(state: Record<string, unknown>, action: { type: string; payload?: Record<string, unknown> }, actorFamilyId: string) {
@@ -550,6 +726,69 @@ Deno.serve(async (request) => {
       return json({ ok: true, user: null, message: "Signed out." });
     }
 
+    if (route === "/passkey/auth/options" && request.method === "POST") {
+      await cleanupExpiredPasskeyChallenges();
+      const { origin, rpID } = passkeyOriginInfo(request);
+      const options = await generateAuthenticationOptions({
+        rpID,
+        userVerification: "required"
+      });
+      await savePasskeyChallenge({
+        challenge: options.challenge,
+        flow: "authenticate",
+        rpID,
+        origin
+      });
+      const availableCount = await countPasskeysForRp(rpID);
+      return json({ ok: true, options, availableCount });
+    }
+
+    if (route === "/passkey/auth/verify" && request.method === "POST") {
+      await cleanupExpiredPasskeyChallenges();
+      const body = await request.json();
+      const challenge = textSafe(body.challenge);
+      if (!challenge) return json({ ok: false, message: "Passkey challenge missing." }, 400);
+      const challengeRow = await getPasskeyChallenge(challenge, "authenticate");
+      if (!challengeRow) return json({ ok: false, message: "Passkey sign-in expired. Try again." }, 400);
+      const credentialId = textSafe(body.response?.id);
+      const credentialRow = await getPasskeyCredential(credentialId, challengeRow.rp_id);
+      if (!credentialRow) {
+        await deletePasskeyChallenge(challenge);
+        return json({ ok: false, message: "That passkey is not saved for this trip yet." }, 404);
+      }
+      const verification = await verifyAuthenticationResponse({
+        response: body.response,
+        expectedChallenge: challengeRow.challenge,
+        expectedOrigin: challengeRow.origin,
+        expectedRPID: challengeRow.rp_id,
+        credential: {
+          id: credentialRow.credential_id,
+          publicKey: bytesFromBase64Url(String(credentialRow.public_key || "")),
+          counter: Number(credentialRow.counter || 0),
+          transports: parseTransportList(credentialRow.transports)
+        }
+      });
+      if (!verification.verified) {
+        await deletePasskeyChallenge(challenge);
+        return json({ ok: false, message: "Passkey sign-in could not be verified." }, 400);
+      }
+      const user = userFromPersonId(credentialRow.person_id);
+      if (!user) {
+        await deletePasskeyChallenge(challenge);
+        return json({ ok: false, message: "That saved passkey is no longer linked to a trip login." }, 400);
+      }
+      await touchPasskeyCredential({
+        credentialId: credentialRow.credential_id,
+        rpID: challengeRow.rp_id,
+        counter: Number(verification.authenticationInfo.newCounter || 0),
+        deviceType: verification.authenticationInfo.credentialDeviceType,
+        backedUp: Boolean(verification.authenticationInfo.credentialBackedUp)
+      });
+      await deletePasskeyChallenge(challenge);
+      const session = await createSession(user);
+      return json({ ok: true, token: session.token, user, tripInfo, message: "Signed in with passkey." });
+    }
+
     // Public, subscribable calendar feed (no auth) for Apple/Google Calendar.
     if ((route === "/calendar.ics" || route === "/trip.ics") && (request.method === "GET" || request.method === "HEAD")) {
       const state = await getStoredState();
@@ -568,6 +807,78 @@ Deno.serve(async (request) => {
     const session = await currentSession(request);
     if (!session) {
       return json({ ok: false, needsProfile: true, message: "Sign in required." }, 401);
+    }
+
+    if (route === "/passkey/status" && request.method === "GET") {
+      const { rpID } = passkeyOriginInfo(request);
+      const count = (await listPasskeysForPerson(session.user.personId, rpID)).length;
+      return json({ ok: true, count, rpID });
+    }
+
+    if (route === "/passkey/register/options" && request.method === "POST") {
+      await cleanupExpiredPasskeyChallenges();
+      const { origin, rpID } = passkeyOriginInfo(request);
+      const existing = await listPasskeysForPerson(session.user.personId, rpID);
+      const options = await generateRegistrationOptions({
+        rpName: PASSKEY_RP_NAME,
+        rpID,
+        userID: passkeyUserId(session.user.personId),
+        userName: session.user.personId,
+        userDisplayName: session.user.firstName,
+        attestationType: "none",
+        authenticatorSelection: {
+          residentKey: "required",
+          userVerification: "required"
+        },
+        excludeCredentials: existing.map((credential) => ({
+          id: credential.credential_id,
+          transports: parseTransportList(credential.transports)
+        }))
+      });
+      await savePasskeyChallenge({
+        challenge: options.challenge,
+        flow: "register",
+        personId: session.user.personId,
+        familyId: session.user.familyId,
+        rpID,
+        origin
+      });
+      return json({ ok: true, options });
+    }
+
+    if (route === "/passkey/register/verify" && request.method === "POST") {
+      await cleanupExpiredPasskeyChallenges();
+      const body = await request.json();
+      const challenge = textSafe(body.challenge);
+      if (!challenge) return json({ ok: false, message: "Passkey challenge missing." }, 400);
+      const challengeRow = await getPasskeyChallenge(challenge, "register");
+      if (!challengeRow || challengeRow.person_id !== session.user.personId) {
+        return json({ ok: false, message: "Passkey setup expired. Start again." }, 400);
+      }
+      const verification = await verifyRegistrationResponse({
+        response: body.response,
+        expectedChallenge: challengeRow.challenge,
+        expectedOrigin: challengeRow.origin,
+        expectedRPID: challengeRow.rp_id,
+        requireUserVerification: true
+      });
+      if (!verification.verified || !verification.registrationInfo) {
+        await deletePasskeyChallenge(challenge);
+        return json({ ok: false, message: "Could not verify that passkey." }, 400);
+      }
+      await upsertPasskeyCredential({
+        credentialId: verification.registrationInfo.credential.id,
+        personId: session.user.personId,
+        familyId: session.user.familyId,
+        rpID: challengeRow.rp_id,
+        publicKey: base64UrlFromBytes(verification.registrationInfo.credential.publicKey),
+        counter: Number(verification.registrationInfo.credential.counter || 0),
+        transports: parseTransportList(body.response?.response?.transports),
+        deviceType: verification.registrationInfo.credentialDeviceType,
+        backedUp: Boolean(verification.registrationInfo.credentialBackedUp)
+      });
+      await deletePasskeyChallenge(challenge);
+      return json({ ok: true, message: "Passkey saved.", count: (await listPasskeysForPerson(session.user.personId, challengeRow.rp_id)).length });
     }
 
     if (route === "/me" && request.method === "GET") {
