@@ -1232,8 +1232,15 @@ function supplyPurposeLabel(item = {}) {
   return mealTypeDisplay(item.mealType);
 }
 
+function supplyOwnerId(item = {}) {
+  const owner = families.some((family) => family.id === item?.owner) ? item.owner : "";
+  if (owner) return owner;
+  const createdBy = families.some((family) => family.id === item?.createdBy) ? item.createdBy : "";
+  return item?.custom && createdBy ? createdBy : "";
+}
+
 function bringingItemsForFamily(familyId) {
-  return state.supplies.filter((item) => item.owner === familyId);
+  return state.supplies.filter((item) => supplyOwnerId(item) === familyId);
 }
 
 function bringingItemsForMeal(meal) {
@@ -1248,7 +1255,7 @@ function bringingItemsForMeal(meal) {
           : "dinner";
   return state.supplies.filter((item) => {
     if (String(item.type || "").toLowerCase() !== "food") return false;
-    if (!item.owner) return false;
+    if (!supplyOwnerId(item)) return false;
     if (item.days.length && !item.days.includes(meal.day)) return false;
     return item.mealType === "any" || item.mealType === mealType;
   });
@@ -1567,14 +1574,17 @@ function renderSupplies() {
   const container = document.querySelector("#supplyList");
   if (!container) return;
   const sorted = [...state.supplies].sort((a, b) => {
-    if (!!a.owner === !!b.owner) return a.type.localeCompare(b.type);
-    return a.owner ? 1 : -1;
+    const aOwner = supplyOwnerId(a);
+    const bOwner = supplyOwnerId(b);
+    if (!!aOwner === !!bOwner) return a.type.localeCompare(b.type);
+    return aOwner ? 1 : -1;
   });
   container.innerHTML = sorted.map((item) => {
-    const owner = item.owner ? familyById(item.owner) : null;
-    const isOwnClaim = Boolean(item.owner && item.owner === activeFamilyId());
+    const ownerId = supplyOwnerId(item);
+    const owner = ownerId ? familyById(ownerId) : null;
+    const isOwnClaim = Boolean(ownerId && ownerId === activeFamilyId());
     return `
-      <article class="supply-row ${item.owner ? "is-claimed" : ""}">
+      <article class="supply-row ${ownerId ? "is-claimed" : ""}">
         <div>
           <span class="supply-type">${escapeText(item.type)}</span>
           <strong>${escapeText(item.name)}</strong>
@@ -1805,7 +1815,7 @@ function renderTopNeeded() {
     detail: meal.idea,
     action: "meal"
   }));
-  const openSupplies = state.supplies.filter((item) => !item.owner).map((item) => ({
+  const openSupplies = state.supplies.filter((item) => !supplyOwnerId(item)).map((item) => ({
     id: item.id,
     title: item.name,
     detail: `${item.qty} · ${item.type}`,
@@ -1999,14 +2009,14 @@ function renderFamilies() {
 function updateCounts() {
   const foodMeals = state.meals.filter((meal) => !isNonFoodEvent(meal));
   const mealClaimed = foodMeals.filter((meal) => meal.owner).length;
-  const supplyClaimed = state.supplies.filter((item) => item.owner).length;
+  const supplyClaimed = state.supplies.filter((item) => supplyOwnerId(item)).length;
   const openMeals = foodMeals.length - mealClaimed;
   const openSupplies = 0;
   const claimedTotal = mealClaimed + supplyClaimed;
   const neededTotal = openMeals + openSupplies;
   const myClaimTotal = activeFamilyId() ? bringingItemsForFamily(activeFamilyId()).length : 0;
   const missingCheckins = families.filter((family) => !state.familyChecks[family.id]).length;
-  const coldCount = state.supplies.filter((item) => item.type === "cold" && item.owner).length +
+  const coldCount = state.supplies.filter((item) => item.type === "cold" && supplyOwnerId(item)).length +
     state.meals.filter((meal) => meal.owner).reduce((count, meal) => count + Math.min((meal.cold || []).length, 2), 0);
 
   document.querySelectorAll("#mealClaimedCount").forEach((node) => { node.textContent = mealClaimed; });
@@ -2128,11 +2138,12 @@ function claimSupply(id) {
   }
   const item = state.supplies.find((supply) => supply.id === id);
   if (!item) return;
-  if (item.owner && item.owner !== familyId) {
-    showToast(`${item.name} is already claimed by ${familyById(item.owner)?.name || "another family"}.`);
+  const ownerId = supplyOwnerId(item);
+  if (ownerId && ownerId !== familyId) {
+    showToast(`${item.name} is already claimed by ${familyById(ownerId)?.name || "another family"}.`);
     return;
   }
-  const willClaim = !item.owner;
+  const willClaim = !ownerId;
   performAction("toggleSupply", { id, owner: familyId }, () => {
     item.owner = willClaim ? familyId : "";
   }, willClaim ? `${familyById(familyId).name} claimed ${item.name}.` : `${item.name} moved back to still needed.`);
