@@ -1556,6 +1556,35 @@ function renderOpenMeals() {
   `).join("");
 }
 
+function renderCalendarEventList() {
+  const container = document.querySelector("#calendarEventList");
+  if (!container) return;
+  const events = state.meals.filter((meal) => isNonFoodEvent(meal));
+  if (!events.length) {
+    container.innerHTML = `
+      <article class="needed-row">
+        <div>
+          <strong>No calendar events yet</strong>
+          <span>Use Add Non-Food Event to put parade times, outings, or plans on the calendar.</span>
+        </div>
+      </article>
+    `;
+    return;
+  }
+  container.innerHTML = events.map((meal) => `
+    <article class="needed-row">
+      <div>
+        <strong>${escapeText(meal.dayLabel)} · ${escapeText(meal.idea || "Untitled event")}</strong>
+        <span>${escapeText(meal.kids || meal.time || "Time TBD")}</span>
+      </div>
+      <div class="calendar-event-actions">
+        <button class="claim-button" type="button" data-edit-meal="${meal.id}">Edit</button>
+        ${isCustomMeal(meal) && canManageCustomItem(meal) ? `<button class="claim-button danger-outline" type="button" data-delete-meal="${meal.id}">Delete</button>` : ""}
+      </div>
+    </article>
+  `).join("");
+}
+
 function renderChecklist(containerId, items) {
   const container = document.querySelector(containerId);
   if (!container) return;
@@ -2042,6 +2071,7 @@ function renderAll() {
   renderTripInfo();
   renderInstallPrompt();
   renderCalendarBoard();
+  renderCalendarEventList();
   renderLogistics();
   renderChecklist("#shellQuestionList", shellChecklist);
   renderChecklist("#gearChecklistList", gearChecklist);

@@ -1211,6 +1211,10 @@ svg {
   margin-bottom: 16px;
 }
 
+.calendar-events-panel {
+  margin-top: 12px;
+}
+
 .needed-list {
   display: grid;
   gap: 8px;
@@ -1227,6 +1231,12 @@ svg {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface-soft);
+}
+
+.calendar-event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .bringing-list,
@@ -1658,6 +1668,12 @@ svg {
 }
 
 .text-mini-button.danger {
+  color: #9b2f19;
+}
+
+.claim-button.danger-outline {
+  border-style: solid;
+  border-color: #d9b1aa;
   color: #9b2f19;
 }
 
