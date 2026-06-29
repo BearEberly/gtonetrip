@@ -12,6 +12,7 @@ const icons = {
   "arrow-right": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>',
   alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.2 2.7 17.4A2 2 0 0 0 4.4 20h15.2a2 2 0 0 0 1.7-2.6L13.7 4.2a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
   grill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14"></path><path d="M7 8a5 5 0 0 0 10 0"></path><path d="M12 13v8"></path><path d="m8 21 4-8 4 8"></path><path d="M8 4c0 1 1 1 1 2"></path><path d="M12 3c0 1 1 1 1 2"></path><path d="M16 4c0 1 1 1 1 2"></path></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="m16.5 3.5 4 4L7 21H3v-4z"></path></svg>',
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
   sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.9 4.9 1.4 1.4"></path><path d="m17.7 17.7 1.4 1.4"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m4.9 19.1 1.4-1.4"></path><path d="m17.7 6.3 1.4-1.4"></path></svg>',
   moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>',
@@ -1318,13 +1319,24 @@ function isCustomSupply(item) {
   return /^supply-\d+/.test(String(item?.id || ""));
 }
 
+function editIconButton(kind, id, label) {
+  const escapedId = escapeText(id);
+  const escapedLabel = escapeText(label);
+  const dataAttr = kind === "meal" ? "data-edit-meal" : "data-edit-supply";
+  return `
+    <button class="edit-icon-button" type="button" ${dataAttr}="${escapedId}" aria-label="${escapedLabel}" title="${escapedLabel}">
+      <span data-icon="edit"></span>
+    </button>
+  `;
+}
+
 function itemManageActions(kind, item) {
   const escapedId = escapeText(item.id);
   if (kind === "meal") {
     const editLabel = isNonFoodEvent(item) ? "Edit event" : "Edit meal";
     return `
       <div class="item-manage-actions" aria-label="Manage meal">
-        <button class="text-mini-button" type="button" data-edit-meal="${escapedId}">${editLabel}</button>
+        ${editIconButton("meal", item.id, editLabel)}
         ${isCustomMeal(item) && canManageCustomItem(item) ? `<button class="text-mini-button danger" type="button" data-delete-meal="${escapedId}">Delete</button>` : ""}
       </div>
     `;
@@ -1332,7 +1344,7 @@ function itemManageActions(kind, item) {
   if (!canManageCustomItem(item)) return "";
   return `
     <div class="item-manage-actions" aria-label="Manage bringing item">
-      <button class="text-mini-button" type="button" data-edit-supply="${escapedId}">Edit</button>
+      ${editIconButton("supply", item.id, "Edit item")}
       <button class="text-mini-button danger" type="button" data-delete-supply="${escapedId}">Delete</button>
     </div>
   `;
@@ -1390,12 +1402,14 @@ function renderMealBoard() {
         <div class="meal-name">
           <strong>${escapeText(meal.type)}</strong>
           <span>${escapeText(meal.idea || "No recipe set yet.")}</span>
-          ${itemManageActions("meal", meal)}
         </div>
         <div class="meal-meta">
           <span class="meta-chip">${escapeText(meal.time)}</span>
           ${meal.kids ? `<span class="meta-chip">Kids: ${escapeText(meal.kids)}</span>` : ""}
           ${mealPlanningItemsMarkup(meal)}
+        </div>
+        <div class="meal-row-actions">
+          ${itemManageActions("meal", meal)}
         </div>
       </article>
     `).join("");
@@ -1551,7 +1565,7 @@ function renderOpenMeals() {
         <strong>${escapeText(meal.dayLabel)} ${escapeText(meal.type)}</strong>
         <span>${escapeText(meal.idea || "Recipe still blank")}${bringingItemsForMeal(meal).length ? ` · ${escapeText(bringingItemsForMeal(meal).map((item) => item.name).join(", "))}` : " · No bringing items linked yet"}</span>
       </div>
-      <button class="claim-button" type="button" data-edit-meal="${meal.id}">Edit</button>
+      ${editIconButton("meal", meal.id, "Edit meal")}
     </article>
   `).join("");
 }
@@ -1578,7 +1592,7 @@ function renderCalendarEventList() {
         <span>${escapeText(meal.kids || meal.time || "Time TBD")}</span>
       </div>
       <div class="calendar-event-actions">
-        <button class="claim-button" type="button" data-edit-meal="${meal.id}">Edit</button>
+        ${editIconButton("meal", meal.id, "Edit event")}
         ${isCustomMeal(meal) && canManageCustomItem(meal) ? `<button class="claim-button danger-outline" type="button" data-delete-meal="${meal.id}">Delete</button>` : ""}
       </div>
     </article>
@@ -1662,7 +1676,7 @@ function renderBringingBoard() {
             </div>
           </div>
           <div class="bringing-row-actions">
-            <button class="claim-button" type="button" data-edit-supply="${item.id}">Edit</button>
+            ${editIconButton("supply", item.id, "Edit item")}
             <button class="claim-button" type="button" data-delete-supply="${item.id}">Delete</button>
           </div>
         </article>

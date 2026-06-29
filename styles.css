@@ -1656,6 +1656,12 @@ svg {
   margin-top: 8px;
 }
 
+.meal-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
 .text-mini-button {
   min-height: 30px;
   padding: 0 9px;
@@ -1669,6 +1675,22 @@ svg {
 
 .text-mini-button.danger {
   color: #9b2f19;
+}
+
+.edit-icon-button {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--forest-700);
+}
+
+.edit-icon-button svg {
+  width: 15px;
+  height: 15px;
 }
 
 .claim-button.danger-outline {
@@ -2821,6 +2843,11 @@ button:focus-visible {
   gap: 8px;
 }
 
+.meal-row-actions,
+.calendar-event-actions {
+  justify-content: flex-end;
+}
+
 .needed-row .claim-button,
 .meal-row .claim-button,
 .meal-row .claimed-pill {
@@ -3256,6 +3283,10 @@ button:focus-visible {
   .meal-row .claimed-pill {
     grid-column: auto;
     justify-self: start;
+  }
+
+  .meal-row-actions {
+    justify-content: flex-end;
   }
 
   .activity-card {
