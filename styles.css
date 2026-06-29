@@ -97,16 +97,13 @@ svg {
   width: 42px;
   height: 42px;
   place-items: center;
-  color: var(--forest-700);
 }
 
-.brand-mark svg {
-  width: 34px;
-  height: 34px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linejoin: round;
-  stroke-width: 2.2;
+.brand-mark img {
+  width: 42px;
+  height: 42px;
+  display: block;
+  border-radius: 10px;
 }
 
 .brand strong,
