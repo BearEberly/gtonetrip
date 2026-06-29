@@ -1089,6 +1089,14 @@ function mealTypeDisplay(mealType) {
   return mealTypeLabels[mealTypeSafe(mealType)] || "Any meal / shared";
 }
 
+function bringingMealToneClass(mealType) {
+  const normalized = mealTypeSafe(mealType);
+  if (normalized === "breakfast") return "is-breakfast";
+  if (normalized === "lunch") return "is-lunch";
+  if (normalized === "dinner") return "is-dinner";
+  return "is-shared";
+}
+
 function bringingItemsForFamily(familyId) {
   return state.supplies.filter((item) => item.owner === familyId);
 }
@@ -1117,13 +1125,13 @@ function bringingImageMarkup(item) {
 }
 
 function bringingMetaMarkup(item) {
-  const note = item.notes ? `<span>${escapeText(item.notes)}</span>` : "";
+  const note = item.notes ? ` · ${escapeText(item.notes)}` : "";
+  const toneClass = bringingMealToneClass(item.mealType);
   return `
-    <div class="bringing-meta-chips">
-      <span class="meta-chip">${escapeText(mealTypeDisplay(item.mealType))}</span>
-      <span class="meta-chip">${escapeText(daysSummary(item.days))}</span>
+    <div class="bringing-inline-meta">
+      <span class="bringing-chip ${toneClass}">${escapeText(mealTypeDisplay(item.mealType))}</span>
+      <span class="bringing-inline-summary">${escapeText(daysSummary(item.days))}${note}</span>
     </div>
-    ${note}
   `;
 }
 
@@ -1439,6 +1447,7 @@ function renderSupplies() {
 function collectClaimsByFamily(familyId) {
   return bringingItemsForFamily(familyId).map((item) => ({
     id: item.id,
+    mealType: item.mealType,
     title: item.name,
     detail: `${mealTypeDisplay(item.mealType)} · ${daysSummary(item.days)}`,
     note: item.notes || ""
@@ -1455,7 +1464,7 @@ function renderBringingBoard() {
   if (myClaims) {
     myClaims.innerHTML = ownClaims.length
       ? ownClaims.map((item) => `
-        <article class="bringing-row">
+        <article class="bringing-row ${bringingMealToneClass(item.mealType)}">
           <div class="bringing-row-main">
             ${bringingImageMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
             <div>
@@ -1494,7 +1503,7 @@ function renderBringingBoard() {
           <div class="bringing-group-list">
             ${claims.length
               ? claims.map((item) => `
-                <article class="bringing-row">
+                <article class="bringing-row ${bringingMealToneClass(item.mealType)}">
                   <div class="bringing-row-main">
                     ${bringingImageMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
                     <div>
