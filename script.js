@@ -379,6 +379,7 @@ let sessionToken = loadSessionToken();
 let tripInfo = null;
 let drawerStep = 1;
 let lastFocusedElement = null;
+let logisticsEditMode = "";
 let itemMode = "meal";
 let editingItemId = "";
 let pendingSupplyImage = "";
@@ -1544,70 +1545,84 @@ function renderLogistics() {
       `;
     }
     if (promptList) {
-      promptList.innerHTML = `
-        <label>
-          <strong>Not signed in</strong>
-          <span>Once you log in, this page will ask what time you are showing up and what time you are leaving.</span>
-        </label>
-      `;
+      promptList.innerHTML = "";
+      promptList.classList.add("is-hidden");
     }
     return;
   }
   const logistics = logisticsForFamily(familyId);
   if (familyList) {
     const family = familyById(familyId);
+    const firstName = api.user?.firstName || family?.name || "Your login";
     familyList.innerHTML = `
-      <section class="bringing-group">
-        <header class="bringing-group-header">
-          <div>
-            <span>Family</span>
-            <strong>${escapeText(family?.name || "Your family")}</strong>
+      <section class="bringing-group logistics-card">
+        <div class="logistics-person">
+          <strong>${escapeText(firstName)}</strong>
+          <span>Family</span>
+          <b class="logistics-family-name">${escapeText(family?.name || "Your family")}</b>
+        </div>
+        <article class="bringing-row logistics-row">
+          <div class="logistics-row-main">
+            <strong>Showing up ${escapeText(logistics.arrival)}</strong>
+            <button class="text-mini-button" type="button" data-open-logistics-edit="arrival">Update</button>
           </div>
-          <i class="family-swatch" style="background:${family?.color || "#8aa57b"}" aria-hidden="true"></i>
-        </header>
-        <article class="bringing-row">
-          <div>
-            <strong>Arriving</strong>
-            <span>${escapeText(logistics.arrival)}</span>
-          </div>
+          ${logisticsEditMode === "arrival" ? `
+            <div class="logistics-inline-editor">
+              <select id="logisticsArrivalSelect">
+                ${timingOptionsMarkup(logistics.arrival, arrivalOptions)}
+              </select>
+              <div class="logistics-inline-actions">
+                <button class="text-mini-button" type="button" data-save-logistics-edit="arrival">Save</button>
+                <button class="text-mini-button" type="button" data-cancel-logistics-edit>Cancel</button>
+              </div>
+            </div>
+          ` : ""}
         </article>
-        <article class="bringing-row">
-          <div>
-            <strong>Leaving</strong>
-            <span>${escapeText(logistics.leaving)}</span>
+        <article class="bringing-row logistics-row">
+          <div class="logistics-row-main">
+            <strong>Leaving ${escapeText(logistics.leaving)}</strong>
+            <button class="text-mini-button" type="button" data-open-logistics-edit="leaving">Update</button>
           </div>
+          ${logisticsEditMode === "leaving" ? `
+            <div class="logistics-inline-editor">
+              <select id="logisticsLeavingSelect">
+                ${timingOptionsMarkup(logistics.leaving, leavingOptions)}
+              </select>
+              <div class="logistics-inline-actions">
+                <button class="text-mini-button" type="button" data-save-logistics-edit="leaving">Save</button>
+                <button class="text-mini-button" type="button" data-cancel-logistics-edit>Cancel</button>
+              </div>
+            </div>
+          ` : ""}
         </article>
       </section>
     `;
   }
   if (promptList) {
-    promptList.innerHTML = `
-      <label>
-        <strong>Arriving</strong>
-        <select id="logisticsArrivalSelect">
-          ${timingOptionsMarkup(logistics.arrival, arrivalOptions)}
-        </select>
-      </label>
-      <label>
-        <strong>Leaving</strong>
-        <select id="logisticsLeavingSelect">
-          ${timingOptionsMarkup(logistics.leaving, leavingOptions)}
-        </select>
-      </label>
-      <button class="primary-action compact-action" type="button" id="saveLogisticsTiming">Save timing</button>
-    `;
+    promptList.innerHTML = "";
+    promptList.classList.add("is-hidden");
   }
 }
 
-function saveLogisticsTiming() {
+function openLogisticsEdit(mode) {
+  logisticsEditMode = logisticsEditMode === mode ? "" : mode;
+  renderLogistics();
+}
+
+function saveLogisticsTiming(mode = logisticsEditMode) {
   const familyId = activeFamilyId();
   if (!familyId) {
     showToast("Sign in first.");
     return;
   }
-  const arrival = document.querySelector("#logisticsArrivalSelect")?.value || "";
-  const leaving = document.querySelector("#logisticsLeavingSelect")?.value || "";
   const existing = state.familyResponses?.[familyId] || {};
+  const logistics = logisticsForFamily(familyId);
+  const arrival = mode === "arrival"
+    ? (document.querySelector("#logisticsArrivalSelect")?.value || logistics.arrival || "")
+    : (existing.arrival || logistics.arrival || "");
+  const leaving = mode === "leaving"
+    ? (document.querySelector("#logisticsLeavingSelect")?.value || logistics.leaving || "")
+    : (existing.leaving || logistics.leaving || "");
   performAction("checkin", {
     familyId,
     arrival,
@@ -1624,6 +1639,12 @@ function saveLogisticsTiming() {
       updatedAt: new Date().toISOString()
     };
   }, "Timing updated.");
+  logisticsEditMode = "";
+}
+
+function cancelLogisticsEdit() {
+  logisticsEditMode = "";
+  renderLogistics();
 }
 
 function renderTopNeeded() {
@@ -2371,6 +2392,15 @@ function bindEvents() {
       const active = supplyDay.classList.contains("is-selected");
       supplyDay.setAttribute("aria-pressed", active ? "true" : "false");
     }
+
+    const openLogisticsButton = event.target.closest("[data-open-logistics-edit]");
+    if (openLogisticsButton) openLogisticsEdit(openLogisticsButton.dataset.openLogisticsEdit);
+
+    const saveLogisticsButton = event.target.closest("[data-save-logistics-edit]");
+    if (saveLogisticsButton) saveLogisticsTiming(saveLogisticsButton.dataset.saveLogisticsEdit);
+
+    const cancelLogisticsButton = event.target.closest("[data-cancel-logistics-edit]");
+    if (cancelLogisticsButton) cancelLogisticsEdit();
   });
 
   document.addEventListener("change", (event) => {
@@ -2408,9 +2438,6 @@ function bindEvents() {
   });
   document.querySelector("#addMealIdea")?.addEventListener("click", addMealIdea);
   document.querySelector("#addSupply")?.addEventListener("click", addSupply);
-  document.addEventListener("click", (event) => {
-    if (event.target.closest("#saveLogisticsTiming")) saveLogisticsTiming();
-  });
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
   document.querySelector("#clearSupplyImage")?.addEventListener("click", () => {
     const input = document.querySelector("#supplyImage");

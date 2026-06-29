@@ -1354,6 +1354,74 @@ svg {
   grid-template-columns: 1fr;
 }
 
+.logistics-panel {
+  padding-top: 14px;
+}
+
+.logistics-card {
+  gap: 12px;
+}
+
+.logistics-person {
+  display: grid;
+  gap: 4px;
+}
+
+.logistics-person strong,
+.logistics-family-name {
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.logistics-person span {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.logistics-family-name {
+  font-weight: 800;
+}
+
+.logistics-row {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.logistics-row-main {
+  display: grid;
+  gap: 8px;
+}
+
+.logistics-row-main strong {
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+.logistics-row .text-mini-button {
+  width: fit-content;
+}
+
+.logistics-inline-editor {
+  display: grid;
+  gap: 8px;
+}
+
+.logistics-inline-editor select {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.logistics-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .needed-row strong,
 .needed-row span {
   display: block;

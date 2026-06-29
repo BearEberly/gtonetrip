@@ -12,7 +12,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=10">
+    <link rel="stylesheet" href="styles.css?v=11">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -143,31 +143,10 @@
         </section>
 
         <section class="content-panel is-hidden" id="supplies" data-panel="supplies">
-          <div class="panel-heading">
-            <div>
-              <h1>Logistics</h1>
-            </div>
-          </div>
-
-          <div class="two-column">
-            <section class="board-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>Family</h2>
-                </div>
-              </div>
-              <div class="bringing-groups" id="logisticsFamilyList"></div>
-            </section>
-
-            <section class="board-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>Update timing</h2>
-                </div>
-              </div>
-              <div class="question-list" id="logisticsPromptList"></div>
-            </section>
-          </div>
+          <section class="board-panel logistics-panel">
+            <div class="bringing-groups" id="logisticsFamilyList"></div>
+            <div class="question-list is-hidden" id="logisticsPromptList"></div>
+          </section>
         </section>
 
         <section class="content-panel is-hidden" id="cabin" data-panel="cabin">
@@ -467,6 +446,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=14"></script>
+    <script src="script.js?v=15"></script>
   </body>
 </html>
