@@ -364,13 +364,14 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
   if (action.type === "addSupply") {
     const name = textSafe(payload.name);
     if (!name) return { changed: false, message: "Bringing item is empty." };
+    const supplyNotes = textSafe(payload.notes ?? payload.qty);
     (next.supplies as Record<string, unknown>[]).push({
       id: `supply-${Date.now()}`,
       name,
-      notes: textSafe(payload.qty),
-      qty: textSafe(payload.qty),
+      notes: supplyNotes,
+      qty: supplyNotes,
       type: bringingTypeSafe(payload.type),
-      owner: "",
+      owner: actorFamilyId,
       mealType: mealTypeSafe(payload.mealType),
       days: dayListSafe(payload.days),
       image: imageDataUrlSafe(payload.image),
@@ -387,9 +388,10 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only your family can edit this bringing item." };
     const name = textSafe(payload.name);
     if (!name) return { changed: false, message: "Bringing item is empty." };
+    const supplyNotes = textSafe(payload.notes ?? payload.qty);
     supply.name = name;
-    supply.notes = textSafe(payload.qty);
-    supply.qty = textSafe(payload.qty);
+    supply.notes = supplyNotes;
+    supply.qty = supplyNotes;
     supply.type = bringingTypeSafe(payload.type || supply.type);
     supply.mealType = mealTypeSafe(payload.mealType || supply.mealType);
     supply.days = dayListSafe(payload.days, Array.isArray(supply.days) ? (supply.days as string[]) : []);
