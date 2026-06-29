@@ -1647,7 +1647,7 @@ function buildTravelEntries(day) {
     if (matchesTravelDay(logistics.arrival, day)) {
       entries.push({
         type: "arrival",
-        title: `${familyTravelLabel(family.id)} arrive`,
+        title: `${familyTravelLabel(family.id)} arrival`,
         detail: logistics.arrival
       });
     }

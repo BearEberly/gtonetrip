@@ -20,6 +20,12 @@ const MEAL_LABELS = {
 };
 
 const FAMILY_LABELS = { shell: "Shell", nick: "G6", bear: "Jear", nat: "Riggs" };
+const DEFAULT_LOGISTICS = {
+  shell: { arrival: "Wednesday afternoon" },
+  nick: { arrival: "Thursday afternoon" },
+  bear: { arrival: "Friday afternoon" },
+  nat: { arrival: "Friday" }
+};
 const DAY_WORDS = { wednesday: "wed", thursday: "thu", friday: "fri", saturday: "sat", sunday: "sun", monday: "mon" };
 const PDT_OFFSET = 7; // hours to add to local PDT to get UTC
 
@@ -109,6 +115,13 @@ function bringingNamesForMeal(state, meal) {
     .filter(Boolean);
 }
 
+function arrivalForFamily(state, familyId) {
+  const responses = (state.familyResponses && typeof state.familyResponses === "object") ? state.familyResponses : {};
+  const savedArrival = String(responses[familyId]?.arrival || "").trim();
+  if (savedArrival) return savedArrival;
+  return String(DEFAULT_LOGISTICS[familyId]?.arrival || "").trim();
+}
+
 export function buildICS(state, tripInfo = {}) {
   const meals = Array.isArray(state.meals) ? state.meals : [];
   const location = tripInfo.address || "Arnold, California";
@@ -146,15 +159,14 @@ export function buildICS(state, tripInfo = {}) {
   };
 
   // Arrivals (all-day) from family logistics
-  const responses = (state.familyResponses && typeof state.familyResponses === "object") ? state.familyResponses : {};
   for (const famId of Object.keys(FAMILY_LABELS)) {
-    const arrival = responses[famId] && responses[famId].arrival;
+    const arrival = arrivalForFamily(state, famId);
     const text = String(arrival || "").toLowerCase();
     const dayKey = Object.keys(DAY_WORDS).find((w) => text.includes(w));
     if (dayKey) {
       addEvent({
         uid: `arrival-${famId}`,
-        summary: `${FAMILY_LABELS[famId]} arrives`,
+        summary: `${FAMILY_LABELS[famId]} arrival`,
         description: arrival,
         day: DAY_WORDS[dayKey]
       });

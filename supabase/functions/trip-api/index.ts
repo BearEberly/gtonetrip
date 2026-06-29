@@ -598,6 +598,12 @@ const ICS_MEAL_LABELS: Record<string, string> = {
   breakfast: "Breakfast", lunch: "Lunch", dinner: "Dinner", dessert: "Dessert / Snacks", "pack-up": "Pack-up"
 };
 const ICS_FAMILY_LABELS: Record<string, string> = { shell: "Shell", nick: "G6", bear: "Jear", nat: "Riggs" };
+const ICS_DEFAULT_LOGISTICS: Record<string, { arrival: string }> = {
+  shell: { arrival: "Wednesday afternoon" },
+  nick: { arrival: "Thursday afternoon" },
+  bear: { arrival: "Friday afternoon" },
+  nat: { arrival: "Friday" }
+};
 const ICS_DAY_WORDS: Record<string, string> = { wednesday: "wed", thursday: "thu", friday: "fri", saturday: "sat", sunday: "sun", monday: "mon" };
 const ICS_PDT_OFFSET = 7;
 
@@ -647,6 +653,12 @@ function icsFold(line: string) {
   if (s.length) out.push(" " + s);
   return out.join("\r\n");
 }
+function icsArrivalForFamily(state: Record<string, any>, familyId: string): string {
+  const responses = (state.familyResponses && typeof state.familyResponses === "object") ? state.familyResponses : {};
+  const savedArrival = String(responses[familyId]?.arrival || "").trim();
+  if (savedArrival) return savedArrival;
+  return String(ICS_DEFAULT_LOGISTICS[familyId]?.arrival || "").trim();
+}
 function buildICS(state: Record<string, any>, info: Record<string, any>): string {
   const meals = Array.isArray(state.meals) ? state.meals : [];
   const supplies = Array.isArray(state.supplies) ? state.supplies : [];
@@ -677,12 +689,11 @@ function buildICS(state: Record<string, any>, info: Record<string, any>): string
     if (location) push(`LOCATION:${icsEsc(location)}`);
     push("END:VEVENT");
   };
-  const responses = (state.familyResponses && typeof state.familyResponses === "object") ? state.familyResponses : {};
   for (const famId of Object.keys(ICS_FAMILY_LABELS)) {
-    const arrival = responses[famId] && responses[famId].arrival;
+    const arrival = icsArrivalForFamily(state, famId);
     const text = String(arrival || "").toLowerCase();
     const word = Object.keys(ICS_DAY_WORDS).find((w) => text.includes(w));
-    if (word) add(`arrival-${famId}`, `${ICS_FAMILY_LABELS[famId]} arrives`, String(arrival), ICS_DAY_WORDS[word], null);
+    if (word) add(`arrival-${famId}`, `${ICS_FAMILY_LABELS[famId]} arrival`, String(arrival), ICS_DAY_WORDS[word], null);
   }
   for (const meal of meals) {
     const key = icsMealTypeKey(meal.type);
