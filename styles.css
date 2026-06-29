@@ -910,6 +910,50 @@ svg {
   font-size: 0.9rem;
 }
 
+.collapsible-panel {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+
+.collapsible-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+}
+
+.collapsible-summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible-summary span:last-child {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.optional-details {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+
+.optional-details summary {
+  cursor: pointer;
+  padding: 12px 14px;
+  font-weight: 700;
+}
+
+.optional-details-body {
+  display: grid;
+  gap: 14px;
+  padding: 0 14px 14px;
+}
+
 .notice-panel {
   display: grid;
   grid-template-columns: 44px 1fr auto;
@@ -1520,6 +1564,12 @@ svg {
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 16px;
+}
+
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .panel-heading h1 {
@@ -2638,7 +2688,7 @@ button:focus-visible {
   bottom: 0;
   z-index: 30;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   min-height: 72px;
   padding: 7px 2px max(7px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--line);
@@ -2919,7 +2969,7 @@ button:focus-visible {
     bottom: 0;
     z-index: 30;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     min-height: 72px;
     padding: 7px 2px max(7px, env(safe-area-inset-bottom));
     border-top: 1px solid var(--line);
@@ -3411,3 +3461,420 @@ button:focus-visible {
     transition: transform 150ms ease, filter 150ms ease, background 150ms ease, border-color 150ms ease;
   }
 }
+
+/* ============================================================
+   Food hub — per-day, per-meal coverage view
+   ============================================================ */
+.food-hub { display: flex; flex-direction: column; gap: 12px; }
+
+.food-tabs { display: flex; gap: 8px; }
+.food-tab {
+  flex: 1; padding: 11px 8px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--muted); font-weight: 650; font-size: 15px; cursor: pointer;
+}
+.food-tab.is-active { background: var(--forest-700); color: #fff; border-color: var(--forest-700); }
+
+.food-days { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 4px; -webkit-overflow-scrolling: touch; }
+.food-day {
+  flex: 0 0 auto; min-width: 72px; padding: 8px 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); cursor: pointer; text-align: center; line-height: 1.15;
+}
+.food-day b { display: block; font-size: 15px; }
+.food-day small { color: var(--muted); font-size: 12px; }
+.food-day.is-active { background: var(--text); color: #fff; border-color: var(--text); }
+.food-day.is-active small { color: #cdd3cd; }
+
+.food-meal-grid, .food-family-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+
+.fh-meal {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+  box-shadow: var(--soft-shadow);
+}
+.fh-top { display: flex; align-items: center; gap: 10px; padding: 14px 16px 6px; }
+.fh-chip {
+  font-size: 11px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase;
+  padding: 4px 9px; border-radius: 999px; color: #fff;
+}
+.fh-chip.tone-breakfast { background: var(--amber-500); }
+.fh-chip.tone-lunch { background: var(--lake-600); }
+.fh-chip.tone-dinner { background: var(--ember-600); }
+.fh-chip.tone-dessert { background: #8a5cc0; }
+.fh-chip.tone-shared { background: #6e6e73; }
+.fh-time { color: var(--muted); font-size: 13px; }
+.fh-meal-manage { margin-left: auto; }
+.fh-meal-manage .item-manage-actions { margin: 0; }
+
+.fh-meal h3 { margin: 2px 16px 2px; font-size: 18px; letter-spacing: -.2px; }
+.fh-kids { margin: 0 16px 10px; font-size: 13px; color: var(--muted); }
+.fh-kids b { color: var(--text); font-weight: 600; }
+
+.fh-cov { margin: 4px 16px 12px; }
+.fh-covbar { height: 8px; border-radius: 999px; background: #eef1ee; overflow: hidden; }
+.fh-covfill { height: 100%; background: var(--forest-600); width: 0; transition: width .35s ease; }
+.fh-covfill.is-full { background: var(--forest-600); }
+.fh-covlabel { display: flex; justify-content: space-between; font-size: 12px; margin-top: 6px; }
+.fh-done { color: var(--forest-700); font-weight: 700; }
+.fh-gap-label { color: var(--ember-700); font-weight: 700; }
+.fh-full { color: var(--forest-700); font-weight: 700; }
+.fh-muted { color: var(--muted); }
+
+.fh-sect { margin: 0 16px 12px; }
+.fh-sect h4 { margin: 0 0 7px; font-size: 12px; letter-spacing: .4px; text-transform: uppercase; color: var(--muted); }
+.fh-bring { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.fh-bring:first-of-type { border-top: none; }
+.fh-dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.fh-bring-name { min-width: 0; }
+.fh-who { color: var(--muted); margin-left: auto; font-size: 12.5px; }
+.fh-empty-line { color: var(--muted); font-style: italic; font-size: 13.5px; }
+
+.fh-needed { display: flex; flex-wrap: wrap; gap: 7px; }
+.fh-gap {
+  border: 1px dashed var(--ember-700); color: var(--ember-700); background: #fdf3f1;
+  border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.fh-gap:hover { background: var(--ember-700); color: #fff; }
+.fh-alldone { font-size: 13px; color: var(--forest-700); font-weight: 600; }
+.fh-open { font-size: 13px; color: var(--muted); }
+
+.fh-act { padding: 12px 16px; border-top: 1px solid var(--line); background: var(--surface-soft); }
+.fh-bring-btn { width: 100%; }
+
+.fh-empty { padding: 22px 16px; text-align: center; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+
+/* By family cards */
+.fh-fam { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+.fh-fam-head { display: flex; align-items: center; gap: 10px; }
+.fh-fam-head .fh-dot { width: 13px; height: 13px; }
+.fh-fam-head b { font-size: 17px; }
+.fh-fam-count { margin-left: auto; font-size: 13px; color: var(--muted); }
+.fh-fam-list { margin: 8px 0 0; padding: 0; list-style: none; }
+.fh-fam-list li { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.fh-tag { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+/* Phone-first: single column of meal cards within the app's 430px column.
+   (Desktop multi-column would require widening the shared .main container.) */
+
+/* ============================================================
+   iPhone simplification pass: compact hero, less chrome
+   ============================================================ */
+
+/* 1) Hero keeps the cabin photo and the "Logged in as / Sign out" bar.
+   (Just a slightly stronger shade so the title stays readable over the photo.) */
+.hero-shade {
+  background:
+    linear-gradient(180deg, rgba(3, 18, 10, 0.18), rgba(3, 18, 10, 0.78)),
+    linear-gradient(90deg, rgba(3, 18, 10, 0.42), rgba(3, 18, 10, 0.10)) !important;
+}
+
+/* 2) Remove the repeated helper sub-text under titles */
+.panel-heading p,
+.section-heading p { display: none !important; }
+
+/* 3) Edit button always visible in the meal card's top-right (single tap) */
+.fh-meal-manage { display: flex; }
+.fh-meal .fh-act .fh-bring-btn,
+.fh-meal .fh-gap { cursor: pointer; }
+
+/* ============================================================
+   Cleaner, friendlier buttons (iPhone)
+   ============================================================ */
+button { -webkit-tap-highlight-color: transparent; }
+.primary-action, .secondary-action, .compact-action, .auth-submit,
+.fh-bring-btn, .claim-button, .text-mini-button, .edit-icon-button,
+.fh-gap, .food-tab, .food-day {
+  touch-action: manipulation;
+  transition: transform .12s ease, background-color .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+}
+
+/* Primary: solid green, soft lift, friendly rounding */
+.primary-action, .auth-submit, .fh-bring-btn {
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: var(--forest-700) !important;
+  color: #fff !important;
+  font-weight: 750 !important;
+  box-shadow: 0 6px 16px rgba(16, 32, 25, 0.18) !important;
+}
+.primary-action:hover, .auth-submit:hover, .fh-bring-btn:hover { background: var(--forest-600) !important; }
+.primary-action:active, .auth-submit:active, .fh-bring-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 10px rgba(16, 32, 25, 0.16) !important;
+}
+.fh-bring-btn { min-height: 50px; font-size: 1rem; }
+
+/* Secondary: clean white with crisp border */
+.secondary-action {
+  border: 1.5px solid var(--line-strong) !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  color: var(--forest-800) !important;
+  font-weight: 700 !important;
+  box-shadow: var(--soft-shadow);
+}
+.secondary-action:active { transform: scale(0.98); }
+
+.compact-action { border-radius: 12px !important; }
+
+/* Claim / chip buttons: soft green tint instead of dashed */
+.claim-button {
+  border: 1px solid var(--forest-600) !important;
+  background: #eef6f0 !important;
+  color: var(--forest-800) !important;
+  border-radius: 999px !important;
+  min-height: 40px;
+  padding: 0 16px !important;
+  font-weight: 700;
+}
+.claim-button:active { transform: scale(0.97); }
+.claim-button[disabled] { opacity: 0.45; }
+.claim-button.danger-outline, .text-mini-button.danger, .claim-button[data-delete-supply], .claim-button[data-delete-meal] {
+  border-color: var(--ember-600) !important;
+  background: #fdf3f1 !important;
+  color: var(--ember-700) !important;
+}
+
+/* Small manage controls: a touch bigger, softer corners */
+.edit-icon-button { width: 36px !important; height: 36px !important; border-radius: 10px !important; border-color: var(--line) !important; }
+.edit-icon-button:active { transform: scale(0.94); }
+.text-mini-button { min-height: 36px !important; border-radius: 10px !important; }
+
+/* Press feedback for gaps, tabs, day pills */
+.fh-gap:active, .food-tab:active, .food-day:active { transform: scale(0.97); }
+
+/* Drawer footer buttons: comfortable height */
+.drawer-footer .primary-action, .drawer-footer .secondary-action { min-height: 50px; }
+
+/* Visible keyboard/focus ring for accessibility */
+.primary-action:focus-visible, .secondary-action:focus-visible, .auth-submit:focus-visible,
+.fh-bring-btn:focus-visible, .claim-button:focus-visible, .fh-gap:focus-visible,
+.food-tab:focus-visible, .food-day:focus-visible {
+  outline: 3px solid rgba(36, 138, 75, 0.45);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Food tab: tidy header actions + centered segmented control
+   ============================================================ */
+
+/* Compact, right-aligned action pills (Add meal slot / Add item) */
+#food .panel-heading { align-items: center; }
+#food .panel-actions { justify-content: flex-end; gap: 8px; }
+#food .panel-actions .compact-action {
+  min-height: 38px !important;
+  padding: 0 15px !important;
+  font-size: 0.82rem !important;
+  border-radius: 999px !important;
+  width: auto !important;
+}
+
+/* "By meal / By family" as a centered iOS-style segmented control */
+.food-tabs {
+  width: 100%;
+  max-width: 320px;
+  margin: 2px auto 6px;
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+.food-tab {
+  flex: 1;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  border-radius: 999px !important;
+  min-height: 40px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.food-tab.is-active {
+  background: var(--forest-700) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(16, 32, 25, 0.18);
+}
+
+/* Center the day pills when they fit */
+.food-days { justify-content: center; }
+
+/* Food tab: add actions moved to a tidy centered bar under the cards */
+.food-add-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.food-add-bar .compact-action {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px !important;
+  font-size: 0.9rem !important;
+}
+.food-tabs { margin-top: 2px; }
+
+/* Bottom nav now has 3 tabs (Family tab removed) */
+.mobile-nav { grid-template-columns: repeat(3, 1fr) !important; }
+
+/* "Ideas to add" suggestion chips — softer/neutral vs the red "still needed" gaps */
+.fh-suggest-sect h4 { color: var(--muted); }
+.fh-suggest {
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .12s ease, background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.fh-suggest:hover { border-color: var(--forest-600); background: #eef6f0; color: var(--forest-800); }
+.fh-suggest:active { transform: scale(0.97); }
+
+/* ============================================================
+   Motion: sliding segmented control + gentle card entrances
+   ============================================================ */
+.food-tabs { position: relative; overflow: hidden; }
+.food-tab-thumb {
+  position: absolute;
+  top: 4px; bottom: 4px; left: 4px;
+  width: calc(50% - 4px);
+  background: var(--forest-700);
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(16, 32, 25, 0.18);
+  transition: transform .30s cubic-bezier(.34, 1.12, .5, 1);
+  z-index: 0;
+}
+.food-tabs.at-family .food-tab-thumb { transform: translateX(100%); }
+.food-tab { position: relative; z-index: 1; background: transparent !important; box-shadow: none !important; }
+.food-tab.is-active { background: transparent !important; box-shadow: none !important; color: #fff !important; }
+.food-tab:not(.is-active) { color: var(--muted) !important; }
+
+/* Meal cards rise in gently (staggered) */
+@keyframes fhRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.fh-meal { animation: fhRise .32s ease both; }
+.fh-meal:nth-child(1) { animation-delay: .02s; }
+.fh-meal:nth-child(2) { animation-delay: .07s; }
+.fh-meal:nth-child(3) { animation-delay: .12s; }
+.fh-meal:nth-child(4) { animation-delay: .17s; }
+.fh-meal:nth-child(5) { animation-delay: .22s; }
+
+/* Family cards fade in too */
+.fh-fam { animation: fhRise .3s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .food-tab-thumb { transition: none; }
+  .fh-meal, .fh-fam { animation: none; }
+}
+
+/* ============================================================
+   By-family: titled colored header bands + separated body
+   ============================================================ */
+.fh-fam {
+  padding: 0 !important;
+  overflow: hidden;
+}
+.fh-fam-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 !important;
+  padding: 12px 16px;
+  color: #fff;
+}
+.fh-fam-head b { font-size: 1.05rem; font-weight: 800; letter-spacing: .2px; }
+.fh-fam-head .fh-fam-count {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.16);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.fh-fam-body { background: var(--surface-soft); padding: 6px 16px 12px; }
+.fh-fam-list { margin: 0; }
+.fh-fam-list li { border-top: 1px solid var(--line); }
+.fh-fam-list li:first-child { border-top: 0; }
+.fh-fam-body .fh-empty-line { padding: 10px 0; }
+
+/* ============================================================
+   Meal cards: sub-sections sit on a faint inner panel
+   ============================================================ */
+.fh-meal .fh-sect {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin: 0 12px 10px;
+}
+.fh-meal .fh-sect h4 { margin-bottom: 6px; }
+.fh-meal .fh-bring { border-top-color: rgba(0, 0, 0, 0.07); }
+.fh-meal .fh-cov { margin: 6px 12px 12px; }
+
+/* By-family: logged-in family highlighted + tappable own items */
+.fh-fam.is-mine { box-shadow: 0 0 0 2px rgba(47, 143, 78, 0.45), var(--soft-shadow); }
+.fh-fam-head .fh-you {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+}
+.fh-fam-list li.fh-fam-item { display: flex; align-items: center; gap: 9px; padding: 9px 6px; }
+.fh-fam-item.is-editable { cursor: pointer; border-radius: 8px; transition: background-color .12s ease; }
+.fh-fam-item.is-editable:hover { background: rgba(0, 0, 0, 0.04); }
+.fh-fam-item.is-editable:active { background: rgba(0, 0, 0, 0.07); }
+.fh-fam-item .fh-tag { margin-left: auto; }
+.fh-edit-hint { display: inline-grid; place-items: center; width: 18px; height: 18px; color: var(--muted); opacity: .55; }
+.fh-edit-hint svg { width: 15px; height: 15px; }
+
+/* ============================================================
+   Calendar: per-day scenery faded in from the right (embedded)
+   ============================================================ */
+.calendar-day-card { position: relative; }
+.cal-day-photo {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-size: cover; background-position: right center; background-repeat: no-repeat;
+}
+.calendar-day-card > .calendar-day-header,
+.calendar-day-card > .calendar-day-grid { position: relative; z-index: 1; }
+.calendar-day-card .calendar-slot { background: transparent; }
+.calendar-day-card .calendar-slot strong,
+.calendar-day-card .calendar-slot span,
+.calendar-day-card .calendar-slot .calendar-slot-kind { text-shadow: 0 1px 2px rgba(255,255,255,0.9); }
+
+.day-wed .cal-day-photo { background-image: linear-gradient(to right, #fff 0%, #fff 34%, rgba(255,255,255,0.80) 56%, rgba(255,255,255,0.40) 100%), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzIwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2NmZThkYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2VlZjVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMyMCIgZmlsbD0idXJsKCNzKSIvPgo8cGF0aCBkPSJNMCAyNTAgUTE1MCAyMDAgMzAwIDI0MCBUNjAwIDIzMCBWMzIwIEgwWiIgZmlsbD0iI2JjZDZjMiIvPgo8cGF0aCBkPSJNMCAyODAgUTE2MCAyNTAgMzQwIDI3NSBUNjAwIDI3MCBWMzIwIEgwWiIgZmlsbD0iIzljYzFhNiIvPgo8ZyBmaWxsPSIjMmY2YjQ2Ij4KPHBvbHlnb24gcG9pbnRzPSIzODAsMjUwIDQxMCwxNTAgNDQwLDI1MCIvPjxwb2x5Z29uIHBvaW50cz0iNDIwLDI2MCA0NjAsMTIwIDUwMCwyNjAiLz4KPHBvbHlnb24gcG9pbnRzPSI0NzAsMjU1IDUwNSwxNjAgNTQwLDI1NSIvPjxwb2x5Z29uIHBvaW50cz0iNTIwLDI2NSA1NjAsMTM1IDYwMCwyNjUiLz4KPC9nPgo8ZyBmaWxsPSIjMjQ1NTM5Ij4KPHBvbHlnb24gcG9pbnRzPSIzNTAsMjcwIDM4MCwxOTAgNDEwLDI3MCIvPjxwb2x5Z29uIHBvaW50cz0iNDUwLDI3NSA0ODUsMTg1IDUyMCwyNzUiLz48cG9seWdvbiBwb2ludHM9IjU0MCwyNzUgNTc1LDIwMCA2MTAsMjc1Ii8+CjwvZz4KPHJlY3QgeT0iMjkwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMwIiBmaWxsPSIjMWY0YTMzIi8+Cjwvc3ZnPgo="); }
+.day-thu .cal-day-photo { background-image: linear-gradient(to right, #fff 0%, #fff 34%, rgba(255,255,255,0.80) 56%, rgba(255,255,255,0.40) 100%), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzIwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Q5ZWNmNiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2VlZjZmYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMyMCIgZmlsbD0idXJsKCNzKSIvPgo8Y2lyY2xlIGN4PSI1MDAiIGN5PSI4MCIgcj0iMzQiIGZpbGw9IiNmZGYzZGEiLz4KPHBvbHlnb24gcG9pbnRzPSIzMDAsMjEwIDQwMCw5MCA1MDAsMjEwIiBmaWxsPSIjN2Q5N2IwIi8+Cjxwb2x5Z29uIHBvaW50cz0iNDMwLDIxMCA1MjAsMTEwIDYxMCwyMTAiIGZpbGw9IiM1ZjdhOTYiLz4KPHBvbHlnb24gcG9pbnRzPSIzNzAsMjEwIDQxMCwxNTAgNDUwLDIxMCIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC43Ii8+CjxyZWN0IHk9IjIxMCIgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MCIgZmlsbD0iIzNmNWI3OCIvPgo8cmVjdCB5PSIyNTAiIHdpZHRoPSI2MDAiIGhlaWdodD0iNzAiIGZpbGw9IiM5Y2MyZDkiLz4KPHJlY3QgeT0iMjUwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjcwIiBmaWxsPSIjYmNkOWU4IiBvcGFjaXR5PSIwLjUiLz4KPC9zdmc+Cg=="); }
+.day-fri .cal-day-photo { background-image: linear-gradient(to right, #fff 0%, #fff 34%, rgba(255,255,255,0.80) 56%, rgba(255,255,255,0.40) 100%), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzIwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y0Yzc5YSIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iI2M5OGE4NiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzViNDY2ZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMyMCIgZmlsbD0idXJsKCNzKSIvPgo8ZyBmaWxsPSIjM2EyZjRkIiBvcGFjaXR5PSIwLjg1Ij4KPHBvbHlnb24gcG9pbnRzPSIzMDAsMjUwIDMzMCwxNzAgMzYwLDI1MCIvPjxwb2x5Z29uIHBvaW50cz0iMzUwLDI1MCAzODUsMTYwIDQyMCwyNTAiLz4KPC9nPgo8cmVjdCB5PSIyNTAiIHdpZHRoPSI2MDAiIGhlaWdodD0iNzAiIGZpbGw9IiMyYzIyMzgiLz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTAwLDI1MCkiPgo8cmVjdCB4PSItMzAiIHk9IjE4IiB3aWR0aD0iNjAiIGhlaWdodD0iOSIgcng9IjQiIGZpbGw9IiM1YjNiMjQiIHRyYW5zZm9ybT0icm90YXRlKDEyKSIvPgo8cmVjdCB4PSItMzAiIHk9IjE4IiB3aWR0aD0iNjAiIGhlaWdodD0iOSIgcng9IjQiIGZpbGw9IiM2YjQ2MmIiIHRyYW5zZm9ybT0icm90YXRlKC0xMikiLz4KPHBhdGggZD0iTTAgMjAgQy0xOCAtMiAxNCAtMTAgNCAtMzQgQyAyNiAtMTYgMjIgNiAxMiAyMiBaIiBmaWxsPSIjZmY5YjNkIi8+CjxwYXRoIGQ9Ik0yIDE4IEMtOCAyIDEwIC00IDQgLTIyIEMgMTYgLTEwIDE0IDYgOCAxOCBaIiBmaWxsPSIjZmZkMzVhIi8+CjwvZz4KPC9zdmc+Cg=="); }
+.day-sat .cal-day-photo { background-image: linear-gradient(to right, #fff 0%, #fff 34%, rgba(255,255,255,0.80) 56%, rgba(255,255,255,0.40) 100%), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzIwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBmMWMzOCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzI2Mzc1YyIvPjwvbGluZWFyR3JhZGllbnQ+CjxnIGlkPSJmdyI+PGcgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgo8bGluZSB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iLTM0Ii8+PGxpbmUgeDE9IjAiIHkxPSIwIiB4Mj0iMjQiIHkyPSItMjQiLz48bGluZSB4MT0iMCIgeTE9IjAiIHgyPSIzNCIgeTI9IjAiLz4KPGxpbmUgeDE9IjAiIHkxPSIwIiB4Mj0iMjQiIHkyPSIyNCIvPjxsaW5lIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIzNCIvPjxsaW5lIHgxPSIwIiB5MT0iMCIgeDI9Ii0yNCIgeTI9IjI0Ii8+CjxsaW5lIHgxPSIwIiB5MT0iMCIgeDI9Ii0zNCIgeTI9IjAiLz48bGluZSB4MT0iMCIgeTE9IjAiIHgyPSItMjQiIHkyPSItMjQiLz48L2c+PC9nPjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIzMjAiIGZpbGw9InVybCgjcykiLz4KPGcgb3BhY2l0eT0iMC45NSI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iMS41IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iMTYwIiBjeT0iNDAiIHI9IjEuMiIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjI0MCIgY3k9IjkwIiByPSIxLjQiIGZpbGw9IiNmZmYiLz48L2c+Cjx1c2UgaHJlZj0iI2Z3IiB4PSI0NzAiIHk9IjExMCIgc3Ryb2tlPSIjZmY1YTVhIi8+Cjx1c2UgaHJlZj0iI2Z3IiB4PSI1NDAiIHk9IjcwIiBzdHJva2U9IiNmZmZmZmYiIHRyYW5zZm9ybT0ic2NhbGUoMC44KSIgb3BhY2l0eT0iMC45Ii8+Cjx1c2UgaHJlZj0iI2Z3IiB4PSI0MjAiIHk9IjYwIiBzdHJva2U9IiM1YWEwZmYiLz4KPHJlY3QgeT0iMjYyIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjU4IiBmaWxsPSIjMGIxNDI2Ii8+CjxwYXRoIGQ9Ik0zMDAgMjYyIFEzNjAgMjM1IDQzMCAyNTggVDYwMCAyNTAgVjI2MloiIGZpbGw9IiMxNjI0M2YiLz4KPC9zdmc+Cg=="); }
+.day-sun .cal-day-photo { background-image: linear-gradient(to right, #fff 0%, #fff 34%, rgba(255,255,255,0.80) 56%, rgba(255,255,255,0.40) 100%), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzIwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2RmZWVkNyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2VlZjVlYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMyMCIgZmlsbD0idXJsKCNzKSIvPgo8ZyBmaWxsPSIjM2M3YTNmIiBvcGFjaXR5PSIwLjYiPjxjaXJjbGUgY3g9IjQzMCIgY3k9IjcwIiByPSI2MCIvPjxjaXJjbGUgY3g9IjUyMCIgY3k9IjU1IiByPSI3MCIvPjxjaXJjbGUgY3g9IjU4NSIgY3k9IjkwIiByPSI1NSIvPjwvZz4KPHJlY3QgeT0iMjUwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjcwIiBmaWxsPSIjNmI4ZjRlIi8+CjxnIGZpbGw9IiM2ZTRhMmMiPgo8cmVjdCB4PSI0MDAiIHk9IjEyMCIgd2lkdGg9IjM0IiBoZWlnaHQ9IjE1MCIgcng9IjEwIi8+CjxyZWN0IHg9IjQ4MCIgeT0iOTUiIHdpZHRoPSI0NCIgaGVpZ2h0PSIxNzUiIHJ4PSIxMiIvPgo8cmVjdCB4PSI1NjAiIHk9IjEzNSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjEzNSIgcng9IjkiLz4KPC9nPgo8ZyBmaWxsPSIjNWEzYzIyIiBvcGFjaXR5PSIwLjUiPjxyZWN0IHg9IjQxMCIgeT0iMTIwIiB3aWR0aD0iOCIgaGVpZ2h0PSIxNTAiLz48cmVjdCB4PSI0OTUiIHk9Ijk1IiB3aWR0aD0iMTAiIGhlaWdodD0iMTc1Ii8+PC9nPgo8L3N2Zz4K"); }
+.day-mon .cal-day-photo { background-image: linear-gradient(to right, #fff 0%, #fff 34%, rgba(255,255,255,0.80) 56%, rgba(255,255,255,0.40) 100%), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzIwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZTdiMyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmZDlhNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMyMCIgZmlsbD0idXJsKCNzKSIvPgo8Y2lyY2xlIGN4PSI1MDAiIGN5PSIxMjAiIHI9IjQ4IiBmaWxsPSIjZmZiODZiIi8+CjxjaXJjbGUgY3g9IjUwMCIgY3k9IjEyMCIgcj0iNzAiIGZpbGw9IiNmZmNmOGEiIG9wYWNpdHk9IjAuNDUiLz4KPHBhdGggZD0iTTAgMjQwIFExNTAgMjAwIDMyMCAyMzUgVDYwMCAyMjAgVjMyMCBIMFoiIGZpbGw9IiNlM2E4NmEiLz4KPHBhdGggZD0iTTAgMjcwIFExNjAgMjQwIDM0MCAyNjggVDYwMCAyNjIgVjMyMCBIMFoiIGZpbGw9IiNjOThhNWEiLz4KPHBhdGggZD0iTTAgMjk1IFExNzAgMjc1IDM2MCAyOTIgVDYwMCAyOTAgVjMyMCBIMFoiIGZpbGw9IiNhODZiNDYiLz4KPC9zdmc+Cg=="); }
+
+/* Subscribe-to-calendar card */
+.subscribe-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.subscribe-copy strong { display: block; }
+.subscribe-copy span { color: var(--muted); font-size: 0.85rem; }
+.subscribe-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.subscribe-actions .compact-action { border-radius: 999px !important; }
+
+/* Compact calendar subscribe bar (small buttons, top of Calendar tab) */
+.cal-subscribe-bar { display: flex; justify-content: flex-start; align-items: center; gap: 8px; margin-bottom: 12px; }
+.cal-sub-btn {
+  min-height: 32px; padding: 0 13px; font-size: 0.78rem; font-weight: 700;
+  border-radius: 999px; border: 1.5px solid var(--line-strong);
+  background: #fff; color: var(--forest-800); cursor: pointer;
+  transition: transform .12s ease, background-color .15s ease;
+}
+.cal-sub-btn.primary { background: var(--forest-700); color: #fff; border-color: var(--forest-700); }
+.cal-sub-btn:active { transform: scale(0.97); }
+
+/* Calendar: edit button anchored top-right of each line */
+.calendar-day-card .calendar-slot { position: relative; padding-right: 46px; }
+.calendar-day-card .calendar-slot .item-manage-actions { position: absolute; top: 8px; right: 8px; margin: 0; z-index: 2; }

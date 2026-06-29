@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe8da"/><stop offset="1" stop-color="#eef5ee"/></linearGradient></defs>
+<rect width="600" height="320" fill="url(#s)"/>
+<path d="M0 250 Q150 200 300 240 T600 230 V320 H0Z" fill="#bcd6c2"/>
+<path d="M0 280 Q160 250 340 275 T600 270 V320 H0Z" fill="#9cc1a6"/>
+<g fill="#2f6b46">
+<polygon points="380,250 410,150 440,250"/><polygon points="420,260 460,120 500,260"/>
+<polygon points="470,255 505,160 540,255"/><polygon points="520,265 560,135 600,265"/>
+</g>
+<g fill="#245539">
+<polygon points="350,270 380,190 410,270"/><polygon points="450,275 485,185 520,275"/><polygon points="540,275 575,200 610,275"/>
+</g>
+<rect y="290" width="600" height="30" fill="#1f4a33"/>
+</svg>

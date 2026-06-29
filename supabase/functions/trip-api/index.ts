@@ -413,6 +413,119 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
   return { changed: false, message: "Unknown action." };
 }
 
+// ---- Subscribable iCalendar (.ics) feed ----
+const ICS_DAY_DATES: Record<string, [number, number, number]> = {
+  wed: [2026, 7, 1], thu: [2026, 7, 2], fri: [2026, 7, 3],
+  sat: [2026, 7, 4], sun: [2026, 7, 5], mon: [2026, 7, 6]
+};
+const ICS_MEAL_LABELS: Record<string, string> = {
+  breakfast: "Breakfast", lunch: "Lunch", dinner: "Dinner", dessert: "Dessert / Snacks", "pack-up": "Pack-up"
+};
+const ICS_FAMILY_LABELS: Record<string, string> = { shell: "Shell", nick: "G6", bear: "Jear", nat: "Riggs" };
+const ICS_DAY_WORDS: Record<string, string> = { wednesday: "wed", thursday: "thu", friday: "fri", saturday: "sat", sunday: "sun", monday: "mon" };
+const ICS_PDT_OFFSET = 7;
+
+function icsMealTypeKey(type: unknown): string {
+  const t = String(type || "").toLowerCase();
+  if (t.includes("dessert")) return "dessert";
+  if (t.includes("breakfast")) return "breakfast";
+  if (t.includes("lunch")) return "lunch";
+  if (t.includes("pack")) return "pack-up";
+  if (t.includes("event")) return "event";
+  return "dinner";
+}
+function icsPad(n: number) { return String(n).padStart(2, "0"); }
+function icsParseRange(value: unknown): { sh: number; sm: number; eh: number; em: number } | null {
+  const str = String(value || "").toLowerCase();
+  const m = str.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*(?:-|–|—|to)\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/);
+  const apply = (h: number, mer?: string) => {
+    if (mer === "pm" && h < 12) return h + 12;
+    if (mer === "am" && h === 12) return 0;
+    return h;
+  };
+  if (!m) {
+    const s = str.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/);
+    if (!s) return null;
+    const h = apply(Number(s[1]), s[3]); const mm = Number(s[2] || 0);
+    return { sh: h, sm: mm, eh: h + 1, em: mm };
+  }
+  const startMer = m[3]; const endMer = m[6] || m[3];
+  return { sh: apply(Number(m[1]), startMer || endMer), sm: Number(m[2] || 0), eh: apply(Number(m[4]), endMer), em: Number(m[5] || 0) };
+}
+function icsUtc(date: [number, number, number], h: number, m: number) {
+  const dt = new Date(Date.UTC(date[0], date[1] - 1, date[2], h + ICS_PDT_OFFSET, m, 0));
+  return `${dt.getUTCFullYear()}${icsPad(dt.getUTCMonth() + 1)}${icsPad(dt.getUTCDate())}T${icsPad(dt.getUTCHours())}${icsPad(dt.getUTCMinutes())}00Z`;
+}
+function icsDate(date: [number, number, number]) { return `${date[0]}${icsPad(date[1])}${icsPad(date[2])}`; }
+function icsNextDate(date: [number, number, number]): [number, number, number] {
+  const dt = new Date(Date.UTC(date[0], date[1] - 1, date[2] + 1));
+  return [dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate()];
+}
+function icsEsc(v: unknown) {
+  return String(v || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+}
+function icsFold(line: string) {
+  if (line.length <= 73) return line;
+  const out = [line.slice(0, 73)]; let s = line.slice(73);
+  while (s.length > 72) { out.push(" " + s.slice(0, 72)); s = s.slice(72); }
+  if (s.length) out.push(" " + s);
+  return out.join("\r\n");
+}
+function buildICS(state: Record<string, any>, info: Record<string, any>): string {
+  const meals = Array.isArray(state.meals) ? state.meals : [];
+  const supplies = Array.isArray(state.supplies) ? state.supplies : [];
+  const location = info.address || "Arnold, California";
+  const d = new Date();
+  const stamp = `${d.getUTCFullYear()}${icsPad(d.getUTCMonth() + 1)}${icsPad(d.getUTCDate())}T${icsPad(d.getUTCHours())}${icsPad(d.getUTCMinutes())}${icsPad(d.getUTCSeconds())}Z`;
+  const lines: string[] = [];
+  const push = (l: string) => lines.push(icsFold(l));
+  push("BEGIN:VCALENDAR");
+  push("VERSION:2.0");
+  push("PRODID:-//Guantones Trip//4th of July 2026//EN");
+  push("CALSCALE:GREGORIAN");
+  push("METHOD:PUBLISH");
+  push("X-WR-CALNAME:4th of July 2026 — Guantones Trip");
+  push("X-WR-TIMEZONE:America/Los_Angeles");
+  push("REFRESH-INTERVAL;VALUE=DURATION:PT1H");
+  push("X-PUBLISHED-TTL:PT1H");
+  const add = (uid: string, summary: string, description: string, day: string, range: any) => {
+    const date = ICS_DAY_DATES[day];
+    if (!date) return;
+    push("BEGIN:VEVENT");
+    push(`UID:${icsEsc(uid)}@gtonetrip`);
+    push(`DTSTAMP:${stamp}`);
+    if (range) { push(`DTSTART:${icsUtc(date, range.sh, range.sm)}`); push(`DTEND:${icsUtc(date, range.eh, range.em)}`); }
+    else { push(`DTSTART;VALUE=DATE:${icsDate(date)}`); push(`DTEND;VALUE=DATE:${icsDate(icsNextDate(date))}`); }
+    push(`SUMMARY:${icsEsc(summary)}`);
+    if (description) push(`DESCRIPTION:${icsEsc(description)}`);
+    if (location) push(`LOCATION:${icsEsc(location)}`);
+    push("END:VEVENT");
+  };
+  const responses = (state.familyResponses && typeof state.familyResponses === "object") ? state.familyResponses : {};
+  for (const famId of Object.keys(ICS_FAMILY_LABELS)) {
+    const arrival = responses[famId] && responses[famId].arrival;
+    const text = String(arrival || "").toLowerCase();
+    const word = Object.keys(ICS_DAY_WORDS).find((w) => text.includes(w));
+    if (word) add(`arrival-${famId}`, `${ICS_FAMILY_LABELS[famId]} arrives`, String(arrival), ICS_DAY_WORDS[word], null);
+  }
+  for (const meal of meals) {
+    const key = icsMealTypeKey(meal.type);
+    if (key === "event") { add(`event-${meal.id}`, meal.idea || "Trip event", meal.kids || meal.time || "", meal.day, icsParseRange(meal.kids) || icsParseRange(meal.time)); continue; }
+    if (!meal.idea) continue;
+    const bringing = supplies
+      .filter((it: any) => String(it.type || "").toLowerCase() === "food" && (it.owner || it.createdBy))
+      .filter((it: any) => !it.days || !it.days.length || it.days.includes(meal.day))
+      .filter((it: any) => it.mealType === "any" || it.mealType === key)
+      .map((it: any) => it.name).filter(Boolean);
+    const desc: string[] = [];
+    if (meal.kids) desc.push(`Kid backup: ${meal.kids}`);
+    if (bringing.length) desc.push(`Bringing: ${bringing.join(", ")}`);
+    add(`meal-${meal.id}`, `${ICS_MEAL_LABELS[key] || "Meal"}: ${meal.idea}`, desc.join("\n"), meal.day, icsParseRange(meal.time));
+  }
+  push("END:VCALENDAR");
+  return lines.join("\r\n") + "\r\n";
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -435,6 +548,21 @@ Deno.serve(async (request) => {
       const session = await currentSession(request);
       if (session?.token) await deleteSession(session.token);
       return json({ ok: true, user: null, message: "Signed out." });
+    }
+
+    // Public, subscribable calendar feed (no auth) for Apple/Google Calendar.
+    if ((route === "/calendar.ics" || route === "/trip.ics") && (request.method === "GET" || request.method === "HEAD")) {
+      const state = await getStoredState();
+      const ics = buildICS(state as Record<string, unknown>, tripInfo);
+      return new Response(request.method === "HEAD" ? null : ics, {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "text/calendar; charset=utf-8",
+          "Cache-Control": "public, max-age=900",
+          "Content-Disposition": 'inline; filename="guantones-trip.ics"'
+        }
+      });
     }
 
     const session = await currentSession(request);

@@ -12,12 +12,12 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=14">
+    <link rel="stylesheet" href="styles.css?v=32">
   </head>
   <body class="auth-open">
     <div class="app-shell">
       <aside class="sidebar" aria-label="Primary">
-        <a class="brand" href="#dashboard" data-tab="dashboard" aria-label="4th of July 2026 home">
+        <a class="brand" href="#food" data-tab="food" aria-label="4th of July 2026 home">
           <span class="brand-mark" aria-hidden="true">
             <img src="assets/icon-192.png" alt="">
           </span>
@@ -28,25 +28,17 @@
         </a>
 
         <nav class="side-nav">
-          <button class="nav-item is-active" type="button" data-tab="dashboard">
-            <span data-icon="home"></span>
+          <button class="nav-item is-active" type="button" data-tab="food">
+            <span data-icon="utensils"></span>
+            Food
+          </button>
+          <button class="nav-item" type="button" data-tab="dashboard">
+            <span data-icon="calendar"></span>
             Calendar
           </button>
-          <button class="nav-item" type="button" data-tab="supplies">
-            <span data-icon="calendar"></span>
-            Logistics
-          </button>
-          <button class="nav-item" type="button" data-tab="checkin">
-            <span data-icon="bag"></span>
-            Bringing
-          </button>
-          <button class="nav-item" type="button" data-tab="food">
-            <span data-icon="utensils"></span>
-            Meals
-          </button>
-          <button class="nav-item" type="button" data-tab="cabin">
-            <span data-icon="flame"></span>
-            More
+          <button class="nav-item" type="button" data-tab="todo">
+            <span data-icon="mountain"></span>
+            To Do
           </button>
         </nav>
 
@@ -81,13 +73,21 @@
           </div>
         </section>
 
-        <section class="content-panel" id="dashboard" data-panel="dashboard">
+        <section class="content-panel is-hidden" id="dashboard" data-panel="dashboard">
+          <div class="cal-subscribe-bar">
+            <button class="cal-sub-btn primary" type="button" id="subscribeApple">Add to Apple Calendar</button>
+            <button class="cal-sub-btn" type="button" id="copyCalLink">Copy link</button>
+          </div>
+
           <section class="board-panel calendar-panel">
             <div class="section-heading">
               <div>
-                <h2>Calendar</h2>
+                <h2>Trip Schedule</h2>
               </div>
-              <button class="primary-action compact-action" type="button" id="addNonFoodEvent">Add Non-Food Event</button>
+              <div class="panel-actions">
+                <button class="secondary-action compact-action" type="button" id="openCheckin">Update my arrival</button>
+                <button class="primary-action compact-action" type="button" id="addNonFoodEvent">Add Non-Food Event</button>
+              </div>
             </div>
             <div class="calendar-board" id="calendarBoard"></div>
           </section>
@@ -95,105 +95,75 @@
           <section class="board-panel calendar-events-panel">
             <div class="section-heading">
               <div>
-                <h2>Calendar events</h2>
-                <p>Edit or delete the non-food events that show on the calendar.</p>
+                <h2>Non-food events</h2>
+                <p>Keep parade times, golf, and other side plans here so they do not compete with meals.</p>
               </div>
             </div>
             <div class="needed-list" id="calendarEventList"></div>
           </section>
+
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>House details</h2>
+              </div>
+            </div>
+            <div class="detail-list">
+              <div><span>Address</span><strong id="cabinAddressValue">Sign in to view house address</strong></div>
+            </div>
+          </section>
+        </section>
+
+        <section class="content-panel is-hidden" id="todo" data-panel="todo">
+          <div class="panel-heading">
+            <div>
+              <h1>Things to do</h1>
+              <p>Reference-only outings and links for the weekend &mdash; parade times, trails, and side plans.</p>
+            </div>
+          </div>
+          <section class="board-panel">
+            <div class="cabin-activity-list" id="cabinActivityList"></div>
+          </section>
         </section>
 
         <section class="content-panel is-hidden" id="checkin" data-panel="checkin">
-          <div class="panel-heading">
-            <div>
-              <h1>What am I bringing?</h1>
-              <p>See what each household already has covered, plus your own items in one place.</p>
-            </div>
-            <button class="primary-action compact-action" type="button" id="addSupply">Add what I&apos;m bringing</button>
-          </div>
           <section class="board-panel">
             <div class="section-heading">
               <div>
-                <h2>My items</h2>
-                <p>Add what you&apos;re bringing, what meal it supports, and the days it can be used.</p>
+                <h2>Food Board moved</h2>
+                <p>The main bringing flow now lives on the Food tab.</p>
               </div>
             </div>
-            <div class="bringing-list" id="myClaimsList"></div>
-          </section>
-          <section class="board-panel">
-            <div class="section-heading">
-              <div>
-                <h2>By household</h2>
-                <p>Quick scan of what the other households have already added.</p>
-              </div>
-            </div>
-            <div class="bringing-groups" id="bringingByFamily"></div>
           </section>
         </section>
 
-        <section class="content-panel is-hidden" id="food" data-panel="food">
-          <div class="panel-heading">
-            <div>
-              <h1>Meals</h1>
-              <p>Tap a meal to set the recipe. Items from Bringing show up here automatically by meal and day.</p>
+        <section class="content-panel" id="food" data-panel="food">
+          <div class="food-hub">
+            <div class="food-tabs" role="tablist" aria-label="Food views">
+              <span class="food-tab-thumb" aria-hidden="true"></span>
+              <button class="food-tab is-active" type="button" data-food-view="meals" role="tab">By meal</button>
+              <button class="food-tab" type="button" data-food-view="family" role="tab">By family</button>
             </div>
-            <button class="primary-action compact-action" type="button" id="addMealIdea">Add meal slot</button>
+            <div class="food-days" id="foodDays" aria-label="Pick a day"></div>
+            <div class="food-meal-grid" id="foodMealGrid"></div>
+            <div class="food-family-grid is-hidden" id="foodFamilyGrid"></div>
           </div>
 
-          <section class="board-panel open-meals-panel">
-            <div class="section-heading">
-              <div>
-                <h2>Meals to finish</h2>
-                <p>These are the meal slots that still need a clearer recipe or plan.</p>
-              </div>
-            </div>
-            <div class="needed-list" id="openMealList"></div>
-          </section>
-
-          <div class="meal-board" id="mealBoard"></div>
-        </section>
-
-        <section class="content-panel is-hidden" id="supplies" data-panel="supplies">
-          <div class="panel-heading panel-heading-compact">
-            <div>
-              <h1>Logistics</h1>
-            </div>
+          <div class="food-add-bar">
+            <button class="secondary-action compact-action" type="button" id="addMealIdea">Add meal slot</button>
+            <button class="primary-action compact-action" type="button" id="addSupply">Add item</button>
           </div>
-          <section class="board-panel logistics-panel">
-            <div class="bringing-groups" id="logisticsFamilyList"></div>
-            <div class="question-list is-hidden" id="logisticsPromptList"></div>
-          </section>
         </section>
 
         <section class="content-panel is-hidden" id="cabin" data-panel="cabin">
-          <div class="panel-heading">
-            <div>
-              <h1>More</h1>
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Trip details moved</h2>
+                <p>House details and side plans now live on the Trip tab.</p>
+              </div>
             </div>
-          </div>
-
-          <div class="two-column">
-            <section class="board-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>House details</h2>
-                </div>
-              </div>
-              <div class="detail-list">
-                <div><span>Address</span><strong id="cabinAddressValue">Sign in to view house address</strong></div>
-              </div>
-            </section>
-
-            <section class="board-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>Things to do</h2>
-                  <p>Official links plus Google Maps for the holiday weekend.</p>
-                </div>
-              </div>
-              <div class="cabin-activity-list" id="cabinActivityList"></div>
-            </section>
-          </div>
+          </section>
         </section>
 
         <section class="content-panel is-hidden" id="activities" data-panel="activities">
@@ -210,25 +180,17 @@
       </main>
 
       <nav class="mobile-nav" aria-label="Mobile primary">
-        <button class="mobile-nav-item is-active" type="button" data-tab="dashboard">
-          <span data-icon="home"></span>
+        <button class="mobile-nav-item is-active" type="button" data-tab="food">
+          <span data-icon="utensils"></span>
+          Food
+        </button>
+        <button class="mobile-nav-item" type="button" data-tab="dashboard">
+          <span data-icon="calendar"></span>
           Calendar
         </button>
-        <button class="mobile-nav-item" type="button" data-tab="supplies">
-          <span data-icon="calendar"></span>
-          Logistics
-        </button>
-        <button class="mobile-nav-item" type="button" data-tab="checkin">
-          <span data-icon="bag"></span>
-          Bringing
-        </button>
-        <button class="mobile-nav-item" type="button" data-tab="food">
-          <span data-icon="utensils"></span>
-          Meals
-        </button>
-        <button class="mobile-nav-item" type="button" data-tab="cabin">
-          <span data-icon="flame"></span>
-          More
+        <button class="mobile-nav-item" type="button" data-tab="todo">
+          <span data-icon="mountain"></span>
+          To Do
         </button>
       </nav>
     </div>
@@ -351,43 +313,48 @@
         <section class="item-form-section is-hidden" data-item-section="supply">
           <label>
             What are you bringing?
-            <input id="supplyName" type="text" placeholder="Eggs, bacon, sausage, drinks">
+            <input id="supplyName" type="text" placeholder="Eggs, bacon, chips, buns">
           </label>
           <label>
-            Notes
-            <input id="supplyQty" type="text" placeholder="Two dozen, one cooler, enough for everyone">
+            Note or amount (optional)
+            <input id="supplyQty" type="text" placeholder="Two dozen, enough for breakfast, backup item">
           </label>
-          <label>
-            Picture (optional)
-            <input id="supplyImage" type="file" accept="image/*">
-          </label>
-          <div class="item-image-preview is-hidden" id="supplyImagePreviewWrap">
-            <img id="supplyImagePreview" alt="Preview of what you are bringing">
-            <button class="secondary-action compact-action" type="button" id="clearSupplyImage">Remove picture</button>
-          </div>
-          <label>
-            What is it for?
-            <select id="supplyMealType">
-              <option value="non-food">Non-food item</option>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-              <option value="dessert">Dessert / Snacks</option>
-              <option value="pack-up">Pack-up</option>
-              <option value="any">Any meal / shared</option>
-            </select>
-          </label>
-          <fieldset class="day-picker">
-            <legend>Tap the days this can be used</legend>
-            <div class="day-chip-grid" id="supplyDayPicker">
-              <button type="button" class="day-chip" data-supply-day="wed">Wed</button>
-              <button type="button" class="day-chip" data-supply-day="thu">Thu</button>
-              <button type="button" class="day-chip" data-supply-day="fri">Fri</button>
-              <button type="button" class="day-chip" data-supply-day="sat">Sat</button>
-              <button type="button" class="day-chip" data-supply-day="sun">Sun</button>
-              <button type="button" class="day-chip" data-supply-day="mon">Mon</button>
+          <details class="optional-details">
+            <summary>Add details (optional)</summary>
+            <div class="optional-details-body">
+              <label>
+                What is it for?
+                <select id="supplyMealType">
+                  <option value="any">Any meal / shared</option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                  <option value="dessert">Dessert / Snacks</option>
+                  <option value="pack-up">Pack-up</option>
+                  <option value="non-food">Non-food item</option>
+                </select>
+              </label>
+              <fieldset class="day-picker">
+                <legend>Tap the days this supports</legend>
+                <div class="day-chip-grid" id="supplyDayPicker">
+                  <button type="button" class="day-chip" data-supply-day="wed">Wed</button>
+                  <button type="button" class="day-chip" data-supply-day="thu">Thu</button>
+                  <button type="button" class="day-chip" data-supply-day="fri">Fri</button>
+                  <button type="button" class="day-chip" data-supply-day="sat">Sat</button>
+                  <button type="button" class="day-chip" data-supply-day="sun">Sun</button>
+                  <button type="button" class="day-chip" data-supply-day="mon">Mon</button>
+                </div>
+              </fieldset>
+              <label>
+                Picture (optional)
+                <input id="supplyImage" type="file" accept="image/*">
+              </label>
+              <div class="item-image-preview is-hidden" id="supplyImagePreviewWrap">
+                <img id="supplyImagePreview" alt="Preview of what you are bringing">
+                <button class="secondary-action compact-action" type="button" id="clearSupplyImage">Remove picture</button>
+              </div>
             </div>
-          </fieldset>
+          </details>
         </section>
 
         <div class="drawer-footer">
@@ -435,6 +402,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=24"></script>
+    <script src="script.js?v=34"></script>
   </body>
 </html>

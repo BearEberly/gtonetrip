@@ -21,10 +21,10 @@ const icons = {
 };
 
 const families = [
-  { id: "shell", name: "Shell", shortName: "Shell", color: "#d9512b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
-  { id: "nick", name: "G6", shortName: "G6", color: "#b37224", status: "Needs timing", details: "Nick, Marissa, Luca, Sophia, Rocco, Gio" },
-  { id: "bear", name: "Jear", shortName: "Jear", color: "#5a9f3c", status: "Needs timing", details: "Bear and Jessica" },
-  { id: "nat", name: "Riggs", shortName: "Riggs", color: "#167fa6", status: "Needs timing", details: "Andy, Natalie, Oli, Viv" }
+  { id: "shell", name: "Shell", shortName: "Shell", color: "#c0392b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
+  { id: "nick", name: "G6", shortName: "G6", color: "#6d4aa7", status: "Needs timing", details: "Nick, Marissa, Luca, Sophia, Rocco, Gio" },
+  { id: "bear", name: "Jear", shortName: "Jear", color: "#2f8f4e", status: "Needs timing", details: "Bear and Jessica" },
+  { id: "nat", name: "Riggs", shortName: "Riggs", color: "#1f7fa6", status: "Needs timing", details: "Andy, Natalie, Oli, Viv" }
 ];
 
 const attendees = [
@@ -499,6 +499,8 @@ const api = {
 
 let state = loadLocalState();
 let selectedDay = "wed";
+let foodView = "meals";
+let foodDay = "";
 let selectedFamily = loadSelectedFamily();
 let sessionToken = loadSessionToken();
 let tripInfo = null;
@@ -850,6 +852,7 @@ async function submitAuthForm(event) {
     applyProfile(payload.user);
     applyTripInfo(payload.tripInfo);
     hideAuthScreen();
+    setActivePanel("food");
     showToast("Signed in.");
     connectSharedState();
   } catch (error) {
@@ -1207,7 +1210,7 @@ function dayLabelShort(day) {
 }
 
 function daysSummary(days = []) {
-  if (!days.length) return "No days picked yet";
+  if (!days.length) return "Any day / whole trip";
   return days.map(dayLabelShort).join(" · ");
 }
 
@@ -1504,7 +1507,8 @@ function renderCalendarBoard() {
     const mealEntries = state.meals.filter((meal) => meal.day === day && !isNonFoodEvent(meal));
     const eventEntries = state.meals.filter((meal) => meal.day === day && isNonFoodEvent(meal));
     return `
-      <section class="calendar-day-card">
+      <section class="calendar-day-card day-${day}">
+        <div class="cal-day-photo" aria-hidden="true"></div>
         <header class="calendar-day-header">
           <strong>${label}</strong>
           <span>${date}</span>
@@ -1515,12 +1519,14 @@ function renderCalendarBoard() {
               <span class="calendar-slot-kind">${item.type === "departure" ? "Departure" : "Arrival"}</span>
               <strong>${escapeText(item.title)}</strong>
               <span class="calendar-slot-time">${escapeText(item.detail)}</span>
+              ${item.type === "departure" ? "" : `<div class="item-manage-actions"><button class="edit-icon-button" type="button" data-open-arrival aria-label="Edit arrival timing" title="Edit arrival timing"><span data-icon="edit"></span></button></div>`}
             </article>
           `).join("") : `
             <article class="calendar-slot calendar-slot-empty">
               <span class="calendar-slot-kind">Travel</span>
               <strong>?</strong>
               <span class="calendar-slot-time">No arrival listed</span>
+              <div class="item-manage-actions"><button class="edit-icon-button" type="button" data-open-arrival aria-label="Set arrival timing" title="Set arrival timing"><span data-icon="edit"></span></button></div>
             </article>
           `}
           ${eventEntries.map((meal) => `
@@ -1536,6 +1542,7 @@ function renderCalendarBoard() {
               <span class="calendar-slot-kind">${escapeText(meal.type)}</span>
               <strong>${escapeText(meal.idea || "No meal plan yet")}</strong>
               <span class="calendar-slot-time">${escapeText(meal.time)}${bringingItemsForMeal(meal).length ? ` · ${escapeText(bringingItemsForMeal(meal).map((item) => item.name).join(", "))}` : ""}</span>
+              ${itemManageActions("meal", meal)}
             </article>
           `).join("")}
         </div>
@@ -1622,6 +1629,17 @@ function renderSupplies() {
     if (!!aOwner === !!bOwner) return a.type.localeCompare(b.type);
     return aOwner ? 1 : -1;
   });
+  if (!sorted.length) {
+    container.innerHTML = `
+      <article class="bringing-row bringing-row-empty">
+        <div>
+          <strong>No shared items yet</strong>
+          <span>Add staples, drinks, paper goods, or extras here.</span>
+        </div>
+      </article>
+    `;
+    return;
+  }
   container.innerHTML = sorted.map((item) => {
     const ownerId = supplyOwnerId(item);
     const owner = ownerId ? familyById(ownerId) : null;
@@ -2079,6 +2097,212 @@ function updateCounts() {
   if (coldMeter) coldMeter.style.width = `${Math.min(100, Math.round((coldCount / 18) * 100))}%`;
 }
 
+// ---- Food hub (per-day, per-meal coverage view) ----
+const FOOD_DAY_ORDER = ["wed", "thu", "fri", "sat", "sun", "mon"];
+
+function foodDaysWithMeals() {
+  const present = new Set(state.meals.filter((m) => !isNonFoodEvent(m)).map((m) => m.day));
+  const days = FOOD_DAY_ORDER.filter((d) => present.has(d));
+  return days.length ? days : ["fri", "sat", "sun"];
+}
+
+function ensureFoodDay() {
+  const days = foodDaysWithMeals();
+  if (!foodDay || !days.includes(foodDay)) foodDay = days[0];
+  return days;
+}
+
+function mealTypeKey(meal) {
+  const t = String(meal?.type || "").toLowerCase();
+  if (t.includes("dessert")) return "dessert";
+  if (t.includes("breakfast")) return "breakfast";
+  if (t.includes("lunch")) return "lunch";
+  if (t.includes("pack")) return "pack-up";
+  return "dinner";
+}
+
+function mealToneClass(meal) {
+  return {
+    breakfast: "tone-breakfast",
+    lunch: "tone-lunch",
+    dinner: "tone-dinner",
+    dessert: "tone-dessert",
+    "pack-up": "tone-shared"
+  }[mealTypeKey(meal)] || "tone-shared";
+}
+
+function mealTypeShort(meal) {
+  return {
+    breakfast: "Breakfast",
+    lunch: "Lunch",
+    dinner: "Dinner",
+    dessert: "Dessert",
+    "pack-up": "Pack-up"
+  }[mealTypeKey(meal)] || meal.type;
+}
+
+function mealNeeds(meal) {
+  return Array.isArray(meal.cold) ? meal.cold.map((s) => String(s || "").trim()).filter(Boolean) : [];
+}
+
+function ingredientCovered(ingredient, items) {
+  const ing = String(ingredient || "").toLowerCase().trim();
+  if (!ing) return true;
+  const ingWords = ing.split(/[^a-z]+/).filter((w) => w.length > 2);
+  return items.some((it) => {
+    const name = String(it.name || "").toLowerCase();
+    if (name.includes(ing) || ing.includes(name)) return true;
+    return ingWords.some((w) => name.includes(w));
+  });
+}
+
+// Typical cookout-trip items to suggest per meal type (tap to add).
+const MEAL_SUGGESTIONS = {
+  breakfast: ["Eggs", "Bacon", "Sausage", "Pancake mix", "Waffles", "Cinnamon rolls", "Bagels", "Cream cheese", "Butter", "Milk", "Coffee", "Orange juice", "Fresh fruit", "Yogurt"],
+  lunch: ["Sandwich bread", "Lunch meat", "Cheese", "Hot dogs", "Buns", "Chips", "Pasta salad", "Fresh fruit", "Condiments", "Pickles", "Veggies & dip", "Lemonade", "Watermelon"],
+  dinner: ["Burgers", "Buns", "Steaks", "Chicken", "Hot dogs", "Cheese slices", "Lettuce, tomato, onion", "Ketchup & mustard", "BBQ sauce", "Corn on the cob", "Green salad", "Baked beans", "Tortillas", "Chips & salsa"],
+  dessert: ["S'mores kit", "Ice cream", "Cookies", "Brownies", "Cake", "Watermelon", "Popsicles", "Pie", "Whipped cream", "Mixed berries"],
+  "pack-up": ["Trash bags", "Leftover containers", "Coffee for the road", "Drive snacks", "Water bottles"]
+};
+
+function renderFoodDays() {
+  const el = document.querySelector("#foodDays");
+  if (!el) return;
+  const days = ensureFoodDay();
+  el.innerHTML = days.map((d) => {
+    const parts = (dayMeta[d]?.dayLabel || d).split(" ");
+    const short = parts[0];
+    const date = parts.slice(1).join(" ");
+    return `<button class="food-day ${d === foodDay ? "is-active" : ""}" type="button" data-food-day="${d}">
+      <b>${escapeText(short)}</b><small>${escapeText(date)}</small></button>`;
+  }).join("");
+}
+
+function renderFoodMealGrid() {
+  const el = document.querySelector("#foodMealGrid");
+  if (!el) return;
+  ensureFoodDay();
+  const order = { breakfast: 0, lunch: 1, dinner: 2, dessert: 3, "pack-up": 4 };
+  const meals = state.meals
+    .filter((m) => m.day === foodDay && !isNonFoodEvent(m))
+    .sort((a, b) => (order[mealTypeKey(a)] ?? 9) - (order[mealTypeKey(b)] ?? 9));
+  if (!meals.length) {
+    el.innerHTML = `<div class="fh-empty">No meals planned for this day yet.</div>`;
+    return;
+  }
+  el.innerHTML = meals.map((meal) => {
+    const items = bringingItemsForMeal(meal);
+    const needs = mealNeeds(meal);
+    const gaps = needs.filter((n) => !ingredientCovered(n, items));
+    const haveCount = items.length;
+    const gapCount = gaps.length;
+    const total = needs.length || haveCount;
+    const covered = needs.length ? needs.length - gapCount : haveCount;
+    const pct = total ? Math.round((covered / total) * 100) : (haveCount ? 100 : 0);
+
+    const bring = haveCount
+      ? items.map((it) => {
+          const fam = familyById(supplyOwnerId(it));
+          return `<div class="fh-bring"><span class="fh-dot" style="background:${fam ? fam.color : "#9aa0a6"}"></span><span class="fh-bring-name">${escapeText(it.name)}</span><span class="fh-who">${escapeText(fam ? fam.name : "")}</span></div>`;
+        }).join("")
+      : `<div class="fh-empty-line">No one has added anything for this meal yet.</div>`;
+
+    const covLabel = gapCount
+      ? `<div class="fh-covlabel"><span class="fh-done">${covered} covered</span><span class="fh-gap-label">${gapCount} still needed</span></div>`
+      : `<div class="fh-covlabel"><span class="fh-full">&#10003; Fully covered</span><span class="fh-muted">${haveCount} item${haveCount === 1 ? "" : "s"}</span></div>`;
+
+    const needMarkup = gapCount
+      ? `<div class="fh-sect"><h4>Still needed</h4><div class="fh-needed">${gaps.map((g) => `<button class="fh-gap" type="button" data-gap-meal="${escapeText(meal.id)}" data-gap-name="${escapeText(g)}">+ ${escapeText(g)}</button>`).join("")}</div></div>`
+      : (needs.length || haveCount)
+        ? `<div class="fh-sect"><div class="fh-alldone">&#10003; Nothing else needed &mdash; this meal is set.</div></div>`
+        : `<div class="fh-sect"><div class="fh-open">No plan yet. Tap &ldquo;I&rsquo;ll bring something&rdquo; to start it.</div></div>`;
+
+    const suggestions = (MEAL_SUGGESTIONS[mealTypeKey(meal)] || [])
+      .filter((s) => !ingredientCovered(s, items) && !gaps.some((g) => g.toLowerCase() === s.toLowerCase()))
+      .slice(0, 9);
+    const suggestMarkup = suggestions.length
+      ? `<div class="fh-sect fh-suggest-sect"><h4>Ideas to add</h4><div class="fh-needed">${suggestions.map((s) => `<button class="fh-suggest" type="button" data-gap-meal="${escapeText(meal.id)}" data-gap-name="${escapeText(s)}">+ ${escapeText(s)}</button>`).join("")}</div></div>`
+      : "";
+
+    return `<article class="fh-meal">
+      <div class="fh-top">
+        <span class="fh-chip ${mealToneClass(meal)}">${escapeText(mealTypeShort(meal))}</span>
+        <span class="fh-time">${escapeText(meal.time || "")}</span>
+        <span class="fh-meal-manage">${itemManageActions("meal", meal)}</span>
+      </div>
+      <h3>${escapeText(meal.idea || "No plan yet")}</h3>
+      ${meal.kids ? `<div class="fh-kids">Kid backup: <b>${escapeText(meal.kids)}</b></div>` : ""}
+      <div class="fh-cov"><div class="fh-covbar"><div class="fh-covfill ${gapCount ? "" : "is-full"}" style="width:${pct}%"></div></div>${covLabel}</div>
+      <div class="fh-sect"><h4>Who&rsquo;s bringing what</h4>${bring}</div>
+      ${needMarkup}
+      ${suggestMarkup}
+      <div class="fh-act"><button class="primary-action fh-bring-btn" type="button" data-bring-meal="${escapeText(meal.id)}">I&rsquo;ll bring something</button></div>
+    </article>`;
+  }).join("");
+  insertIcons();
+}
+
+function renderFoodFamilyGrid() {
+  const el = document.querySelector("#foodFamilyGrid");
+  if (!el) return;
+  const activeId = activeFamilyId();
+  const ordered = [...families].sort((a, b) => (b.id === activeId ? 1 : 0) - (a.id === activeId ? 1 : 0));
+  el.innerHTML = ordered.map((fam) => {
+    const items = bringingItemsForFamily(fam.id);
+    const isMine = fam.id === activeId;
+    const body = items.length
+      ? `<ul class="fh-fam-list">${items.map((it) => {
+          const editable = canManageCustomItem(it);
+          return `<li class="fh-fam-item${editable ? " is-editable" : ""}"${editable ? ` data-edit-supply="${escapeText(it.id)}"` : ""}>
+            <span class="fh-bring-name">${escapeText(it.name)}</span>
+            <span class="fh-tag">${escapeText(supplyPurposeLabel(it))}</span>
+            ${editable ? `<span class="fh-edit-hint" data-icon="edit" aria-hidden="true"></span>` : ""}
+          </li>`;
+        }).join("")}</ul>`
+      : `<div class="fh-empty-line">Nothing added yet.</div>`;
+    return `<section class="fh-fam${isMine ? " is-mine" : ""}">
+      <header class="fh-fam-head" style="background:${fam.color}">
+        <b>${escapeText(fam.name)}</b>${isMine ? `<span class="fh-you">You</span>` : ""}
+        <span class="fh-fam-count">${items.length} item${items.length === 1 ? "" : "s"}</span>
+      </header>
+      <div class="fh-fam-body">${body}</div>
+    </section>`;
+  }).join("");
+  insertIcons();
+}
+
+function renderFoodHub() {
+  const mealGrid = document.querySelector("#foodMealGrid");
+  if (!mealGrid) return;
+  const famGrid = document.querySelector("#foodFamilyGrid");
+  const daysEl = document.querySelector("#foodDays");
+  const showMeals = foodView !== "family";
+  document.querySelectorAll("[data-food-view]").forEach((b) => b.classList.toggle("is-active", b.dataset.foodView === foodView));
+  document.querySelector(".food-tabs")?.classList.toggle("at-family", foodView === "family");
+  if (daysEl) daysEl.classList.toggle("is-hidden", !showMeals);
+  mealGrid.classList.toggle("is-hidden", !showMeals);
+  if (famGrid) famGrid.classList.toggle("is-hidden", showMeals);
+  renderFoodDays();
+  renderFoodMealGrid();
+  renderFoodFamilyGrid();
+}
+
+function openSupplyForMeal(mealId, prefillName) {
+  const meal = state.meals.find((m) => m.id === mealId);
+  openItemDrawer("supply");
+  if (meal) {
+    const typeSel = document.querySelector("#supplyMealType");
+    if (typeSel) typeSel.value = mealTypeKey(meal);
+    updateSupplyDayAvailability();
+    setSupplyDaySelection([meal.day]);
+    const details = document.querySelector(".optional-details");
+    if (details) details.open = true;
+  }
+  const nameInput = document.querySelector("#supplyName");
+  if (nameInput && prefillName) nameInput.value = prefillName;
+  window.setTimeout(() => document.querySelector("#supplyName")?.focus(), 0);
+}
+
 function renderAll() {
   renderFamilies();
   renderProfile();
@@ -2094,6 +2318,7 @@ function renderAll() {
   renderMealBoard();
   renderSupplies();
   renderBringingBoard();
+  renderFoodHub();
   renderCabinActivityList();
   renderGuideHighlights();
   renderActivityPreview();
@@ -2400,12 +2625,12 @@ function openItemDrawer(mode, itemId = "") {
     ? (isEdit ? "Edit non-food event" : "Add non-food event")
     : mode === "meal"
       ? (isEdit ? "Edit meal plan" : "Add meal slot")
-      : (isEdit ? "Edit what I'm bringing" : "Add what I'm bringing");
+      : (isEdit ? "Edit item" : "Add item");
   if (help) help.textContent = isEvent
     ? "Add a trip event that should show on the calendar but not under meals."
     : mode === "meal"
       ? "Set the recipe for this meal. Bringing items link in automatically."
-      : "Add the item, what meal it supports, and the days it can be used.";
+      : "Start with the item name. Meal, day, and picture details are optional.";
   if (save) save.textContent = isEdit ? "Save changes" : (isEvent ? "Add event" : mode === "meal" ? "Add meal" : "Save item");
   document.querySelectorAll("[data-item-section]").forEach((section) => {
     const isMealSection = section.dataset.itemSection === "meal";
@@ -2532,10 +2757,6 @@ function submitItemForm(event) {
     showToast("Add an item name first.");
     return;
   }
-  if (selectedPurpose !== "non-food" && !payload.days.length) {
-    showToast("Pick at least one day for this item.");
-    return;
-  }
   if (editingItemId) {
     const supply = state.supplies.find((item) => item.id === editingItemId);
     performAction("updateSupply", { id: editingItemId, ...payload }, () => {
@@ -2612,6 +2833,18 @@ function deleteSupply(id) {
   }, "Bringing item deleted.");
 }
 
+function calendarFeedUrls() {
+  const cfg = window.APP_CONFIG || {};
+  let https;
+  if (cfg.supabaseUrl) {
+    const fn = cfg.tripApiFunction || "trip-api";
+    https = `${String(cfg.supabaseUrl).replace(/\/$/, "")}/functions/v1/${fn}/calendar.ics`;
+  } else {
+    https = `${window.location.origin}/trip.ics`;
+  }
+  return { https, webcal: https.replace(/^https?:\/\//, "webcal://") };
+}
+
 function bindEvents() {
   document.addEventListener("click", (event) => {
     const nav = event.target.closest("[data-tab]");
@@ -2626,11 +2859,26 @@ function bindEvents() {
     const editMealButton = event.target.closest("[data-edit-meal]");
     if (editMealButton) editMeal(editMealButton.dataset.editMeal);
 
+    const openArrivalButton = event.target.closest("[data-open-arrival]");
+    if (openArrivalButton) openDrawer();
+
     const deleteMealButton = event.target.closest("[data-delete-meal]");
     if (deleteMealButton) deleteMeal(deleteMealButton.dataset.deleteMeal);
 
     const supplyButton = event.target.closest("[data-claim-supply]");
     if (supplyButton) claimSupply(supplyButton.dataset.claimSupply);
+
+    const foodViewBtn = event.target.closest("[data-food-view]");
+    if (foodViewBtn) { foodView = foodViewBtn.dataset.foodView; renderFoodHub(); }
+
+    const foodDayBtn = event.target.closest("[data-food-day]");
+    if (foodDayBtn) { foodDay = foodDayBtn.dataset.foodDay; renderFoodHub(); }
+
+    const bringMealBtn = event.target.closest("[data-bring-meal]");
+    if (bringMealBtn) openSupplyForMeal(bringMealBtn.dataset.bringMeal, "");
+
+    const gapBtn = event.target.closest("[data-gap-meal]");
+    if (gapBtn) openSupplyForMeal(gapBtn.dataset.gapMeal, gapBtn.dataset.gapName || "");
 
     const editSupplyButton = event.target.closest("[data-edit-supply]");
     if (editSupplyButton) editSupply(editSupplyButton.dataset.editSupply);
@@ -2727,6 +2975,14 @@ function bindEvents() {
   document.querySelector("#addMealIdea")?.addEventListener("click", addMealIdea);
   document.querySelector("#addNonFoodEvent")?.addEventListener("click", addNonFoodEvent);
   document.querySelector("#addSupply")?.addEventListener("click", addSupply);
+  document.querySelector("#subscribeApple")?.addEventListener("click", () => {
+    window.location.href = calendarFeedUrls().webcal;
+  });
+  document.querySelector("#copyCalLink")?.addEventListener("click", async () => {
+    const { https } = calendarFeedUrls();
+    try { await navigator.clipboard.writeText(https); showToast("Calendar link copied."); }
+    catch { showToast(https); }
+  });
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
   document.querySelector("#supplyMealType")?.addEventListener("change", updateSupplyDayAvailability);
   document.querySelector("#clearSupplyImage")?.addEventListener("click", () => {

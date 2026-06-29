@@ -11,6 +11,7 @@ import {
   verifyAuthenticationResponse,
   verifyRegistrationResponse
 } from "@simplewebauthn/server";
+import { buildICS } from "./calendar-feed.js";
 
 const rootDir = resolve(".");
 const dataDir = resolve(process.env.DATA_DIR || join(rootDir, "data"));
@@ -1158,7 +1159,7 @@ function safeStaticPath(pathname) {
 
 function isPublicStaticPath(pathname) {
   if (pathname === "/") return true;
-  if (["/index.html", "/styles.css", "/script.js", "/service-worker.js", "/manifest.webmanifest"].includes(pathname)) return true;
+  if (["/index.html", "/styles.css", "/script.js", "/app-config.js", "/service-worker.js", "/manifest.webmanifest"].includes(pathname)) return true;
   if (pathname.startsWith("/assets/")) return true;
   return false;
 }
@@ -1198,6 +1199,20 @@ const server = createServer(async (request, response) => {
       version: sharedState.version,
       updatedAt: sharedState.updatedAt
     });
+    return;
+  }
+
+  // Public, subscribable calendar feed (no auth) for Apple/Google Calendar.
+  if ((request.method === "GET" || request.method === "HEAD") &&
+      (url.pathname === "/trip.ics" || url.pathname === "/calendar.ics")) {
+    const ics = buildICS(sharedState, privateTripInfo);
+    response.writeHead(200, {
+      "Content-Type": "text/calendar; charset=utf-8",
+      "Content-Disposition": 'inline; filename="guantones-trip.ics"',
+      "Cache-Control": "public, max-age=900",
+      "Access-Control-Allow-Origin": "*"
+    });
+    response.end(request.method === "HEAD" ? undefined : ics);
     return;
   }
 
