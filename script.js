@@ -107,6 +107,7 @@ const cabinThingsToDo = [
     id: "arnold-parade",
     category: "Holiday weekend",
     name: "Arnold Independence Day Parade",
+    when: "Saturday July 4 · 10:00 AM",
     note: "Small-town Fourth of July parade through Arnold and the best family-specific holiday event nearby.",
     websiteUrl: "https://www.gocalaveras.com/business/festivals-events/arnold-independence-day-parade/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Independence+Day+Parade+Arnold+CA",
@@ -116,6 +117,7 @@ const cabinThingsToDo = [
     id: "arts-crafts",
     category: "Holiday weekend",
     name: "Sierra Nevada Arts & Crafts Festival",
+    when: "Saturday July 4 · 10:00 AM - 5:00 PM · Sunday July 5 · 10:00 AM - 4:00 PM",
     note: "Holiday weekend arts-and-crafts event in Arnold if you want an easy family stop between meals and cabin time.",
     websiteUrl: "https://www.gocalaveras.com/events/54th-annual-sierra-nevada-arts-crafts-festival/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Arts+and+Crafts+Festival+Arnold+CA",
@@ -125,6 +127,7 @@ const cabinThingsToDo = [
     id: "white-pines-lake-trip",
     category: "Water",
     name: "White Pines Lake",
+    when: "Best in daytime · check lake and parking conditions",
     note: "Closest easy lake option for beach time, picnics, paddling, and kid-friendly downtime.",
     websiteUrl: "https://www.gocalaveras.com/business/outdoor-recreation/white-pines-lake/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=White+Pines+Lake+Arnold+CA",
@@ -134,6 +137,7 @@ const cabinThingsToDo = [
     id: "big-trees-trip",
     category: "Nature",
     name: "Calaveras Big Trees State Park",
+    when: "Daily day-use park hours · easiest as a morning or early afternoon stop",
     note: "Best all-ages redwood-style outing nearby with shaded walks, giant trees, and easy sightseeing.",
     websiteUrl: "https://www.parks.ca.gov/?page_id=551",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Calaveras+Big+Trees+State+Park",
@@ -143,6 +147,7 @@ const cabinThingsToDo = [
     id: "arnold-rim-trail-trip",
     category: "Nature",
     name: "Arnold Rim Trail",
+    when: "Open in daylight · best in the morning or evening",
     note: "Best nearby trail system for scenic walks, overlook stops, and a more active family outing.",
     websiteUrl: "https://arnoldrimtrail.org/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Rim+Trail+Arnold+CA",
@@ -152,6 +157,7 @@ const cabinThingsToDo = [
     id: "logging-museum-trip",
     category: "Nature",
     name: "Sierra Nevada Logging Museum",
+    when: "Check current museum hours before going",
     note: "Quick history stop that pairs well with White Pines Lake or the easier Arnold Rim Trail access.",
     websiteUrl: "https://www.gocalaveras.com/business/attractions/sierra-nevada-logging-museum/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Logging+Museum+Arnold+CA",
@@ -161,6 +167,7 @@ const cabinThingsToDo = [
     id: "sequoia-woods-trip",
     category: "Food and golf",
     name: "Sequoia Woods Country Club",
+    when: "Check current dining, tee time, and guest-access hours",
     note: "Closest golf and clubhouse option near the cabin if you want a low-drive adult outing or nearby meal stop.",
     websiteUrl: "https://www.sequoiawoods.com/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Sequoia+Woods+Country+Club+Arnold+CA",
@@ -170,6 +177,7 @@ const cabinThingsToDo = [
     id: "lake-alpine-trip",
     category: "Scenic day trip",
     name: "Lake Alpine",
+    when: "Daylight outing · better as an early leave-and-return trip",
     note: "Higher-elevation lake day with cooler weather, mountain scenery, and a longer drive that feels like a real outing.",
     websiteUrl: "https://www.gocalaveras.com/business/lakes-rivers/lake-alpine-recreation-area/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Lake+Alpine+California",
@@ -179,6 +187,7 @@ const cabinThingsToDo = [
     id: "bear-valley-trip",
     category: "Scenic day trip",
     name: "Bear Valley Mountain",
+    when: "Check current summer activity and event hours",
     note: "Mountain base area with summer events and activities if you want to pair it with Lake Alpine or a scenic drive.",
     websiteUrl: "https://www.bearvalley.com/events-activities",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Bear+Valley+Mountain+Resort+CA",
@@ -188,6 +197,7 @@ const cabinThingsToDo = [
     id: "moaning-caverns-trip",
     category: "Adventure",
     name: "Moaning Caverns Adventure Park",
+    when: "Guided tours daily · last tour is usually around 4:00 PM",
     note: "Good family detour for cave tours, zip lines, and something different from lake and trail time.",
     websiteUrl: "https://moaningcaverns.com/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Moaning+Caverns+Adventure+Park",
@@ -197,6 +207,7 @@ const cabinThingsToDo = [
     id: "mercer-caverns-trip",
     category: "Adventure",
     name: "Mercer Caverns",
+    when: "Guided tours daily · check current departure times",
     note: "Classic cave stop if the group wants a guided underground outing instead of more water or hiking.",
     websiteUrl: "https://mercercaverns.com/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Mercer+Caverns+Murphys+CA",
@@ -206,6 +217,7 @@ const cabinThingsToDo = [
     id: "california-cavern-trip",
     category: "Adventure",
     name: "California Cavern",
+    when: "Guided tours daily · last tour is usually around 4:00 PM",
     note: "Another cave option in the county if you want a bigger outing beyond Arnold itself.",
     websiteUrl: "https://www.gocalaveras.com/business/caves/california-cavern/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=California+Cavern+Mountain+Ranch+CA",
@@ -1291,9 +1303,10 @@ function isCustomSupply(item) {
 function itemManageActions(kind, item) {
   const escapedId = escapeText(item.id);
   if (kind === "meal") {
+    const editLabel = isNonFoodEvent(item) ? "Edit event" : "Edit meal";
     return `
       <div class="item-manage-actions" aria-label="Manage meal">
-        <button class="text-mini-button" type="button" data-edit-meal="${escapedId}">Edit meal</button>
+        <button class="text-mini-button" type="button" data-edit-meal="${escapedId}">${editLabel}</button>
         ${isCustomMeal(item) && canManageCustomItem(item) ? `<button class="text-mini-button danger" type="button" data-delete-meal="${escapedId}">Delete</button>` : ""}
       </div>
     `;
@@ -1309,16 +1322,21 @@ function itemManageActions(kind, item) {
 
 function mealIcon(type) {
   const normalized = type.toLowerCase();
+  if (normalized.includes("event")) return "calendar";
   if (normalized.includes("breakfast") || normalized.includes("lunch")) return "sun";
   if (normalized.includes("dinner")) return "moon";
   if (normalized.includes("dessert")) return "dessert";
   return "bag";
 }
 
+function isNonFoodEvent(item) {
+  return String(item?.type || "").trim().toLowerCase() === "event";
+}
+
 function renderMealPreview() {
   const container = document.querySelector("#mealPreview");
   if (!container) return;
-  const meals = state.meals.filter((meal) => meal.day === selectedDay);
+  const meals = state.meals.filter((meal) => meal.day === selectedDay && !isNonFoodEvent(meal));
   container.innerHTML = meals.map((meal) => `
     <article class="meal-row">
       <span class="meal-icon" data-icon="${mealIcon(meal.type)}"></span>
@@ -1349,7 +1367,7 @@ function renderMealBoard() {
     ["mon", "Monday", "July 6"]
   ];
   container.innerHTML = days.map(([day, label, date]) => {
-    const rows = state.meals.filter((meal) => meal.day === day).map((meal) => `
+    const rows = state.meals.filter((meal) => meal.day === day && !isNonFoodEvent(meal)).map((meal) => `
       <article class="meal-row">
         <div class="meal-name">
           <strong>${escapeText(meal.type)}</strong>
@@ -1451,7 +1469,8 @@ function renderCalendarBoard() {
   ];
   container.innerHTML = days.map(([day, label, date]) => {
     const travelEntries = buildTravelEntries(day);
-    const mealEntries = state.meals.filter((meal) => meal.day === day);
+    const mealEntries = state.meals.filter((meal) => meal.day === day && !isNonFoodEvent(meal));
+    const eventEntries = state.meals.filter((meal) => meal.day === day && isNonFoodEvent(meal));
     return `
       <section class="calendar-day-card">
         <header class="calendar-day-header">
@@ -1472,6 +1491,14 @@ function renderCalendarBoard() {
               <span class="calendar-slot-time">No arrival listed</span>
             </article>
           `}
+          ${eventEntries.map((meal) => `
+            <article class="calendar-slot calendar-slot-event">
+              <span class="calendar-slot-kind">Event</span>
+              <strong>${escapeText(meal.idea || "No event name yet")}</strong>
+              <span class="calendar-slot-time">${escapeText(meal.kids || meal.time || "Time TBD")}</span>
+              ${itemManageActions("meal", meal)}
+            </article>
+          `).join("")}
           ${mealEntries.map((meal) => `
             <article class="calendar-slot">
               <span class="calendar-slot-kind">${escapeText(meal.type)}</span>
@@ -1488,7 +1515,7 @@ function renderCalendarBoard() {
 function renderOpenMeals() {
   const container = document.querySelector("#openMealList");
   if (!container) return;
-  const mealsToFinish = state.meals.filter((meal) => !meal.idea || !bringingItemsForMeal(meal).length);
+  const mealsToFinish = state.meals.filter((meal) => !isNonFoodEvent(meal) && (!meal.idea || !bringingItemsForMeal(meal).length));
   if (!mealsToFinish.length) {
     container.innerHTML = `
       <article class="needed-row">
@@ -1761,7 +1788,7 @@ function cancelLogisticsEdit() {
 function renderTopNeeded() {
   const container = document.querySelector("#topNeeded");
   if (!container) return;
-  const openMeals = state.meals.filter((meal) => !meal.owner).map((meal) => ({
+  const openMeals = state.meals.filter((meal) => !isNonFoodEvent(meal) && !meal.owner).map((meal) => ({
     id: meal.id,
     title: `${meal.dayLabel} ${meal.type}`,
     detail: meal.idea,
@@ -1824,6 +1851,7 @@ function renderCabinActivityList() {
       <div class="cabin-activity-copy">
         <span class="activity-rank">${escapeText(item.category)}</span>
         <strong>${escapeText(item.name)}</strong>
+        <span class="cabin-activity-when">${escapeText(item.when || "Check current hours")}</span>
         <span>${escapeText(item.note)}</span>
         <div class="cabin-activity-links">
           <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
@@ -1958,9 +1986,10 @@ function renderFamilies() {
 }
 
 function updateCounts() {
-  const mealClaimed = state.meals.filter((meal) => meal.owner).length;
+  const foodMeals = state.meals.filter((meal) => !isNonFoodEvent(meal));
+  const mealClaimed = foodMeals.filter((meal) => meal.owner).length;
   const supplyClaimed = state.supplies.filter((item) => item.owner).length;
-  const openMeals = state.meals.length - mealClaimed;
+  const openMeals = foodMeals.length - mealClaimed;
   const openSupplies = 0;
   const claimedTotal = mealClaimed + supplyClaimed;
   const neededTotal = openMeals + openSupplies;
@@ -2193,10 +2222,10 @@ function createMealIdea(payload) {
     day,
     dayLabel: dayMeta[day].dayLabel,
     type: payload.type || "Meal idea",
-    time: "Flexible",
+    time: payload.time || "Flexible",
     owner: "",
     idea: payload.idea,
-    kids: payload.kids || "Add kid backup",
+    kids: payload.kids || (payload.type === "Event" ? "" : "Add kid backup"),
     cold: [],
     custom: true,
     createdBy: activeFamilyId(),
@@ -2273,23 +2302,46 @@ function openItemDrawer(mode, itemId = "") {
   const title = document.querySelector("#itemDrawerTitle");
   const help = document.querySelector("#itemDrawerHelp");
   const save = document.querySelector("#saveItem");
+  const typeWrap = document.querySelector("#mealIdeaTypeWrap");
+  const typeLabel = document.querySelector("#mealIdeaTypeLabel");
+  const textLabel = document.querySelector("#mealIdeaTextLabel");
+  const kidsLabel = document.querySelector("#mealIdeaKidsLabel");
+  const ideaInput = document.querySelector("#mealIdeaText");
+  const kidsInput = document.querySelector("#mealIdeaKids");
+  const isEvent = mode === "event";
   const isEdit = Boolean(itemId);
-  if (title) title.textContent = mode === "meal" ? (isEdit ? "Edit meal plan" : "Add meal slot") : (isEdit ? "Edit what I'm bringing" : "Add what I'm bringing");
-  if (help) help.textContent = mode === "meal" ? "Set the recipe for this meal. Bringing items link in automatically." : "Add the item, what meal it supports, and the days it can be used.";
-  if (save) save.textContent = isEdit ? "Save changes" : (mode === "meal" ? "Add meal" : "Save item");
+  if (title) title.textContent = isEvent
+    ? (isEdit ? "Edit non-food event" : "Add non-food event")
+    : mode === "meal"
+      ? (isEdit ? "Edit meal plan" : "Add meal slot")
+      : (isEdit ? "Edit what I'm bringing" : "Add what I'm bringing");
+  if (help) help.textContent = isEvent
+    ? "Add a trip event that should show on the calendar but not under meals."
+    : mode === "meal"
+      ? "Set the recipe for this meal. Bringing items link in automatically."
+      : "Add the item, what meal it supports, and the days it can be used.";
+  if (save) save.textContent = isEdit ? "Save changes" : (isEvent ? "Add event" : mode === "meal" ? "Add meal" : "Save item");
   document.querySelectorAll("[data-item-section]").forEach((section) => {
-    section.classList.toggle("is-hidden", section.dataset.itemSection !== mode);
+    const isMealSection = section.dataset.itemSection === "meal";
+    const shouldShow = mode === "supply" ? section.dataset.itemSection === "supply" : isMealSection;
+    section.classList.toggle("is-hidden", !shouldShow);
   });
   document.querySelector("#itemForm")?.reset();
   setPendingSupplyImage("");
   setSupplyDaySelection([]);
-  if (isEdit && mode === "meal") {
+  if (typeWrap) typeWrap.classList.toggle("is-hidden", isEvent);
+  if (typeLabel) typeLabel.textContent = "Meal";
+  if (textLabel) textLabel.textContent = isEvent ? "Event name" : "Idea";
+  if (kidsLabel) kidsLabel.textContent = isEvent ? "Time / details" : "Kid backup";
+  if (ideaInput) ideaInput.placeholder = isEvent ? "Parade, lake day, golf tee time" : "Chili, tacos, pasta night";
+  if (kidsInput) kidsInput.placeholder = isEvent ? "10:00 AM in Arnold, leave cabin by 9:15" : "Butter pasta, nuggets, fruit";
+  if (isEdit && (mode === "meal" || mode === "event")) {
     const meal = state.meals.find((item) => item.id === itemId);
     if (meal) {
       document.querySelector("#mealIdeaDay").value = meal.day || "sun";
       document.querySelector("#mealIdeaType").value = meal.type || "Dinner";
       document.querySelector("#mealIdeaText").value = meal.idea || "";
-      document.querySelector("#mealIdeaKids").value = meal.kids || "";
+      document.querySelector("#mealIdeaKids").value = isEvent ? (meal.kids || meal.time || "") : (meal.kids || "");
     }
   }
   if (isEdit && mode === "supply") {
@@ -2307,7 +2359,8 @@ function openItemDrawer(mode, itemId = "") {
   document.querySelector("#itemDrawer")?.classList.remove("is-hidden");
   window.setTimeout(() => {
     const firstField = mode === "meal" ? "#mealIdeaDay" : "#supplyName";
-    document.querySelector(firstField)?.focus();
+    const focusField = isEvent ? "#mealIdeaDay" : firstField;
+    document.querySelector(focusField)?.focus();
   }, 0);
 }
 
@@ -2335,35 +2388,38 @@ function closeAllDrawers() {
 
 function submitItemForm(event) {
   event.preventDefault();
-  if (itemMode === "meal") {
+  if (itemMode === "meal" || itemMode === "event") {
+    const isEvent = itemMode === "event";
     const payload = {
       day: document.querySelector("#mealIdeaDay")?.value || "sun",
-      type: document.querySelector("#mealIdeaType")?.value || "Meal idea",
+      type: isEvent ? "Event" : (document.querySelector("#mealIdeaType")?.value || "Meal idea"),
       idea: document.querySelector("#mealIdeaText")?.value.trim() || "",
-      kids: document.querySelector("#mealIdeaKids")?.value.trim() || ""
+      kids: isEvent
+        ? (document.querySelector("#mealIdeaKids")?.value.trim() || "Time TBD")
+        : (document.querySelector("#mealIdeaKids")?.value.trim() || "")
     };
     if (!payload.idea) {
-      showToast("Add a meal idea first.");
+      showToast(isEvent ? "Add an event name first." : "Add a meal idea first.");
       return;
     }
     if (editingItemId) {
       const meal = state.meals.find((item) => item.id === editingItemId);
-      performAction("updateMealPlan", { id: editingItemId, ...payload }, () => {
+      performAction("updateMealIdea", { id: editingItemId, ...payload }, () => {
         if (!meal) return;
         const day = dayMeta[payload.day] ? payload.day : "sun";
         meal.day = day;
         meal.dayLabel = dayMeta[day].dayLabel;
         meal.type = payload.type || "Meal";
         meal.idea = payload.idea;
-        meal.kids = payload.kids || "Add kid backup";
+        meal.kids = isEvent ? (payload.kids || "Time TBD") : (payload.kids || "Add kid backup");
         meal.updatedAt = new Date().toISOString();
-      }, "Meal updated.");
+      }, isEvent ? "Event updated." : "Meal updated.");
       closeItemDrawer();
       return;
     }
     performAction("addMealIdea", payload, () => {
       state.meals.push(createMealIdea(payload));
-    }, "Meal idea added.");
+    }, isEvent ? "Event added." : "Meal idea added.");
     closeItemDrawer();
     return;
   }
@@ -2414,10 +2470,14 @@ function addSupply() {
   openItemDrawer("supply");
 }
 
+function addNonFoodEvent() {
+  openItemDrawer("event");
+}
+
 function editMeal(id) {
   const meal = state.meals.find((item) => item.id === id);
   if (!meal) return;
-  openItemDrawer("meal", id);
+  openItemDrawer(isNonFoodEvent(meal) ? "event" : "meal", id);
 }
 
 function deleteMeal(id) {
@@ -2568,6 +2628,7 @@ function bindEvents() {
     updateDrawer();
   });
   document.querySelector("#addMealIdea")?.addEventListener("click", addMealIdea);
+  document.querySelector("#addNonFoodEvent")?.addEventListener("click", addNonFoodEvent);
   document.querySelector("#addSupply")?.addEventListener("click", addSupply);
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
   document.querySelector("#clearSupplyImage")?.addEventListener("click", () => {

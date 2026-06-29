@@ -12,7 +12,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=13">
+    <link rel="stylesheet" href="styles.css?v=14">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -60,7 +60,7 @@
       </aside>
 
       <main class="main">
-        <section class="hero" id="dashboard" data-panel="dashboard">
+        <section class="shared-hero" aria-label="Trip overview">
           <div class="hero-media">
             <img src="assets/cabin-hero.png" alt="Mountain lake cabin in Arnold, California">
             <div class="hero-shade"></div>
@@ -79,13 +79,15 @@
               </div>
             </div>
           </div>
+        </section>
 
+        <section class="content-panel" id="dashboard" data-panel="dashboard">
           <section class="board-panel calendar-panel">
             <div class="section-heading">
               <div>
                 <h2>Calendar</h2>
-                <p>Wednesday through Monday. This fills up as trip items and plans are added.</p>
               </div>
+              <button class="primary-action compact-action" type="button" id="addNonFoodEvent">Add Non-Food Event</button>
             </div>
             <div class="calendar-board" id="calendarBoard"></div>
           </section>
@@ -142,6 +144,11 @@
         </section>
 
         <section class="content-panel is-hidden" id="supplies" data-panel="supplies">
+          <div class="panel-heading panel-heading-compact">
+            <div>
+              <h1>Logistics</h1>
+            </div>
+          </div>
           <section class="board-panel logistics-panel">
             <div class="bringing-groups" id="logisticsFamilyList"></div>
             <div class="question-list is-hidden" id="logisticsPromptList"></div>
@@ -312,8 +319,8 @@
               <option value="mon">Monday July 6</option>
             </select>
           </label>
-          <label>
-            Meal
+          <label id="mealIdeaTypeWrap">
+            <span id="mealIdeaTypeLabel">Meal</span>
             <select id="mealIdeaType">
               <option>Breakfast</option>
               <option>Lunch</option>
@@ -322,11 +329,11 @@
             </select>
           </label>
           <label>
-            Idea
+            <span id="mealIdeaTextLabel">Idea</span>
             <input id="mealIdeaText" type="text" placeholder="Chili, tacos, pasta night">
           </label>
           <label>
-            Kid backup
+            <span id="mealIdeaKidsLabel">Kid backup</span>
             <input id="mealIdeaKids" type="text" placeholder="Butter pasta, nuggets, fruit">
           </label>
         </section>
@@ -417,6 +424,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=17"></script>
+    <script src="script.js?v=18"></script>
   </body>
 </html>
