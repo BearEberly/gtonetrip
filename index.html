@@ -131,12 +131,35 @@
         <section class="content-panel is-hidden" id="todo" data-panel="todo">
           <div class="panel-heading">
             <div>
-              <h1>Things to do</h1>
-              <p>Reference-only outings and links for the weekend &mdash; parade times, trails, and side plans.</p>
+              <h1>To Do</h1>
+              <p>One checklist, nearby food, and nearby outing links.</p>
             </div>
           </div>
           <section class="board-panel">
-            <div class="cabin-activity-list" id="cabinActivityList"></div>
+            <details class="todo-dropdown" open>
+              <summary>Trip to-do list</summary>
+              <div class="todo-dropdown-body">
+                <div class="question-list todo-checklist-list" id="todoChecklistList"></div>
+              </div>
+            </details>
+          </section>
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Places to eat nearby</h2>
+                <p>Short-drive backups and sit-down options.</p>
+              </div>
+            </div>
+            <div class="cabin-activity-list" id="nearbyFoodList"></div>
+          </section>
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Things to do nearby</h2>
+                <p>Closer, easier outings that feel worth the drive.</p>
+              </div>
+            </div>
+            <div class="cabin-activity-list" id="nearbyOutingList"></div>
           </section>
         </section>
 
@@ -153,14 +176,8 @@
 
         <section class="content-panel" id="food" data-panel="food">
           <div class="food-hub">
-            <div class="food-tabs" role="tablist" aria-label="Food views">
-              <span class="food-tab-thumb" aria-hidden="true"></span>
-              <button class="food-tab is-active" type="button" data-food-view="meals" role="tab">By meal</button>
-              <button class="food-tab" type="button" data-food-view="family" role="tab">By family</button>
-            </div>
             <div class="food-days" id="foodDays" aria-label="Pick a day"></div>
             <div class="food-meal-grid" id="foodMealGrid"></div>
-            <div class="food-family-grid is-hidden" id="foodFamilyGrid"></div>
           </div>
 
           <div class="food-add-bar">
@@ -417,6 +434,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=37"></script>
+    <script src="script.js?v=38"></script>
   </body>
 </html>

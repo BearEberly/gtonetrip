@@ -2273,6 +2273,12 @@ svg {
   font-weight: 780;
 }
 
+.cabin-activity-copy .cabin-activity-worth {
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 720;
+}
+
 .cabin-activity-copy span {
   margin-top: 4px;
   color: var(--muted);
@@ -3531,7 +3537,8 @@ button:focus-visible {
 .fh-meal-manage { margin-left: auto; }
 .fh-meal-manage .item-manage-actions { margin: 0; }
 
-.fh-meal h3 { margin: 2px 16px 2px; font-size: 18px; letter-spacing: -.2px; }
+.fh-meal h3 { margin: 2px 16px 8px; font-size: 18px; letter-spacing: -.2px; }
+.fh-bring-list { margin: 0; padding: 0; list-style: none; }
 .fh-kids { margin: 0 16px 10px; font-size: 13px; color: var(--muted); }
 .fh-kids b { color: var(--text); font-weight: 600; }
 
@@ -3563,7 +3570,7 @@ button:focus-visible {
 .fh-alldone { font-size: 13px; color: var(--forest-700); font-weight: 600; }
 .fh-open { font-size: 13px; color: var(--muted); }
 
-.fh-act { padding: 12px 16px; border-top: 1px solid var(--line); background: var(--surface-soft); }
+.fh-act { padding: 10px 16px 12px; border-top: 1px solid var(--line); background: var(--surface-soft); }
 .fh-bring-btn { width: 100%; }
 
 .fh-empty { padding: 22px 16px; text-align: center; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
@@ -3740,6 +3747,33 @@ button { -webkit-tap-highlight-color: transparent; }
   font-size: 0.9rem !important;
 }
 .food-tabs { margin-top: 2px; }
+
+.todo-dropdown {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  overflow: hidden;
+}
+
+.todo-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 1rem;
+  font-weight: 760;
+}
+
+.todo-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.todo-dropdown-body {
+  padding: 0 12px 12px;
+}
+
+.todo-checklist-list {
+  gap: 8px;
+}
 
 /* Bottom nav now has 3 tabs (Family tab removed) */
 .mobile-nav { grid-template-columns: repeat(3, 1fr) !important; }

@@ -246,6 +246,154 @@ const gearChecklist = [
   { id: "gear-board-games", label: "Board games: Cranium and Riggs charades" }
 ];
 
+const tripTodoChecklist = [
+  { id: "shell-door-code", label: "Get the door code from Shell" },
+  { id: "shell-wifi", label: "Get the Wi-Fi name and password" },
+  { id: "shell-fridge", label: "Confirm fridge and freezer space" },
+  { id: "shell-grill-type", label: "Confirm the cabin grill type" },
+  { id: "shell-sequoia-access", label: "Check Sequoia Woods guest access" },
+  { id: "shell-checkout", label: "Confirm Monday checkout timing" },
+  { id: "shell-trash", label: "Get trash and recycling instructions" },
+  { id: "gear-pizza-oven", label: "Ask Nicholas about the pizza oven" },
+  { id: "gear-blackstone", label: "Pack the two-burner Blackstone" },
+  { id: "gear-propane", label: "Pack propane and a lighter" },
+  { id: "gear-seasonings", label: "Pack steak seasonings" },
+  { id: "gear-board-games", label: "Pack Cranium and Riggs charades" }
+];
+
+const nearbyFoodSpots = [
+  {
+    id: "sarafinas",
+    category: "Sit-down dinner",
+    name: "Sarafina's Italian Kitchen",
+    drive: "~10 min",
+    verdict: "Worth it if you want the nicest close sit-down dinner.",
+    note: "Good fallback when the group wants one solid dinner out instead of another cabin meal.",
+    websiteUrl: "https://sarafinasitaliankitchen.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sarafina%27s+Italian+Kitchen+Arnold+CA",
+    icon: "utensils"
+  },
+  {
+    id: "snowshoe",
+    category: "Burgers and beer",
+    name: "Snowshoe Brewing Co Restaurant",
+    drive: "~8 min",
+    verdict: "Worth it for an easy casual dinner with a big menu.",
+    note: "Strong backup when adults want beer and the group needs something easy for mixed appetites.",
+    websiteUrl: "https://www.gocalaveras.com/business/restaurants/snowshoe-brewing-co-restaurant/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Snowshoe+Brewing+Co+Restaurant+Arnold+CA",
+    icon: "utensils"
+  },
+  {
+    id: "el-vaquero",
+    category: "Mexican",
+    name: "El Vaquero",
+    drive: "~8 min",
+    verdict: "Worth it if you want quick, no-fuss Mexican food close by.",
+    note: "Good for a simple group meal when no one wants a bigger outing.",
+    websiteUrl: "https://www.gocalaveras.com/business/restaurants/el-vaquero/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=El+Vaquero+Arnold+CA",
+    icon: "utensils"
+  },
+  {
+    id: "big-trees-market-deli",
+    category: "Quick deli and backup groceries",
+    name: "Big Trees Market & Deli",
+    drive: "~8 min",
+    verdict: "Worth it for sandwiches, deli food, and forgotten grocery runs.",
+    note: "Best practical stop when you need a fast meal plus cabin backup supplies in one run.",
+    websiteUrl: "https://www.gocalaveras.com/business/food-drink/big-trees-market-deli/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Big+Trees+Market+%26+Deli+Arnold+CA",
+    icon: "bag"
+  },
+  {
+    id: "sequoia-woods-restaurant",
+    category: "Nearby adult meal",
+    name: "Sequoia Woods Country Club Restaurant",
+    drive: "~6 min",
+    verdict: "Worth it for a close adult meal or drinks without much driving.",
+    note: "Easy nearby option when you want to get out of the cabin but stay close.",
+    websiteUrl: "https://www.gocalaveras.com/business/food-drink/sequoia-woods-country-club-restaurant/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sequoia+Woods+Country+Club+Restaurant+Arnold+CA",
+    icon: "grill"
+  }
+];
+
+const nearbyOutings = [
+  {
+    id: "arnold-parade",
+    category: "Holiday weekend",
+    name: "Arnold Independence Day Parade",
+    drive: "~5-10 min",
+    when: "Saturday July 4 · 10:00 AM",
+    verdict: "Worth it if you want the main small-town Fourth of July moment. Go early.",
+    note: "This is the cleanest holiday-specific outing nearby and easy to pair with lunch back at the cabin.",
+    websiteUrl: "https://www.gocalaveras.com/business/festivals-events/arnold-independence-day-parade/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Independence+Day+Parade+Arnold+CA",
+    icon: "sun"
+  },
+  {
+    id: "arts-crafts",
+    category: "Holiday weekend",
+    name: "Sierra Nevada Arts & Crafts Festival",
+    drive: "~5-10 min",
+    when: "Saturday and Sunday daytime",
+    verdict: "Worth it if you want easy browsing and a low-effort outing. Skip it if everyone just wants lake time.",
+    note: "Simple in-town option when the group wants to get out without committing to a longer drive.",
+    websiteUrl: "https://www.gocalaveras.com/events/54th-annual-sierra-nevada-arts-crafts-festival/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Arts+and+Crafts+Festival+Arnold+CA",
+    icon: "bag"
+  },
+  {
+    id: "white-pines-lake",
+    category: "Water",
+    name: "White Pines Lake",
+    drive: "~10 min",
+    when: "Best in daylight",
+    verdict: "Worth it: this is the easiest close family lake option.",
+    note: "Best pick when you want beach time, picnic space, and a nearby outing that is not a big production.",
+    websiteUrl: "https://www.gocalaveras.com/business/outdoor-recreation/white-pines-lake/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=White+Pines+Lake+Arnold+CA",
+    icon: "mountain"
+  },
+  {
+    id: "arnold-rim-trail",
+    category: "Nature",
+    name: "Arnold Rim Trail",
+    drive: "~10 min",
+    when: "Best in the morning or evening",
+    verdict: "Worth it if the group wants a real walk with views.",
+    note: "Good close outing for fresh air and movement without turning the day into a full drive.",
+    websiteUrl: "https://arnoldrimtrail.org/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Rim+Trail+Arnold+CA",
+    icon: "mountain"
+  },
+  {
+    id: "logging-museum",
+    category: "Quick stop",
+    name: "Sierra Nevada Logging Museum",
+    drive: "~10 min",
+    when: "Check current museum hours",
+    verdict: "Worth it only as a short add-on stop, not the whole day.",
+    note: "Best paired with White Pines Lake or the easier Arnold Rim Trail access nearby.",
+    websiteUrl: "https://sierraloggingmuseum.org/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Logging+Museum+Arnold+CA",
+    icon: "bag"
+  },
+  {
+    id: "big-trees",
+    category: "Nature",
+    name: "Calaveras Big Trees State Park",
+    drive: "~15 min",
+    when: "Best in the morning or early afternoon",
+    verdict: "Worth it if you want the strongest all-ages outing close enough to feel easy.",
+    note: "Probably the best close scenic outing when you want something memorable but still practical from the cabin.",
+    websiteUrl: "https://www.parks.ca.gov/?page_id=551",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Calaveras+Big+Trees+State+Park",
+    icon: "mountain"
+  }
+];
+
 const activities = [
   {
     id: "white-pines-lake",
@@ -2102,15 +2250,16 @@ function renderGuideHighlights() {
 }
 
 function renderCabinActivityList() {
-  const container = document.querySelector("#cabinActivityList");
+  const container = document.querySelector("#nearbyOutingList");
   if (!container) return;
-  container.innerHTML = cabinThingsToDo.map((item) => `
+  container.innerHTML = nearbyOutings.map((item) => `
     <article class="cabin-activity-card">
       <span class="activity-thumb cabin-activity-thumb">${activityIconMarkup(item)}</span>
       <div class="cabin-activity-copy">
         <span class="activity-rank">${escapeText(item.category)}</span>
         <strong>${escapeText(item.name)}</strong>
-        <span class="cabin-activity-when">${escapeText(item.when || "Check current hours")}</span>
+        <span class="cabin-activity-when">${escapeText(item.drive)} · ${escapeText(item.when || "Check current hours")}</span>
+        <span class="cabin-activity-worth">${escapeText(item.verdict)}</span>
         <span>${escapeText(item.note)}</span>
         <div class="cabin-activity-links">
           <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
@@ -2119,6 +2268,31 @@ function renderCabinActivityList() {
       </div>
     </article>
   `).join("");
+}
+
+function renderNearbyFoodList() {
+  const container = document.querySelector("#nearbyFoodList");
+  if (!container) return;
+  container.innerHTML = nearbyFoodSpots.map((item) => `
+    <article class="cabin-activity-card">
+      <span class="activity-thumb cabin-activity-thumb">${activityIconMarkup(item)}</span>
+      <div class="cabin-activity-copy">
+        <span class="activity-rank">${escapeText(item.category)}</span>
+        <strong>${escapeText(item.name)}</strong>
+        <span class="cabin-activity-when">${escapeText(item.drive)}</span>
+        <span class="cabin-activity-worth">${escapeText(item.verdict)}</span>
+        <span>${escapeText(item.note)}</span>
+        <div class="cabin-activity-links">
+          <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
+          <a class="text-mini-button cabin-link-button" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderTodoChecklist() {
+  renderChecklist("#todoChecklistList", tripTodoChecklist);
 }
 
 function renderActivityPreview() {
@@ -2368,32 +2542,23 @@ function renderFoodMealGrid() {
     const items = bringingItemsForMeal(meal);
     const needs = mealNeeds(meal);
     const gaps = needs.filter((n) => !ingredientCovered(n, items));
-    const haveCount = items.length;
-    const gapCount = gaps.length;
-    const total = needs.length || haveCount;
-    const covered = needs.length ? needs.length - gapCount : haveCount;
-    const pct = total ? Math.round((covered / total) * 100) : (haveCount ? 100 : 0);
-
-    const bring = haveCount
-      ? items.map((it) => {
+    const bring = items.length
+      ? `<ul class="fh-bring-list">${items.map((it) => {
           const fam = familyById(supplyOwnerId(it));
-          return `<div class="fh-bring"><span class="fh-dot" style="background:${fam ? fam.color : "#9aa0a6"}"></span><span class="fh-bring-name">${escapeText(it.name)}</span><span class="fh-who">${escapeText(fam ? fam.name : "")}</span></div>`;
-        }).join("")
+          return `<li class="fh-bring"><span class="fh-bring-name">${escapeText(it.name)}</span><span class="fh-who">${escapeText(fam ? fam.name : "Unassigned")}</span></li>`;
+        }).join("")}</ul>`
       : `<div class="fh-empty-line">No one has added anything for this meal yet.</div>`;
 
-    const covLabel = gapCount
-      ? `<div class="fh-covlabel"><span class="fh-done">${covered} covered</span><span class="fh-gap-label">${gapCount} still needed</span></div>`
-      : `<div class="fh-covlabel"><span class="fh-full">&#10003; Fully covered</span><span class="fh-muted">${haveCount} item${haveCount === 1 ? "" : "s"}</span></div>`;
-
-    const needMarkup = gapCount
-      ? `<div class="fh-sect"><h4>Still needed</h4><div class="fh-needed">${gaps.map((g) => `<button class="fh-gap" type="button" data-gap-meal="${escapeText(meal.id)}" data-gap-name="${escapeText(g)}">+ ${escapeText(g)}</button>`).join("")}</div></div>`
-      : (needs.length || haveCount)
-        ? `<div class="fh-sect"><div class="fh-alldone">&#10003; Nothing else needed &mdash; this meal is set.</div></div>`
-        : `<div class="fh-sect"><div class="fh-open">No plan yet. Tap &ldquo;I&rsquo;ll bring something&rdquo; to start it.</div></div>`;
-
-    const suggestions = (MEAL_SUGGESTIONS[mealTypeKey(meal)] || [])
-      .filter((s) => !ingredientCovered(s, items) && !gaps.some((g) => g.toLowerCase() === s.toLowerCase()))
-      .slice(0, 9);
+    const suggestionPool = [];
+    gaps.forEach((gap) => {
+      if (!suggestionPool.some((item) => item.toLowerCase() === gap.toLowerCase())) suggestionPool.push(gap);
+    });
+    (MEAL_SUGGESTIONS[mealTypeKey(meal)] || []).forEach((suggestion) => {
+      if (ingredientCovered(suggestion, items)) return;
+      if (suggestionPool.some((item) => item.toLowerCase() === suggestion.toLowerCase())) return;
+      suggestionPool.push(suggestion);
+    });
+    const suggestions = suggestionPool.slice(0, 6);
     const suggestMarkup = suggestions.length
       ? `<div class="fh-sect fh-suggest-sect"><h4>Ideas to add</h4><div class="fh-needed">${suggestions.map((s) => `<button class="fh-suggest" type="button" data-gap-meal="${escapeText(meal.id)}" data-gap-name="${escapeText(s)}">+ ${escapeText(s)}</button>`).join("")}</div></div>`
       : "";
@@ -2405,12 +2570,9 @@ function renderFoodMealGrid() {
         <span class="fh-meal-manage">${itemManageActions("meal", meal)}</span>
       </div>
       <h3>${escapeText(meal.idea || "No plan yet")}</h3>
-      ${meal.kids ? `<div class="fh-kids">Kid backup: <b>${escapeText(meal.kids)}</b></div>` : ""}
-      <div class="fh-cov"><div class="fh-covbar"><div class="fh-covfill ${gapCount ? "" : "is-full"}" style="width:${pct}%"></div></div>${covLabel}</div>
       <div class="fh-sect"><h4>Who&rsquo;s bringing what</h4>${bring}</div>
-      ${needMarkup}
       ${suggestMarkup}
-      <div class="fh-act"><button class="primary-action fh-bring-btn" type="button" data-bring-meal="${escapeText(meal.id)}">I&rsquo;ll bring something</button></div>
+      <div class="fh-act"><button class="primary-action fh-bring-btn" type="button" data-bring-meal="${escapeText(meal.id)}">Add item</button></div>
     </article>`;
   }).join("");
   insertIcons();
@@ -2448,17 +2610,8 @@ function renderFoodFamilyGrid() {
 function renderFoodHub() {
   const mealGrid = document.querySelector("#foodMealGrid");
   if (!mealGrid) return;
-  const famGrid = document.querySelector("#foodFamilyGrid");
-  const daysEl = document.querySelector("#foodDays");
-  const showMeals = foodView !== "family";
-  document.querySelectorAll("[data-food-view]").forEach((b) => b.classList.toggle("is-active", b.dataset.foodView === foodView));
-  document.querySelector(".food-tabs")?.classList.toggle("at-family", foodView === "family");
-  if (daysEl) daysEl.classList.toggle("is-hidden", !showMeals);
-  mealGrid.classList.toggle("is-hidden", !showMeals);
-  if (famGrid) famGrid.classList.toggle("is-hidden", showMeals);
   renderFoodDays();
   renderFoodMealGrid();
-  renderFoodFamilyGrid();
 }
 
 function openSupplyForMeal(mealId, prefillName) {
@@ -2493,6 +2646,8 @@ function renderAll() {
   renderSupplies();
   renderBringingBoard();
   renderFoodHub();
+  renderTodoChecklist();
+  renderNearbyFoodList();
   renderCabinActivityList();
   renderGuideHighlights();
   renderActivityPreview();
