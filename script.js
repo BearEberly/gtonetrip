@@ -952,10 +952,6 @@ async function submitAuthForm(event) {
     setActivePanel("food");
     showToast("Signed in.");
     connectSharedState();
-    const status = await refreshPasskeyStatus();
-    if (passkeyState.supported && Number(status?.count || 0) === 0) {
-      showToast(`${passkeySetupLabel()} is ready if you want one-tap sign-in next time.`);
-    }
   } catch (error) {
     updateAuthMessage(error.message || "Could not sign in.");
   } finally {
@@ -3238,19 +3234,15 @@ function bindEvents() {
 }
 
 async function initializeSession() {
-  await ensurePasskeySupport();
   await loadProfile();
   if (api.user) {
-    await refreshPasskeyStatus();
     connectSharedState();
     return;
   }
-  renderPasskeyUi();
 }
 
 insertIcons();
 renderAll();
-renderPasskeyUi();
 bindEvents();
 registerServiceWorker();
 initializeSession();
