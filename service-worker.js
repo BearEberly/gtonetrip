@@ -1,4 +1,4 @@
-const cacheName = "guantonio-trip-v77";
+const cacheName = "guantonio-trip-v78";
 
 const cacheableUrls = [
   "/",
@@ -18,6 +18,13 @@ const cacheableUrls = [
   "/assets/vendor/simplewebauthn-browser.umd.min.js"
 ];
 const cacheablePaths = new Set(cacheableUrls);
+const networkFirstPaths = new Set([
+  "/",
+  "/index.html",
+  "/app-config.js",
+  "/styles.css",
+  "/script.js"
+]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -44,6 +51,18 @@ self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
   if (requestUrl.origin !== self.location.origin) return;
   if (!cacheablePaths.has(requestUrl.pathname)) return;
+
+  if (networkFirstPaths.has(requestUrl.pathname)) {
+    event.respondWith(
+      fetch(event.request).then((response) => {
+        if (!response || !response.ok) throw new Error("network");
+        const clone = response.clone();
+        caches.open(cacheName).then((cache) => cache.put(event.request, clone));
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cached) => {

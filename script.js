@@ -677,6 +677,8 @@ let smartUploadOpen = false;
 let pendingScheduleImage = "";
 let pendingProfilePhoto = "";
 let pendingProfilePhotoSource = "";
+let profilePhotoChanged = false;
+let profilePhotoSelectionFailed = false;
 let profilePhotoCrop = { x: 0, y: 0, zoom: 1 };
 const profileCropPointers = new Map();
 let profileCropDrag = null;
@@ -961,6 +963,8 @@ function populateProfileForm() {
   const name = displayNameForUser();
   pendingProfilePhoto = profilePhotoForUser();
   pendingProfilePhotoSource = pendingProfilePhoto;
+  profilePhotoChanged = false;
+  profilePhotoSelectionFailed = false;
   resetProfileCrop();
   const titleNode = document.querySelector("#profileDrawerTitle");
   const nameInput = document.querySelector("#profileNameInput");
@@ -1016,7 +1020,11 @@ async function saveProfileForm(event) {
     showToast("Password must be at least 4 characters.");
     return;
   }
-  if (profileCropSource()) {
+  if (profilePhotoSelectionFailed) {
+    showToast("That picture did not load. Choose it again, then save.");
+    return;
+  }
+  if (profilePhotoChanged && profileCropSource()) {
     try {
       pendingProfilePhoto = await cropProfilePhoto();
     } catch {
@@ -1029,13 +1037,14 @@ async function saveProfileForm(event) {
     }
   }
   try {
+    const body = {
+      displayName,
+      profilePassword
+    };
+    if (profilePhotoChanged) body.photo = pendingProfilePhoto;
     const response = await authAwareRequest("/profile", {
       method: "POST",
-      body: {
-        displayName,
-        photo: pendingProfilePhoto,
-        profilePassword
-      }
+      body
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not save profile.");
@@ -1051,6 +1060,8 @@ async function saveProfileForm(event) {
 function removeProfilePhoto() {
   pendingProfilePhoto = "";
   pendingProfilePhotoSource = "";
+  profilePhotoChanged = true;
+  profilePhotoSelectionFailed = false;
   resetProfileCrop();
   const fileInput = document.querySelector("#profilePhotoInput");
   if (fileInput) fileInput.value = "";
@@ -5057,10 +5068,14 @@ function bindEvents() {
     try {
       pendingProfilePhotoSource = await compressImageFile(file, 900, 0.82);
       pendingProfilePhoto = pendingProfilePhotoSource;
+      profilePhotoChanged = true;
+      profilePhotoSelectionFailed = false;
       resetProfileCrop();
       setProfilePhotoPreview(pendingProfilePhoto, document.querySelector("#profileNameInput")?.value || displayNameForUser());
       renderProfileCropper();
     } catch {
+      profilePhotoChanged = false;
+      profilePhotoSelectionFailed = true;
       showToast("Could not load that picture.");
     }
   });
