@@ -5165,6 +5165,12 @@ button { -webkit-tap-highlight-color: transparent; }
   align-content: space-between;
 }
 
+.destination-card-actions-stack {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
 .destination-card-copy,
 .destination-card-actions {
   position: relative;
@@ -5307,29 +5313,36 @@ button { -webkit-tap-highlight-color: transparent; }
   line-height: 1.28;
 }
 
-.destination-card-mini-link {
-  justify-self: start;
+.destination-card-map-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.destination-card-map-link {
   display: inline-flex;
+  width: 100%;
+  min-height: 34px;
   align-items: center;
-  min-height: 30px;
-  padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.44);
-  border-radius: 999px;
+  justify-content: center;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.14);
   color: #fff7f0;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
+  font-size: 0.76rem;
+  font-weight: 700;
   text-decoration: none;
   backdrop-filter: blur(8px);
 }
 
-.destination-card-mini-link:hover,
-.destination-card-mini-link:focus-visible {
-  background: rgba(255, 255, 255, 0.22);
+.destination-card-map-link:hover,
+.destination-card-map-link:focus-visible {
+  background: rgba(255, 255, 255, 0.24);
 }
 
-.destination-card-mini-link:focus-visible {
+.destination-card-map-link:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.34);
   outline-offset: 2px;
 }
@@ -5539,6 +5552,7 @@ button { -webkit-tap-highlight-color: transparent; }
 
 .destination-card-cta {
   cursor: pointer;
+  width: 100%;
 }
 
 .destination-card .compact-action:hover,
