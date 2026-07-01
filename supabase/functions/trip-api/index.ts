@@ -1692,9 +1692,14 @@ Deno.serve(async (request) => {
     if (route === "/profile" && request.method === "POST") {
       const body = await request.json() as Record<string, unknown>;
       const rawSharedPassword = String(body.sharedPassword ?? "");
+      const rawPhoto = String(body.photo ?? "").trim();
       const wantsPasswordUpdate = hasOwn(body, "sharedPassword") && Boolean(rawSharedPassword.trim());
+      const wantsPhotoUpdate = hasOwn(body, "photo");
       if (wantsPasswordUpdate && !sharedPasswordSafe(rawSharedPassword)) {
         return json({ ok: false, message: "Trip password must be at least 4 characters." }, 400);
+      }
+      if (wantsPhotoUpdate && rawPhoto && !imageDataUrlSafe(rawPhoto)) {
+        return json({ ok: false, message: "Profile photo is too large. Try a smaller image." }, 400);
       }
       if (wantsPasswordUpdate && !isBearPowerUser(session.user.personId)) {
         return json({ ok: false, message: "Only Bear can change the shared trip password." }, 403);

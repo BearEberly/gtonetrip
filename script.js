@@ -1021,6 +1021,10 @@ async function saveProfileForm(event) {
       showToast("Could not crop that picture.");
       return;
     }
+    if (hasProfilePhotoSizeError(pendingProfilePhoto) || !pendingProfilePhoto) {
+      showToast("That picture is still too large. Try a different photo or zoom in a little more.");
+      return;
+    }
   }
   try {
     const response = await authAwareRequest("/profile", {
@@ -2070,6 +2074,11 @@ function imageDataUrlSafe(value) {
   const raw = String(value || "").trim();
   if (!raw.startsWith("data:image/")) return "";
   return raw.length <= 400000 ? raw : "";
+}
+
+function hasProfilePhotoSizeError(value) {
+  const raw = String(value || "").trim();
+  return Boolean(raw && raw.startsWith("data:image/") && !imageDataUrlSafe(raw));
 }
 
 function shortText(value, max = 120) {
@@ -4249,7 +4258,7 @@ async function imageFromDataUrl(dataUrl) {
 async function cropProfilePhoto() {
   const source = await imageFromDataUrl(profileCropSource());
   if (!source) return "";
-  const size = 512;
+  const size = 384;
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
@@ -4267,7 +4276,11 @@ async function cropProfilePhoto() {
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, size, size);
   context.drawImage(source, drawX, drawY, drawWidth, drawHeight);
-  return canvas.toDataURL("image/jpeg", 0.86);
+  for (const quality of [0.82, 0.74, 0.66, 0.58]) {
+    const dataUrl = canvas.toDataURL("image/jpeg", quality);
+    if (imageDataUrlSafe(dataUrl)) return dataUrl;
+  }
+  return "";
 }
 
 function clampProfileZoom(value) {
