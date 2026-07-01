@@ -4549,18 +4549,34 @@ async function prepareSupplyAiImageFile(file) {
 async function handleSupplyAiImageFiles(files) {
   const selectedFiles = Array.from(files || []).filter(Boolean);
   if (!selectedFiles.length) return;
-  try {
-    updateSupplyAiStatus(selectedFiles.length === 1 ? "Preparing photo..." : `Preparing ${selectedFiles.length} photos...`);
-    const prepared = [];
-    for (let index = 0; index < selectedFiles.length; index += 1) {
+  updateSupplyAiStatus(selectedFiles.length === 1 ? "Preparing photo..." : `Preparing ${selectedFiles.length} photos...`);
+  const existing = [...pendingSupplyAiImages];
+  const prepared = [];
+  let failed = 0;
+  let lastError = "";
+  for (let index = 0; index < selectedFiles.length; index += 1) {
+    try {
       updateSupplyAiStatus(`Preparing photo ${index + 1} of ${selectedFiles.length}...`);
-      prepared.push(await prepareSupplyAiImageFile(selectedFiles[index]));
+      const preparedImage = await prepareSupplyAiImageFile(selectedFiles[index]);
+      if (preparedImage) {
+        prepared.push(preparedImage);
+        setPendingSupplyAiImages([...existing, ...prepared]);
+      }
+    } catch (error) {
+      failed += 1;
+      lastError = error instanceof Error ? error.message : "Could not load that photo.";
     }
-    setPendingSupplyAiImages([...pendingSupplyAiImages, ...prepared]);
-    setSupplyImportBusy(false);
-  } catch (error) {
-    setPendingSupplyAiImages(pendingSupplyAiImages);
-    const message = error instanceof Error ? error.message : "Could not load that photo.";
+  }
+  const nextImages = [...existing, ...prepared];
+  setPendingSupplyAiImages(nextImages);
+  setSupplyImportBusy(false);
+  if (failed && prepared.length) {
+    updateSupplyAiStatus(`Added ${prepared.length} photo${prepared.length === 1 ? "" : "s"}. ${failed} photo${failed === 1 ? "" : "s"} could not be loaded.`);
+    showToast(`${prepared.length} photo${prepared.length === 1 ? "" : "s"} ready. ${failed} failed.`);
+    return;
+  }
+  if (failed && !prepared.length) {
+    const message = lastError || "Could not load those photos.";
     updateSupplyAiStatus(message);
     showToast(message);
   }
@@ -4571,16 +4587,23 @@ async function runSupplyAiImport() {
   try {
     setSupplyImportBusy(true);
     const allItems = [];
+    let failed = 0;
+    let lastError = "";
     for (let index = 0; index < pendingSupplyAiImages.length; index += 1) {
       updateSupplyAiStatus(`Reading photo ${index + 1} of ${pendingSupplyAiImages.length}...`);
-      const response = await authAwareRequest("/supply/import-photo", {
-        method: "POST",
-        body: { image: pendingSupplyAiImages[index] }
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not read that photo.");
-      const items = Array.isArray(payload.items) ? payload.items.map((item) => supplyDraftDefault(item)).filter((item) => item.name) : [];
-      allItems.push(...items);
+      try {
+        const response = await authAwareRequest("/supply/import-photo", {
+          method: "POST",
+          body: { image: pendingSupplyAiImages[index] }
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not read that photo.");
+        const items = Array.isArray(payload.items) ? payload.items.map((item) => supplyDraftDefault(item)).filter((item) => item.name) : [];
+        allItems.push(...items);
+      } catch (error) {
+        failed += 1;
+        lastError = error instanceof Error ? error.message : "Could not read that photo.";
+      }
     }
     const seen = new Set();
     const items = allItems.filter((item) => {
@@ -4590,7 +4613,7 @@ async function runSupplyAiImport() {
       return true;
     }).slice(0, 30);
     if (!items.length) {
-      updateSupplyAiStatus("No clear items found. Add them manually below.");
+      updateSupplyAiStatus(failed ? (lastError || "Could not read those photos.") : "No clear items found. Add them manually below.");
       return;
     }
     if (itemMode === "meal") {
@@ -4601,7 +4624,7 @@ async function runSupplyAiImport() {
     const existing = supplyDraftItems.filter((item) => item.name);
     supplyDraftItems = [...existing, ...items].slice(0, 30);
     renderSupplyDraftRows();
-    updateSupplyAiStatus(`Added ${items.length} draft item${items.length === 1 ? "" : "s"}. Review before saving.`);
+    updateSupplyAiStatus(`Added ${items.length} draft item${items.length === 1 ? "" : "s"}${failed ? ` from ${pendingSupplyAiImages.length - failed} photo${pendingSupplyAiImages.length - failed === 1 ? "" : "s"}` : ""}. Review before saving.`);
   } catch (error) {
     updateSupplyAiStatus(error instanceof Error ? error.message : "Could not read that photo.");
   } finally {
