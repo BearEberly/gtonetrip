@@ -4926,10 +4926,6 @@ button { -webkit-tap-highlight-color: transparent; }
     linear-gradient(90deg, color-mix(in srgb, var(--owner-color, var(--forest-700)) 12%, #fff), #fff 44%);
 }
 
-.fh-food-row-simple.is-editable {
-  cursor: pointer;
-}
-
 .fh-food-row:first-of-type {
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
@@ -4973,6 +4969,17 @@ button { -webkit-tap-highlight-color: transparent; }
   font-size: 0.72rem;
   font-weight: 800;
   white-space: nowrap;
+}
+
+.fh-owner-trailing {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 6px;
+}
+
+.fh-owner-trailing .edit-icon-button {
+  flex: 0 0 auto;
 }
 
 @media (max-width: 420px) {
@@ -5131,6 +5138,26 @@ button { -webkit-tap-highlight-color: transparent; }
   z-index: 2;
 }
 
+.destination-card-overlay {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 999px;
+  background: rgba(12, 34, 21, 0.36);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+
 .destination-card::before {
   content: "";
   position: absolute;
@@ -5163,6 +5190,15 @@ button { -webkit-tap-highlight-color: transparent; }
 .destination-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 36px rgba(16, 32, 25, 0.1);
+}
+
+.destination-card.is-disabled {
+  cursor: not-allowed;
+}
+
+.destination-card.is-disabled:hover {
+  transform: none;
+  box-shadow: var(--soft-shadow);
 }
 
 .destination-card-top,

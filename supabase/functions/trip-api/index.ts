@@ -213,17 +213,28 @@ function aiImageDataUrlSafe(value: unknown) {
   return raw.length <= AI_IMAGE_DATA_URL_MAX_LENGTH ? raw : "";
 }
 
+function simpleSupplyNameSafe(value: unknown) {
+  const raw = textSafe(value, "", 120).replace(/\s+/g, " ").trim();
+  const lower = raw.toLowerCase();
+  if (!raw) return "";
+  if (/\bhot\s*dog\s*buns?\b/.test(lower)) return "Hot dog buns";
+  if (/\b(hot\s*dogs?|franks?|frankfurters?|wieners?|weenies?)\b/.test(lower)) return "Hot dogs";
+  if (/\b(popcorn|popped\s+corn)\b/.test(lower)) return "Popcorn";
+  return raw;
+}
+
 function supplyImportItemSafe(value: unknown) {
   if (!value || typeof value !== "object") return null;
   const raw = value as Record<string, unknown>;
-  const name = textSafe(raw.name, "", 120);
+  const name = simpleSupplyNameSafe(raw.name);
   if (!name) return null;
   const mealType = mealTypeSafe(raw.mealType);
   const type = String(raw.type || "").trim().toLowerCase() === "non-food" ? "table" : bringingTypeSafe(raw.type);
   const days = mealType === "any" || type === "table" ? dayListSafe(raw.days) : dayListSafe(raw.days);
   return {
     name,
-    notes: textSafe(raw.notes ?? raw.amount ?? raw.qty, "", 160),
+    quantity: textSafe(raw.quantity ?? raw.qty ?? raw.amount, "", 80),
+    notes: textSafe(raw.notes, "", 160),
     type,
     mealType: type === "table" ? "any" : mealType,
     days: type === "table" ? [] : days,
@@ -273,7 +284,7 @@ async function importSupplyItemsFromPhoto(image: string, actorFamilyId: string) 
           content: [
             {
               type: "input_text",
-              text: "You read handwritten or printed family trip food and supply lists. Extract only concrete items people are bringing. Do not invent items. Keep names short and useful for a shared trip packing board."
+              text: "You read handwritten or printed family trip food and supply lists. Extract only concrete items people are bringing. Do not invent items. Use short common item names, not long brand/package names. Example: use Hot dogs, Popcorn, Bacon, Paper plates. Normalize franks, frankfurters, wieners, or weenies to Hot dogs. Put package count or size in quantity. Put brand/flavor/package details in notes only if useful."
             }
           ]
         },
@@ -282,7 +293,7 @@ async function importSupplyItemsFromPhoto(image: string, actorFamilyId: string) 
           content: [
             {
               type: "input_text",
-              text: `Extract draft items for ${familyLabel}. Use mealType breakfast, lunch, dinner, dessert, pack-up, or any. Use days wed, thu, fri, sat, sun, mon only when the image clearly says a day. Use type food, drink, gear, or non-food. Return uncertain items too, but lower confidence.`
+              text: `Extract draft items for ${familyLabel}. Use name for the simple thing it is, like Hot dogs or Popcorn, not the full product label. If the package says franks, frankfurters, wieners, or weenies, use Hot dogs. Use quantity for counts, sizes, packs, or amounts like 2 packs, 36 ct, 1 bag, two dozen. Use notes only for extra useful detail. Use mealType breakfast, lunch, dinner, dessert, pack-up, or any. Use days wed, thu, fri, sat, sun, mon only when the image clearly says a day. Use type food, drink, gear, or non-food. Return uncertain items too, but lower confidence.`
             },
             { type: "input_image", image_url: safeImage }
           ]
@@ -304,9 +315,10 @@ async function importSupplyItemsFromPhoto(image: string, actorFamilyId: string) 
                 items: {
                   type: "object",
                   additionalProperties: false,
-                  required: ["name", "notes", "mealType", "days", "type", "confidence"],
+                  required: ["name", "quantity", "notes", "mealType", "days", "type", "confidence"],
                   properties: {
                     name: { type: "string" },
+                    quantity: { type: "string" },
                     notes: { type: "string" },
                     mealType: { type: "string", enum: ["breakfast", "lunch", "dinner", "dessert", "pack-up", "any"] },
                     days: {
@@ -1274,12 +1286,13 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
   if (action.type === "addSupply") {
     const name = textSafe(payload.name);
     if (!name) return { changed: false, message: "Bringing item is empty." };
-    const supplyNotes = textSafe(payload.notes ?? payload.qty);
+    const supplyQty = textSafe(payload.quantity ?? payload.qty ?? payload.amount, "", 160);
+    const supplyNotes = textSafe(payload.notes, "", 300);
     (next.supplies as Record<string, unknown>[]).push({
       id: `supply-${Date.now()}`,
       name,
       notes: supplyNotes,
-      qty: supplyNotes,
+      qty: supplyQty,
       type: bringingTypeSafe(payload.type),
       owner: actorFamilyId,
       mealType: mealTypeSafe(payload.mealType),
@@ -1298,10 +1311,11 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     if (!canManageCustomItem(supply, actorFamilyId, actorPersonId)) return { changed: false, message: "Only your family can edit this bringing item." };
     const name = textSafe(payload.name);
     if (!name) return { changed: false, message: "Bringing item is empty." };
-    const supplyNotes = textSafe(payload.notes ?? payload.qty);
+    const supplyQty = textSafe(payload.quantity ?? payload.qty ?? payload.amount, "", 160);
+    const supplyNotes = textSafe(payload.notes, "", 300);
     supply.name = name;
     supply.notes = supplyNotes;
-    supply.qty = supplyNotes;
+    supply.qty = supplyQty;
     supply.type = bringingTypeSafe(payload.type || supply.type);
     supply.mealType = mealTypeSafe(payload.mealType || supply.mealType);
     supply.days = dayListSafe(payload.days, Array.isArray(supply.days) ? (supply.days as string[]) : []);

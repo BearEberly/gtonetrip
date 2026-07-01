@@ -2218,13 +2218,14 @@ function normalizeSupplyItem(item) {
   const fallback = legacyBringingDefaults(item);
   const owner = families.some((family) => family.id === item?.owner) ? item.owner : "";
   const days = dayListSafe(item?.days, fallback.days);
-  const notes = String(item?.notes || item?.qty || "").trim();
+  const qty = String(item?.qty || item?.quantity || "").trim();
+  const notes = String(item?.notes || (!qty ? item?.qty : "") || "").trim();
   return {
     ...item,
     id: String(item?.id || `supply-${Date.now()}`),
     name: String(item?.name || "").trim(),
     notes: notes || "",
-    qty: notes || "",
+    qty: qty || "",
     type: bringingTypeSafe(item?.type || fallback.type),
     owner,
     mealType: mealTypeSafe(item?.mealType || fallback.mealType),
@@ -2544,12 +2545,13 @@ function bringingImageMarkup(item) {
 }
 
 function bringingMetaMarkup(item) {
+  const quantity = item.qty ? ` · ${escapeText(item.qty)}` : "";
   const note = item.notes ? ` · ${escapeText(item.notes)}` : "";
   const toneClass = bringingMealToneClass(item.mealType);
   return `
     <div class="bringing-inline-meta">
       <span class="bringing-chip ${toneClass}">${escapeText(supplyPurposeLabel(item))}</span>
-      <span class="bringing-inline-summary">${escapeText(daysSummary(item.days))}${note}</span>
+      <span class="bringing-inline-summary">${escapeText(daysSummary(item.days))}${quantity}${note}</span>
     </div>
   `;
 }
@@ -2990,7 +2992,7 @@ function renderSupplies() {
         <div>
           <span class="supply-type">${escapeText(item.type)}</span>
           <strong>${escapeText(item.name)}</strong>
-          <span>${escapeText(item.qty)}${owner ? ` · ${escapeText(owner.name)}` : ""}</span>
+          <span>${item.qty ? `${escapeText(item.qty)} · ` : ""}${owner ? escapeText(owner.name) : "Unclaimed"}</span>
           ${itemManageActions("supply", item)}
         </div>
         <button
@@ -3640,13 +3642,16 @@ function renderFoodMealGrid() {
           const familyName = fam ? fam.name : "Not assigned yet";
           const familyColor = fam?.color || "#6e6e73";
           const editable = canManageCustomItem(it);
-          return `<li class="fh-bring fh-food-row fh-food-row-simple${editable ? " is-editable" : ""}" style="--owner-color:${escapeText(familyColor)}"${editable ? ` data-edit-supply="${escapeText(it.id)}"` : ""}>
+          return `<li class="fh-bring fh-food-row fh-food-row-simple" style="--owner-color:${escapeText(familyColor)}">
             <span class="fh-owner-dot" aria-hidden="true"></span>
             <span class="fh-food-copy">
               <strong class="fh-bring-name">${escapeText(it.name)}</strong>
               <span class="fh-who">${escapeText(supplyPurposeLabel(it))}</span>
             </span>
-            <span class="fh-owner-badge">${escapeText(familyName)}</span>
+            <span class="fh-owner-trailing">
+              <span class="fh-owner-badge">${escapeText(familyName)}</span>
+              ${editable ? editIconButton("supply", it.id, `Edit ${it.name}`) : ""}
+            </span>
           </li>`;
         }).join("")}</ul>`
       : `<div class="fh-empty-line">No one has added anything for this meal yet.</div>`;
@@ -4022,7 +4027,7 @@ function createSupplyItem(payload) {
     id: `supply-${Date.now()}`,
     name: payload.name,
     notes: payload.notes || "",
-    qty: payload.notes || "",
+    qty: payload.quantity || payload.qty || "",
     type: payload.type || "food",
     owner: activeFamilyId(),
     mealType: payload.mealType || "any",
@@ -4045,9 +4050,11 @@ function setPendingSupplyImage(dataUrl) {
 function supplyDraftDefault(overrides = {}) {
   const hasMealType = Object.hasOwn(overrides, "mealType") || Object.hasOwn(overrides, "purpose");
   const rawMealType = overrides.mealType || overrides.purpose || "";
+  const quantity = overrides.quantity || overrides.qty || overrides.amount || "";
   return {
     name: shortText(overrides.name, 120),
-    notes: shortText(overrides.notes || overrides.qty || "", 160),
+    quantity: shortText(quantity, 80),
+    notes: shortText(overrides.notes || "", 160),
     type: bringingTypeSafe(overrides.type || "food"),
     mealType: hasMealType ? mealTypeSafe(rawMealType || "any") : "",
     days: dayListSafe(overrides.days || []),
@@ -4139,11 +4146,11 @@ function renderSupplyDraftRows() {
         </div>
         <label>
           Item name
-          <input data-supply-draft-field="name" type="text" value="${escapeText(item.name || "")}" placeholder="Eggs, bacon, chips">
+          <input data-supply-draft-field="name" type="text" value="${escapeText(item.name || "")}" placeholder="Hot dogs, popcorn, eggs">
         </label>
         <label>
-          Note or amount
-          <input data-supply-draft-field="notes" type="text" value="${escapeText(item.notes || "")}" placeholder="Two dozen, enough for breakfast">
+          Quantity
+          <input data-supply-draft-field="quantity" type="text" value="${escapeText(item.quantity || "")}" placeholder="2 packs, 36 ct, one bag">
         </label>
         <label>
           What is it for?
@@ -4179,7 +4186,8 @@ function supplyDraftsFromDom() {
     const hasSpecificDay = Boolean(purpose && !isNonFood);
     return supplyDraftDefault({
       name: row.querySelector('[data-supply-draft-field="name"]')?.value || "",
-      notes: row.querySelector('[data-supply-draft-field="notes"]')?.value || "",
+      quantity: row.querySelector('[data-supply-draft-field="quantity"]')?.value || "",
+      notes: "",
       type: isNonFood ? "table" : "food",
       mealType: isNonFood ? "any" : (purpose || "any"),
       days: hasSpecificDay ? Array.from(row.querySelectorAll("[data-supply-draft-day].is-selected")).map((button) => button.dataset.supplyDraftDay) : []
@@ -4716,7 +4724,8 @@ async function submitItemForm(event) {
   if (editingItemId) {
     const payload = {
       name: document.querySelector("#supplyName")?.value.trim() || "",
-      notes: document.querySelector("#supplyQty")?.value.trim() || "",
+      quantity: document.querySelector("#supplyQty")?.value.trim() || "",
+      notes: "",
       type: "food",
       mealType: "any",
       days: selectedSupplyDays(),
@@ -4739,7 +4748,7 @@ async function submitItemForm(event) {
       if (!supply) return;
       supply.name = payload.name;
       supply.notes = payload.notes || "";
-      supply.qty = payload.notes || "";
+      supply.qty = payload.quantity || "";
       supply.type = supply.type || payload.type || "food";
       supply.mealType = payload.mealType || "any";
       supply.days = dayListSafe(payload.days);
@@ -4760,6 +4769,7 @@ async function submitItemForm(event) {
   for (const draft of drafts) {
     const payload = {
       name: draft.name,
+      quantity: draft.quantity,
       notes: draft.notes,
       type: draft.type,
       mealType: draft.mealType,
@@ -4847,7 +4857,8 @@ function addSupplyToSelectedMeal(id) {
   const nextDays = days.includes(day) ? days : [...days, day];
   const payload = {
     name: supply.name || "",
-    notes: supply.notes || supply.qty || "",
+    quantity: supply.qty || "",
+    notes: supply.notes || "",
     type: supply.type || "food",
     mealType,
     days: nextDays,
@@ -4856,7 +4867,7 @@ function addSupplyToSelectedMeal(id) {
   performAction("updateSupply", { id, ...payload }, () => {
     supply.name = payload.name;
     supply.notes = payload.notes;
-    supply.qty = payload.notes;
+    supply.qty = payload.quantity;
     supply.type = payload.type;
     supply.mealType = payload.mealType;
     supply.days = dayListSafe(payload.days);
