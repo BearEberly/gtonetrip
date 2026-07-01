@@ -57,31 +57,7 @@ const defaultMeals = [
   { id: "mon-cleanup", day: "mon", dayLabel: "Mon Jul 6", type: "Pack-up", time: "Before checkout", owner: "", idea: "Fridge clear-out and trash", kids: "Road snacks", cold: [] }
 ];
 
-const defaultSupplies = [
-  { id: "plates", name: "Paper plates", notes: "Marissa already bought plenty.", type: "table", owner: "nick", mealType: "any", days: ["wed", "thu", "fri", "sat", "sun", "mon"] },
-  { id: "napkins", name: "Napkins", notes: "Marissa already bought plenty.", type: "table", owner: "nick", mealType: "any", days: ["wed", "thu", "fri", "sat", "sun", "mon"] },
-  { id: "paper-towels", name: "Paper towels", notes: "Jer is covering paper towels.", type: "table", owner: "bear", mealType: "any", days: ["wed", "thu", "fri", "sat", "sun", "mon"] },
-  { id: "sparkling-ice", name: "Sparkling Ice drinks", notes: "Marissa photo-confirmed drinks.", type: "drink", owner: "nick", mealType: "any", days: ["fri", "sat", "sun"] },
-  { id: "orange-juice", name: "Orange juice", notes: "Breakfast drink.", type: "drink", owner: "nick", mealType: "breakfast", days: ["fri", "sat", "sun"] },
-  { id: "milk", name: "Milk", notes: "G6 has milk for breakfast.", type: "drink", owner: "nick", mealType: "breakfast", days: ["sat", "sun"] },
-  { id: "smores", name: "S'mores ingredients", notes: "G6 has marshmallows, grahams, and chocolate.", type: "food", owner: "nick", mealType: "dessert", days: ["fri", "sat"] },
-  { id: "chips-nachos", name: "Chips for nachos", notes: "G6 already grabbed a large bag.", type: "food", owner: "nick", mealType: "lunch", days: ["sun"] },
-  { id: "bacon", name: "Bacon", notes: "Double pack.", type: "food", owner: "nick", mealType: "breakfast", days: ["sat", "sun"] },
-  { id: "eggs", name: "Eggs", notes: "Jear shared eggs.", type: "food", owner: "bear", mealType: "breakfast", days: ["fri", "sat", "sun"] },
-  { id: "cinnamon-rolls", name: "Cinnamon rolls", notes: "Jer has Saturday breakfast cinnamon rolls.", type: "food", owner: "bear", mealType: "breakfast", days: ["sat"] },
-  { id: "toast-bread", name: "Toast bread", notes: "Jer is covering toast for breakfast.", type: "food", owner: "bear", mealType: "breakfast", days: ["sat", "sun"] },
-  { id: "waffles-muffins", name: "Waffles or muffins", notes: "Jer is covering Sunday breakfast waffles or muffins.", type: "food", owner: "bear", mealType: "breakfast", days: ["sun"] },
-  { id: "butter", name: "Butter", notes: "Jer has butter covered.", type: "food", owner: "bear", mealType: "breakfast", days: ["sat", "sun"] },
-  { id: "steaks", name: "Steaks", notes: "Jear is covering the Sunday steak dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["sun"] },
-  { id: "other-meats", name: "Other meats", notes: "Jear may bring extra meat for another dinner.", type: "food", owner: "bear", mealType: "dinner", days: ["sun"] },
-  { id: "hot-dogs-buns", name: "Hot dogs and buns", notes: "Jer is covering the Sunday hot dogs.", type: "food", owner: "bear", mealType: "lunch", days: ["sun"] },
-  { id: "pizza", name: "Pizza", notes: "Nova is bringing Friday pizza for dinner.", type: "food", owner: "nat", mealType: "dinner", days: ["fri"] },
-  { id: "tacos", name: "Tacos", notes: "Nova is bringing Friday tacos for dinner.", type: "food", owner: "nat", mealType: "dinner", days: ["fri"] },
-  { id: "oli-cake", name: "Oli cake", notes: "Nova is bringing Oli cake Friday night.", type: "food", owner: "nat", mealType: "dessert", days: ["fri"] },
-  { id: "blackstone-two-burner", name: "Two-burner Blackstone", notes: "Bear can bring the smaller Blackstone.", type: "gear", owner: "bear", mealType: "any", days: ["fri", "sat", "sun"] },
-  { id: "cranium", name: "Cranium", notes: "Board game from Jear.", type: "gear", owner: "bear", mealType: "any", days: ["fri", "sat", "sun"] },
-  { id: "charades", name: "Charades", notes: "Riggs wants to bring charades.", type: "gear", owner: "nat", mealType: "any", days: ["fri", "sat", "sun"] }
-];
+const defaultSupplies = [];
 
 const guideHighlights = [
   {
@@ -631,7 +607,7 @@ const calendarMealSlots = [
   { label: "Dessert / Snacks", time: "8:00 - 10:00", value: "?" }
 ];
 
-const storageKey = "cabin-game-plan-v1";
+const storageKey = "cabin-game-plan-v2";
 const selectedFamilyKey = "cabin-game-plan-selected-family-v1";
 const clientIdKey = "cabin-game-plan-client-id-v1";
 const sessionTokenKey = "gtonetrip-session-token-v1";
