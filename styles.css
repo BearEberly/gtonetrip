@@ -5173,8 +5173,8 @@ button { -webkit-tap-highlight-color: transparent; }
 
 .destination-card-overlay {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 50%;
+  left: 50%;
   z-index: 3;
   display: inline-flex;
   align-items: center;
@@ -5189,6 +5189,7 @@ button { -webkit-tap-highlight-color: transparent; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   backdrop-filter: blur(10px);
+  transform: translate(-50%, -50%);
 }
 
 .destination-card::before {
@@ -5204,8 +5205,8 @@ button { -webkit-tap-highlight-color: transparent; }
 .destination-card.is-calendar {
   border-color: rgba(27, 111, 62, 0.26);
   background:
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.52), transparent 42%),
-    linear-gradient(165deg, #1f7a45 0%, #3fa865 55%, #edf7ef 100%);
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.62), transparent 44%),
+    linear-gradient(165deg, #2b8150 0%, #63b683 52%, #f3faf5 100%);
 }
 
 .destination-card.is-food {
