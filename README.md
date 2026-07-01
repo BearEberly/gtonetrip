@@ -27,6 +27,8 @@ The frontend talks to Supabase using values from `app-config.js`, so local previ
 - Family logistics check-ins
 - Shared calendar state
 - Session login by adult name
+- Profile display names and profile photos
+- Organizer-managed shared trip sign-in password
 
 The shared source of truth is now Supabase, not `data/cabin-state.json`.
 
@@ -42,6 +44,8 @@ Current login flow:
 - after the first password sign-in, the user can optionally save a passkey / Face ID for one-tap sign-in on that site and device family
 
 Login choices are limited to Shell, Nick, Marissa, Bear, Jessica, Andy, and Natalie. Kids do not log in. The selected adult is stored as `personId` so updates still stay tied to the right household.
+
+Profile edits now save through the Supabase backend, so a saved name/photo follows that person across devices instead of living only in one browser.
 
 ## iPhone Install
 

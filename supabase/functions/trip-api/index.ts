@@ -16,11 +16,12 @@ const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 const googleSheetsWebhookUrl = Deno.env.get("GOOGLE_SHEETS_WEBHOOK_URL") || "";
 const googleSheetsWebhookSecret = Deno.env.get("GOOGLE_SHEETS_WEBHOOK_SECRET") || "";
+const openaiApiKey = Deno.env.get("OPENAI_API_KEY") || "";
 const client = createClient(supabaseUrl, serviceRoleKey, {
   auth: { persistSession: false, autoRefreshToken: false }
 });
 
-const SHARED_LOGIN_PASSWORD = "1333";
+const DEFAULT_SHARED_LOGIN_PASSWORD = Deno.env.get("TRIP_SHARED_LOGIN_PASSWORD") || "1333";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 const PASSKEY_CHALLENGE_TTL_MS = 1000 * 60 * 10;
 const PASSKEY_RP_NAME = "4th of July 2026";
@@ -116,6 +117,10 @@ function userFromPersonId(personId: unknown) {
   return attendeeCatalog.get(normalized) || null;
 }
 
+function userFromLoginPayload(body: Record<string, unknown>) {
+  return userFromPersonId(body.personId) || userFromFirstName(body.firstName);
+}
+
 function daySafe(value: unknown) {
   const normalized = String(value || "").trim().toLowerCase();
   return allDayCodes.includes(normalized) ? normalized : "sun";
@@ -135,6 +140,30 @@ function dayLabelFor(day: string) {
     sun: "Sun Jul 5",
     mon: "Mon Jul 6"
   }[day] || "Sun Jul 5";
+}
+
+function emailSafe(value: unknown) {
+  return textSafe(value, "", 160);
+}
+
+function displayNameSafe(value: unknown) {
+  return textSafe(value, "", 60);
+}
+
+function sharedPasswordSafe(value: unknown) {
+  const text = String(value ?? "").trim();
+  if (text.length < 4) return "";
+  return text.slice(0, 80);
+}
+
+function hasOwn(value: object, key: string) {
+  return Object.prototype.hasOwnProperty.call(value, key);
+}
+
+async function sha256Hex(value: string) {
+  const encoded = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", encoded);
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 function mealTypeSafe(value: unknown) {
@@ -175,6 +204,137 @@ function imageDataUrlSafe(value: unknown) {
   const raw = String(value || "").trim();
   if (!raw.startsWith("data:image/")) return "";
   return raw.length <= 400000 ? raw : "";
+}
+
+function aiImageDataUrlSafe(value: unknown) {
+  const raw = String(value || "").trim();
+  if (!raw.startsWith("data:image/")) return "";
+  return raw.length <= 1800000 ? raw : "";
+}
+
+function supplyImportItemSafe(value: unknown) {
+  if (!value || typeof value !== "object") return null;
+  const raw = value as Record<string, unknown>;
+  const name = textSafe(raw.name, "", 120);
+  if (!name) return null;
+  const mealType = mealTypeSafe(raw.mealType);
+  const type = String(raw.type || "").trim().toLowerCase() === "non-food" ? "table" : bringingTypeSafe(raw.type);
+  const days = mealType === "any" || type === "table" ? dayListSafe(raw.days) : dayListSafe(raw.days);
+  return {
+    name,
+    notes: textSafe(raw.notes ?? raw.amount ?? raw.qty, "", 160),
+    type,
+    mealType: type === "table" ? "any" : mealType,
+    days: type === "table" ? [] : days,
+    confidence: Math.max(0, Math.min(1, Number(raw.confidence) || 0.6))
+  };
+}
+
+function outputTextFromOpenAI(payload: Record<string, unknown>) {
+  const direct = textSafe(payload.output_text, "", 20000);
+  if (direct) return direct;
+  const output = Array.isArray(payload.output) ? payload.output : [];
+  const chunks: string[] = [];
+  for (const item of output) {
+    if (!item || typeof item !== "object") continue;
+    const content = Array.isArray((item as Record<string, unknown>).content) ? (item as Record<string, unknown>).content as unknown[] : [];
+    for (const part of content) {
+      if (!part || typeof part !== "object") continue;
+      const raw = part as Record<string, unknown>;
+      const text = textSafe(raw.text ?? raw.output_text, "", 20000);
+      if (text) chunks.push(text);
+    }
+  }
+  return chunks.join("\n").trim();
+}
+
+async function importSupplyItemsFromPhoto(image: string, actorFamilyId: string) {
+  if (!openaiApiKey) throw new Error("OpenAI API key is not configured for photo import.");
+  const safeImage = aiImageDataUrlSafe(image);
+  if (!safeImage) throw new Error("Upload a clearer or smaller food list photo.");
+  const familyLabel = {
+    shell: "Shell",
+    nick: "G6",
+    bear: "Jear",
+    nat: "Riggs"
+  }[actorFamilyId] || "this family";
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${openaiApiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-4.1-mini",
+      input: [
+        {
+          role: "system",
+          content: [
+            {
+              type: "input_text",
+              text: "You read handwritten or printed family trip food and supply lists. Extract only concrete items people are bringing. Do not invent items. Keep names short and useful for a shared trip packing board."
+            }
+          ]
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+              text: `Extract draft items for ${familyLabel}. Use mealType breakfast, lunch, dinner, dessert, pack-up, or any. Use days wed, thu, fri, sat, sun, mon only when the image clearly says a day. Use type food, drink, gear, or non-food. Return uncertain items too, but lower confidence.`
+            },
+            { type: "input_image", image_url: safeImage }
+          ]
+        }
+      ],
+      text: {
+        format: {
+          type: "json_schema",
+          name: "trip_supply_import",
+          strict: true,
+          schema: {
+            type: "object",
+            additionalProperties: false,
+            required: ["items"],
+            properties: {
+              items: {
+                type: "array",
+                maxItems: 24,
+                items: {
+                  type: "object",
+                  additionalProperties: false,
+                  required: ["name", "notes", "mealType", "days", "type", "confidence"],
+                  properties: {
+                    name: { type: "string" },
+                    notes: { type: "string" },
+                    mealType: { type: "string", enum: ["breakfast", "lunch", "dinner", "dessert", "pack-up", "any"] },
+                    days: {
+                      type: "array",
+                      items: { type: "string", enum: ["wed", "thu", "fri", "sat", "sun", "mon"] }
+                    },
+                    type: { type: "string", enum: ["food", "drink", "gear", "non-food"] },
+                    confidence: { type: "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+  });
+  const result = await response.json().catch(() => ({})) as Record<string, unknown>;
+  if (!response.ok) {
+    const message = textSafe((result.error as Record<string, unknown> | undefined)?.message, "AI photo import failed.", 600);
+    throw new Error(message);
+  }
+  const text = outputTextFromOpenAI(result);
+  const parsed = JSON.parse(text || "{}") as Record<string, unknown>;
+  const items = (Array.isArray(parsed.items) ? parsed.items : [])
+    .map((item) => supplyImportItemSafe(item))
+    .filter(Boolean)
+    .slice(0, 24);
+  return items;
 }
 
 function base64UrlFromBytes(value: Uint8Array) {
@@ -460,6 +620,36 @@ function applyCalendarMemoryPatch(memory: Record<string, unknown>, patch: {
   return { memory: next, changed };
 }
 
+function normalizeSharedProfiles(value: unknown) {
+  const source = value && typeof value === "object" ? value as Record<string, unknown> : {};
+  const next: Record<string, Record<string, unknown>> = {};
+  for (const [rawPersonId, rawValue] of Object.entries(source)) {
+    const personId = personSafe(rawPersonId) || personSafe((rawValue as Record<string, unknown> | undefined)?.personId);
+    const attendee = personId ? attendeeCatalog.get(personId) : null;
+    if (!personId || !attendee || !rawValue || typeof rawValue !== "object") continue;
+    const record = rawValue as Record<string, unknown>;
+    next[personId] = {
+      personId,
+      familyId: familySafe(record.familyId) || attendee.familyId,
+      firstName: textSafe(record.firstName, attendee.firstName, 80),
+      email: emailSafe(record.email),
+      displayName: displayNameSafe(record.displayName),
+      photo: imageDataUrlSafe(record.photo),
+      updatedAt: textSafe(record.updatedAt, "", 80)
+    };
+  }
+  return next;
+}
+
+function normalizeSharedSettings(value: unknown) {
+  const record = value && typeof value === "object" ? value as Record<string, unknown> : {};
+  return {
+    sharedPasswordHash: textSafe(record.sharedPasswordHash, "", 200),
+    updatedByPersonId: personSafe(record.updatedByPersonId),
+    updatedAt: textSafe(record.updatedAt, "", 80)
+  };
+}
+
 function normalizeState(state: Record<string, unknown>) {
   return {
     version: Number(state.version || 1),
@@ -473,7 +663,9 @@ function normalizeState(state: Record<string, unknown>) {
     checklists: normalizeChecklists(state.checklists),
     familyCalendarEvents: normalizeFamilyCalendarEvents(state.familyCalendarEvents),
     familyCalendarMemory: normalizeFamilyCalendarMemory(state.familyCalendarMemory),
-    schedulePhotoDrafts: normalizeSchedulePhotoDrafts(state.schedulePhotoDrafts)
+    schedulePhotoDrafts: normalizeSchedulePhotoDrafts(state.schedulePhotoDrafts),
+    sharedProfiles: normalizeSharedProfiles(state.sharedProfiles),
+    sharedSettings: normalizeSharedSettings(state.sharedSettings)
   };
 }
 
@@ -649,6 +841,81 @@ async function sendGoogleSheetsChangeLog(input: {
   }
 }
 
+function profileRowToUser(
+  user: { personId: string; firstName: string; familyId: string },
+  row?: Record<string, unknown> | null
+) {
+  return {
+    personId: user.personId,
+    firstName: textSafe(row?.firstName, user.firstName, 80),
+    familyId: familySafe(row?.familyId) || user.familyId,
+    email: emailSafe(row?.email),
+    displayName: displayNameSafe(row?.displayName),
+    photo: imageDataUrlSafe(row?.photo)
+  };
+}
+
+async function saveTripProfile(
+  user: { personId: string; firstName: string; familyId: string },
+  patch: { email?: unknown; displayName?: unknown; photo?: unknown } = {}
+) {
+  const state = await getStoredState();
+  const profiles = normalizeSharedProfiles(state.sharedProfiles);
+  const existing = profiles[user.personId] || null;
+  const nextRow: Record<string, unknown> = {
+    personId: user.personId,
+    familyId: user.familyId,
+    firstName: user.firstName,
+    email: hasOwn(patch, "email") ? emailSafe(patch.email) : emailSafe(existing?.email),
+    displayName: hasOwn(patch, "displayName") ? displayNameSafe(patch.displayName) : displayNameSafe(existing?.displayName),
+    photo: hasOwn(patch, "photo") ? imageDataUrlSafe(patch.photo) : imageDataUrlSafe(existing?.photo),
+    updatedAt: new Date().toISOString()
+  };
+  const shouldWrite = !existing
+    || textSafe(existing.familyId) !== textSafe(nextRow.familyId)
+    || textSafe(existing.firstName) !== textSafe(nextRow.firstName)
+    || textSafe(existing.email) !== textSafe(nextRow.email)
+    || textSafe(existing.displayName) !== textSafe(nextRow.displayName)
+    || imageDataUrlSafe(existing.photo) !== imageDataUrlSafe(nextRow.photo);
+  if (shouldWrite) {
+    profiles[user.personId] = nextRow;
+    state.sharedProfiles = profiles;
+    const savedState = await saveStoredState(state);
+    return profileRowToUser(user, (savedState.sharedProfiles as Record<string, Record<string, unknown>>)[user.personId]);
+  }
+  return profileRowToUser(user, nextRow);
+}
+
+async function hydrateUserProfile(user: { personId: string; firstName: string; familyId: string }) {
+  const state = await getStoredState();
+  const row = state.sharedProfiles && typeof state.sharedProfiles === "object"
+    ? (state.sharedProfiles as Record<string, Record<string, unknown>>)[user.personId]
+    : null;
+  return profileRowToUser(user, row);
+}
+
+async function currentSharedPasswordHash() {
+  const state = await getStoredState();
+  const settings = normalizeSharedSettings(state.sharedSettings);
+  return settings.sharedPasswordHash || await sha256Hex(DEFAULT_SHARED_LOGIN_PASSWORD);
+}
+
+async function sharedPasswordMatches(password: unknown) {
+  return (await sha256Hex(String(password ?? ""))) === (await currentSharedPasswordHash());
+}
+
+async function saveSharedPassword(password: unknown, actorPersonId: string) {
+  const safePassword = sharedPasswordSafe(password);
+  if (!safePassword) throw new Error("Trip password must be at least 4 characters.");
+  const state = await getStoredState();
+  state.sharedSettings = {
+    sharedPasswordHash: await sha256Hex(safePassword),
+    updatedByPersonId: personSafe(actorPersonId),
+    updatedAt: new Date().toISOString()
+  };
+  await saveStoredState(state);
+}
+
 async function createSession(user: { personId: string; firstName: string; familyId: string }) {
   const token = crypto.randomUUID();
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS).toISOString();
@@ -681,13 +948,14 @@ async function currentSession(request: Request) {
     await deleteSession(token);
     return null;
   }
+  const baseUser = {
+    personId: data.person_id,
+    firstName: data.first_name,
+    familyId: data.family_id
+  };
   return {
     token,
-    user: {
-      personId: data.person_id,
-      firstName: data.first_name,
-      familyId: data.family_id
-    }
+    user: await hydrateUserProfile(baseUser)
   };
 }
 
@@ -1242,14 +1510,17 @@ Deno.serve(async (request) => {
 
   try {
     if (route === "/login" && request.method === "POST") {
-      const body = await request.json();
-      const user = userFromFirstName(body.firstName);
+      const body = await request.json() as Record<string, unknown>;
+      const user = userFromLoginPayload(body);
       if (!user) return json({ ok: false, message: "Enter your first name." }, 400);
-      if (String(body.password || "") !== SHARED_LOGIN_PASSWORD) {
+      if (!(await sharedPasswordMatches(body.password))) {
         return json({ ok: false, message: "Password did not match." }, 401);
       }
       const session = await createSession(user);
-      return json({ ok: true, token: session.token, user, tripInfo, message: "Signed in." });
+      const hydratedUser = await saveTripProfile(user, {
+        email: body.email
+      });
+      return json({ ok: true, token: session.token, user: hydratedUser, tripInfo, message: "Signed in." });
     }
 
     if (route === "/logout" && request.method === "POST") {
@@ -1318,7 +1589,8 @@ Deno.serve(async (request) => {
       });
       await deletePasskeyChallenge(challenge);
       const session = await createSession(user);
-      return json({ ok: true, token: session.token, user, tripInfo, message: "Signed in with passkey." });
+      const hydratedUser = await hydrateUserProfile(user);
+      return json({ ok: true, token: session.token, user: hydratedUser, tripInfo, message: "Signed in with passkey." });
     }
 
     // Public, subscribable calendar feed (no auth) for Apple/Google Calendar.
@@ -1356,7 +1628,7 @@ Deno.serve(async (request) => {
         rpID,
         userID: passkeyUserId(session.user.personId),
         userName: session.user.personId,
-        userDisplayName: session.user.firstName,
+        userDisplayName: session.user.displayName || session.user.firstName,
         attestationType: "none",
         authenticatorSelection: {
           residentKey: "required",
@@ -1417,9 +1689,45 @@ Deno.serve(async (request) => {
       return json({ ok: true, user: session.user, tripInfo });
     }
 
+    if (route === "/profile" && request.method === "POST") {
+      const body = await request.json() as Record<string, unknown>;
+      const rawSharedPassword = String(body.sharedPassword ?? "");
+      const wantsPasswordUpdate = hasOwn(body, "sharedPassword") && Boolean(rawSharedPassword.trim());
+      if (wantsPasswordUpdate && !sharedPasswordSafe(rawSharedPassword)) {
+        return json({ ok: false, message: "Trip password must be at least 4 characters." }, 400);
+      }
+      if (wantsPasswordUpdate && !isBearPowerUser(session.user.personId)) {
+        return json({ ok: false, message: "Only Bear can change the shared trip password." }, 403);
+      }
+      const updatedUser = await saveTripProfile(session.user, {
+        displayName: body.displayName,
+        photo: body.photo,
+        email: body.email
+      });
+      if (wantsPasswordUpdate) {
+        await saveSharedPassword(rawSharedPassword, session.user.personId);
+      }
+      return json({
+        ok: true,
+        user: updatedUser,
+        tripInfo,
+        message: wantsPasswordUpdate ? "Profile and trip password saved." : "Profile saved."
+      });
+    }
+
     if (route === "/state" && request.method === "GET") {
       const state = await getStoredState();
       return json({ ok: true, state, tripInfo });
+    }
+
+    if (route === "/supply/import-photo" && request.method === "POST") {
+      const body = await request.json();
+      const items = await importSupplyItemsFromPhoto(String(body.image || ""), session.user.familyId);
+      return json({
+        ok: true,
+        items,
+        message: items.length ? `Found ${items.length} draft item${items.length === 1 ? "" : "s"}.` : "No clear items found."
+      });
     }
 
     if (route === "/action" && request.method === "POST") {

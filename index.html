@@ -26,7 +26,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=68">
+    <link rel="stylesheet" href="styles.css?v=69">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -521,6 +521,19 @@
           </div>
         </div>
 
+        <section class="profile-admin-panel is-hidden" id="profilePasswordPanel" aria-label="Shared trip password">
+          <strong>Shared trip password</strong>
+          <p class="auth-helper">Organizer only. Changing this updates the sign-in password for everyone on every device.</p>
+          <label>
+            New trip password
+            <input id="profileSharedPassword" type="password" autocomplete="new-password" placeholder="New shared password">
+          </label>
+          <label>
+            Confirm new trip password
+            <input id="profileSharedPasswordConfirm" type="password" autocomplete="new-password" placeholder="Confirm new shared password">
+          </label>
+        </section>
+
         <div class="panel-actions profile-actions-row">
           <button class="secondary-action compact-action" type="button" id="removeProfilePhoto">Remove picture</button>
           <button class="primary-action compact-action" type="submit">Save</button>
@@ -648,15 +661,42 @@
         </section>
 
         <section class="item-form-section is-hidden" data-item-section="supply">
-          <label>
-            What are you bringing?
-            <input id="supplyName" type="text" placeholder="Eggs, bacon, chips, buns">
-          </label>
-          <label>
-            Note or amount (optional)
-            <input id="supplyQty" type="text" placeholder="Two dozen, enough for breakfast, backup item">
-          </label>
-          <details class="optional-details">
+          <div class="supply-multi-fields" id="supplyMultiFields">
+            <div class="supply-ai-card">
+              <div>
+                <strong>Use AI to add items from a photo</strong>
+                <span>Take a picture of a list or choose one from your camera roll. You can edit everything before saving.</span>
+              </div>
+              <div class="supply-ai-actions">
+                <label class="secondary-action compact-action" for="supplyAiUpload">Upload photo</label>
+                <label class="secondary-action compact-action" for="supplyAiCamera">Take photo</label>
+                <input class="sr-only" id="supplyAiUpload" type="file" accept="image/*">
+                <input class="sr-only" id="supplyAiCamera" type="file" accept="image/*" capture="environment">
+              </div>
+              <div class="supply-ai-preview is-hidden" id="supplyAiPreviewWrap">
+                <img id="supplyAiPreview" alt="Photo selected for AI item import">
+                <button class="primary-action compact-action" type="button" id="runSupplyAiImport">Use AI to add items</button>
+              </div>
+              <p class="supply-ai-status" id="supplyAiStatus" aria-live="polite"></p>
+            </div>
+            <div class="supply-draft-head">
+              <strong>Items to add</strong>
+              <button class="secondary-action compact-action" type="button" id="addSupplyDraftRow">Add another item</button>
+            </div>
+            <div class="supply-draft-list" id="supplyDraftRows"></div>
+          </div>
+
+          <div class="supply-single-fields" id="supplySingleFields">
+            <label>
+              What are you bringing?
+              <input id="supplyName" type="text" placeholder="Eggs, bacon, chips, buns">
+            </label>
+            <label>
+              Note or amount (optional)
+              <input id="supplyQty" type="text" placeholder="Two dozen, enough for breakfast, backup item">
+            </label>
+          </div>
+          <details class="optional-details" id="supplySingleDetails">
             <summary>Add details (optional)</summary>
             <div class="optional-details-body">
               <label>
@@ -713,11 +753,11 @@
       <label>
         <input id="authPassword" type="password" autocomplete="current-password" aria-label="Password" placeholder="Password" enterkeyhint="go" required>
       </label>
+      <button class="primary-action auth-submit" type="submit">Log in</button>
       <input id="authInvite" type="hidden" autocomplete="one-time-code">
       <input id="authEmail" type="hidden" autocomplete="email">
       <input id="authFamily" type="hidden">
       <input id="authPersonId" type="hidden">
-      <button class="sr-only" type="submit" aria-label="Sign in"></button>
     </form>
     <p class="sr-only" id="authRememberedNote"></p>
     <p class="sr-only" id="authMessage" aria-live="polite"></p>
@@ -730,6 +770,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=70"></script>
+    <script src="script.js?v=72"></script>
   </body>
 </html>

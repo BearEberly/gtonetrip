@@ -670,6 +670,9 @@ let itemMode = "meal";
 let editingItemId = "";
 let editingFamilyEventId = "";
 let pendingSupplyImage = "";
+let pendingSupplyAiImage = "";
+let supplyDraftItems = [];
+let supplyImportBusy = false;
 let pendingScheduleImage = "";
 let pendingProfilePhoto = "";
 let pendingProfilePhotoSource = "";
@@ -841,24 +844,55 @@ function loadProfileSettings(user = api.user) {
   }
 }
 
-function saveProfileSettings(settings) {
-  if (!api.user) return;
+function saveProfileSettings(settings, user = api.user) {
+  if (!user) return;
   let allProfiles = {};
   try {
     allProfiles = JSON.parse(safeGetItem(profileSettingsKey) || "{}") || {};
   } catch {
     allProfiles = {};
   }
-  allProfiles[profileStorageId()] = {
+  allProfiles[profileStorageId(user)] = {
     displayName: shortText(settings.displayName, 60),
+    email: shortText(settings.email, 160),
     photo: imageDataUrlSafe(settings.photo)
   };
   safeSetItem(profileSettingsKey, JSON.stringify(allProfiles));
 }
 
 function displayNameForUser(user = api.user) {
-  const savedName = loadProfileSettings(user).displayName;
-  return shortText(savedName || user?.firstName || "Profile", 60) || "Profile";
+  const saved = loadProfileSettings(user);
+  return shortText(user?.displayName || saved.displayName || user?.firstName || "Profile", 60) || "Profile";
+}
+
+function profilePhotoForUser(user = api.user) {
+  const saved = loadProfileSettings(user);
+  return imageDataUrlSafe(user?.photo) || imageDataUrlSafe(saved.photo);
+}
+
+function normalizeSignedInUser(user) {
+  if (!user || typeof user !== "object") return null;
+  return {
+    ...user,
+    personId: shortText(user.personId, 80),
+    firstName: shortText(user.firstName, 80),
+    familyId: shortText(user.familyId, 40),
+    email: shortText(user.email, 160),
+    displayName: shortText(user.displayName, 60),
+    photo: imageDataUrlSafe(user.photo)
+  };
+}
+
+function renderProfileAdminPanel() {
+  const panel = document.querySelector("#profilePasswordPanel");
+  const password = document.querySelector("#profileSharedPassword");
+  const confirm = document.querySelector("#profileSharedPasswordConfirm");
+  const visible = isBearPowerUser();
+  panel?.classList.toggle("is-hidden", !visible);
+  if (!visible) {
+    if (password) password.value = "";
+    if (confirm) confirm.value = "";
+  }
 }
 
 function profileInitial(name = displayNameForUser()) {
@@ -920,16 +954,20 @@ function renderProfileCropper() {
 
 function populateProfileForm() {
   if (!api.user) return;
-  const settings = loadProfileSettings();
   const name = displayNameForUser();
-  pendingProfilePhoto = imageDataUrlSafe(settings.photo);
+  pendingProfilePhoto = profilePhotoForUser();
   pendingProfilePhotoSource = pendingProfilePhoto;
   resetProfileCrop();
   const nameInput = document.querySelector("#profileNameInput");
   const fileInput = document.querySelector("#profilePhotoInput");
+  const passwordInput = document.querySelector("#profileSharedPassword");
+  const passwordConfirmInput = document.querySelector("#profileSharedPasswordConfirm");
   if (nameInput) nameInput.value = name;
   if (fileInput) fileInput.value = "";
+  if (passwordInput) passwordInput.value = "";
+  if (passwordConfirmInput) passwordConfirmInput.value = "";
   setProfilePhotoPreview(pendingProfilePhoto, name);
+  renderProfileAdminPanel();
   renderProfileCropper();
 }
 
@@ -962,6 +1000,20 @@ async function saveProfileForm(event) {
   event?.preventDefault?.();
   if (!api.user) return;
   const displayName = document.querySelector("#profileNameInput")?.value.trim() || api.user.firstName || "Profile";
+  const sharedPassword = document.querySelector("#profileSharedPassword")?.value.trim() || "";
+  const sharedPasswordConfirm = document.querySelector("#profileSharedPasswordConfirm")?.value.trim() || "";
+  if ((sharedPassword || sharedPasswordConfirm) && !isBearPowerUser()) {
+    showToast("Only Bear can change the shared trip password.");
+    return;
+  }
+  if (sharedPassword !== sharedPasswordConfirm) {
+    showToast("Trip password confirmation does not match.");
+    return;
+  }
+  if (sharedPassword && sharedPassword.length < 4) {
+    showToast("Trip password must be at least 4 characters.");
+    return;
+  }
   if (profileCropSource()) {
     try {
       pendingProfilePhoto = await cropProfilePhoto();
@@ -970,10 +1022,24 @@ async function saveProfileForm(event) {
       return;
     }
   }
-  saveProfileSettings({ displayName, photo: pendingProfilePhoto });
-  renderProfile();
-  closeProfileDrawer();
-  showToast("Profile saved.");
+  try {
+    const response = await authAwareRequest("/profile", {
+      method: "POST",
+      body: {
+        displayName,
+        photo: pendingProfilePhoto,
+        sharedPassword
+      }
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not save profile.");
+    applyProfile(payload.user);
+    applyTripInfo(payload.tripInfo);
+    closeProfileDrawer();
+    showToast(payload.message || "Profile saved.");
+  } catch (error) {
+    showToast(error.message || "Could not save profile.");
+  }
 }
 
 function removeProfilePhoto() {
@@ -1153,11 +1219,19 @@ function hideAuthScreen() {
 }
 
 function applyProfile(user) {
-  api.user = user || null;
-  api.needsProfile = !user;
-  if (!user) tripInfo = null;
-  if (user?.familyId) {
-    selectedFamily = user.familyId;
+  const normalizedUser = normalizeSignedInUser(user);
+  api.user = normalizedUser;
+  api.needsProfile = !normalizedUser;
+  if (!normalizedUser) tripInfo = null;
+  if (normalizedUser) {
+    saveProfileSettings({
+      displayName: normalizedUser.displayName,
+      email: normalizedUser.email,
+      photo: normalizedUser.photo
+    }, normalizedUser);
+  }
+  if (normalizedUser?.familyId) {
+    selectedFamily = normalizedUser.familyId;
     saveSelectedFamily();
   }
   renderProfile();
@@ -1174,10 +1248,11 @@ function renderProfile() {
     return;
   }
   const name = displayNameForUser();
-  const photo = loadProfileSettings().photo || "";
+  const photo = profilePhotoForUser();
   sessionBar?.classList.remove("is-hidden");
   document.querySelector("#profileAvatarButton")?.setAttribute("aria-label", `Open profile for ${name}`);
   setProfilePhotoPreview(photo, name);
+  renderProfileAdminPanel();
 }
 
 function applyTripInfo(info) {
@@ -1776,6 +1851,7 @@ async function loadProfile() {
   const payload = await response.json().catch(() => ({}));
   if (payload.user) {
     applyProfile(payload.user);
+    applyTripInfo(payload.tripInfo);
     setAuthFieldsFromUser(payload.user);
     hideAuthScreen();
     return payload.user;
@@ -3933,6 +4009,179 @@ function setPendingSupplyImage(dataUrl) {
   wrap?.classList.toggle("is-hidden", !pendingSupplyImage);
 }
 
+function supplyDraftDefault(overrides = {}) {
+  return {
+    name: shortText(overrides.name, 120),
+    notes: shortText(overrides.notes || overrides.qty || "", 160),
+    type: bringingTypeSafe(overrides.type || "food"),
+    mealType: mealTypeSafe(overrides.mealType || "any"),
+    days: dayListSafe(overrides.days || []),
+    confidence: Number(overrides.confidence || 0)
+  };
+}
+
+function setPendingSupplyAiImage(dataUrl) {
+  const raw = String(dataUrl || "").trim();
+  pendingSupplyAiImage = raw.startsWith("data:image/") && raw.length <= 1800000 ? raw : "";
+  const wrap = document.querySelector("#supplyAiPreviewWrap");
+  const preview = document.querySelector("#supplyAiPreview");
+  if (preview) preview.src = pendingSupplyAiImage || "";
+  wrap?.classList.toggle("is-hidden", !pendingSupplyAiImage);
+  updateSupplyAiStatus(pendingSupplyAiImage ? "Photo ready. Tap Use AI to add items." : "");
+}
+
+function updateSupplyAiStatus(message = "") {
+  const node = document.querySelector("#supplyAiStatus");
+  if (node) node.textContent = message;
+}
+
+function setSupplyImportBusy(isBusy) {
+  supplyImportBusy = Boolean(isBusy);
+  document.querySelector("#runSupplyAiImport")?.toggleAttribute("disabled", supplyImportBusy || !pendingSupplyAiImage);
+  document.querySelector("#supplyAiUpload")?.toggleAttribute("disabled", supplyImportBusy);
+  document.querySelector("#supplyAiCamera")?.toggleAttribute("disabled", supplyImportBusy);
+}
+
+function renderSupplyDraftRows() {
+  const list = document.querySelector("#supplyDraftRows");
+  if (!list) return;
+  if (!supplyDraftItems.length) supplyDraftItems = [supplyDraftDefault()];
+  list.innerHTML = supplyDraftItems.map((item, index) => {
+    const days = new Set(dayListSafe(item.days));
+    const isNonFood = item.type === "table" || item.mealType === "non-food";
+    const purpose = isNonFood ? "non-food" : mealTypeSafe(item.mealType);
+    const confidence = item.confidence ? `<span>${Math.round(item.confidence * 100)}% sure</span>` : "";
+    return `
+      <article class="supply-draft-row" data-supply-draft-index="${index}">
+        <div class="supply-draft-row-head">
+          <strong>Item ${index + 1}</strong>
+          ${confidence}
+          <button class="icon-button light" type="button" data-remove-supply-draft="${index}" aria-label="Remove item ${index + 1}">
+            <span data-icon="x"></span>
+          </button>
+        </div>
+        <label>
+          Item name
+          <input data-supply-draft-field="name" type="text" value="${escapeText(item.name || "")}" placeholder="Eggs, bacon, chips">
+        </label>
+        <label>
+          Note or amount
+          <input data-supply-draft-field="notes" type="text" value="${escapeText(item.notes || "")}" placeholder="Two dozen, enough for breakfast">
+        </label>
+        <label>
+          What is it for?
+          <select data-supply-draft-field="purpose">
+            <option value="any" ${purpose === "any" ? "selected" : ""}>Any meal / shared</option>
+            <option value="breakfast" ${purpose === "breakfast" ? "selected" : ""}>Breakfast</option>
+            <option value="lunch" ${purpose === "lunch" ? "selected" : ""}>Lunch</option>
+            <option value="dinner" ${purpose === "dinner" ? "selected" : ""}>Dinner</option>
+            <option value="dessert" ${purpose === "dessert" ? "selected" : ""}>Dessert / Snacks</option>
+            <option value="pack-up" ${purpose === "pack-up" ? "selected" : ""}>Pack-up</option>
+            <option value="non-food" ${purpose === "non-food" ? "selected" : ""}>Non-food item</option>
+          </select>
+        </label>
+        <fieldset class="day-picker ${purpose === "non-food" ? "is-disabled" : ""}" aria-disabled="${purpose === "non-food" ? "true" : "false"}">
+          <legend>Days</legend>
+          <div class="day-chip-grid">
+            ${allDayCodes.map((day) => `
+              <button type="button" class="day-chip ${days.has(day) ? "is-selected" : ""}" data-supply-draft-day="${day}" aria-pressed="${days.has(day) ? "true" : "false"}" ${purpose === "non-food" ? "disabled" : ""}>${escapeText(dayLabelShort(day))}</button>
+            `).join("")}
+          </div>
+        </fieldset>
+      </article>
+    `;
+  }).join("");
+}
+
+function supplyDraftsFromDom() {
+  return Array.from(document.querySelectorAll("[data-supply-draft-index]")).map((row) => {
+    const purpose = row.querySelector('[data-supply-draft-field="purpose"]')?.value || "any";
+    const isNonFood = purpose === "non-food";
+    return supplyDraftDefault({
+      name: row.querySelector('[data-supply-draft-field="name"]')?.value || "",
+      notes: row.querySelector('[data-supply-draft-field="notes"]')?.value || "",
+      type: isNonFood ? "table" : "food",
+      mealType: isNonFood ? "any" : purpose,
+      days: isNonFood ? [] : Array.from(row.querySelectorAll("[data-supply-draft-day].is-selected")).map((button) => button.dataset.supplyDraftDay)
+    });
+  });
+}
+
+function syncSupplyDraftsFromDom() {
+  supplyDraftItems = supplyDraftsFromDom();
+}
+
+function addSupplyDraftRow(item = {}) {
+  syncSupplyDraftsFromDom();
+  supplyDraftItems.push(supplyDraftDefault(item));
+  renderSupplyDraftRows();
+  document.querySelector(`[data-supply-draft-index="${supplyDraftItems.length - 1}"] input`)?.focus();
+}
+
+function removeSupplyDraftRow(index) {
+  syncSupplyDraftsFromDom();
+  supplyDraftItems.splice(index, 1);
+  if (!supplyDraftItems.length) supplyDraftItems.push(supplyDraftDefault());
+  renderSupplyDraftRows();
+}
+
+function changeSupplyDraftPurpose(row) {
+  if (!row) return;
+  const purpose = row.querySelector('[data-supply-draft-field="purpose"]')?.value || "any";
+  const disabled = purpose === "non-food";
+  const picker = row.querySelector(".day-picker");
+  picker?.classList.toggle("is-disabled", disabled);
+  picker?.setAttribute("aria-disabled", disabled ? "true" : "false");
+  row.querySelectorAll("[data-supply-draft-day]").forEach((button) => {
+    button.disabled = disabled;
+    if (disabled) {
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+    }
+  });
+}
+
+async function handleSupplyAiImageFile(file) {
+  if (!file) return;
+  try {
+    updateSupplyAiStatus("Preparing photo...");
+    const compressed = await compressImageFile(file, 1300, 0.78);
+    setPendingSupplyAiImage(compressed);
+    setSupplyImportBusy(false);
+  } catch {
+    setPendingSupplyAiImage("");
+    showToast("Could not load that photo.");
+  }
+}
+
+async function runSupplyAiImport() {
+  if (!pendingSupplyAiImage || supplyImportBusy) return;
+  try {
+    setSupplyImportBusy(true);
+    updateSupplyAiStatus("Reading photo...");
+    const response = await authAwareRequest("/supply/import-photo", {
+      method: "POST",
+      body: { image: pendingSupplyAiImage }
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not read that photo.");
+    const items = Array.isArray(payload.items) ? payload.items.map((item) => supplyDraftDefault(item)).filter((item) => item.name) : [];
+    if (!items.length) {
+      updateSupplyAiStatus("No clear items found. Add them manually below.");
+      return;
+    }
+    syncSupplyDraftsFromDom();
+    const existing = supplyDraftItems.filter((item) => item.name);
+    supplyDraftItems = [...existing, ...items].slice(0, 30);
+    renderSupplyDraftRows();
+    updateSupplyAiStatus(`Added ${items.length} draft item${items.length === 1 ? "" : "s"}. Review before saving.`);
+  } catch (error) {
+    updateSupplyAiStatus(error instanceof Error ? error.message : "Could not read that photo.");
+  } finally {
+    setSupplyImportBusy(false);
+  }
+}
+
 function setSupplyDaySelection(days = []) {
   const selected = new Set(dayListSafe(days));
   document.querySelectorAll("[data-supply-day]").forEach((button) => {
@@ -4146,18 +4395,21 @@ function openItemDrawer(mode, itemId = "") {
   const isEvent = mode === "event";
   const isEdit = Boolean(itemId);
   const isMealEdit = mode === "meal" && isEdit;
+  const isSupplyAdd = mode === "supply" && !isEdit;
   const canDeleteSupply = mode === "supply" && isEdit && canManageCustomItem(state.supplies.find((item) => item.id === itemId));
   if (title) title.textContent = isEvent
     ? (isEdit ? "Edit non-food event" : "Add non-food event")
     : mode === "meal"
       ? (isEdit ? "Edit meal plan" : "Add meal slot")
-      : (isEdit ? "Edit item" : "Add item");
+      : (isEdit ? "Edit item" : "Add items");
   if (help) help.textContent = isEvent
     ? "Add a trip event that should show on the calendar but not under meals."
     : mode === "meal"
       ? "Set the recipe for this meal. Bringing items link in automatically."
-      : "Start with the item name. Meal, day, and picture details are optional.";
-  if (save) save.textContent = isEdit ? "Save changes" : (isEvent ? "Add event" : mode === "meal" ? "Add meal" : "Save item");
+      : isSupplyAdd
+        ? "Add one item manually, add another row, or use a photo to fill drafts."
+        : "Start with the item name. Meal, day, and picture details are optional.";
+  if (save) save.textContent = isEdit ? "Save changes" : (isEvent ? "Add event" : mode === "meal" ? "Add meal" : "Save items");
   deleteItem?.classList.toggle("is-hidden", !canDeleteSupply);
   deleteItem?.closest(".drawer-footer")?.classList.toggle("has-delete", canDeleteSupply);
   if (deleteItem) deleteItem.dataset.deleteEditingSupply = canDeleteSupply ? itemId : "";
@@ -4168,8 +4420,17 @@ function openItemDrawer(mode, itemId = "") {
   });
   document.querySelector("#itemForm")?.reset();
   setPendingSupplyImage("");
+  setPendingSupplyAiImage("");
   setSupplyDaySelection([]);
   updateSupplyDayAvailability();
+  document.querySelector("#supplyMultiFields")?.classList.toggle("is-hidden", !isSupplyAdd);
+  document.querySelector("#supplySingleFields")?.classList.toggle("is-hidden", isSupplyAdd);
+  document.querySelector("#supplySingleDetails")?.classList.toggle("is-hidden", isSupplyAdd);
+  if (isSupplyAdd) {
+    supplyDraftItems = [supplyDraftDefault()];
+    renderSupplyDraftRows();
+    setSupplyImportBusy(false);
+  }
   if (typeWrap) typeWrap.classList.toggle("is-hidden", isEvent);
   if (typeLabel) typeLabel.textContent = "Meal";
   if (textLabel) textLabel.textContent = isEvent ? "Event name" : "Idea";
@@ -4204,7 +4465,7 @@ function openItemDrawer(mode, itemId = "") {
   document.querySelector("#drawerBackdrop")?.classList.remove("is-hidden");
   document.querySelector("#itemDrawer")?.classList.remove("is-hidden");
   window.setTimeout(() => {
-    const firstField = mode === "meal" ? "#mealIdeaDay" : "#supplyName";
+    const firstField = mode === "meal" ? "#mealIdeaDay" : (isSupplyAdd ? "[data-supply-draft-field='name']" : "#supplyName");
     const focusField = isEvent ? "#mealIdeaDay" : firstField;
     document.querySelector(focusField)?.focus();
   }, 0);
@@ -4233,7 +4494,7 @@ function closeAllDrawers() {
   lastFocusedElement = null;
 }
 
-function submitItemForm(event) {
+async function submitItemForm(event) {
   event.preventDefault();
   if (itemMode === "meal" || itemMode === "event") {
     const isEvent = itemMode === "event";
@@ -4274,27 +4535,27 @@ function submitItemForm(event) {
     return;
   }
 
-  const payload = {
-    name: document.querySelector("#supplyName")?.value.trim() || "",
-    notes: document.querySelector("#supplyQty")?.value.trim() || "",
-    type: "food",
-    mealType: "any",
-    days: selectedSupplyDays(),
-    image: pendingSupplyImage
-  };
-  const selectedPurpose = document.querySelector("#supplyMealType")?.value || "any";
-  if (selectedPurpose === "non-food") {
-    payload.type = "table";
-    payload.mealType = "any";
-    payload.days = [];
-  } else {
-    payload.mealType = selectedPurpose;
-  }
-  if (!payload.name) {
-    showToast("Add an item name first.");
-    return;
-  }
   if (editingItemId) {
+    const payload = {
+      name: document.querySelector("#supplyName")?.value.trim() || "",
+      notes: document.querySelector("#supplyQty")?.value.trim() || "",
+      type: "food",
+      mealType: "any",
+      days: selectedSupplyDays(),
+      image: pendingSupplyImage
+    };
+    const selectedPurpose = document.querySelector("#supplyMealType")?.value || "any";
+    if (selectedPurpose === "non-food") {
+      payload.type = "table";
+      payload.mealType = "any";
+      payload.days = [];
+    } else {
+      payload.mealType = selectedPurpose;
+    }
+    if (!payload.name) {
+      showToast("Add an item name first.");
+      return;
+    }
     const supply = state.supplies.find((item) => item.id === editingItemId);
     performAction("updateSupply", { id: editingItemId, ...payload }, () => {
       if (!supply) return;
@@ -4310,10 +4571,34 @@ function submitItemForm(event) {
     closeItemDrawer();
     return;
   }
-  performAction("addSupply", payload, () => {
-    state.supplies.push(createSupplyItem(payload));
-  }, "Bringing item added.");
-  closeItemDrawer();
+  const drafts = supplyDraftsFromDom().filter((item) => item.name);
+  if (!drafts.length) {
+    showToast("Add at least one item first.");
+    return;
+  }
+  const save = document.querySelector("#saveItem");
+  save?.toggleAttribute("disabled", true);
+  let savedCount = 0;
+  for (const draft of drafts) {
+    const payload = {
+      name: draft.name,
+      notes: draft.notes,
+      type: draft.type,
+      mealType: draft.mealType,
+      days: draft.days,
+      image: ""
+    };
+    const saved = await performAction("addSupply", payload, () => {
+      state.supplies.push(createSupplyItem(payload));
+    }, `Added ${draft.name}.`);
+    if (saved) savedCount += 1;
+    else break;
+  }
+  save?.toggleAttribute("disabled", false);
+  if (savedCount) {
+    showToast(`Added ${savedCount} item${savedCount === 1 ? "" : "s"}.`);
+    closeItemDrawer();
+  }
 }
 
 function addMealIdea() {
@@ -4615,6 +4900,32 @@ function bindEvents() {
     catch { showToast(https); }
   });
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
+  document.querySelector("#addSupplyDraftRow")?.addEventListener("click", () => addSupplyDraftRow());
+  document.querySelector("#supplyDraftRows")?.addEventListener("click", (event) => {
+    const remove = event.target.closest("[data-remove-supply-draft]");
+    if (remove) {
+      removeSupplyDraftRow(Number(remove.dataset.removeSupplyDraft || 0));
+      return;
+    }
+    const day = event.target.closest("[data-supply-draft-day]");
+    if (day) {
+      day.classList.toggle("is-selected");
+      day.setAttribute("aria-pressed", day.classList.contains("is-selected") ? "true" : "false");
+    }
+  });
+  document.querySelector("#supplyDraftRows")?.addEventListener("change", (event) => {
+    const purpose = event.target.closest('[data-supply-draft-field="purpose"]');
+    if (purpose) changeSupplyDraftPurpose(purpose.closest("[data-supply-draft-index]"));
+  });
+  document.querySelector("#runSupplyAiImport")?.addEventListener("click", runSupplyAiImport);
+  document.querySelector("#supplyAiUpload")?.addEventListener("change", async (event) => {
+    await handleSupplyAiImageFile(event.target.files?.[0]);
+    event.target.value = "";
+  });
+  document.querySelector("#supplyAiCamera")?.addEventListener("change", async (event) => {
+    await handleSupplyAiImageFile(event.target.files?.[0]);
+    event.target.value = "";
+  });
   document.querySelector("#mealIdeaDay")?.addEventListener("change", renderMealAvailablePanel);
   document.querySelector("#mealIdeaType")?.addEventListener("change", renderMealAvailablePanel);
   document.querySelector("#familyEventForm")?.addEventListener("submit", (event) => {

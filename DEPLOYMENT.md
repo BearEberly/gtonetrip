@@ -32,6 +32,7 @@ Pages serves the static files from the repo root. There is no Node server requir
 - `POST /login`
 - `POST /logout`
 - `GET /me`
+- `POST /profile`
 - `GET /state`
 - `POST /action`
 - `GET /passkey/status`
@@ -40,7 +41,7 @@ Pages serves the static files from the repo root. There is no Node server requir
 - `POST /passkey/auth/options`
 - `POST /passkey/auth/verify`
 
-The function uses the shared password `1333` plus the selected adult name.
+The function uses the shared trip password plus the selected adult name. The default fallback is `1333`, but the organizer can now change the shared password online and have that apply everywhere.
 
 ## Database Responsibilities
 
@@ -51,7 +52,7 @@ Supabase stores:
 - `public.passkey_credentials`
 - `public.passkey_challenges`
 
-`trip_state` holds the singleton shared board state under key `primary`.
+`trip_state` holds the singleton shared board state under key `primary`, including the shared trip board plus shared profile display/photo settings.
 
 ## Cloudflare Setup
 
