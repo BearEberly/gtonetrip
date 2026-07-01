@@ -26,7 +26,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=72">
+    <link rel="stylesheet" href="styles.css?v=73">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -361,6 +361,19 @@
                   <span class="destination-card-cta">Open</span>
                 </span>
               </button>
+
+              <button class="destination-card home-destination-button is-users is-hidden" type="button" id="openUsersDestination" aria-label="Open Users">
+                <span class="destination-card-copy">
+                  <p class="destination-card-kicker">Power user</p>
+                  <h3>Users</h3>
+                  <p>See profiles, families, photos, and reset passwords.</p>
+                  <span class="destination-card-stat"><strong id="homeUsersCount">0</strong> users</span>
+                  <span class="destination-card-note">Bear only</span>
+                </span>
+                <span class="destination-card-actions">
+                  <span class="destination-card-cta">Manage</span>
+                </span>
+              </button>
             </div>
           </section>
         </section>
@@ -542,6 +555,26 @@
 
       <div class="drawer-footer profile-footer">
         <button type="button" class="secondary-action" id="logoutProfile">Sign out</button>
+      </div>
+    </aside>
+
+    <aside class="profile-drawer users-drawer is-hidden" id="usersDrawer" aria-labelledby="usersDrawerTitle" aria-modal="true" role="dialog">
+      <div class="drawer-header">
+        <div>
+          <p>Bear only</p>
+          <h2 id="usersDrawerTitle">Users</h2>
+        </div>
+        <button class="icon-button dark" type="button" id="closeUsersDrawer" aria-label="Close users">
+          <span data-icon="x"></span>
+        </button>
+      </div>
+
+      <div class="users-panel">
+        <div class="users-panel-summary">
+          <strong id="usersPanelCount">0 users</strong>
+          <span>Update names, family assignment, email, or reset a password.</span>
+        </div>
+        <div class="users-list" id="usersList" aria-live="polite"></div>
       </div>
     </aside>
 
@@ -775,6 +808,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=82"></script>
+    <script src="script.js?v=83"></script>
   </body>
 </html>

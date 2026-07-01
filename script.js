@@ -686,6 +686,8 @@ let profilePhotoCrop = { x: 0, y: 0, zoom: 1 };
 const profileCropPointers = new Map();
 let profileCropDrag = null;
 let profileCropPinch = null;
+let adminUsers = [];
+let adminUsersBusy = false;
 let familyScheduleDrafts = [];
 let familyScheduleSourceText = "";
 let familyScheduleScanBusy = false;
@@ -891,7 +893,8 @@ function normalizeSignedInUser(user) {
     familyId: shortText(user.familyId, 40),
     email: shortText(user.email, 160),
     displayName: shortText(user.displayName, 60),
-    photo: imageDataUrlSafe(user.photo)
+    photo: imageDataUrlSafe(user.photo),
+    hasPassword: Boolean(user.hasPassword)
   };
 }
 
@@ -1001,7 +1004,7 @@ function openProfileDrawer() {
 function closeProfileDrawer() {
   document.querySelector("#profileDrawer")?.classList.add("is-hidden");
   resetProfileCropGestureState();
-  const anotherDrawerOpen = Boolean(document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden)"));
+  const anotherDrawerOpen = Boolean(document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden), #usersDrawer:not(.is-hidden)"));
   if (!anotherDrawerOpen) {
     document.body.classList.remove("drawer-open");
     document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
@@ -1279,6 +1282,7 @@ function renderProfile() {
   if (!api.user) {
     sessionBar?.classList.add("is-hidden");
     closeProfileDrawer();
+    closeUsersDrawer();
     return;
   }
   const name = displayNameForUser();
@@ -1289,6 +1293,195 @@ function renderProfile() {
   if (titleNode) titleNode.textContent = profileTitleForUser();
   setProfilePhotoPreview(photo, name);
   renderProfileAdminPanel();
+  renderAdminHomeAccess();
+}
+
+function normalizeAdminUser(user) {
+  if (!user || typeof user !== "object") return null;
+  const personId = shortText(user.personId, 80);
+  if (!personId) return null;
+  const catalogUser = attendeeById(personId) || {};
+  return {
+    personId,
+    firstName: shortText(user.firstName || catalogUser.firstName || catalogUser.name, 80),
+    familyId: families.some((family) => family.id === user.familyId) ? user.familyId : (catalogUser.familyId || ""),
+    email: shortText(user.email, 160),
+    displayName: shortText(user.displayName, 60),
+    photo: imageDataUrlSafe(user.photo),
+    hasPhoto: Boolean(user.hasPhoto || imageDataUrlSafe(user.photo)),
+    hasPassword: Boolean(user.hasPassword),
+    updatedAt: shortText(user.updatedAt, 80)
+  };
+}
+
+function familyOptionsMarkup(selectedFamilyId = "") {
+  return families.map((family) => `
+    <option value="${escapeText(family.id)}" ${family.id === selectedFamilyId ? "selected" : ""}>${escapeText(family.name)}</option>
+  `).join("");
+}
+
+function adminUserName(user) {
+  return user.displayName || user.firstName || "User";
+}
+
+function renderUsersDrawer(message = "") {
+  const list = document.querySelector("#usersList");
+  const count = document.querySelector("#usersPanelCount");
+  const usersCount = document.querySelector("#homeUsersCount");
+  if (count) count.textContent = `${adminUsers.length || attendees.length} user${(adminUsers.length || attendees.length) === 1 ? "" : "s"}`;
+  if (usersCount) usersCount.textContent = String(adminUsers.length || attendees.length);
+  if (!list) return;
+  if (!isBearPowerUser()) {
+    list.innerHTML = `<div class="users-empty">Only Bear can manage users.</div>`;
+    return;
+  }
+  if (adminUsersBusy) {
+    list.innerHTML = `<div class="users-empty">Loading users...</div>`;
+    return;
+  }
+  if (!adminUsers.length) {
+    list.innerHTML = `<div class="users-empty">${escapeText(message || "Open Users to load profiles.")}</div>`;
+    return;
+  }
+  list.innerHTML = adminUsers.map((user) => {
+    const family = familyById(user.familyId);
+    const photo = imageDataUrlSafe(user.photo);
+    const name = adminUserName(user);
+    return `
+      <form class="user-admin-card" data-admin-user-form="${escapeText(user.personId)}">
+        <div class="user-admin-head">
+          <div class="user-admin-avatar">
+            ${photo ? `<img src="${escapeText(photo)}" alt="">` : `<span>${escapeText(profileInitial(name))}</span>`}
+          </div>
+          <div>
+            <strong>${escapeText(name)}</strong>
+            <span>${escapeText(user.firstName)} · ${escapeText(family?.name || "No family")}</span>
+          </div>
+          <span class="user-admin-pill">${user.hasPassword ? "Custom password" : "Shared password"}</span>
+        </div>
+        <div class="user-admin-grid">
+          <label>
+            Display name
+            <input name="displayName" type="text" value="${escapeText(user.displayName || user.firstName)}" placeholder="${escapeText(user.firstName)}">
+          </label>
+          <label>
+            Family
+            <select name="familyId">${familyOptionsMarkup(user.familyId)}</select>
+          </label>
+          <label class="user-admin-wide">
+            Email
+            <input name="email" type="email" value="${escapeText(user.email || "")}" placeholder="Optional">
+          </label>
+          <label>
+            New password
+            <input name="profilePassword" type="password" autocomplete="new-password" placeholder="Leave blank">
+          </label>
+          <label>
+            Confirm password
+            <input name="profilePasswordConfirm" type="password" autocomplete="new-password" placeholder="Leave blank">
+          </label>
+          <label class="user-admin-check ${user.hasPhoto ? "" : "is-disabled"}">
+            <input name="removePhoto" type="checkbox" ${user.hasPhoto ? "" : "disabled"}>
+            Remove picture
+          </label>
+        </div>
+        <div class="user-admin-actions">
+          <span>${user.updatedAt ? `Updated ${escapeText(new Date(user.updatedAt).toLocaleDateString())}` : "No profile changes yet"}</span>
+          <button class="primary-action compact-action" type="submit">Save user</button>
+        </div>
+      </form>
+    `;
+  }).join("");
+}
+
+async function fetchAdminUsers() {
+  if (!isBearPowerUser()) return false;
+  adminUsersBusy = true;
+  renderUsersDrawer();
+  try {
+    const response = await authAwareRequest("/admin/users", { cache: "no-store" });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not load users.");
+    adminUsers = Array.isArray(payload.users) ? payload.users.map(normalizeAdminUser).filter(Boolean) : [];
+    renderUsersDrawer();
+    renderAdminHomeAccess();
+    return true;
+  } catch (error) {
+    renderUsersDrawer(error.message || "Could not load users.");
+    showToast(error.message || "Could not load users.");
+    return false;
+  } finally {
+    adminUsersBusy = false;
+    renderUsersDrawer();
+  }
+}
+
+async function openUsersDrawer() {
+  if (!isBearPowerUser()) {
+    showToast("Only Bear can manage users.");
+    return;
+  }
+  lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  document.body.classList.add("drawer-open");
+  document.querySelector("#drawerBackdrop")?.classList.remove("is-hidden");
+  document.querySelector("#usersDrawer")?.classList.remove("is-hidden");
+  renderUsersDrawer();
+  await fetchAdminUsers();
+  window.setTimeout(() => document.querySelector("#closeUsersDrawer")?.focus(), 0);
+}
+
+function closeUsersDrawer() {
+  document.querySelector("#usersDrawer")?.classList.add("is-hidden");
+  const anotherDrawerOpen = Boolean(document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden), .profile-drawer:not(.is-hidden)"));
+  if (!anotherDrawerOpen) {
+    document.body.classList.remove("drawer-open");
+    document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
+  }
+  lastFocusedElement?.focus?.();
+  lastFocusedElement = null;
+}
+
+async function saveAdminUserForm(form) {
+  if (!isBearPowerUser()) return;
+  const personId = form?.dataset?.adminUserForm || "";
+  const password = form.querySelector("[name='profilePassword']")?.value.trim() || "";
+  const confirm = form.querySelector("[name='profilePasswordConfirm']")?.value.trim() || "";
+  if (password !== confirm) {
+    showToast("Password confirmation does not match.");
+    return;
+  }
+  if (password && password.length < 4) {
+    showToast("Password must be at least 4 characters.");
+    return;
+  }
+  const saveButton = form.querySelector("button[type='submit']");
+  saveButton?.toggleAttribute("disabled", true);
+  try {
+    const body = {
+      personId,
+      displayName: form.querySelector("[name='displayName']")?.value.trim() || "",
+      email: form.querySelector("[name='email']")?.value.trim() || "",
+      familyId: form.querySelector("[name='familyId']")?.value || "",
+      removePhoto: Boolean(form.querySelector("[name='removePhoto']")?.checked),
+      clientId: api.clientId
+    };
+    if (password) body.profilePassword = password;
+    const response = await authAwareRequest("/admin/users", {
+      method: "POST",
+      body
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not save user.");
+    adminUsers = Array.isArray(payload.users) ? payload.users.map(normalizeAdminUser).filter(Boolean) : adminUsers;
+    if (payload.updatedUser?.personId === api.user?.personId) applyProfile(payload.updatedUser);
+    renderUsersDrawer();
+    renderAdminHomeAccess();
+    showToast(payload.message || "User saved.");
+  } catch (error) {
+    showToast(error.message || "Could not save user.");
+  } finally {
+    saveButton?.toggleAttribute("disabled", false);
+  }
 }
 
 function applyTripInfo(info) {
@@ -1396,6 +1589,17 @@ function renderHomeHub() {
   if (subcopy) subcopy.textContent = count
     ? `${count} shared family event${count === 1 ? "" : "s"} remembered for everyone`
     : "Sports, recitals, school dates, and anything the family should all see";
+  renderAdminHomeAccess();
+}
+
+function renderAdminHomeAccess() {
+  const grid = document.querySelector("#homeDestinationCards");
+  const usersButton = document.querySelector("#openUsersDestination");
+  const usersCount = document.querySelector("#homeUsersCount");
+  const isAdmin = isBearPowerUser();
+  grid?.classList.toggle("has-admin-users", isAdmin);
+  usersButton?.classList.toggle("is-hidden", !isAdmin);
+  if (usersCount) usersCount.textContent = String(adminUsers.length || attendees.length);
 }
 
 function resetFamilyEventForm() {
@@ -3984,9 +4188,12 @@ function openDrawer() {
 }
 
 function closeDrawer() {
-  document.body.classList.remove("drawer-open");
-  document.querySelector("#drawerBackdrop").classList.add("is-hidden");
   document.querySelector("#checkinDrawer").classList.add("is-hidden");
+  const anotherDrawerOpen = Boolean(document.querySelector(".item-drawer:not(.is-hidden), .profile-drawer:not(.is-hidden)"));
+  if (!anotherDrawerOpen) {
+    document.body.classList.remove("drawer-open");
+    document.querySelector("#drawerBackdrop").classList.add("is-hidden");
+  }
   lastFocusedElement?.focus?.();
   lastFocusedElement = null;
 }
@@ -4692,8 +4899,8 @@ function openItemDrawer(mode, itemId = "") {
 function closeItemDrawer() {
   document.querySelector("#itemDrawer")?.classList.add("is-hidden");
   editingItemId = "";
-  const checkinOpen = !document.querySelector("#checkinDrawer")?.classList.contains("is-hidden");
-  if (!checkinOpen) {
+  const anotherDrawerOpen = Boolean(document.querySelector(".checkin-drawer:not(.is-hidden), .profile-drawer:not(.is-hidden)"));
+  if (!anotherDrawerOpen) {
     document.body.classList.remove("drawer-open");
     document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
   }
@@ -4705,6 +4912,7 @@ function closeAllDrawers() {
   document.querySelector("#checkinDrawer")?.classList.add("is-hidden");
   document.querySelector("#itemDrawer")?.classList.add("is-hidden");
   document.querySelector("#profileDrawer")?.classList.add("is-hidden");
+  document.querySelector("#usersDrawer")?.classList.add("is-hidden");
   document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
   document.body.classList.remove("drawer-open");
   editingItemId = "";
@@ -4954,6 +5162,9 @@ function bindEvents() {
     const jump = event.target.closest("[data-tab-jump]");
     if (jump) setActivePanel(jump.dataset.tabJump);
 
+    const usersDestination = event.target.closest("#openUsersDestination");
+    if (usersDestination) openUsersDrawer();
+
     const mealButton = event.target.closest("[data-claim-meal]");
     if (mealButton) claimMeal(mealButton.dataset.claimMeal);
 
@@ -5083,6 +5294,13 @@ function bindEvents() {
     }
   });
 
+  document.addEventListener("submit", (event) => {
+    const form = event.target.closest("[data-admin-user-form]");
+    if (!form) return;
+    event.preventDefault();
+    saveAdminUserForm(form);
+  });
+
   document.querySelectorAll(".day-tabs button").forEach((button) => {
     button.addEventListener("click", () => {
       selectedDay = button.dataset.day;
@@ -5098,6 +5316,7 @@ function bindEvents() {
   document.querySelector("#closeDrawer")?.addEventListener("click", closeDrawer);
   document.querySelector("#closeItemDrawer")?.addEventListener("click", closeItemDrawer);
   document.querySelector("#closeProfileDrawer")?.addEventListener("click", closeProfileDrawer);
+  document.querySelector("#closeUsersDrawer")?.addEventListener("click", closeUsersDrawer);
   document.querySelector("#cancelItem")?.addEventListener("click", closeItemDrawer);
   document.querySelector("#deleteItem")?.addEventListener("click", deleteEditingSupplyFromDrawer);
   document.querySelector("#drawerBackdrop")?.addEventListener("click", closeAllDrawers);

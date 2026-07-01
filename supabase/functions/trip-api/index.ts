@@ -989,26 +989,29 @@ function profileRowToUser(
   user: { personId: string; firstName: string; familyId: string },
   row?: Record<string, unknown> | null
 ) {
+  const passwordHash = textSafe(row?.passwordHash, "", 200);
   return {
     personId: user.personId,
     firstName: textSafe(row?.firstName, user.firstName, 80),
     familyId: familySafe(row?.familyId) || user.familyId,
     email: emailSafe(row?.email),
     displayName: displayNameSafe(row?.displayName),
-    photo: imageDataUrlSafe(row?.photo)
+    photo: imageDataUrlSafe(row?.photo),
+    hasPassword: Boolean(passwordHash)
   };
 }
 
 async function saveTripProfile(
   user: { personId: string; firstName: string; familyId: string },
-  patch: { email?: unknown; displayName?: unknown; photo?: unknown; passwordHash?: unknown } = {}
+  patch: { email?: unknown; displayName?: unknown; photo?: unknown; passwordHash?: unknown; familyId?: unknown } = {}
 ) {
   const state = await getStoredState();
   const profiles = normalizeSharedProfiles(state.sharedProfiles);
   const existing = profiles[user.personId] || null;
+  const nextFamilyId = hasOwn(patch, "familyId") ? familySafe(patch.familyId) || user.familyId : familySafe(existing?.familyId) || user.familyId;
   const nextRow: Record<string, unknown> = {
     personId: user.personId,
-    familyId: user.familyId,
+    familyId: nextFamilyId,
     firstName: user.firstName,
     email: hasOwn(patch, "email") ? emailSafe(patch.email) : emailSafe(existing?.email),
     displayName: hasOwn(patch, "displayName") ? displayNameSafe(patch.displayName) : displayNameSafe(existing?.displayName),
@@ -1030,6 +1033,27 @@ async function saveTripProfile(
     return profileRowToUser(user, (savedState.sharedProfiles as Record<string, Record<string, unknown>>)[user.personId]);
   }
   return profileRowToUser(user, nextRow);
+}
+
+function adminProfileRowForUser(user: { personId: string; firstName: string; familyId: string }, row?: Record<string, unknown> | null) {
+  const hydrated = profileRowToUser(user, row);
+  return {
+    personId: hydrated.personId,
+    firstName: hydrated.firstName,
+    familyId: hydrated.familyId,
+    email: hydrated.email,
+    displayName: hydrated.displayName,
+    photo: hydrated.photo,
+    hasPhoto: Boolean(hydrated.photo),
+    hasPassword: Boolean(hydrated.hasPassword),
+    updatedAt: textSafe(row?.updatedAt, "", 80)
+  };
+}
+
+async function listAdminProfiles() {
+  const state = await getStoredState();
+  const profiles = normalizeSharedProfiles(state.sharedProfiles);
+  return [...attendeeCatalog.values()].map((user) => adminProfileRowForUser(user, profiles[user.personId]));
 }
 
 async function hydrateUserProfile(user: { personId: string; firstName: string; familyId: string }) {
@@ -2083,6 +2107,63 @@ Deno.serve(async (request) => {
       return json({ ok: true, user: session.user, tripInfo });
     }
 
+    if (route === "/admin/users" && request.method === "GET") {
+      if (!isBearPowerUser(session.user.personId)) {
+        return json({ ok: false, message: "Bear can manage users." }, 403);
+      }
+      const users = await listAdminProfiles();
+      return json({ ok: true, users, tripInfo });
+    }
+
+    if (route === "/admin/users" && request.method === "POST") {
+      if (!isBearPowerUser(session.user.personId)) {
+        return json({ ok: false, message: "Bear can manage users." }, 403);
+      }
+      const body = await request.json() as Record<string, unknown>;
+      const targetUser = userFromPersonId(body.personId);
+      if (!targetUser) return json({ ok: false, message: "User not found." }, 404);
+      const rawPassword = String(body.profilePassword ?? "").trim();
+      const wantsPasswordUpdate = hasOwn(body, "profilePassword") && Boolean(rawPassword);
+      if (wantsPasswordUpdate && !sharedPasswordSafe(rawPassword)) {
+        return json({ ok: false, message: "Password must be at least 4 characters." }, 400);
+      }
+
+      const beforeUsers = await listAdminProfiles();
+      const beforeUser = beforeUsers.find((user) => user.personId === targetUser.personId) || null;
+      const profilePatch: { email?: unknown; displayName?: unknown; familyId?: unknown; photo?: unknown; passwordHash?: unknown } = {
+        displayName: body.displayName,
+        email: body.email,
+        familyId: body.familyId
+      };
+      if (body.removePhoto) profilePatch.photo = "";
+      if (wantsPasswordUpdate) profilePatch.passwordHash = await sha256Hex(rawPassword);
+      const updatedUser = await saveTripProfile(targetUser, profilePatch);
+      const users = await listAdminProfiles();
+      const updatedAdminUser = users.find((user) => user.personId === updatedUser.personId) || adminProfileRowForUser(targetUser);
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "adminProfileUpdate",
+        payload: body,
+        actor: session.user,
+        clientId: textSafe(body.clientId, "", 180),
+        message: wantsPasswordUpdate ? `Profile and password updated for ${updatedUser.firstName}.` : `Profile updated for ${updatedUser.firstName}.`,
+        success: true,
+        entityType: "profile",
+        entityId: updatedUser.personId,
+        entityLabel: updatedUser.displayName || updatedUser.firstName,
+        oldValues: beforeUser,
+        newValues: updatedAdminUser,
+        source: "trip-api-admin"
+      });
+      return json({
+        ok: true,
+        users,
+        updatedUser: updatedAdminUser,
+        tripInfo,
+        message: wantsPasswordUpdate ? "Profile and password saved." : "Profile saved."
+      });
+    }
+
     if (route === "/profile" && request.method === "POST") {
       const body = await request.json() as Record<string, unknown>;
       const rawProfilePassword = String(body.profilePassword ?? "");
@@ -2130,12 +2211,13 @@ Deno.serve(async (request) => {
         hasPhoto: Boolean(session.user.photo),
         hasPassword: Boolean(session.user.hasPassword)
       };
-      const updatedUser = await saveTripProfile(session.user, {
+      const profilePatch: { displayName?: unknown; photo?: unknown; email?: unknown; passwordHash?: unknown } = {
         displayName: body.displayName,
-        photo: body.photo,
-        email: body.email,
-        passwordHash: wantsPasswordUpdate ? await sha256Hex(rawProfilePassword) : undefined
-      });
+        email: body.email
+      };
+      if (wantsPhotoUpdate) profilePatch.photo = body.photo;
+      if (wantsPasswordUpdate) profilePatch.passwordHash = await sha256Hex(rawProfilePassword);
+      const updatedUser = await saveTripProfile(session.user, profilePatch);
       await trySendGoogleSheetsWebhookLog({
         request,
         actionType: "profileUpdate",
