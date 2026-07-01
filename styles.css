@@ -4682,16 +4682,16 @@ button { -webkit-tap-highlight-color: transparent; }
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 1px;
+  gap: 0;
   min-width: 0;
   min-height: 58px;
-  padding: 8px 3px 7px;
+  padding: 9px 3px 8px;
   border-radius: 18px;
   color: #6f786f;
   font-size: 0.64rem;
   font-weight: 750;
   letter-spacing: 0.01em;
-  line-height: 1.05;
+  line-height: 1;
   transition: transform 160ms ease, color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
