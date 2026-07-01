@@ -246,21 +246,6 @@ const gearChecklist = [
   { id: "gear-board-games", label: "Board games: Cranium and Riggs charades" }
 ];
 
-const tripTodoChecklist = [
-  { id: "shell-door-code", label: "Get the door code from Shell" },
-  { id: "shell-wifi", label: "Get the Wi-Fi name and password" },
-  { id: "shell-fridge", label: "Confirm fridge and freezer space" },
-  { id: "shell-grill-type", label: "Confirm the cabin grill type" },
-  { id: "shell-sequoia-access", label: "Check Sequoia Woods guest access" },
-  { id: "shell-checkout", label: "Confirm Monday checkout timing" },
-  { id: "shell-trash", label: "Get trash and recycling instructions" },
-  { id: "gear-pizza-oven", label: "Ask Nicholas about the pizza oven" },
-  { id: "gear-blackstone", label: "Pack the two-burner Blackstone" },
-  { id: "gear-propane", label: "Pack propane and a lighter" },
-  { id: "gear-seasonings", label: "Pack steak seasonings" },
-  { id: "gear-board-games", label: "Pack Cranium and Riggs charades" }
-];
-
 const nearbyFoodSpots = [
   {
     id: "sarafinas",
@@ -590,6 +575,21 @@ const mealTypeLabels = {
   "pack-up": "Pack-up",
   any: "Any meal / shared"
 };
+const defaultFamilyEventTypes = [
+  "Practice",
+  "Game",
+  "Recital",
+  "Performance",
+  "School",
+  "Birthday",
+  "Family",
+  "Appointment",
+  "Other"
+];
+const defaultFamilyPeople = ["Luca", "Sophia", "Rocco", "Gio", "Oli", "Viv", "Family"];
+const defaultFamilyLocations = ["School", "Soccer field", "Baseball field", "Dance studio", "Theater", "Gym"];
+const familyCalendarName = "G Family";
+const familyScheduleMaxDrafts = 24;
 const bringingTypeLabels = {
   food: "Food",
   drink: "Drink",
@@ -633,6 +633,7 @@ const selectedFamilyKey = "cabin-game-plan-selected-family-v1";
 const clientIdKey = "cabin-game-plan-client-id-v1";
 const sessionTokenKey = "gtonetrip-session-token-v1";
 const installPromptDismissedKey = "cabin-game-plan-install-dismissed-v1";
+const profileSettingsKey = "gre-family-profile-settings-v1";
 const supabaseConfig = window.APP_CONFIG || {};
 const supabaseFunctionBase = `${supabaseConfig.supabaseUrl}/functions/v1/${supabaseConfig.tripApiFunction}`;
 const supabasePublishableKey = supabaseConfig.supabasePublishableKey || "";
@@ -641,6 +642,7 @@ const api = {
   eventSource: null,
   statePoller: null,
   hasLoadedSharedState: false,
+  lastStateKey: "",
   user: null,
   needsProfile: true
 };
@@ -654,8 +656,10 @@ const passkeyState = {
 
 let state = loadLocalState();
 let selectedDay = "wed";
-let foodView = "meals";
+let foodView = "family";
 let foodDay = "";
+let todoView = "things";
+let currentActivePanel = "home";
 let selectedFamily = loadSelectedFamily();
 let sessionToken = loadSessionToken();
 let tripInfo = null;
@@ -664,7 +668,15 @@ let lastFocusedElement = null;
 let logisticsEditMode = "";
 let itemMode = "meal";
 let editingItemId = "";
+let editingFamilyEventId = "";
 let pendingSupplyImage = "";
+let pendingScheduleImage = "";
+let pendingProfilePhoto = "";
+let pendingProfilePhotoSource = "";
+let profilePhotoCrop = { x: 0, y: 0, zoom: 1 };
+let familyScheduleDrafts = [];
+let familyScheduleSourceText = "";
+let familyScheduleScanBusy = false;
 let deferredInstallPrompt = null;
 let waitingServiceWorker = null;
 let hasReloadedForServiceWorker = false;
@@ -810,6 +822,163 @@ async function handleInstallAction() {
 function dismissInstallPrompt() {
   safeSetItem(installPromptDismissedKey, "true");
   renderInstallPrompt();
+}
+
+function profileStorageId(user = api.user) {
+  return String(user?.personId || user?.id || user?.firstName || "profile").trim().toLowerCase() || "profile";
+}
+
+function loadProfileSettings(user = api.user) {
+  try {
+    const allProfiles = JSON.parse(safeGetItem(profileSettingsKey) || "{}");
+    const saved = allProfiles?.[profileStorageId(user)];
+    return saved && typeof saved === "object" ? saved : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveProfileSettings(settings) {
+  if (!api.user) return;
+  let allProfiles = {};
+  try {
+    allProfiles = JSON.parse(safeGetItem(profileSettingsKey) || "{}") || {};
+  } catch {
+    allProfiles = {};
+  }
+  allProfiles[profileStorageId()] = {
+    displayName: shortText(settings.displayName, 60),
+    photo: imageDataUrlSafe(settings.photo)
+  };
+  safeSetItem(profileSettingsKey, JSON.stringify(allProfiles));
+}
+
+function displayNameForUser(user = api.user) {
+  const savedName = loadProfileSettings(user).displayName;
+  return shortText(savedName || user?.firstName || "Profile", 60) || "Profile";
+}
+
+function profileInitial(name = displayNameForUser()) {
+  return (String(name || "P").trim().match(/[a-z0-9]/i)?.[0] || "P").toUpperCase();
+}
+
+function setProfilePhotoPreview(photo, name = displayNameForUser()) {
+  const safePhoto = imageDataUrlSafe(photo);
+  const initial = profileInitial(name);
+  const avatarImage = document.querySelector("#profileAvatarImage");
+  const avatarInitial = document.querySelector("#profileAvatarInitial");
+  const previewImage = document.querySelector("#profilePhotoImage");
+  const previewInitial = document.querySelector("#profilePhotoInitial");
+  if (avatarImage) {
+    avatarImage.src = safePhoto || "";
+    avatarImage.classList.toggle("is-hidden", !safePhoto);
+  }
+  if (previewImage) {
+    previewImage.src = safePhoto || "";
+    previewImage.classList.toggle("is-hidden", !safePhoto);
+  }
+  if (avatarInitial) {
+    avatarInitial.textContent = initial;
+    avatarInitial.classList.toggle("is-hidden", Boolean(safePhoto));
+  }
+  if (previewInitial) {
+    previewInitial.textContent = initial;
+    previewInitial.classList.toggle("is-hidden", Boolean(safePhoto));
+  }
+}
+
+function profileSourceDataUrlSafe(value) {
+  const raw = String(value || "").trim();
+  if (!raw.startsWith("data:image/")) return "";
+  return raw.length <= 2000000 ? raw : "";
+}
+
+function profileCropSource() {
+  return profileSourceDataUrlSafe(pendingProfilePhotoSource) || imageDataUrlSafe(pendingProfilePhoto);
+}
+
+function resetProfileCrop() {
+  profilePhotoCrop = { x: 0, y: 0, zoom: 1 };
+}
+
+function renderProfileCropper() {
+  const source = profileCropSource();
+  const cropper = document.querySelector("#profileCropper");
+  const image = document.querySelector("#profileCropImage");
+  const zoom = document.querySelector("#profilePhotoZoom");
+  if (cropper) cropper.classList.toggle("is-hidden", !source);
+  if (image) {
+    image.src = source || "";
+    image.style.transform = `translate(${profilePhotoCrop.x}px, ${profilePhotoCrop.y}px) scale(${profilePhotoCrop.zoom})`;
+  }
+  if (zoom) zoom.value = String(profilePhotoCrop.zoom);
+}
+
+function populateProfileForm() {
+  if (!api.user) return;
+  const settings = loadProfileSettings();
+  const name = displayNameForUser();
+  pendingProfilePhoto = imageDataUrlSafe(settings.photo);
+  pendingProfilePhotoSource = pendingProfilePhoto;
+  resetProfileCrop();
+  const nameInput = document.querySelector("#profileNameInput");
+  const fileInput = document.querySelector("#profilePhotoInput");
+  if (nameInput) nameInput.value = name;
+  if (fileInput) fileInput.value = "";
+  setProfilePhotoPreview(pendingProfilePhoto, name);
+  renderProfileCropper();
+}
+
+function openProfileDrawer() {
+  if (!api.user) {
+    showAuthScreen("Sign in first.");
+    return;
+  }
+  lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  populateProfileForm();
+  document.body.classList.add("drawer-open");
+  document.querySelector("#drawerBackdrop")?.classList.remove("is-hidden");
+  document.querySelector("#profileDrawer")?.classList.remove("is-hidden");
+  window.setTimeout(() => document.querySelector("#profileNameInput")?.focus(), 0);
+}
+
+function closeProfileDrawer() {
+  document.querySelector("#profileDrawer")?.classList.add("is-hidden");
+  const anotherDrawerOpen = Boolean(document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden)"));
+  if (!anotherDrawerOpen) {
+    document.body.classList.remove("drawer-open");
+    document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
+  }
+  lastFocusedElement?.focus?.();
+  lastFocusedElement = null;
+}
+
+async function saveProfileForm(event) {
+  event?.preventDefault?.();
+  if (!api.user) return;
+  const displayName = document.querySelector("#profileNameInput")?.value.trim() || api.user.firstName || "Profile";
+  if (profileCropSource()) {
+    try {
+      pendingProfilePhoto = await cropProfilePhoto();
+    } catch {
+      showToast("Could not crop that picture.");
+      return;
+    }
+  }
+  saveProfileSettings({ displayName, photo: pendingProfilePhoto });
+  renderProfile();
+  closeProfileDrawer();
+  showToast("Profile saved.");
+}
+
+function removeProfilePhoto() {
+  pendingProfilePhoto = "";
+  pendingProfilePhotoSource = "";
+  resetProfileCrop();
+  const fileInput = document.querySelector("#profilePhotoInput");
+  if (fileInput) fileInput.value = "";
+  setProfilePhotoPreview("", document.querySelector("#profileNameInput")?.value || displayNameForUser());
+  renderProfileCropper();
 }
 
 function updateAuthMessage(message) {
@@ -961,10 +1130,13 @@ function showAuthScreen(message = "") {
   if (family && selectedFamily && !family.value) family.value = selectedFamily;
   document.body.classList.add("auth-open");
   screen.classList.remove("is-hidden");
+  renderAuthPeople();
   updateAuthMessage(message);
   renderPasskeyUi();
   setTimeout(() => {
-    const target = document.querySelector("#authFirstName") || document.querySelector("#authPassword");
+    const target = document.querySelector("#authPersonId")?.value
+      ? document.querySelector("#authPassword")
+      : document.querySelector("#authFirstName") || document.querySelector("#authPassword");
     target?.focus?.();
   }, 0);
 }
@@ -991,13 +1163,16 @@ function applyProfile(user) {
 
 function renderProfile() {
   const sessionBar = document.querySelector("#appSessionBar");
-  const sessionLabel = document.querySelector("#appSessionLabel");
   if (!api.user) {
     sessionBar?.classList.add("is-hidden");
+    closeProfileDrawer();
     return;
   }
+  const name = displayNameForUser();
+  const photo = loadProfileSettings().photo || "";
   sessionBar?.classList.remove("is-hidden");
-  if (sessionLabel) sessionLabel.textContent = `Logged in as ${api.user.firstName || "Profile"}`;
+  document.querySelector("#profileAvatarButton")?.setAttribute("aria-label", `Open profile for ${name}`);
+  setProfilePhotoPreview(photo, name);
 }
 
 function applyTripInfo(info) {
@@ -1020,6 +1195,540 @@ function renderTripInfo() {
   if (doorNode) doorNode.textContent = signedIn ? (tripInfo?.doorCode || "TBD") : "TBD";
   if (wifiNode) wifiNode.textContent = signedIn ? (tripInfo?.wifi || "TBD") : "TBD";
   if (checkoutNode) checkoutNode.textContent = tripInfo?.checkout || "Monday July 6 · time TBD";
+  updateHeroForPanel(currentActivePanel);
+}
+
+function familyCalendarState() {
+  return state.familyCalendar || normalizeFamilyCalendar({});
+}
+
+function familyCalendarEvents() {
+  return [...familyCalendarState().events].sort((left, right) => {
+    const leftDate = left.date || "9999-12-31";
+    const rightDate = right.date || "9999-12-31";
+    if (leftDate !== rightDate) return leftDate.localeCompare(rightDate);
+    const leftTime = left.allDay ? "00:00" : (left.startTime || "23:59");
+    const rightTime = right.allDay ? "00:00" : (right.startTime || "23:59");
+    return leftTime.localeCompare(rightTime);
+  });
+}
+
+function familyCalendarMemories() {
+  const calendar = familyCalendarState();
+  const events = calendar.events || [];
+  return {
+    people: familyMemoryList([
+      ...defaultFamilyPeople,
+      ...calendar.memories.people,
+      ...events.map((event) => event.person)
+    ]),
+    titles: familyMemoryList([
+      ...calendar.memories.titles,
+      ...events.map((event) => event.title)
+    ]),
+    locations: familyMemoryList([
+      ...defaultFamilyLocations,
+      ...calendar.memories.locations,
+      ...events.map((event) => event.location)
+    ]),
+    eventTypes: familyMemoryList([
+      ...defaultFamilyEventTypes,
+      ...calendar.memories.eventTypes,
+      ...events.map((event) => event.eventType)
+    ])
+  };
+}
+
+function replaceDatalistOptions(id, values) {
+  const node = document.querySelector(`#${id}`);
+  if (!node) return;
+  node.innerHTML = values.map((value) => `<option value="${escapeText(value)}"></option>`).join("");
+}
+
+function familyEventDateLabel(value) {
+  if (!value) return "Date TBD";
+  const parsed = new Date(`${value}T12:00:00`);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return parsed.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+}
+
+function familyEventTimeLabel(event) {
+  if (event.allDay) return "All day";
+  if (!event.startTime && !event.endTime) return "Time TBD";
+  if (event.startTime && event.endTime) return `${event.startTime} - ${event.endTime}`;
+  return event.startTime || event.endTime || "Time TBD";
+}
+
+function familyEventChipMarkup(values, field) {
+  return values.slice(0, 6).map((value) => `
+    <button class="memory-chip" type="button" data-family-memory="${escapeText(field)}" data-memory-value="${escapeText(value)}">${escapeText(value)}</button>
+  `).join("");
+}
+
+function renderHomeHub() {
+  const stats = document.querySelector("#homeStatUpcoming");
+  const nextEvent = document.querySelector("#homeStatNext");
+  const title = document.querySelector("#homeFamilyCalendarTitle");
+  const subcopy = document.querySelector("#homeFamilyCalendarCopy");
+  const count = familyCalendarEvents().length;
+  const firstUpcoming = familyCalendarEvents().find((event) => event.date) || familyCalendarEvents()[0] || null;
+  if (stats) stats.textContent = String(count);
+  if (nextEvent) nextEvent.textContent = firstUpcoming
+    ? `${familyEventDateLabel(firstUpcoming.date)} · ${firstUpcoming.title}`
+    : "No family events added yet";
+  if (title) title.textContent = familyCalendarState().name || familyCalendarName;
+  if (subcopy) subcopy.textContent = count
+    ? `${count} shared family event${count === 1 ? "" : "s"} remembered for everyone`
+    : "Sports, recitals, school dates, and anything the family should all see";
+}
+
+function resetFamilyEventForm() {
+  editingFamilyEventId = "";
+  document.querySelector("#familyEventForm")?.reset();
+  const allDay = document.querySelector("#familyEventAllDay");
+  if (allDay) allDay.checked = false;
+  const titleNode = document.querySelector("#familyEventFormTitle");
+  const saveNode = document.querySelector("#familyEventSave");
+  const cancelNode = document.querySelector("#familyEventCancel");
+  const deleteNode = document.querySelector("#familyEventDelete");
+  if (titleNode) titleNode.textContent = "Add to G Family";
+  if (saveNode) saveNode.textContent = "Save event";
+  cancelNode?.classList.add("is-hidden");
+  deleteNode?.classList.add("is-hidden");
+  toggleFamilyEventTimeState();
+}
+
+function populateFamilyEventForm(event) {
+  if (!event) return;
+  editingFamilyEventId = event.id;
+  document.querySelector("#familyEventTitle").value = event.title || "";
+  document.querySelector("#familyEventType").value = event.eventType || "";
+  document.querySelector("#familyEventPerson").value = event.person || "";
+  document.querySelector("#familyEventLocation").value = event.location || "";
+  document.querySelector("#familyEventDate").value = event.date || "";
+  document.querySelector("#familyEventStartTime").value = event.startTime || "";
+  document.querySelector("#familyEventEndTime").value = event.endTime || "";
+  document.querySelector("#familyEventNotes").value = event.notes || "";
+  const allDay = document.querySelector("#familyEventAllDay");
+  if (allDay) allDay.checked = Boolean(event.allDay);
+  const titleNode = document.querySelector("#familyEventFormTitle");
+  const saveNode = document.querySelector("#familyEventSave");
+  const cancelNode = document.querySelector("#familyEventCancel");
+  const deleteNode = document.querySelector("#familyEventDelete");
+  if (titleNode) titleNode.textContent = "Edit family event";
+  if (saveNode) saveNode.textContent = "Save changes";
+  cancelNode?.classList.remove("is-hidden");
+  deleteNode?.classList.remove("is-hidden");
+  toggleFamilyEventTimeState();
+}
+
+function toggleFamilyEventTimeState() {
+  const allDay = Boolean(document.querySelector("#familyEventAllDay")?.checked);
+  document.querySelectorAll("[data-time-field]").forEach((node) => {
+    node.toggleAttribute("disabled", allDay);
+    node.closest("label")?.classList.toggle("is-disabled", allDay);
+  });
+}
+
+function currentFamilyEventPayload() {
+  const allDay = Boolean(document.querySelector("#familyEventAllDay")?.checked);
+  return {
+    title: shortText(document.querySelector("#familyEventTitle")?.value, 120),
+    eventType: shortText(document.querySelector("#familyEventType")?.value || "Other", 40) || "Other",
+    person: shortText(document.querySelector("#familyEventPerson")?.value, 80),
+    location: shortText(document.querySelector("#familyEventLocation")?.value, 120),
+    date: isoDateSafe(document.querySelector("#familyEventDate")?.value),
+    startTime: allDay ? "" : timeSafe(document.querySelector("#familyEventStartTime")?.value),
+    endTime: allDay ? "" : timeSafe(document.querySelector("#familyEventEndTime")?.value),
+    allDay,
+    notes: shortText(document.querySelector("#familyEventNotes")?.value, 400),
+    source: "manual"
+  };
+}
+
+function renderFamilyCalendar() {
+  const upcomingNode = document.querySelector("#familyCalendarUpcoming");
+  const memories = familyCalendarMemories();
+  const events = familyCalendarEvents();
+  replaceDatalistOptions("familyTitleSuggestions", memories.titles);
+  replaceDatalistOptions("familyTypeSuggestions", memories.eventTypes);
+  replaceDatalistOptions("familyPersonSuggestions", memories.people);
+  replaceDatalistOptions("familyLocationSuggestions", memories.locations);
+  const nameNode = document.querySelector("#familyCalendarName");
+  const statCount = document.querySelector("#familyCalendarStatCount");
+  const statNote = document.querySelector("#familyCalendarStatNote");
+  if (nameNode) nameNode.textContent = familyCalendarState().name || familyCalendarName;
+  if (statCount) statCount.textContent = String(events.length);
+  if (statNote) statNote.textContent = events[0]
+    ? `${familyEventDateLabel(events[0].date)} · ${events[0].title}`
+    : "No family events added yet";
+  const emptyNode = `
+    <article class="needed-row">
+      <div>
+        <strong>No family events yet</strong>
+        <span>Add sports, recitals, school events, and shared family dates here.</span>
+      </div>
+    </article>
+  `;
+  if (upcomingNode) {
+    upcomingNode.innerHTML = events.length ? events.map((event) => `
+      <article class="family-event-card">
+        <div class="family-event-topline">
+          <span class="family-event-date">${escapeText(familyEventDateLabel(event.date))}</span>
+          <span class="family-event-type">${escapeText(event.eventType || "Event")}</span>
+        </div>
+        <strong>${escapeText(event.title)}</strong>
+        <div class="family-event-meta">
+          <span>${escapeText(event.person || "Family")}</span>
+          <span>${escapeText(familyEventTimeLabel(event))}</span>
+          <span>${escapeText(event.location || "Location TBD")}</span>
+        </div>
+        ${event.notes ? `<p>${escapeText(event.notes)}</p>` : ""}
+        <div class="calendar-event-actions">
+          <button class="secondary-action compact-action" type="button" data-edit-family-event="${escapeText(event.id)}">Edit</button>
+          <button class="secondary-action compact-action danger-outline" type="button" data-delete-family-event="${escapeText(event.id)}">Delete</button>
+        </div>
+      </article>
+    `).join("") : emptyNode;
+  }
+  const peopleChips = document.querySelector("#familyPeopleChips");
+  const typeChips = document.querySelector("#familyTypeChips");
+  const locationChips = document.querySelector("#familyLocationChips");
+  if (peopleChips) peopleChips.innerHTML = familyEventChipMarkup(memories.people, "person");
+  if (typeChips) typeChips.innerHTML = familyEventChipMarkup(memories.eventTypes, "type");
+  if (locationChips) locationChips.innerHTML = familyEventChipMarkup(memories.locations, "location");
+  renderFamilyImportHistory();
+  renderFamilyScheduleDrafts();
+}
+
+function renderFamilyImportHistory() {
+  const container = document.querySelector("#familyImportHistory");
+  if (!container) return;
+  const imports = familyCalendarState().imports || [];
+  if (!imports.length) {
+    container.innerHTML = `
+      <article class="needed-row">
+        <div>
+          <strong>No schedule imports yet</strong>
+          <span>Photo imports you save will show here for quick reference.</span>
+        </div>
+      </article>
+    `;
+    return;
+  }
+  container.innerHTML = imports.map((entry) => `
+    <article class="needed-row">
+      <div>
+        <strong>${escapeText(entry.label || "Schedule import")}</strong>
+        <span>${escapeText(entry.person || "Family")} · ${entry.draftEvents.length} drafted event${entry.draftEvents.length === 1 ? "" : "s"}</span>
+      </div>
+    </article>
+  `).join("");
+}
+
+function setPendingScheduleImage(dataUrl) {
+  pendingScheduleImage = imageDataUrlSafe(dataUrl);
+  const wrap = document.querySelector("#scheduleImagePreviewWrap");
+  const preview = document.querySelector("#scheduleImagePreview");
+  if (preview) preview.src = pendingScheduleImage || "";
+  wrap?.classList.toggle("is-hidden", !pendingScheduleImage);
+}
+
+function resetFamilyScheduleImport() {
+  pendingScheduleImage = "";
+  familyScheduleDrafts = [];
+  familyScheduleSourceText = "";
+  familyScheduleScanBusy = false;
+  document.querySelector("#scheduleImportForm")?.reset();
+  document.querySelector("#scheduleExtractedText").value = "";
+  const input = document.querySelector("#scheduleImage");
+  if (input) input.value = "";
+  setPendingScheduleImage("");
+  renderFamilyScheduleDrafts();
+  setFamilyScanBusy(false);
+}
+
+function setFamilyScanBusy(isBusy) {
+  familyScheduleScanBusy = Boolean(isBusy);
+  const button = document.querySelector("#scanSchedule");
+  if (button) {
+    button.disabled = familyScheduleScanBusy;
+    button.textContent = familyScheduleScanBusy ? "Scanning..." : "Scan schedule";
+  }
+}
+
+function parseTimeTo24Hour(hoursText, minutesText, meridiemText) {
+  let hours = Number(hoursText || 0);
+  const minutes = String(minutesText || "00").padStart(2, "0");
+  const meridiem = String(meridiemText || "").toLowerCase();
+  if (meridiem === "pm" && hours < 12) hours += 12;
+  if (meridiem === "am" && hours === 12) hours = 0;
+  return `${String(hours).padStart(2, "0")}:${minutes}`;
+}
+
+function normalizeScheduleLine(line) {
+  return String(line || "")
+    .replace(/\u2013|\u2014/g, "-")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function parseScheduleDate(monthText, dayText) {
+  const monthMap = {
+    jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4,
+    may: 5, jun: 6, june: 6, jul: 7, july: 7, aug: 8, august: 8, sep: 9, sept: 9,
+    september: 9, oct: 10, october: 10, nov: 11, november: 11, dec: 12, december: 12
+  };
+  const now = new Date();
+  const year = now.getFullYear();
+  if (monthText.includes("/")) {
+    const [month, day] = monthText.split("/");
+    return `${year}-${String(Number(month)).padStart(2, "0")}-${String(Number(day)).padStart(2, "0")}`;
+  }
+  const normalizedMonth = monthMap[String(monthText || "").toLowerCase()];
+  if (!normalizedMonth) return "";
+  return `${year}-${String(normalizedMonth).padStart(2, "0")}-${String(Number(dayText)).padStart(2, "0")}`;
+}
+
+function buildScheduleDrafts(text, context = {}) {
+  const person = shortText(context.person, 80);
+  const label = shortText(context.label, 120);
+  const lines = String(text || "").split(/\r?\n/).map(normalizeScheduleLine).filter(Boolean);
+  const drafts = [];
+  let currentDate = "";
+  lines.forEach((line) => {
+    const dateMatch = line.match(/\b(\d{1,2}\/\d{1,2}|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*)\s+(\d{1,2})?\b/i);
+    if (dateMatch) {
+      currentDate = dateMatch[1].includes("/")
+        ? parseScheduleDate(dateMatch[1], "")
+        : parseScheduleDate(dateMatch[1], dateMatch[2]);
+    }
+    const timeMatch = line.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)(?:\s*-\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm))?/i);
+    if (!timeMatch && !currentDate) return;
+    const date = currentDate || "";
+    if (!date) return;
+    const startTime = timeMatch ? parseTimeTo24Hour(timeMatch[1], timeMatch[2], timeMatch[3]) : "";
+    const endTime = timeMatch && timeMatch[4] ? parseTimeTo24Hour(timeMatch[4], timeMatch[5], timeMatch[6] || timeMatch[3]) : "";
+    let title = line
+      .replace(dateMatch?.[0] || "", "")
+      .replace(timeMatch?.[0] || "", "")
+      .replace(/^[\s\-:|]+|[\s\-:|]+$/g, "")
+      .trim();
+    let location = "";
+    const locationMatch = title.match(/\s@+\s(.+)$/);
+    if (locationMatch) {
+      location = shortText(locationMatch[1], 120);
+      title = title.replace(locationMatch[0], "").trim();
+    }
+    if (!title) title = label || "Scheduled event";
+    drafts.push(normalizeFamilyCalendarEvent({
+      id: `draft-${Date.now()}-${drafts.length}`,
+      title,
+      eventType: label || "Other",
+      person,
+      date,
+      startTime,
+      endTime,
+      location,
+      notes: "",
+      source: "photo"
+    }));
+  });
+  return drafts.filter(Boolean).slice(0, familyScheduleMaxDrafts);
+}
+
+function renderFamilyScheduleDrafts() {
+  const container = document.querySelector("#familyScheduleDrafts");
+  if (!container) return;
+  if (!familyScheduleDrafts.length) {
+    container.innerHTML = `
+      <article class="needed-row">
+        <div>
+          <strong>No draft events yet</strong>
+          <span>Scan a schedule photo, then review the extracted events here before saving them.</span>
+        </div>
+      </article>
+    `;
+    return;
+  }
+  container.innerHTML = familyScheduleDrafts.map((event, index) => `
+    <article class="schedule-draft-card">
+      <div class="schedule-draft-grid">
+        <label>
+          Title
+          <input type="text" value="${escapeText(event.title)}" data-draft-field="title" data-draft-index="${index}">
+        </label>
+        <label>
+          Type
+          <input type="text" value="${escapeText(event.eventType)}" list="familyTypeSuggestions" data-draft-field="eventType" data-draft-index="${index}">
+        </label>
+        <label>
+          Who for
+          <input type="text" value="${escapeText(event.person)}" list="familyPersonSuggestions" data-draft-field="person" data-draft-index="${index}">
+        </label>
+        <label>
+          Date
+          <input type="date" value="${escapeText(event.date)}" data-draft-field="date" data-draft-index="${index}">
+        </label>
+        <label>
+          Start
+          <input type="time" value="${escapeText(event.startTime)}" data-draft-field="startTime" data-draft-index="${index}">
+        </label>
+        <label>
+          End
+          <input type="time" value="${escapeText(event.endTime)}" data-draft-field="endTime" data-draft-index="${index}">
+        </label>
+        <label class="schedule-draft-location">
+          Location
+          <input type="text" value="${escapeText(event.location)}" list="familyLocationSuggestions" data-draft-field="location" data-draft-index="${index}">
+        </label>
+      </div>
+      <div class="calendar-event-actions">
+        <button class="secondary-action compact-action" type="button" data-remove-draft="${index}">Remove</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+async function ensureOcrClient() {
+  if (window.Tesseract?.recognize) return window.Tesseract;
+  await new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-ocr-script="true"]');
+    if (existing) {
+      existing.addEventListener("load", resolve, { once: true });
+      existing.addEventListener("error", reject, { once: true });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+    script.async = true;
+    script.dataset.ocrScript = "true";
+    script.addEventListener("load", resolve, { once: true });
+    script.addEventListener("error", reject, { once: true });
+    document.head.append(script);
+  });
+  return window.Tesseract;
+}
+
+async function scanFamilySchedule() {
+  const file = document.querySelector("#scheduleImage")?.files?.[0];
+  const person = shortText(document.querySelector("#scheduleImportPerson")?.value, 80);
+  const label = shortText(document.querySelector("#scheduleImportLabel")?.value, 120);
+  if (!file) {
+    showToast("Choose a schedule photo first.");
+    return;
+  }
+  if (!person) {
+    showToast("Add who the schedule is for.");
+    return;
+  }
+  if (!label) {
+    showToast("Add what the schedule is for.");
+    return;
+  }
+  try {
+    setFamilyScanBusy(true);
+    const ocrClient = await ensureOcrClient();
+    const image = await compressImageFile(file, 1280, 0.86);
+    setPendingScheduleImage(image);
+    const result = await ocrClient.recognize(image, "eng");
+    familyScheduleSourceText = shortText(result?.data?.text || "", 5000);
+    document.querySelector("#scheduleExtractedText").value = familyScheduleSourceText;
+    familyScheduleDrafts = buildScheduleDrafts(familyScheduleSourceText, { person, label });
+    if (!familyScheduleDrafts.length) {
+      familyScheduleDrafts = [normalizeFamilyCalendarEvent({
+        id: `draft-${Date.now()}`,
+        title: label,
+        eventType: label,
+        person,
+        date: "",
+        startTime: "",
+        endTime: "",
+        location: "",
+        notes: "",
+        source: "photo"
+      })];
+      showToast("Photo scanned. I could not confidently split it into events, so I created one draft row to edit.");
+    } else {
+      showToast(`Photo scanned. ${familyScheduleDrafts.length} draft event${familyScheduleDrafts.length === 1 ? "" : "s"} ready to review.`);
+    }
+    renderFamilyScheduleDrafts();
+  } catch {
+    showToast("Schedule scan failed. You can still paste the text and build drafts manually.");
+  } finally {
+    setFamilyScanBusy(false);
+  }
+}
+
+function rebuildDraftsFromText() {
+  const person = shortText(document.querySelector("#scheduleImportPerson")?.value, 80);
+  const label = shortText(document.querySelector("#scheduleImportLabel")?.value, 120);
+  familyScheduleSourceText = shortText(document.querySelector("#scheduleExtractedText")?.value, 5000);
+  familyScheduleDrafts = buildScheduleDrafts(familyScheduleSourceText, { person, label });
+  renderFamilyScheduleDrafts();
+  showToast(familyScheduleDrafts.length ? "Draft events rebuilt from the text." : "No draft events found in that text yet.");
+}
+
+async function saveFamilyEvent() {
+  const payload = currentFamilyEventPayload();
+  if (!payload.title) {
+    showToast("Add an event title first.");
+    return;
+  }
+  if (!payload.date) {
+    showToast("Add a date for the event.");
+    return;
+  }
+  if (payload.startTime && payload.endTime && payload.endTime < payload.startTime) {
+    showToast("End time must be after start time.");
+    return;
+  }
+  const action = editingFamilyEventId ? "updateFamilyEvent" : "addFamilyEvent";
+  const nextPayload = editingFamilyEventId ? { id: editingFamilyEventId, ...payload } : payload;
+  const saved = await performAction(action, nextPayload, null, editingFamilyEventId ? "Family event updated." : "Family event added.");
+  if (saved) resetFamilyEventForm();
+}
+
+function editFamilyEvent(id) {
+  const event = familyCalendarEvents().find((entry) => entry.id === id);
+  if (!event) return;
+  populateFamilyEventForm(event);
+  document.querySelector("#familyEventTitle")?.focus();
+}
+
+function deleteFamilyEvent(id = editingFamilyEventId) {
+  if (!id) return;
+  const event = familyCalendarEvents().find((entry) => entry.id === id);
+  if (!event) return;
+  if (!window.confirm(`Delete "${event.title}"?`)) return;
+  performAction("deleteFamilyEvent", { id }, null, "Family event deleted.");
+  resetFamilyEventForm();
+}
+
+async function saveFamilyScheduleImport() {
+  const person = shortText(document.querySelector("#scheduleImportPerson")?.value, 80);
+  const label = shortText(document.querySelector("#scheduleImportLabel")?.value, 120);
+  familyScheduleSourceText = shortText(document.querySelector("#scheduleExtractedText")?.value, 5000);
+  if (!person || !label) {
+    showToast("Add who it is for and what it is for first.");
+    return;
+  }
+  const draftEvents = familyScheduleDrafts
+    .map((event) => normalizeFamilyCalendarEvent(event))
+    .filter((event) => event && event.title && event.date)
+    .slice(0, familyScheduleMaxDrafts);
+  if (!draftEvents.length) {
+    showToast("Review the drafts and make sure each one has at least a title and date.");
+    return;
+  }
+  const saved = await performAction("saveSchedulePhotoDraft", {
+    title: label,
+    people: [person],
+    sourceImage: pendingScheduleImage,
+    sourceText: familyScheduleSourceText,
+    events: draftEvents
+  }, null, `Saved ${draftEvents.length} event${draftEvents.length === 1 ? "" : "s"} to ${familyCalendarName}.`);
+  if (saved) resetFamilyScheduleImport();
 }
 
 function setAuthFieldsFromUser(user) {
@@ -1081,6 +1790,8 @@ async function submitAuthForm(event) {
   event.preventDefault();
   const firstName = document.querySelector("#authFirstName")?.value.trim() || "";
   const password = document.querySelector("#authPassword")?.value || "";
+  const personId = document.querySelector("#authPersonId")?.value || "";
+  const familyId = document.querySelector("#authFamily")?.value || "";
   if (!firstName) {
     updateAuthMessage("Enter your first name.");
     document.querySelector("#authFirstName")?.focus();
@@ -1091,13 +1802,15 @@ async function submitAuthForm(event) {
     updateAuthMessage("Signing in...");
     const payload = await authPost("/login", {
       firstName,
-      password
+      password,
+      personId,
+      familyId
     });
     rememberSessionToken(payload.token || "");
     applyProfile(payload.user);
     applyTripInfo(payload.tripInfo);
     hideAuthScreen();
-    setActivePanel("food");
+    setActivePanel("home");
     showToast("Signed in.");
     connectSharedState();
   } catch (error) {
@@ -1139,7 +1852,7 @@ async function signInWithPasskey() {
     applyProfile(verifyPayload.user);
     applyTripInfo(verifyPayload.tripInfo);
     hideAuthScreen();
-    setActivePanel("food");
+    setActivePanel("home");
     showToast("Signed in.");
     connectSharedState();
     await refreshPasskeyStatus();
@@ -1278,6 +1991,96 @@ function imageDataUrlSafe(value) {
   return raw.length <= 400000 ? raw : "";
 }
 
+function shortText(value, max = 120) {
+  return String(value || "").trim().slice(0, max);
+}
+
+function isoDateSafe(value) {
+  const text = String(value || "").trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : "";
+}
+
+function timeSafe(value) {
+  const text = String(value || "").trim();
+  return /^\d{2}:\d{2}$/.test(text) ? text : "";
+}
+
+function familyMemoryList(value, fallback = []) {
+  const seen = new Set();
+  const list = [];
+  const source = Array.isArray(value) ? value : fallback;
+  source.forEach((entry) => {
+    const cleaned = shortText(entry, 80);
+    const key = cleaned.toLowerCase();
+    if (!cleaned || seen.has(key)) return;
+    seen.add(key);
+    list.push(cleaned);
+  });
+  return list.slice(0, 40);
+}
+
+function normalizeFamilyCalendarEvent(event) {
+  const title = shortText(event?.title || event?.idea, 120);
+  if (!title) return null;
+  const personLabel = shortText(event?.person || event?.forPersonLabel || (Array.isArray(event?.people) ? event.people.join(", ") : ""), 80);
+  return {
+    id: shortText(event?.id || `family-event-${Date.now()}`, 80),
+    title,
+    eventType: shortText(event?.eventType || event?.type || "Other", 40) || "Other",
+    person: personLabel,
+    date: isoDateSafe(event?.date),
+    startTime: timeSafe(event?.startTime),
+    endTime: timeSafe(event?.endTime),
+    allDay: Boolean(event?.allDay),
+    location: shortText(event?.location || event?.locationName || "", 120),
+    notes: shortText(event?.notes || "", 400),
+    source: shortText(event?.source || "manual", 20) || "manual",
+    image: imageDataUrlSafe(event?.image || event?.sourceImage || ""),
+    createdBy: families.some((family) => family.id === event?.createdBy) ? event.createdBy : "",
+    createdAt: event?.createdAt || "",
+    updatedAt: event?.updatedAt || ""
+  };
+}
+
+function normalizeFamilyCalendarImport(entry) {
+  return {
+    id: shortText(entry?.id || `schedule-import-${Date.now()}`, 80),
+    person: shortText(entry?.person || (Array.isArray(entry?.people) ? entry.people.join(", ") : ""), 80),
+    label: shortText(entry?.label || entry?.title || entry?.sourceFileName || "", 120),
+    image: imageDataUrlSafe(entry?.image || ""),
+    extractedText: shortText(entry?.extractedText || entry?.sourceText || "", 5000),
+    draftEvents: Array.isArray(entry?.draftEvents || entry?.events)
+      ? (entry.draftEvents || entry.events).map(normalizeFamilyCalendarEvent).filter(Boolean).slice(0, familyScheduleMaxDrafts)
+      : [],
+    createdBy: families.some((family) => family.id === entry?.createdBy) ? entry.createdBy : "",
+    createdAt: entry?.createdAt || "",
+    updatedAt: entry?.updatedAt || ""
+  };
+}
+
+function normalizeFamilyCalendar(value) {
+  const memorySource = value?.memories || value?.memory || value?.familyCalendarMemory || {};
+  const storedEvents = Array.isArray(value?.events || value?.familyCalendarEvents) ? (value.events || value.familyCalendarEvents) : [];
+  const events = storedEvents.map(normalizeFamilyCalendarEvent).filter(Boolean);
+  const derivedPeople = events.map((event) => event.person).filter(Boolean);
+  const derivedTitles = events.map((event) => event.title).filter(Boolean);
+  const derivedLocations = events.map((event) => event.location).filter(Boolean);
+  const derivedTypes = events.map((event) => event.eventType).filter(Boolean);
+  return {
+    name: shortText(value?.name || familyCalendarName, 80) || familyCalendarName,
+    events,
+    memories: {
+      people: familyMemoryList(memorySource.people || memorySource.rememberedNames, derivedPeople),
+      titles: familyMemoryList(memorySource.titles || memorySource.rememberedEventTitles, derivedTitles),
+      locations: familyMemoryList(memorySource.locations || memorySource.rememberedLocations, derivedLocations),
+      eventTypes: familyMemoryList(memorySource.eventTypes || memorySource.rememberedEventTypes, [...defaultFamilyEventTypes, ...derivedTypes])
+    },
+    imports: Array.isArray(value?.imports || value?.schedulePhotoDrafts)
+      ? (value.imports || value.schedulePhotoDrafts).map(normalizeFamilyCalendarImport).slice(0, 10)
+      : []
+  };
+}
+
 function normalizeMealItem(meal) {
   const day = dayMeta[meal?.day] ? meal.day : "sun";
   return {
@@ -1327,6 +2130,7 @@ function normalizeClientState(nextState) {
     familyChecks: nextState.familyChecks && typeof nextState.familyChecks === "object" ? nextState.familyChecks : { bear: true },
     familyResponses: nextState.familyResponses && typeof nextState.familyResponses === "object" ? nextState.familyResponses : {},
     checklists: nextState.checklists && typeof nextState.checklists === "object" ? nextState.checklists : {},
+    familyCalendar: normalizeFamilyCalendar(nextState),
     activityVotes: nextState.activityVotes && typeof nextState.activityVotes === "object"
       ? { ...defaultActivityVotes(), ...nextState.activityVotes }
       : defaultActivityVotes(),
@@ -1393,6 +2197,11 @@ function authAwareRequest(path, init = {}) {
   return tripApiRequest(path, init);
 }
 
+function sharedStateKey(nextState) {
+  if (!nextState || typeof nextState !== "object") return "";
+  return `${Number(nextState.version || 0)}:${nextState.updatedAt || ""}`;
+}
+
 async function fetchStateWithAuth() {
   const response = await authAwareRequest("/state", { cache: "no-store" });
   if (response.status === 401 || response.status === 403) {
@@ -1406,10 +2215,14 @@ async function fetchStateWithAuth() {
   return response;
 }
 
-function applySharedState(nextState) {
+function applySharedState(nextState, options = {}) {
+  const nextKey = sharedStateKey(nextState);
+  if (!options.force && nextKey && api.lastStateKey === nextKey) return false;
   state = normalizeClientState(nextState);
+  api.lastStateKey = sharedStateKey(state) || nextKey;
   saveLocalState();
   renderAll();
+  return true;
 }
 
 function setSyncStatus(mode, label) {
@@ -1456,7 +2269,7 @@ async function connectSharedState() {
     if (!response.ok) throw new Error("Shared state unavailable");
     const payload = await response.json();
     applyTripInfo(payload.tripInfo);
-    applySharedState(payload.state);
+    applySharedState(payload.state, { force: true });
     api.hasLoadedSharedState = true;
     setSyncStatus("live", "Live sync");
     startStatePolling();
@@ -2291,8 +3104,100 @@ function renderNearbyFoodList() {
   `).join("");
 }
 
-function renderTodoChecklist() {
-  renderChecklist("#todoChecklistList", tripTodoChecklist);
+function renderTodoThingsToDo() {
+  const container = document.querySelector("#todoThingsToDoList");
+  if (!container) return;
+  const grouped = cabinThingsToDo.reduce((groups, item) => {
+    if (!groups.has(item.category)) groups.set(item.category, []);
+    groups.get(item.category).push(item);
+    return groups;
+  }, new Map());
+
+  container.innerHTML = Array.from(grouped.entries()).map(([category, items]) => `
+    <section class="todo-activity-group" aria-label="${escapeText(category)}">
+      <div class="todo-activity-group-heading">
+        <h3>${escapeText(category)}</h3>
+        <span>${items.length} ${items.length === 1 ? "idea" : "ideas"}</span>
+      </div>
+      <div class="todo-activity-list">
+        ${items.map((item) => `
+          <article class="cabin-activity-card todo-link-card">
+            <span class="activity-thumb cabin-activity-thumb">${activityIconMarkup(item)}</span>
+            <div class="cabin-activity-copy">
+              <span class="activity-rank">${escapeText(item.category)}</span>
+              <strong>${escapeText(item.name)}</strong>
+              <span class="cabin-activity-when">${escapeText(item.when || "Check current hours")}</span>
+              <span>${escapeText(item.note)}</span>
+              <div class="cabin-activity-links">
+                <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
+                <a class="text-mini-button cabin-link-button" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
+              </div>
+            </div>
+          </article>
+        `).join("")}
+      </div>
+    </section>
+  `).join("");
+}
+
+function isGameSupply(item = {}) {
+  const text = `${item.id || ""} ${item.name || ""} ${item.notes || ""} ${item.qty || ""}`.toLowerCase();
+  return String(item.type || "").toLowerCase() === "gear" &&
+    /\b(game|games|board|card|cards|cranium|charades|cornhole|dice|puzzle|puzzles)\b/.test(text);
+}
+
+function renderTodoViewTabs() {
+  document.querySelectorAll("[data-todo-view]").forEach((button) => {
+    const selected = button.dataset.todoView === todoView;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-selected", selected ? "true" : "false");
+  });
+  document.querySelectorAll("[data-todo-pane]").forEach((pane) => {
+    pane.classList.toggle("is-hidden", pane.dataset.todoPane !== todoView);
+  });
+}
+
+function renderTodoGamesByFamily() {
+  const container = document.querySelector("#todoGamesByFamily");
+  if (!container) return;
+  const gameMap = new Map(defaultSupplies.filter(isGameSupply).map((item) => [item.id, normalizeSupplyItem(item)]));
+  state.supplies.filter(isGameSupply).forEach((item) => {
+    gameMap.set(item.id, normalizeSupplyItem(item));
+  });
+  const games = Array.from(gameMap.values());
+  container.innerHTML = families.map((family) => {
+    const familyGames = games.filter((item) => supplyOwnerId(item) === family.id);
+    return `
+      <article class="todo-family-games-card" style="--family-color:${family.color}">
+        <div class="todo-family-games-head">
+          <div>
+            <span class="activity-rank">Family</span>
+            <strong>${escapeText(family.shortName || family.name)}</strong>
+          </div>
+          <span>${familyGames.length} ${familyGames.length === 1 ? "game" : "games"}</span>
+        </div>
+        ${familyGames.length
+          ? `<div class="todo-game-list">
+              ${familyGames.map((game) => `
+                <div class="todo-game-row">
+                  <span class="activity-thumb todo-game-thumb">${icons.bag}</span>
+                  <div>
+                    <strong>${escapeText(game.name)}</strong>
+                    <span>${escapeText(game.notes || game.qty || "Game for the cabin")}</span>
+                  </div>
+                </div>
+              `).join("")}
+            </div>`
+          : `<p class="todo-games-empty">No games listed yet.</p>`}
+      </article>
+    `;
+  }).join("");
+}
+
+function renderTodoHub() {
+  renderTodoViewTabs();
+  renderTodoThingsToDo();
+  renderTodoGamesByFamily();
 }
 
 function renderActivityPreview() {
@@ -2489,6 +3394,11 @@ function mealTypeShort(meal) {
   }[mealTypeKey(meal)] || meal.type;
 }
 
+function foodDayName(day) {
+  const label = dayMeta[day]?.fullLabel || dayMeta[day]?.dayLabel || day || "";
+  return String(label).split(/\s+/)[0] || "Day";
+}
+
 function mealNeeds(meal) {
   return Array.isArray(meal.cold) ? meal.cold.map((s) => String(s || "").trim()).filter(Boolean) : [];
 }
@@ -2545,7 +3455,16 @@ function renderFoodMealGrid() {
     const bring = items.length
       ? `<ul class="fh-bring-list">${items.map((it) => {
           const fam = familyById(supplyOwnerId(it));
-          return `<li class="fh-bring"><span class="fh-bring-name">${escapeText(it.name)}</span><span class="fh-who">${escapeText(fam ? fam.name : "Unassigned")}</span></li>`;
+          const familyName = fam ? fam.name : "Unassigned";
+          const familyColor = fam?.color || "#6e6e73";
+          return `<li class="fh-bring fh-food-row" style="--owner-color:${escapeText(familyColor)}">
+            <span class="fh-owner-dot" aria-hidden="true"></span>
+            <span class="fh-food-copy">
+              <strong class="fh-bring-name">${escapeText(it.name)}</strong>
+              <span class="fh-who">Brought by ${escapeText(familyName)}</span>
+            </span>
+            <span class="fh-owner-badge">${escapeText(familyName)}</span>
+          </li>`;
         }).join("")}</ul>`
       : `<div class="fh-empty-line">No one has added anything for this meal yet.</div>`;
 
@@ -2562,15 +3481,18 @@ function renderFoodMealGrid() {
     const suggestMarkup = suggestions.length
       ? `<div class="fh-sect fh-suggest-sect"><h4>Ideas to add</h4><div class="fh-needed">${suggestions.map((s) => `<button class="fh-suggest" type="button" data-gap-meal="${escapeText(meal.id)}" data-gap-name="${escapeText(s)}">+ ${escapeText(s)}</button>`).join("")}</div></div>`
       : "";
+    const mealTitle = `${foodDayName(meal.day)} ${mealTypeShort(meal)}`;
 
     return `<article class="fh-meal">
-      <div class="fh-top">
+      <header class="fh-top fh-meal-head">
         <span class="fh-chip ${mealToneClass(meal)}">${escapeText(mealTypeShort(meal))}</span>
-        <span class="fh-time">${escapeText(meal.time || "")}</span>
+        <span class="fh-meal-title-wrap">
+          <h3>${escapeText(mealTitle)}</h3>
+          ${meal.time ? `<span class="fh-time">${escapeText(meal.time)}</span>` : ""}
+        </span>
         <span class="fh-meal-manage">${itemManageActions("meal", meal)}</span>
-      </div>
-      <h3>${escapeText(meal.idea || "No plan yet")}</h3>
-      <div class="fh-sect"><h4>Who&rsquo;s bringing what</h4>${bring}</div>
+      </header>
+      <div class="fh-meal-items">${bring}</div>
       ${suggestMarkup}
       <div class="fh-act"><button class="primary-action fh-bring-btn" type="button" data-bring-meal="${escapeText(meal.id)}">Add item</button></div>
     </article>`;
@@ -2610,6 +3532,23 @@ function renderFoodFamilyGrid() {
 function renderFoodHub() {
   const mealGrid = document.querySelector("#foodMealGrid");
   if (!mealGrid) return;
+  const familyGrid = document.querySelector("#foodFamilyGrid");
+  const foodDays = document.querySelector("#foodDays");
+  const tabs = document.querySelector("#foodViewTabs");
+  const isFamilyView = foodView === "family";
+  tabs?.classList.toggle("at-family", isFamilyView);
+  document.querySelectorAll("[data-food-view]").forEach((button) => {
+    const isActive = button.dataset.foodView === foodView;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+  foodDays?.classList.toggle("is-hidden", isFamilyView);
+  mealGrid.classList.toggle("is-hidden", isFamilyView);
+  familyGrid?.classList.toggle("is-hidden", !isFamilyView);
+  if (isFamilyView) {
+    renderFoodFamilyGrid();
+    return;
+  }
   renderFoodDays();
   renderFoodMealGrid();
 }
@@ -2631,6 +3570,8 @@ function openSupplyForMeal(mealId, prefillName) {
 }
 
 function renderAll() {
+  renderHomeHub();
+  renderFamilyCalendar();
   renderFamilies();
   renderProfile();
   renderTripInfo();
@@ -2646,7 +3587,7 @@ function renderAll() {
   renderSupplies();
   renderBringingBoard();
   renderFoodHub();
-  renderTodoChecklist();
+  renderTodoHub();
   renderNearbyFoodList();
   renderCabinActivityList();
   renderGuideHighlights();
@@ -2655,13 +3596,79 @@ function renderAll() {
   updateCounts();
 }
 
-function setActivePanel(tab) {
+function updateMobileNav(activeTab) {
+  const mobileNav = document.querySelector(".mobile-nav");
+  if (!mobileNav) return;
+  mobileNav.dataset.activePanel = activeTab;
+  const visibleButtons = Array.from(document.querySelectorAll(".mobile-nav-item")).filter((button) => {
+    const panels = String(button.dataset.mobilePanels || "").split(",").map((item) => item.trim()).filter(Boolean);
+    const visible = !panels.length || panels.includes(activeTab);
+    button.classList.toggle("is-hidden", !visible);
+    return visible;
+  });
+  const isHomeOnly = visibleButtons.length <= 1;
+  mobileNav.classList.toggle("is-home-only", isHomeOnly);
+  mobileNav.style.gridTemplateColumns = `repeat(${Math.max(visibleButtons.length, 1)}, 1fr)`;
+}
+
+const panelHashes = {
+  home: "home",
+  "g-family": "g-family",
+  "trip-food": "july-event",
+  "trip-calendar": "calendar",
+  todo: "todo",
+  checkin: "checkin",
+  cabin: "cabin",
+  activities: "activities"
+};
+const hashPanels = Object.fromEntries(Object.entries(panelHashes).map(([panel, hash]) => [hash, panel]));
+
+function panelFromHash() {
+  const key = window.location.hash.replace(/^#/, "").trim();
+  return hashPanels[key] || "";
+}
+
+function updatePanelHash(tab, mode = "push") {
+  const hash = panelHashes[tab];
+  if (!hash || window.location.hash === `#${hash}`) return;
+  const nextUrl = `${window.location.pathname}${window.location.search}#${hash}`;
+  if (mode === "replace") {
+    window.history.replaceState(null, "", nextUrl);
+    return;
+  }
+  window.history.pushState(null, "", nextUrl);
+}
+
+function updateHeroForPanel(activeTab) {
+  const titleNode = document.querySelector("#heroTitle");
+  const subtitleNode = document.querySelector("#heroSubtitle");
+  const locationNode = document.querySelector("#heroLocationText");
+  const tripLocation = tripInfo?.cityLabel || "Arnold, California";
+  const tripHero = { subtitle: "4th of July 2026", location: tripLocation };
+  const heroMap = {
+    home: { title: "GRE Family App", subtitle: "Guantonio, Riggs, Eberly", location: "Family hub" },
+    "g-family": { title: "G Family", subtitle: "Family calendar", location: "Shared family calendar" },
+    "trip-food": { title: "4th of July 2026", subtitle: "July 1 - 6, 2026", location: tripLocation },
+    "trip-calendar": { title: "Calendar Events", ...tripHero },
+    todo: { title: "Things To Do", ...tripHero }
+  };
+  const hero = heroMap[activeTab] || heroMap.home;
+  if (titleNode) titleNode.textContent = hero.title;
+  if (subtitleNode) subtitleNode.textContent = hero.subtitle;
+  if (locationNode) locationNode.textContent = hero.location;
+}
+
+function setActivePanel(tab, options = {}) {
+  currentActivePanel = tab;
   document.querySelectorAll("[data-panel]").forEach((panel) => {
     panel.classList.toggle("is-hidden", panel.dataset.panel !== tab);
   });
-  document.querySelectorAll("[data-tab]").forEach((button) => {
+  document.querySelectorAll(".nav-item[data-tab], .mobile-nav-item[data-tab], .home-destination-button[data-tab]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.tab === tab);
   });
+  updateHeroForPanel(tab);
+  updateMobileNav(tab);
+  if (!options.skipHash) updatePanelHash(tab, options.replaceHash ? "replace" : "push");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
 }
@@ -2911,7 +3918,7 @@ function updateSupplyDayAvailability() {
   if (picker) picker.setAttribute("aria-disabled", isNonFood ? "true" : "false");
 }
 
-async function compressImageFile(file) {
+async function compressImageFile(file, maxSize = 360, quality = 0.72) {
   if (!file) return "";
   const source = await new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -2925,14 +3932,61 @@ async function compressImageFile(file) {
     reader.readAsDataURL(file);
   });
   const canvas = document.createElement("canvas");
-  const maxSize = 360;
   const ratio = Math.min(1, maxSize / Math.max(source.width, source.height));
   canvas.width = Math.max(1, Math.round(source.width * ratio));
   canvas.height = Math.max(1, Math.round(source.height * ratio));
   const context = canvas.getContext("2d");
   if (!context) return "";
   context.drawImage(source, 0, 0, canvas.width, canvas.height);
-  return canvas.toDataURL("image/jpeg", 0.72);
+  return canvas.toDataURL("image/jpeg", quality);
+}
+
+async function imageFromDataUrl(dataUrl) {
+  const safeUrl = profileSourceDataUrlSafe(dataUrl);
+  if (!safeUrl) return null;
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = safeUrl;
+  });
+}
+
+async function cropProfilePhoto() {
+  const source = await imageFromDataUrl(profileCropSource());
+  if (!source) return "";
+  const size = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext("2d");
+  if (!context) return pendingProfilePhoto;
+  const baseScale = Math.max(size / source.width, size / source.height);
+  const scale = baseScale * Math.max(1, Math.min(3, profilePhotoCrop.zoom));
+  const drawWidth = source.width * scale;
+  const drawHeight = source.height * scale;
+  const cropFrame = document.querySelector("#profileCropImage")?.parentElement;
+  const previewSize = cropFrame?.clientWidth || 172;
+  const offsetScale = size / previewSize;
+  const drawX = (size - drawWidth) / 2 + (profilePhotoCrop.x * offsetScale);
+  const drawY = (size - drawHeight) / 2 + (profilePhotoCrop.y * offsetScale);
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, size, size);
+  context.drawImage(source, drawX, drawY, drawWidth, drawHeight);
+  return canvas.toDataURL("image/jpeg", 0.86);
+}
+
+function moveProfileCrop(action) {
+  const step = 12;
+  if (action === "up") profilePhotoCrop.y -= step;
+  if (action === "down") profilePhotoCrop.y += step;
+  if (action === "left") profilePhotoCrop.x -= step;
+  if (action === "right") profilePhotoCrop.x += step;
+  if (action === "zoom-in") profilePhotoCrop.zoom = Math.min(3, profilePhotoCrop.zoom + 0.1);
+  if (action === "zoom-out") profilePhotoCrop.zoom = Math.max(1, profilePhotoCrop.zoom - 0.1);
+  if (action === "reset") resetProfileCrop();
+  profilePhotoCrop.zoom = Math.round(profilePhotoCrop.zoom * 100) / 100;
+  renderProfileCropper();
 }
 
 function openItemDrawer(mode, itemId = "") {
@@ -3021,6 +4075,7 @@ function closeItemDrawer() {
 function closeAllDrawers() {
   document.querySelector("#checkinDrawer")?.classList.add("is-hidden");
   document.querySelector("#itemDrawer")?.classList.add("is-hidden");
+  document.querySelector("#profileDrawer")?.classList.add("is-hidden");
   document.querySelector("#drawerBackdrop")?.classList.add("is-hidden");
   document.body.classList.remove("drawer-open");
   editingItemId = "";
@@ -3200,6 +4255,9 @@ function bindEvents() {
     const foodViewBtn = event.target.closest("[data-food-view]");
     if (foodViewBtn) { foodView = foodViewBtn.dataset.foodView; renderFoodHub(); }
 
+    const todoViewBtn = event.target.closest("[data-todo-view]");
+    if (todoViewBtn) { todoView = todoViewBtn.dataset.todoView; renderTodoHub(); }
+
     const foodDayBtn = event.target.closest("[data-food-day]");
     if (foodDayBtn) { foodDay = foodDayBtn.dataset.foodDay; renderFoodHub(); }
 
@@ -3266,11 +4324,46 @@ function bindEvents() {
 
     const cancelLogisticsButton = event.target.closest("[data-cancel-logistics-edit]");
     if (cancelLogisticsButton) cancelLogisticsEdit();
+
+    const editFamilyEventButton = event.target.closest("[data-edit-family-event]");
+    if (editFamilyEventButton) editFamilyEvent(editFamilyEventButton.dataset.editFamilyEvent);
+
+    const deleteFamilyEventButton = event.target.closest("[data-delete-family-event]");
+    if (deleteFamilyEventButton) deleteFamilyEvent(deleteFamilyEventButton.dataset.deleteFamilyEvent);
+
+    const familyMemoryButton = event.target.closest("[data-family-memory]");
+    if (familyMemoryButton) {
+      const value = familyMemoryButton.dataset.memoryValue || "";
+      const fieldMap = {
+        person: "#familyEventPerson",
+        type: "#familyEventType",
+        location: "#familyEventLocation"
+      };
+      const input = document.querySelector(fieldMap[familyMemoryButton.dataset.familyMemory] || "");
+      if (input) {
+        input.value = value;
+        input.focus();
+      }
+    }
+
+    const removeDraftButton = event.target.closest("[data-remove-draft]");
+    if (removeDraftButton) {
+      familyScheduleDrafts.splice(Number(removeDraftButton.dataset.removeDraft), 1);
+      renderFamilyScheduleDrafts();
+    }
   });
 
   document.addEventListener("change", (event) => {
     const checklist = event.target.closest("[data-checklist]");
     if (checklist) toggleChecklist(checklist.dataset.checklist, checklist.checked);
+
+    const draftField = event.target.closest("[data-draft-field]");
+    if (draftField) {
+      const index = Number(draftField.dataset.draftIndex);
+      const field = draftField.dataset.draftField;
+      if (!familyScheduleDrafts[index] || !field) return;
+      familyScheduleDrafts[index][field] = draftField.value;
+    }
   });
 
   document.querySelectorAll(".day-tabs button").forEach((button) => {
@@ -3287,6 +4380,7 @@ function bindEvents() {
   document.querySelector("#openCheckinTwo")?.addEventListener("click", openDrawer);
   document.querySelector("#closeDrawer")?.addEventListener("click", closeDrawer);
   document.querySelector("#closeItemDrawer")?.addEventListener("click", closeItemDrawer);
+  document.querySelector("#closeProfileDrawer")?.addEventListener("click", closeProfileDrawer);
   document.querySelector("#cancelItem")?.addEventListener("click", closeItemDrawer);
   document.querySelector("#drawerBackdrop")?.addEventListener("click", closeAllDrawers);
   document.querySelector("#prevStep")?.addEventListener("click", () => {
@@ -3313,6 +4407,17 @@ function bindEvents() {
     catch { showToast(https); }
   });
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
+  document.querySelector("#familyEventForm")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    saveFamilyEvent();
+  });
+  document.querySelector("#familyEventCancel")?.addEventListener("click", resetFamilyEventForm);
+  document.querySelector("#familyEventDelete")?.addEventListener("click", () => deleteFamilyEvent());
+  document.querySelector("#familyEventAllDay")?.addEventListener("change", toggleFamilyEventTimeState);
+  document.querySelector("#scanSchedule")?.addEventListener("click", scanFamilySchedule);
+  document.querySelector("#rebuildScheduleDrafts")?.addEventListener("click", rebuildDraftsFromText);
+  document.querySelector("#saveScheduleDrafts")?.addEventListener("click", saveFamilyScheduleImport);
+  document.querySelector("#clearScheduleImport")?.addEventListener("click", resetFamilyScheduleImport);
   document.querySelector("#supplyMealType")?.addEventListener("change", updateSupplyDayAvailability);
   document.querySelector("#clearSupplyImage")?.addEventListener("click", () => {
     const input = document.querySelector("#supplyImage");
@@ -3331,6 +4436,46 @@ function bindEvents() {
     } catch {
       showToast("Could not load that picture.");
       setPendingSupplyImage("");
+    }
+  });
+  document.querySelector("#scheduleImage")?.addEventListener("change", async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setPendingScheduleImage("");
+      return;
+    }
+    try {
+      const compressed = await compressImageFile(file, 1280, 0.86);
+      setPendingScheduleImage(compressed);
+    } catch {
+      showToast("Could not load that schedule photo.");
+      setPendingScheduleImage("");
+    }
+  });
+  document.querySelector("#profileAvatarButton")?.addEventListener("click", openProfileDrawer);
+  document.querySelector("#profileForm")?.addEventListener("submit", saveProfileForm);
+  document.querySelector("#removeProfilePhoto")?.addEventListener("click", removeProfilePhoto);
+  document.querySelector("#profileNameInput")?.addEventListener("input", (event) => {
+    setProfilePhotoPreview(pendingProfilePhoto, event.target.value || displayNameForUser());
+  });
+  document.querySelector("#profilePhotoZoom")?.addEventListener("input", (event) => {
+    profilePhotoCrop.zoom = Math.max(1, Math.min(3, Number(event.target.value) || 1));
+    renderProfileCropper();
+  });
+  document.querySelectorAll("[data-profile-crop]").forEach((button) => {
+    button.addEventListener("click", () => moveProfileCrop(button.dataset.profileCrop));
+  });
+  document.querySelector("#profilePhotoInput")?.addEventListener("change", async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      pendingProfilePhotoSource = await compressImageFile(file, 900, 0.82);
+      pendingProfilePhoto = pendingProfilePhotoSource;
+      resetProfileCrop();
+      setProfilePhotoPreview(pendingProfilePhoto, document.querySelector("#profileNameInput")?.value || displayNameForUser());
+      renderProfileCropper();
+    } catch {
+      showToast("Could not load that picture.");
     }
   });
   document.querySelector("#authForm")?.addEventListener("submit", submitAuthForm);
@@ -3356,7 +4501,7 @@ function bindEvents() {
     const url = window.location.href;
     try {
       if (navigator.share) {
-      await navigator.share({ title: "4th of July 2026", url });
+      await navigator.share({ title: "GRE Family App", url });
       } else if (navigator.clipboard) {
         await navigator.clipboard.writeText(url);
         showToast("Trip link copied.");
@@ -3369,7 +4514,7 @@ function bindEvents() {
   });
 
   document.addEventListener("keydown", (event) => {
-    const drawer = document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden)");
+    const drawer = document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden), .profile-drawer:not(.is-hidden)");
     const isDrawerOpen = Boolean(drawer);
     if (event.key === "Escape" && isDrawerOpen) closeAllDrawers();
     if (event.key !== "Tab" || !isDrawerOpen) return;
@@ -3398,6 +4543,14 @@ async function initializeSession() {
 
 insertIcons();
 renderAll();
+const initialPanel = panelFromHash() || "home";
+setActivePanel(initialPanel, { replaceHash: !window.location.hash });
 bindEvents();
+renderAuthPeople();
+resetFamilyEventForm();
 registerServiceWorker();
 initializeSession();
+
+window.addEventListener("hashchange", () => {
+  setActivePanel(panelFromHash() || "home", { skipHash: true });
+});

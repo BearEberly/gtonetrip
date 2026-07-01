@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#1b6f3e">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="4th of July 2026">
+    <meta name="apple-mobile-web-app-title" content="GRE Family App">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>4th of July 2026</title>
-    <meta name="description" content="Guantonio's Trip planning app for family timing, bringing lists, meals, and live updates.">
+    <title>GRE Family App</title>
+    <meta name="description" content="GRE Family App for Guantonio, Riggs, and Eberly family timing, calendars, meals, and live updates.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gtonetrip.beareberly.com/">
-    <meta property="og:title" content="4th of July 2026">
-    <meta property="og:description" content="Guantonio's Trip planning app for family timing, bringing lists, meals, and live updates.">
+    <meta property="og:title" content="GRE Family App">
+    <meta property="og:description" content="GRE Family App for Guantonio, Riggs, and Eberly family timing, calendars, meals, and live updates.">
     <meta property="og:image" content="https://gtonetrip.beareberly.com/assets/login-g-mark.png">
     <meta property="og:image:secure_url" content="https://gtonetrip.beareberly.com/assets/login-g-mark.png">
     <meta property="og:image:type" content="image/png">
@@ -20,39 +20,39 @@
     <meta property="og:image:height" content="601">
     <meta property="og:image:alt" content="Large square G mark for the Guantonio trip app">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="4th of July 2026">
-    <meta name="twitter:description" content="Guantonio's Trip planning app for family timing, bringing lists, meals, and live updates.">
+    <meta name="twitter:title" content="GRE Family App">
+    <meta name="twitter:description" content="GRE Family App for Guantonio, Riggs, and Eberly family timing, calendars, meals, and live updates.">
     <meta name="twitter:image" content="https://gtonetrip.beareberly.com/assets/login-g-mark.png">
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=33">
+    <link rel="stylesheet" href="styles.css?v=55">
   </head>
   <body class="auth-open">
     <div class="app-shell">
       <aside class="sidebar" aria-label="Primary">
-        <a class="brand" href="#food" data-tab="food" aria-label="4th of July 2026 home">
+        <a class="brand" href="#home" data-tab="home" aria-label="GRE Family App home">
           <span class="brand-mark" aria-hidden="true">
             <img src="assets/icon-192.png" alt="">
           </span>
           <span>
-            <strong>4th of July</strong>
-            <small>2026</small>
+            <strong>GRE Family</strong>
+            <small>App</small>
           </span>
         </a>
 
         <nav class="side-nav">
-          <button class="nav-item is-active" type="button" data-tab="food">
-            <span data-icon="utensils"></span>
-            Food
+          <button class="nav-item is-active" type="button" data-tab="home">
+            <span data-icon="home"></span>
+            Home
           </button>
-          <button class="nav-item" type="button" data-tab="dashboard">
+          <button class="nav-item" type="button" data-tab="g-family">
             <span data-icon="calendar"></span>
-            Calendar
+            G Family
           </button>
-          <button class="nav-item" type="button" data-tab="todo">
-            <span data-icon="mountain"></span>
-            To Do
+          <button class="nav-item" type="button" data-tab="trip-food">
+            <span data-icon="flame"></span>
+            4th of July Event
           </button>
         </nav>
 
@@ -72,13 +72,15 @@
             <div class="hero-shade"></div>
             <div class="hero-session-wrap">
               <div class="app-session is-hidden" id="appSessionBar" aria-live="polite">
-                <span id="appSessionLabel">Logged in as Bear</span>
-                <button type="button" id="logoutProfile">Sign out</button>
+                <button class="profile-avatar-button" type="button" id="profileAvatarButton" aria-label="Open profile">
+                  <img class="is-hidden" id="profileAvatarImage" alt="">
+                  <span id="profileAvatarInitial">B</span>
+                </button>
               </div>
             </div>
             <div class="hero-copy">
-              <h1>4th of July 2026</h1>
-              <p>July 1 - 6, 2026</p>
+              <h1 id="heroTitle">GRE Family App</h1>
+              <p id="heroSubtitle">Guantonio, Riggs, Eberly</p>
               <div class="location-row">
                 <span data-icon="pin"></span>
                 <span id="heroLocationText">Arnold, California</span>
@@ -87,7 +89,307 @@
           </div>
         </section>
 
-        <section class="content-panel is-hidden" id="dashboard" data-panel="dashboard">
+        <section class="content-panel is-hidden" id="g-family" data-panel="g-family">
+          <section class="board-panel family-calendar-section" aria-labelledby="familyCalendarName">
+            <div class="section-heading">
+              <div>
+                <p class="panel-eyebrow">Shared family calendar</p>
+                <h2 id="familyCalendarName">G Family</h2>
+                <p>Keep sports, recitals, school dates, appointments, and shared family timing in one place everyone can see.</p>
+              </div>
+            </div>
+
+            <div class="family-calendar-grid">
+              <article class="family-calendar-card is-highlighted">
+                <div class="family-calendar-card-header">
+                  <span class="family-calendar-kicker">Upcoming</span>
+                  <strong id="familyCalendarStatCount">0</strong>
+                </div>
+                <p class="family-calendar-note" id="familyCalendarStatNote">No family events added yet</p>
+              </article>
+              <article class="family-calendar-card">
+                <div class="family-calendar-card-header">
+                  <span class="family-calendar-kicker">Remembered values</span>
+                  <strong>Fast entry</strong>
+                </div>
+                <p class="family-calendar-note">Locations, names, and event types become dropdown suggestions after the first save.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Upcoming G Family Events</h2>
+                <p>Everything saved here is shared across the family logins.</p>
+              </div>
+            </div>
+            <div id="familyCalendarUpcoming"></div>
+          </section>
+
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2 id="familyEventFormTitle">Add to G Family</h2>
+                <p>Start with a saved person, event type, or location. You can leave time blank if all you know right now is the date.</p>
+              </div>
+            </div>
+
+            <div class="suggestion-block">
+              <span class="suggestion-label">People</span>
+              <div class="suggestion-chip-row" id="familyPeopleChips"></div>
+            </div>
+            <div class="suggestion-block">
+              <span class="suggestion-label">Event types</span>
+              <div class="suggestion-chip-row" id="familyTypeChips"></div>
+            </div>
+            <div class="suggestion-block">
+              <span class="suggestion-label">Locations</span>
+              <div class="suggestion-chip-row" id="familyLocationChips"></div>
+            </div>
+
+            <form class="calendar-entry-form" id="familyEventForm">
+              <label>
+                Event title
+                <input id="familyEventTitle" type="text" list="familyTitleSuggestions" placeholder="Soccer game, recital, school play">
+              </label>
+              <label>
+                Event type
+                <input id="familyEventType" type="text" list="familyTypeSuggestions" placeholder="Practice, game, recital">
+              </label>
+              <label>
+                Who is it for?
+                <input id="familyEventPerson" type="text" list="familyPersonSuggestions" placeholder="Luca, Sophia, Oli, Viv">
+              </label>
+              <label>
+                Location
+                <input id="familyEventLocation" type="text" list="familyLocationSuggestions" placeholder="Field, school, theater, studio">
+              </label>
+              <label>
+                Date
+                <input id="familyEventDate" type="date">
+              </label>
+              <label>
+                Start time
+                <input id="familyEventStartTime" type="time" data-time-field>
+              </label>
+              <label>
+                End time
+                <input id="familyEventEndTime" type="time" data-time-field>
+              </label>
+              <label class="checkbox-row">
+                <input id="familyEventAllDay" type="checkbox">
+                <span>All day</span>
+              </label>
+              <label>
+                Notes
+                <textarea id="familyEventNotes" rows="3" placeholder="Uniform, parking, bring snacks, seating note, or anything helpful"></textarea>
+              </label>
+              <div class="panel-actions">
+                <button class="secondary-action compact-action is-hidden" type="button" id="familyEventCancel">Cancel edit</button>
+                <button class="secondary-action compact-action is-hidden" type="button" id="familyEventDelete">Delete event</button>
+                <button class="primary-action compact-action" type="submit" id="familyEventSave">Save event</button>
+              </div>
+            </form>
+
+            <datalist id="familyTitleSuggestions"></datalist>
+            <datalist id="familyTypeSuggestions"></datalist>
+            <datalist id="familyPersonSuggestions"></datalist>
+            <datalist id="familyLocationSuggestions"></datalist>
+          </section>
+
+          <section class="board-panel schedule-photo-import">
+            <div class="section-heading">
+              <div>
+                <h2>Add From a Schedule Photo</h2>
+                <p>Upload a flyer or screenshot, tell it who it is for and what it is for, then review the drafted events before saving.</p>
+              </div>
+            </div>
+
+            <form class="schedule-photo-actions" id="scheduleImportForm">
+              <label>
+                Who is it for?
+                <input id="scheduleImportPerson" type="text" list="familyPersonSuggestions" placeholder="Kid or family member">
+              </label>
+              <label>
+                What is it for?
+                <input id="scheduleImportLabel" type="text" placeholder="Soccer, recital, camp, school schedule">
+              </label>
+              <label>
+                Schedule photo
+                <input id="scheduleImage" type="file" accept="image/*">
+              </label>
+            </form>
+
+            <div class="schedule-photo-preview is-hidden" id="scheduleImagePreviewWrap">
+              <img id="scheduleImagePreview" alt="Preview of the imported schedule photo">
+            </div>
+
+            <div class="panel-actions">
+              <button class="secondary-action compact-action" type="button" id="clearScheduleImport">Clear</button>
+              <button class="primary-action compact-action" type="button" id="scanSchedule">Scan schedule</button>
+            </div>
+
+            <label>
+              Extracted text
+              <textarea id="scheduleExtractedText" rows="6" placeholder="The scanned text will appear here. You can edit it before rebuilding drafts."></textarea>
+            </label>
+            <div class="panel-actions">
+              <button class="secondary-action compact-action" type="button" id="rebuildScheduleDrafts">Rebuild drafts from text</button>
+              <button class="primary-action compact-action" type="button" id="saveScheduleDrafts">Save reviewed events</button>
+            </div>
+          </section>
+
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Draft Events</h2>
+                <p>Review, correct, or remove each event before saving it to the shared family calendar.</p>
+              </div>
+            </div>
+            <div id="familyScheduleDrafts"></div>
+          </section>
+
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Saved Schedule Imports</h2>
+                <p>Recent schedule scans stay visible as a quick reference.</p>
+              </div>
+            </div>
+            <div id="familyImportHistory"></div>
+          </section>
+        </section>
+
+        <section class="content-panel is-hidden" id="todo" data-panel="todo">
+          <div class="panel-heading">
+            <div>
+              <h1>Things To Do</h1>
+              <p>Hikes, swimming, golf, scenic drives, and easy things to do while we are up there.</p>
+            </div>
+          </div>
+
+          <div class="todo-tabs" id="todoViewTabs" role="tablist" aria-label="Things to do view">
+            <button class="todo-tab is-active" type="button" role="tab" aria-selected="true" data-todo-view="things">Things To Do</button>
+            <button class="todo-tab" type="button" role="tab" aria-selected="false" data-todo-view="games">Games We Are Bringing</button>
+          </div>
+
+          <div id="todoThingsPane" data-todo-pane="things">
+            <section class="board-panel todo-things-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Pick Something To Do</h2>
+                  <p>Open the website for details, or tap Google Maps to route there.</p>
+                </div>
+              </div>
+              <div class="todo-things-grid" id="todoThingsToDoList"></div>
+            </section>
+            <section class="board-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Places to eat nearby</h2>
+                  <p>Short-drive backups and sit-down options.</p>
+                </div>
+              </div>
+              <div class="cabin-activity-list" id="nearbyFoodList"></div>
+            </section>
+          </div>
+
+          <div class="is-hidden" id="todoGamesPane" data-todo-pane="games">
+            <section class="board-panel todo-games-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Games We Are Bringing</h2>
+                  <p>Board games and rainy-day backups grouped by the family bringing them.</p>
+                </div>
+              </div>
+              <div class="todo-games-grid" id="todoGamesByFamily"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="content-panel is-hidden" id="checkin" data-panel="checkin">
+          <section class="board-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Food Board moved</h2>
+                <p>The main bringing flow now lives on the 4th of July Event tab.</p>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="content-panel" id="home" data-panel="home">
+          <div class="panel-heading home-hub-header">
+            <div>
+              <h1>Home</h1>
+              <p>Pick the family calendar or the July trip board.</p>
+            </div>
+          </div>
+
+          <section class="board-panel home-landing-panel home-hub" id="homeLandingPanel" aria-labelledby="homeLandingTitle">
+            <div class="section-heading">
+              <div>
+                <h2 id="homeLandingTitle">Where Do You Want To Go?</h2>
+              </div>
+            </div>
+
+            <div class="destination-card-grid home-destination-grid" id="homeDestinationCards">
+              <button class="destination-card home-destination-button is-calendar" type="button" id="openCalendarEventsDestination" data-tab="g-family" aria-label="Open G Family">
+                <span class="destination-card-copy">
+                  <p class="destination-card-kicker">G Family</p>
+                  <h3 id="homeFamilyCalendarTitle">G Family Calendar</h3>
+                  <p id="homeFamilyCalendarCopy">Kids events, locations, schedule photos.</p>
+                  <span class="destination-card-stat"><strong id="homeStatUpcoming">0</strong> upcoming</span>
+                  <span class="destination-card-note" id="homeStatNext">No family events added yet</span>
+                </span>
+                <span class="destination-card-actions">
+                  <span class="destination-card-cta">Open</span>
+                </span>
+              </button>
+
+              <button class="destination-card home-destination-button is-food" type="button" id="openFourthOfJulyDestination" data-tab="trip-food" aria-label="Open 4th of July Event">
+                <span class="destination-card-copy">
+                  <p class="destination-card-kicker">Trip board</p>
+                  <h3>4th of July Event</h3>
+                  <p>Meals, supplies, trip schedule, and to-do.</p>
+                  <span class="destination-card-stat">July 1 - 6</span>
+                  <span class="destination-card-note">Arnold cabin planning</span>
+                </span>
+                <span class="destination-card-actions">
+                  <span class="destination-card-cta">Open</span>
+                </span>
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <section class="content-panel is-hidden" id="trip-food" data-panel="trip-food">
+          <div class="food-hub">
+            <div class="food-tabs at-family" id="foodViewTabs" role="tablist" aria-label="Food view">
+              <span class="food-tab-thumb" aria-hidden="true"></span>
+              <button class="food-tab is-active" type="button" data-food-view="family" role="tab" aria-selected="true">By family</button>
+              <button class="food-tab" type="button" data-food-view="meals" role="tab" aria-selected="false">By meal</button>
+            </div>
+            <div class="food-days" id="foodDays" aria-label="Pick a day"></div>
+            <div class="food-meal-grid" id="foodMealGrid"></div>
+            <div class="food-family-grid is-hidden" id="foodFamilyGrid"></div>
+          </div>
+
+          <div class="food-add-bar">
+            <button class="secondary-action compact-action" type="button" id="addMealIdea">Add meal slot</button>
+            <button class="primary-action compact-action" type="button" id="addSupply">Add item</button>
+          </div>
+        </section>
+
+        <section class="content-panel is-hidden" id="trip-calendar" data-panel="trip-calendar">
+          <div class="panel-heading">
+            <div>
+              <h1>Calendar Events</h1>
+              <p>Trip schedule, house details, and non-food plans for the 4th of July event.</p>
+            </div>
+          </div>
+
           <div class="cal-subscribe-bar">
             <button class="cal-sub-btn primary" type="button" id="subscribeApple">Add to Apple Calendar</button>
             <button class="cal-sub-btn" type="button" id="copyCalLink">Copy link</button>
@@ -128,64 +430,6 @@
           </section>
         </section>
 
-        <section class="content-panel is-hidden" id="todo" data-panel="todo">
-          <div class="panel-heading">
-            <div>
-              <h1>To Do</h1>
-              <p>One checklist, nearby food, and nearby outing links.</p>
-            </div>
-          </div>
-          <section class="board-panel">
-            <details class="todo-dropdown" open>
-              <summary>Trip to-do list</summary>
-              <div class="todo-dropdown-body">
-                <div class="question-list todo-checklist-list" id="todoChecklistList"></div>
-              </div>
-            </details>
-          </section>
-          <section class="board-panel">
-            <div class="section-heading">
-              <div>
-                <h2>Places to eat nearby</h2>
-                <p>Short-drive backups and sit-down options.</p>
-              </div>
-            </div>
-            <div class="cabin-activity-list" id="nearbyFoodList"></div>
-          </section>
-          <section class="board-panel">
-            <div class="section-heading">
-              <div>
-                <h2>Things to do nearby</h2>
-                <p>Closer, easier outings that feel worth the drive.</p>
-              </div>
-            </div>
-            <div class="cabin-activity-list" id="nearbyOutingList"></div>
-          </section>
-        </section>
-
-        <section class="content-panel is-hidden" id="checkin" data-panel="checkin">
-          <section class="board-panel">
-            <div class="section-heading">
-              <div>
-                <h2>Food Board moved</h2>
-                <p>The main bringing flow now lives on the Food tab.</p>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <section class="content-panel" id="food" data-panel="food">
-          <div class="food-hub">
-            <div class="food-days" id="foodDays" aria-label="Pick a day"></div>
-            <div class="food-meal-grid" id="foodMealGrid"></div>
-          </div>
-
-          <div class="food-add-bar">
-            <button class="secondary-action compact-action" type="button" id="addMealIdea">Add meal slot</button>
-            <button class="primary-action compact-action" type="button" id="addSupply">Add item</button>
-          </div>
-        </section>
-
         <section class="content-panel is-hidden" id="cabin" data-panel="cabin">
           <section class="board-panel">
             <div class="section-heading">
@@ -211,15 +455,19 @@
       </main>
 
       <nav class="mobile-nav" aria-label="Mobile primary">
-        <button class="mobile-nav-item is-active" type="button" data-tab="food">
+        <button class="mobile-nav-item is-active" type="button" data-tab="home" data-mobile-panels="home,g-family,trip-food,trip-calendar,todo">
+          <span data-icon="home"></span>
+          Home
+        </button>
+        <button class="mobile-nav-item" type="button" data-tab="trip-food" data-mobile-panels="trip-food,trip-calendar,todo">
           <span data-icon="utensils"></span>
           Food
         </button>
-        <button class="mobile-nav-item" type="button" data-tab="dashboard">
+        <button class="mobile-nav-item" type="button" data-tab="trip-calendar" data-mobile-panels="trip-food,trip-calendar,todo">
           <span data-icon="calendar"></span>
           Calendar
         </button>
-        <button class="mobile-nav-item" type="button" data-tab="todo">
+        <button class="mobile-nav-item" type="button" data-tab="todo" data-mobile-panels="trip-food,trip-calendar,todo">
           <span data-icon="mountain"></span>
           To Do
         </button>
@@ -227,6 +475,69 @@
     </div>
 
     <div class="drawer-backdrop is-hidden" id="drawerBackdrop"></div>
+    <aside class="profile-drawer is-hidden" id="profileDrawer" aria-labelledby="profileDrawerTitle" aria-modal="true" role="dialog">
+      <div class="drawer-header">
+        <div>
+          <h2 id="profileDrawerTitle">Profile</h2>
+          <p>Name and picture only.</p>
+        </div>
+        <button class="icon-button dark" type="button" id="closeProfileDrawer" aria-label="Close profile">
+          <span data-icon="x"></span>
+        </button>
+      </div>
+
+      <form class="profile-form" id="profileForm">
+        <div class="profile-photo-preview" id="profilePhotoPreview">
+          <img class="is-hidden" id="profilePhotoImage" alt="Profile picture preview">
+          <span id="profilePhotoInitial">B</span>
+        </div>
+
+        <label>
+          Name
+          <input id="profileNameInput" type="text" autocomplete="name" placeholder="Your name">
+        </label>
+
+        <label>
+          Picture (optional)
+          <input id="profilePhotoInput" type="file" accept="image/*">
+        </label>
+
+        <div class="profile-cropper is-hidden" id="profileCropper">
+          <div class="profile-crop-heading">
+            <strong>Crop picture</strong>
+            <span>Move it around and zoom before saving.</span>
+          </div>
+          <div class="profile-crop-frame">
+            <img id="profileCropImage" alt="Picture crop preview">
+          </div>
+          <div class="profile-crop-pad" aria-label="Move picture">
+            <button class="secondary-action compact-action" type="button" data-profile-crop="up">Up</button>
+            <button class="secondary-action compact-action" type="button" data-profile-crop="left">Left</button>
+            <button class="secondary-action compact-action" type="button" data-profile-crop="right">Right</button>
+            <button class="secondary-action compact-action" type="button" data-profile-crop="down">Down</button>
+          </div>
+          <label class="profile-zoom-control">
+            Zoom
+            <input id="profilePhotoZoom" type="range" min="1" max="3" step="0.05" value="1">
+          </label>
+          <div class="profile-crop-pad">
+            <button class="secondary-action compact-action" type="button" data-profile-crop="zoom-out">Zoom out</button>
+            <button class="secondary-action compact-action" type="button" data-profile-crop="zoom-in">Zoom in</button>
+            <button class="secondary-action compact-action" type="button" data-profile-crop="reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="panel-actions profile-actions-row">
+          <button class="secondary-action compact-action" type="button" id="removeProfilePhoto">Remove picture</button>
+          <button class="primary-action compact-action" type="submit">Save</button>
+        </div>
+      </form>
+
+      <div class="drawer-footer profile-footer">
+        <button type="button" class="secondary-action" id="logoutProfile">Sign out</button>
+      </div>
+    </aside>
+
     <aside class="checkin-drawer is-hidden" id="checkinDrawer" aria-labelledby="drawerTitle" aria-modal="true" role="dialog">
       <div class="drawer-header">
         <div>
@@ -397,34 +708,23 @@
 
     <div class="toast is-hidden" id="toast" role="status" aria-live="polite"></div>
 
-<section class="auth-screen" id="authScreen" aria-labelledby="authTitle" aria-modal="true" role="dialog">
+<section class="auth-screen auth-screen-minimal" id="authScreen" aria-label="Login" aria-modal="true" role="dialog">
     <div class="auth-card">
-    <div class="auth-brand">
-          <span class="auth-brand-mark" aria-hidden="true">
-            <img src="assets/login-g-mark.png" alt="">
-      </span>
-      <div>
-        <h1 id="authTitle">4th of July 2026</h1>
-        <p>Guantonio&apos;s Trip. Enter your first name and the family password.</p>
-      </div>
-    </div>
-
     <form class="auth-form" id="authForm">
       <label>
-        First name
-        <input id="authFirstName" type="text" autocomplete="given-name" placeholder="First name" required>
+        <input id="authFirstName" type="text" autocomplete="given-name" aria-label="First name" placeholder="First name" enterkeyhint="next" required>
       </label>
       <label>
-        Password
-        <input id="authPassword" type="password" autocomplete="current-password" placeholder="Password" required>
+        <input id="authPassword" type="password" autocomplete="current-password" aria-label="Password" placeholder="Password" enterkeyhint="go" required>
       </label>
       <input id="authInvite" type="hidden" autocomplete="one-time-code">
       <input id="authEmail" type="hidden" autocomplete="email">
       <input id="authFamily" type="hidden">
-      <button class="primary-action auth-submit" type="submit">Sign in</button>
+      <input id="authPersonId" type="hidden">
+      <button class="sr-only" type="submit" aria-label="Sign in"></button>
     </form>
-    <p class="auth-helper" id="authRememberedNote">This device stays signed in for 30 days after you log in.</p>
-    <p class="auth-message" id="authMessage" aria-live="polite"></p>
+    <p class="sr-only" id="authRememberedNote"></p>
+    <p class="sr-only" id="authMessage" aria-live="polite"></p>
   </div>
 </section>
 
@@ -434,6 +734,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=38"></script>
+    <script src="script.js?v=60"></script>
   </body>
 </html>

@@ -1,11 +1,11 @@
 {
-  "name": "4th of July 2026",
-  "short_name": "4th of July 2026",
+  "name": "GRE Family App",
+  "short_name": "GRE Family",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f5f5f7",
   "theme_color": "#1b6f3e",
-  "description": "Guantonio's Trip planning app for family timing, bringing lists, meals, and live updates.",
+  "description": "GRE Family App for Guantonio, Riggs, and Eberly family timing, calendars, meals, and live updates.",
   "icons": [
     {
       "src": "assets/favicon.svg",
@@ -20,6 +20,11 @@
     {
       "src": "assets/icon-512.png",
       "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-1024.png",
+      "sizes": "1024x1024",
       "type": "image/png"
     }
   ]

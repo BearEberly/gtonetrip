@@ -14,6 +14,8 @@ const corsHeaders = {
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+const googleSheetsWebhookUrl = Deno.env.get("GOOGLE_SHEETS_WEBHOOK_URL") || "";
+const googleSheetsWebhookSecret = Deno.env.get("GOOGLE_SHEETS_WEBHOOK_SECRET") || "";
 const client = createClient(supabaseUrl, serviceRoleKey, {
   auth: { persistSession: false, autoRefreshToken: false }
 });
@@ -89,9 +91,9 @@ function json(payload: unknown, status = 200) {
   });
 }
 
-function textSafe(value: unknown, fallback = "") {
+function textSafe(value: unknown, fallback = "", max = 500) {
   const text = String(value ?? "").trim();
-  return text ? text.slice(0, 500) : fallback;
+  return text ? text.slice(0, max) : fallback;
 }
 
 function personSafe(value: unknown) {
@@ -117,6 +119,11 @@ function userFromPersonId(personId: unknown) {
 function daySafe(value: unknown) {
   const normalized = String(value || "").trim().toLowerCase();
   return allDayCodes.includes(normalized) ? normalized : "sun";
+}
+
+function optionalDaySafe(value: unknown) {
+  const normalized = String(value || "").trim().toLowerCase();
+  return allDayCodes.includes(normalized) ? normalized : "";
 }
 
 function dayLabelFor(day: string) {
@@ -146,6 +153,22 @@ function bringingTypeSafe(value: unknown) {
 function dayListSafe(value: unknown, fallback: string[] = []) {
   const list = Array.isArray(value) ? value : fallback;
   return allDayCodes.filter((day) => list.includes(day));
+}
+
+function uniqueTextList(value: unknown, maxItems = 60, maxLength = 120) {
+  const items = Array.isArray(value) ? value : [value];
+  const next: string[] = [];
+  const seen = new Set<string>();
+  for (const item of items) {
+    const safe = textSafe(item, "", maxLength);
+    if (!safe) continue;
+    const key = safe.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    next.push(safe);
+    if (next.length >= maxItems) break;
+  }
+  return next;
 }
 
 function imageDataUrlSafe(value: unknown) {
@@ -233,6 +256,204 @@ function normalizeChecklists(value: unknown) {
   return next;
 }
 
+function isoDateSafe(value: unknown) {
+  const text = textSafe(value, "", 20);
+  return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : "";
+}
+
+function timeSafe(value: unknown) {
+  const text = textSafe(value, "", 10);
+  return /^\d{2}:\d{2}$/.test(text) ? text : "";
+}
+
+function normalizeFamilyCalendarEvent(value: unknown, fallbackId: string) {
+  if (!value || typeof value !== "object") return null;
+  const raw = value as Record<string, unknown>;
+  const title = textSafe(raw.title ?? raw.idea, "", 160);
+  if (!title) return null;
+  return {
+    id: textSafe(raw.id, fallbackId, 80) || fallbackId,
+    title,
+    eventType: textSafe(raw.eventType ?? raw.type, "Other", 80) || "Other",
+    person: textSafe(raw.person ?? raw.forPersonLabel ?? (Array.isArray(raw.people) ? (raw.people as unknown[]).join(", ") : ""), "", 120),
+    date: isoDateSafe(raw.date),
+    startTime: timeSafe(raw.startTime),
+    endTime: timeSafe(raw.endTime),
+    allDay: Boolean(raw.allDay),
+    location: textSafe(raw.location ?? raw.locationName ?? raw.place, "", 160),
+    notes: textSafe(raw.notes ?? raw.detail ?? raw.description, "", 1200),
+    source: textSafe(raw.source, "manual", 40) || "manual",
+    image: imageDataUrlSafe(raw.image ?? raw.sourceImage),
+    createdAt: textSafe(raw.createdAt, "", 80) || null,
+    updatedAt: textSafe(raw.updatedAt, "", 80) || null,
+    createdBy: familySafe(raw.createdBy),
+    updatedBy: familySafe(raw.updatedBy)
+  };
+}
+
+function normalizeFamilyCalendarEvents(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .slice(0, 400)
+    .map((item, index) => normalizeFamilyCalendarEvent(item, `family-event-${index + 1}`))
+    .filter(Boolean);
+}
+
+function normalizeFamilyCalendarMemory(value: unknown) {
+  const raw = value && typeof value === "object" ? value as Record<string, unknown> : {};
+  return {
+    rememberedLocations: uniqueTextList(raw.rememberedLocations),
+    rememberedNames: uniqueTextList(raw.rememberedNames),
+    rememberedEventTitles: uniqueTextList(raw.rememberedEventTitles),
+    rememberedEventTypes: uniqueTextList(raw.rememberedEventTypes),
+    updatedAt: textSafe(raw.updatedAt, "", 80) || null
+  };
+}
+
+function normalizeScheduleDraftEvent(value: unknown, fallbackId: string) {
+  if (!value || typeof value !== "object") return null;
+  const raw = value as Record<string, unknown>;
+  const title = textSafe(raw.title ?? raw.name ?? raw.eventTitle ?? raw.summary, "", 160);
+  const type = textSafe(raw.type ?? raw.eventType, "", 80);
+  const time = textSafe(raw.time ?? raw.when, "", 120);
+  const location = textSafe(raw.location ?? raw.place, "", 160);
+  const people = uniqueTextList(raw.people ?? raw.names, 20, 80);
+  const notes = textSafe(raw.notes ?? raw.detail ?? raw.description, "", 1000);
+  if (!title && !type && !time && !location && !people.length && !notes) return null;
+  const day = optionalDaySafe(raw.day ?? raw.dayCode);
+  return {
+    id: textSafe(raw.id, fallbackId, 80) || fallbackId,
+    day,
+    dayLabel: textSafe(raw.dayLabel ?? raw.dateLabel, day ? dayLabelFor(day) : "", 120),
+    title: title || "Untitled event",
+    type: type || "Event",
+    time,
+    location,
+    people,
+    notes
+  };
+}
+
+function normalizeSchedulePhotoDraft(value: unknown, fallbackId: string) {
+  if (!value || typeof value !== "object") return null;
+  const raw = value as Record<string, unknown>;
+  const events = Array.isArray(raw.events)
+    ? raw.events
+      .slice(0, 40)
+      .map((item, index) => normalizeScheduleDraftEvent(item, `draft-event-${index + 1}`))
+      .filter(Boolean)
+    : [];
+  return {
+    id: textSafe(raw.id, fallbackId, 80) || fallbackId,
+    title: textSafe(raw.title, "Imported schedule draft", 160) || "Imported schedule draft",
+    location: textSafe(raw.location ?? raw.place, "", 160),
+    people: uniqueTextList(raw.people ?? raw.names, 20, 80),
+    sourceImage: imageDataUrlSafe(raw.sourceImage ?? raw.image),
+    sourceText: textSafe(raw.sourceText ?? raw.ocrText ?? raw.importedText, "", 6000),
+    notes: textSafe(raw.notes, "", 1500),
+    sourceFileName: textSafe(raw.sourceFileName ?? raw.fileName, "", 160),
+    importedAt: textSafe(raw.importedAt, "", 80) || null,
+    createdAt: textSafe(raw.createdAt, "", 80) || null,
+    createdBy: familySafe(raw.createdBy),
+    updatedAt: textSafe(raw.updatedAt, "", 80) || null,
+    updatedBy: familySafe(raw.updatedBy),
+    events
+  };
+}
+
+function normalizeSchedulePhotoDrafts(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .slice(0, 24)
+    .map((item, index) => normalizeSchedulePhotoDraft(item, `schedule-draft-${index + 1}`))
+    .filter(Boolean);
+}
+
+function memoryPatchFromPayload(payload: Record<string, unknown>) {
+  return {
+    rememberedLocations: uniqueTextList(payload.rememberedLocations ?? payload.locations),
+    rememberedNames: uniqueTextList(payload.rememberedNames ?? payload.names),
+    rememberedEventTitles: uniqueTextList(payload.rememberedEventTitles ?? payload.eventTitles ?? payload.titles),
+    rememberedEventTypes: uniqueTextList(payload.rememberedEventTypes ?? payload.eventTypes ?? payload.types)
+  };
+}
+
+function memoryPatchFromDraft(draft: Record<string, unknown>) {
+  const events = Array.isArray(draft.events) ? draft.events : [];
+  const eventTitles = uniqueTextList([
+    draft.title,
+    ...events.map((event) => (event as Record<string, unknown>).title)
+  ]);
+  const eventTypes = uniqueTextList(events.map((event) => (event as Record<string, unknown>).type));
+  const locations = uniqueTextList([
+    draft.location,
+    ...events.map((event) => (event as Record<string, unknown>).location)
+  ]);
+  const names = uniqueTextList([
+    ...(Array.isArray(draft.people) ? draft.people : []),
+    ...events.flatMap((event) => Array.isArray((event as Record<string, unknown>).people) ? (event as Record<string, unknown>).people as unknown[] : [])
+  ], 40, 80);
+  return {
+    rememberedLocations: locations,
+    rememberedNames: names,
+    rememberedEventTitles: eventTitles,
+    rememberedEventTypes: eventTypes
+  };
+}
+
+function memoryPatchFromFamilyEvent(event: Record<string, unknown>) {
+  return {
+    rememberedLocations: uniqueTextList(event.location),
+    rememberedNames: uniqueTextList(event.person),
+    rememberedEventTitles: uniqueTextList(event.title),
+    rememberedEventTypes: uniqueTextList(event.eventType)
+  };
+}
+
+function mergeRememberedValues(existing: string[], incoming: string[], maxItems = 60) {
+  const next = uniqueTextList(existing, maxItems);
+  const seen = new Set(next.map((item) => item.toLowerCase()));
+  let changed = false;
+  for (const item of uniqueTextList(incoming, maxItems)) {
+    const key = item.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    next.push(item);
+    changed = true;
+    if (next.length >= maxItems) break;
+  }
+  return { values: next, changed };
+}
+
+function applyCalendarMemoryPatch(memory: Record<string, unknown>, patch: {
+  rememberedLocations?: string[];
+  rememberedNames?: string[];
+  rememberedEventTitles?: string[];
+  rememberedEventTypes?: string[];
+}) {
+  const next = normalizeFamilyCalendarMemory(memory);
+  let changed = false;
+
+  const locations = mergeRememberedValues(next.rememberedLocations, patch.rememberedLocations || []);
+  next.rememberedLocations = locations.values;
+  changed ||= locations.changed;
+
+  const names = mergeRememberedValues(next.rememberedNames, patch.rememberedNames || []);
+  next.rememberedNames = names.values;
+  changed ||= names.changed;
+
+  const titles = mergeRememberedValues(next.rememberedEventTitles, patch.rememberedEventTitles || []);
+  next.rememberedEventTitles = titles.values;
+  changed ||= titles.changed;
+
+  const types = mergeRememberedValues(next.rememberedEventTypes, patch.rememberedEventTypes || []);
+  next.rememberedEventTypes = types.values;
+  changed ||= types.changed;
+
+  if (changed) next.updatedAt = new Date().toISOString();
+  return { memory: next, changed };
+}
+
 function normalizeState(state: Record<string, unknown>) {
   return {
     version: Number(state.version || 1),
@@ -243,7 +464,10 @@ function normalizeState(state: Record<string, unknown>) {
     familyResponses: state.familyResponses && typeof state.familyResponses === "object" ? state.familyResponses : {},
     activityVotes: state.activityVotes && typeof state.activityVotes === "object" ? state.activityVotes : {},
     activityVoters: normalizeActivityVoters(state.activityVoters),
-    checklists: normalizeChecklists(state.checklists)
+    checklists: normalizeChecklists(state.checklists),
+    familyCalendarEvents: normalizeFamilyCalendarEvents(state.familyCalendarEvents),
+    familyCalendarMemory: normalizeFamilyCalendarMemory(state.familyCalendarMemory),
+    schedulePhotoDrafts: normalizeSchedulePhotoDrafts(state.schedulePhotoDrafts)
   };
 }
 
@@ -265,6 +489,158 @@ async function saveStoredState(state: Record<string, unknown>) {
   }).eq("key", "primary");
   if (error) throw error;
   return next;
+}
+
+function actionEntityType(actionType: string) {
+  if (["claimMeal", "addMealIdea", "updateMealIdea", "deleteMealIdea"].includes(actionType)) return "meal";
+  if (["toggleSupply", "addSupply", "updateSupply", "deleteSupply"].includes(actionType)) return "supply";
+  if (actionType === "checkin") return "familyResponse";
+  if (actionType === "voteActivity") return "activityVote";
+  if (actionType === "toggleChecklist") return "checklist";
+  if (["addFamilyEvent", "updateFamilyEvent", "deleteFamilyEvent"].includes(actionType)) return "familyCalendarEvent";
+  if (actionType === "rememberCalendarMemory") return "familyCalendarMemory";
+  if (["saveSchedulePhotoDraft", "deleteSchedulePhotoDraft"].includes(actionType)) return "schedulePhotoDraft";
+  return "state";
+}
+
+function actionEntityId(actionType: string, payload: Record<string, unknown>, actorFamilyId: string) {
+  if (["claimMeal", "toggleSupply", "updateMealIdea", "deleteMealIdea", "updateSupply", "deleteSupply", "updateFamilyEvent", "deleteFamilyEvent", "deleteSchedulePhotoDraft"].includes(actionType)) {
+    return textSafe(payload.id, "", 120);
+  }
+  if (actionType === "checkin") return familySafe(actorFamilyId || payload.familyId);
+  if (actionType === "voteActivity") return textSafe(payload.id, "", 120);
+  if (actionType === "toggleChecklist") return textSafe(payload.id, "", 120);
+  if (actionType === "addFamilyEvent") return textSafe(payload.id, "", 120) || "new-family-event";
+  if (actionType === "addMealIdea") return "new-meal";
+  if (actionType === "addSupply") return "new-supply";
+  if (actionType === "saveSchedulePhotoDraft") return textSafe(payload.id, "", 120) || "new-schedule-draft";
+  return "";
+}
+
+function findEntitySnapshot(state: Record<string, unknown>, actionType: string, payload: Record<string, unknown>, actorFamilyId: string) {
+  const entityType = actionEntityType(actionType);
+  const entityId = actionEntityId(actionType, payload, actorFamilyId);
+
+  if (entityType === "meal") {
+    return Array.isArray(state.meals)
+      ? state.meals.find((item) => textSafe((item as Record<string, unknown>).id, "", 120) === entityId) || null
+      : null;
+  }
+
+  if (entityType === "supply") {
+    return Array.isArray(state.supplies)
+      ? state.supplies.find((item) => textSafe((item as Record<string, unknown>).id, "", 120) === entityId) || null
+      : null;
+  }
+
+  if (entityType === "familyResponse") {
+    const familyId = familySafe(entityId);
+    return familyId
+      ? ((state.familyResponses && typeof state.familyResponses === "object"
+        ? (state.familyResponses as Record<string, unknown>)[familyId]
+        : null) || null)
+      : null;
+  }
+
+  if (entityType === "activityVote") {
+    const activityId = textSafe(entityId, "", 120);
+    const familyId = familySafe(actorFamilyId);
+    const voted = Boolean((state.activityVoters as Record<string, Record<string, boolean>> | undefined)?.[activityId]?.[familyId]);
+    return activityId ? { activityId, familyId, voted } : null;
+  }
+
+  if (entityType === "checklist") {
+    const checklistId = textSafe(entityId, "", 120);
+    const checked = Boolean((state.checklists as Record<string, boolean> | undefined)?.[checklistId]);
+    return checklistId ? { id: checklistId, checked } : null;
+  }
+
+  if (entityType === "familyCalendarEvent") {
+    return Array.isArray(state.familyCalendarEvents)
+      ? state.familyCalendarEvents.find((item) => textSafe((item as Record<string, unknown>).id, "", 120) === entityId) || null
+      : null;
+  }
+
+  if (entityType === "schedulePhotoDraft") {
+    return Array.isArray(state.schedulePhotoDrafts)
+      ? state.schedulePhotoDrafts.find((item) => textSafe((item as Record<string, unknown>).id, "", 120) === entityId) || null
+      : null;
+  }
+
+  if (entityType === "familyCalendarMemory") {
+    return state.familyCalendarMemory && typeof state.familyCalendarMemory === "object" ? state.familyCalendarMemory : null;
+  }
+
+  return null;
+}
+
+function entityLabelForSnapshot(entityType: string, entity: unknown, payload: Record<string, unknown>) {
+  const record = entity && typeof entity === "object" ? entity as Record<string, unknown> : {};
+  if (entityType === "meal") return textSafe(record.idea ?? payload.idea, "", 180);
+  if (entityType === "supply") return textSafe(record.name ?? payload.name, "", 180);
+  if (entityType === "familyCalendarEvent") return textSafe(record.title ?? payload.title, "", 180);
+  if (entityType === "schedulePhotoDraft") return textSafe(record.title ?? payload.title, "", 180);
+  if (entityType === "familyResponse") return textSafe(payload.arrival ?? record.arrival, "", 180);
+  if (entityType === "activityVote") return textSafe(payload.id ?? record.activityId, "", 180);
+  if (entityType === "checklist") return textSafe(payload.id ?? record.id, "", 180);
+  return textSafe(payload.title ?? payload.name ?? payload.id, "", 180);
+}
+
+function safeJsonStringify(value: unknown, maxLength = 40000) {
+  const text = JSON.stringify(value ?? null);
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+}
+
+async function sendGoogleSheetsChangeLog(input: {
+  actionType: string;
+  payload: Record<string, unknown>;
+  actor: { personId: string; firstName: string; familyId: string };
+  clientId: string;
+  oldState: Record<string, unknown>;
+  newState: Record<string, unknown>;
+  message: string;
+}) {
+  if (!googleSheetsWebhookUrl) return;
+
+  const changedAt = new Date().toISOString();
+  const entityType = actionEntityType(input.actionType);
+  const entityId = actionEntityId(input.actionType, input.payload, input.actor.familyId);
+  const oldEntity = findEntitySnapshot(input.oldState, input.actionType, input.payload, input.actor.familyId);
+  const newEntity = findEntitySnapshot(input.newState, input.actionType, input.payload, input.actor.familyId);
+  const body = {
+    secret: googleSheetsWebhookSecret,
+    timestamp: changedAt,
+    firstName: input.actor.firstName,
+    lastName: "",
+    phoneNumber: "",
+    personId: input.actor.personId,
+    familyId: input.actor.familyId,
+    actionType: input.actionType,
+    entityType,
+    entityId,
+    entityLabel: entityLabelForSnapshot(entityType, newEntity || oldEntity, input.payload),
+    changedFields: Object.keys(input.payload || {}).join(", "),
+    oldValuesJson: safeJsonStringify(oldEntity),
+    newValuesJson: safeJsonStringify(newEntity),
+    payloadJson: safeJsonStringify(input.payload),
+    success: true,
+    message: input.message,
+    changedAt,
+    stateVersion: Number(input.newState.version || 0),
+    source: "trip-api",
+    clientId: textSafe(input.clientId, "", 180)
+  };
+
+  const response = await fetch(googleSheetsWebhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(5000)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Google Sheets webhook failed: ${response.status}`);
+  }
 }
 
 async function createSession(user: { personId: string; firstName: string; familyId: string }) {
@@ -490,6 +866,71 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     return { changed: true, message: "Check-in saved.", state: next };
   }
 
+  if (action.type === "rememberCalendarMemory") {
+    const patch = memoryPatchFromPayload(payload);
+    const applied = applyCalendarMemoryPatch((next.familyCalendarMemory as Record<string, unknown>) || {}, patch);
+    if (!applied.changed) return { changed: false, message: "Nothing new to remember." };
+    next.familyCalendarMemory = applied.memory;
+    return { changed: true, message: "Calendar memory saved.", state: next };
+  }
+
+  if (action.type === "addFamilyEvent") {
+    next.familyCalendarEvents ||= [];
+    const events = normalizeFamilyCalendarEvents(next.familyCalendarEvents) as Record<string, unknown>[];
+    const normalizedEvent = normalizeFamilyCalendarEvent({
+      ...payload,
+      id: payload.id || `family-event-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: actorFamilyId,
+      updatedBy: actorFamilyId
+    }, `family-event-${Date.now()}`) as Record<string, unknown> | null;
+    if (!normalizedEvent) return { changed: false, message: "Family event is missing a title." };
+    events.push(normalizedEvent);
+    next.familyCalendarEvents = events;
+    const applied = applyCalendarMemoryPatch((next.familyCalendarMemory as Record<string, unknown>) || {}, memoryPatchFromFamilyEvent(normalizedEvent));
+    next.familyCalendarMemory = applied.memory;
+    return { changed: true, message: "Family event added.", state: next };
+  }
+
+  if (action.type === "updateFamilyEvent") {
+    const events = normalizeFamilyCalendarEvents(next.familyCalendarEvents) as Record<string, unknown>[];
+    const index = events.findIndex((item) => item.id === textSafe(payload.id, "", 80));
+    if (index < 0) return { changed: false, message: "Family event not found." };
+    const existing = events[index];
+    if (familySafe(existing.createdBy) && familySafe(existing.createdBy) !== familySafe(actorFamilyId)) {
+      return { changed: false, message: "Only the family that added this event can edit it." };
+    }
+    const normalizedEvent = normalizeFamilyCalendarEvent({
+      ...existing,
+      ...payload,
+      id: existing.id,
+      createdAt: existing.createdAt,
+      createdBy: existing.createdBy || actorFamilyId,
+      updatedAt: new Date().toISOString(),
+      updatedBy: actorFamilyId
+    }, String(existing.id || `family-event-${Date.now()}`)) as Record<string, unknown> | null;
+    if (!normalizedEvent) return { changed: false, message: "Family event is missing a title." };
+    events[index] = normalizedEvent;
+    next.familyCalendarEvents = events;
+    const applied = applyCalendarMemoryPatch((next.familyCalendarMemory as Record<string, unknown>) || {}, memoryPatchFromFamilyEvent(normalizedEvent));
+    next.familyCalendarMemory = applied.memory;
+    return { changed: true, message: "Family event updated.", state: next };
+  }
+
+  if (action.type === "deleteFamilyEvent") {
+    const events = normalizeFamilyCalendarEvents(next.familyCalendarEvents) as Record<string, unknown>[];
+    const index = events.findIndex((item) => item.id === textSafe(payload.id, "", 80));
+    if (index < 0) return { changed: false, message: "Family event not found." };
+    const existing = events[index];
+    if (familySafe(existing.createdBy) && familySafe(existing.createdBy) !== familySafe(actorFamilyId)) {
+      return { changed: false, message: "Only the family that added this event can delete it." };
+    }
+    events.splice(index, 1);
+    next.familyCalendarEvents = events;
+    return { changed: true, message: "Family event deleted.", state: next };
+  }
+
   if (action.type === "addMealIdea") {
     const idea = textSafe(payload.idea);
     if (!idea) return { changed: false, message: "Meal idea is empty." };
@@ -584,6 +1025,78 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only your family can delete this bringing item." };
     supplies.splice(index, 1);
     return { changed: true, message: "Bringing item deleted.", state: next };
+  }
+
+  if (action.type === "saveSchedulePhotoDraft") {
+    next.schedulePhotoDrafts ||= [];
+    const drafts = normalizeSchedulePhotoDrafts(next.schedulePhotoDrafts) as Record<string, unknown>[];
+    const requestedId = textSafe(payload.id, "", 80);
+    const existingIndex = requestedId ? drafts.findIndex((item) => item.id === requestedId) : -1;
+    const existingDraft = existingIndex >= 0 ? drafts[existingIndex] : null;
+    const now = new Date().toISOString();
+    const normalizedDraft = normalizeSchedulePhotoDraft({
+      ...(existingDraft || {}),
+      ...payload,
+      id: requestedId || payload.id || `schedule-draft-${Date.now()}`,
+      importedAt: textSafe(payload.importedAt, existingDraft?.importedAt as string || now, 80) || now,
+      createdAt: textSafe(payload.createdAt, existingDraft?.createdAt as string || now, 80) || now,
+      createdBy: existingDraft?.createdBy || actorFamilyId,
+      updatedAt: now,
+      updatedBy: actorFamilyId
+    }, requestedId || `schedule-draft-${Date.now()}`) as Record<string, unknown> | null;
+    if (!normalizedDraft) return { changed: false, message: "Schedule draft could not be saved." };
+    if (existingIndex >= 0) drafts[existingIndex] = normalizedDraft;
+    else drafts.unshift(normalizedDraft);
+    next.schedulePhotoDrafts = drafts.slice(0, 24);
+
+    next.familyCalendarEvents ||= [];
+    const calendarEvents = normalizeFamilyCalendarEvents(next.familyCalendarEvents) as Record<string, unknown>[];
+    const draftEvents = Array.isArray(payload.draftEvents) ? payload.draftEvents : payload.events;
+    if (Array.isArray(draftEvents)) {
+      draftEvents.forEach((item, index) => {
+        const familyEvent = normalizeFamilyCalendarEvent({
+          ...(item as Record<string, unknown>),
+          source: "photo",
+          image: "",
+          createdAt: now,
+          updatedAt: now,
+          createdBy: actorFamilyId,
+          updatedBy: actorFamilyId
+        }, `family-event-${Date.now()}-${index + 1}`) as Record<string, unknown> | null;
+        if (!familyEvent) return;
+        calendarEvents.push(familyEvent);
+      });
+    }
+    next.familyCalendarEvents = calendarEvents;
+
+    const draftMemory = memoryPatchFromDraft(normalizedDraft);
+    const explicitMemory = memoryPatchFromPayload(payload);
+    const applied = applyCalendarMemoryPatch((next.familyCalendarMemory as Record<string, unknown>) || {}, {
+      rememberedLocations: [...draftMemory.rememberedLocations, ...explicitMemory.rememberedLocations],
+      rememberedNames: [...draftMemory.rememberedNames, ...explicitMemory.rememberedNames],
+      rememberedEventTitles: [...draftMemory.rememberedEventTitles, ...explicitMemory.rememberedEventTitles],
+      rememberedEventTypes: [...draftMemory.rememberedEventTypes, ...explicitMemory.rememberedEventTypes]
+    });
+    for (const event of calendarEvents.slice(-((Array.isArray(draftEvents) ? draftEvents.length : 0) || 0))) {
+      const eventMemory = memoryPatchFromFamilyEvent(event as Record<string, unknown>);
+      applied.memory = applyCalendarMemoryPatch(applied.memory as Record<string, unknown>, eventMemory).memory;
+    }
+    next.familyCalendarMemory = applied.memory;
+    return {
+      changed: true,
+      message: existingIndex >= 0 ? "Schedule draft updated and events saved." : "Schedule draft saved and events added.",
+      state: next
+    };
+  }
+
+  if (action.type === "deleteSchedulePhotoDraft") {
+    const id = textSafe(payload.id, "", 80);
+    const drafts = normalizeSchedulePhotoDrafts(next.schedulePhotoDrafts) as Record<string, unknown>[];
+    const index = drafts.findIndex((item) => item.id === id);
+    if (index < 0) return { changed: false, message: "Schedule draft not found." };
+    drafts.splice(index, 1);
+    next.schedulePhotoDrafts = drafts;
+    return { changed: true, message: "Schedule draft deleted.", state: next };
   }
 
   return { changed: false, message: "Unknown action." };
@@ -904,9 +1417,24 @@ Deno.serve(async (request) => {
     if (route === "/action" && request.method === "POST") {
       const body = await request.json();
       const state = await getStoredState();
-      const result = applyAction(state, { type: textSafe(body.type), payload: body.payload || {} }, session.user.familyId);
+      const actionType = textSafe(body.type);
+      const actionPayload = body.payload && typeof body.payload === "object" ? body.payload as Record<string, unknown> : {};
+      const result = applyAction(state, { type: actionType, payload: actionPayload }, session.user.familyId);
       if (!result.changed) return json({ ...result, state, tripInfo }, 409);
       const savedState = await saveStoredState(result.state as Record<string, unknown>);
+      try {
+        await sendGoogleSheetsChangeLog({
+          actionType,
+          payload: actionPayload,
+          actor: session.user,
+          clientId: textSafe(body.clientId, "", 180),
+          oldState: state,
+          newState: savedState,
+          message: result.message
+        });
+      } catch (error) {
+        console.error("Google Sheets change log error", error);
+      }
       return json({ ...result, state: savedState, tripInfo });
     }
 

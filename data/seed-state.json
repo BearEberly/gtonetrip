@@ -42,6 +42,15 @@
   ],
   "familyChecks": { "bear": true },
   "familyResponses": {},
+  "familyCalendarEvents": [],
+  "familyCalendarMemory": {
+    "rememberedLocations": [],
+    "rememberedNames": [],
+    "rememberedEventTitles": [],
+    "rememberedEventTypes": [],
+    "updatedAt": null
+  },
+  "schedulePhotoDrafts": [],
   "checklists": {},
   "activityVotes": {
     "white-pines-lake": 5,
