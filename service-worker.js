@@ -1,4 +1,4 @@
-const cacheName = "guantonio-trip-v60";
+const cacheName = "guantonio-trip-v61";
 
 const cacheableUrls = [
   "/",
@@ -14,6 +14,7 @@ const cacheableUrls = [
   "/assets/icon-1024.png",
   "/assets/cabin-hero.png",
   "/assets/saturday-fireworks.png",
+  "/assets/sunday-birthday-hat.svg",
   "/assets/vendor/simplewebauthn-browser.umd.min.js"
 ];
 const cacheablePaths = new Set(cacheableUrls);
