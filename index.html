@@ -26,7 +26,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=76">
+    <link rel="stylesheet" href="styles.css?v=77">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -349,18 +349,19 @@
                 </span>
               </button>
 
-              <button class="destination-card home-destination-button is-food" type="button" id="openFourthOfJulyDestination" data-tab="trip-food" aria-label="Open 4th of July Event">
+              <div class="destination-card home-destination-stack is-food">
                 <span class="destination-card-copy">
                   <p class="destination-card-kicker">Trip board</p>
-                  <h3>4th of July Event</h3>
+                  <h3>4th of July cabin</h3>
+                  <a class="destination-card-mini-link" href="https://www.google.com/maps/search/?api=1&amp;query=1018%20Wawona%20Way%2C%20Arnold%2C%20CA%2095223" target="_blank" rel="noreferrer">Google Maps to cabin</a>
                   <p>Meals, supplies, trip schedule, and to-do.</p>
                   <span class="destination-card-stat">July 1 - 6</span>
                   <span class="destination-card-note">Arnold cabin planning</span>
                 </span>
                 <span class="destination-card-actions">
-                  <span class="destination-card-cta">Open</span>
+                  <button class="destination-card-cta" type="button" id="openFourthOfJulyDestination" data-tab="trip-food" aria-label="Open 4th of July cabin">Open</button>
                 </span>
-              </button>
+              </div>
 
               <button class="destination-card home-destination-button is-users is-hidden" type="button" id="openUsersDestination" aria-label="Open Users">
                 <span class="destination-card-copy">

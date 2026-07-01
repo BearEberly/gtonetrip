@@ -5161,6 +5161,10 @@ button { -webkit-tap-highlight-color: transparent; }
   text-align: left;
 }
 
+.home-destination-stack {
+  align-content: space-between;
+}
+
 .destination-card-copy,
 .destination-card-actions {
   position: relative;
@@ -5300,6 +5304,33 @@ button { -webkit-tap-highlight-color: transparent; }
   color: rgba(17, 26, 22, 0.78);
   font-size: 0.84rem;
   line-height: 1.28;
+}
+
+.destination-card-mini-link {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.44);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff7f0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+}
+
+.destination-card-mini-link:hover,
+.destination-card-mini-link:focus-visible {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.destination-card-mini-link:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.34);
+  outline-offset: 2px;
 }
 
 .destination-card.is-calendar .destination-card-kicker,
@@ -5503,6 +5534,10 @@ button { -webkit-tap-highlight-color: transparent; }
   font-size: 0.84rem;
   font-weight: 700;
   backdrop-filter: blur(8px);
+}
+
+.destination-card-cta {
+  cursor: pointer;
 }
 
 .destination-card .compact-action:hover,
