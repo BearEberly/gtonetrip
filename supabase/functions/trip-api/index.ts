@@ -122,6 +122,32 @@ function userFromLoginPayload(body: Record<string, unknown>) {
   return userFromPersonId(body.personId) || userFromFirstName(body.firstName);
 }
 
+function routeFromRequest(request: Request) {
+  const url = new URL(request.url);
+  return url.pathname.split("/trip-api").pop() || "/";
+}
+
+function requestIpMetadata(request: Request) {
+  const forwardedFor = textSafe(request.headers.get("x-forwarded-for"), "", 400);
+  const forwardedIp = forwardedFor.split(",").map((part) => part.trim()).find(Boolean) || "";
+  const cfConnectingIp = textSafe(request.headers.get("cf-connecting-ip"), "", 120);
+  const xRealIp = textSafe(request.headers.get("x-real-ip"), "", 120);
+  const flyClientIp = textSafe(request.headers.get("fly-client-ip"), "", 120);
+  const fastlyClientIp = textSafe(request.headers.get("fastly-client-ip"), "", 120);
+  const ipAddress = cfConnectingIp || forwardedIp || xRealIp || flyClientIp || fastlyClientIp;
+  const ipHeader = cfConnectingIp ? "cf-connecting-ip"
+    : forwardedIp ? "x-forwarded-for"
+    : xRealIp ? "x-real-ip"
+    : flyClientIp ? "fly-client-ip"
+    : fastlyClientIp ? "fastly-client-ip"
+    : "";
+  return {
+    ipAddress,
+    ipHeader,
+    forwardedFor
+  };
+}
+
 function daySafe(value: unknown) {
   const normalized = String(value || "").trim().toLowerCase();
   return allDayCodes.includes(normalized) ? normalized : "sun";
@@ -803,44 +829,116 @@ function safeJsonStringify(value: unknown, maxLength = 40000) {
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 }
 
-async function sendGoogleSheetsChangeLog(input: {
+function shouldRedactLogKey(key: string) {
+  const normalized = key.trim().toLowerCase();
+  return normalized === "password"
+    || normalized === "profilepassword"
+    || normalized === "passwordhash"
+    || normalized === "secret"
+    || normalized === "token"
+    || normalized === "photo"
+    || normalized === "image"
+    || normalized === "response"
+    || normalized === "publickey"
+    || normalized === "clientdatajson"
+    || normalized === "attestationobject"
+    || normalized === "authenticatordata"
+    || normalized === "signature"
+    || normalized === "userhandle"
+    || normalized === "challenge";
+}
+
+function sanitizeLogValue(value: unknown, key = "", depth = 0): unknown {
+  if (shouldRedactLogKey(key)) {
+    if (key === "photo" || key === "image") return "[omitted image data]";
+    if (key === "response") return "[omitted response data]";
+    return "[redacted]";
+  }
+  if (value == null) return value;
+  if (depth >= 5) return "[truncated]";
+  if (typeof value === "string") {
+    if (value.startsWith("data:image/")) return `[data-url ${value.length} chars]`;
+    return value.length > 2000 ? `${value.slice(0, 2000)}...` : value;
+  }
+  if (typeof value === "number" || typeof value === "boolean") return value;
+  if (Array.isArray(value)) return value.slice(0, 50).map((item) => sanitizeLogValue(item, "", depth + 1));
+  if (typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const out: Record<string, unknown> = {};
+    for (const [entryKey, entryValue] of Object.entries(record).slice(0, 50)) {
+      out[entryKey] = sanitizeLogValue(entryValue, entryKey, depth + 1);
+    }
+    return out;
+  }
+  return textSafe(value, "", 500);
+}
+
+async function sendGoogleSheetsWebhookLog(input: {
+  request: Request;
   actionType: string;
-  payload: Record<string, unknown>;
-  actor: { personId: string; firstName: string; familyId: string };
-  clientId: string;
-  oldState: Record<string, unknown>;
-  newState: Record<string, unknown>;
+  payload?: Record<string, unknown>;
+  actor?: { personId?: string; firstName?: string; familyId?: string };
+  clientId?: string;
+  oldState?: Record<string, unknown>;
+  newState?: Record<string, unknown>;
+  oldValues?: unknown;
+  newValues?: unknown;
   message: string;
+  success?: boolean;
+  entityType?: string;
+  entityId?: string;
+  entityLabel?: string;
+  source?: string;
 }) {
   if (!googleSheetsWebhookUrl) return;
 
+  const payload = input.payload && typeof input.payload === "object" ? input.payload : {};
   const changedAt = new Date().toISOString();
-  const entityType = actionEntityType(input.actionType);
-  const entityId = actionEntityId(input.actionType, input.payload, input.actor.familyId, input.actor.personId);
-  const oldEntity = findEntitySnapshot(input.oldState, input.actionType, input.payload, input.actor.familyId, input.actor.personId);
-  const newEntity = findEntitySnapshot(input.newState, input.actionType, input.payload, input.actor.familyId, input.actor.personId);
+  const actor = input.actor || {};
+  const route = routeFromRequest(input.request);
+  const ipMeta = requestIpMetadata(input.request);
+  const entityType = textSafe(input.entityType || actionEntityType(input.actionType), "", 120);
+  const entityId = textSafe(
+    input.entityId || actionEntityId(input.actionType, payload, textSafe(actor.familyId, "", 120), textSafe(actor.personId, "", 120)),
+    "",
+    120
+  );
+  const oldEntity = input.oldState
+    ? findEntitySnapshot(input.oldState, input.actionType, payload, textSafe(actor.familyId, "", 120), textSafe(actor.personId, "", 120))
+    : null;
+  const newEntity = input.newState
+    ? findEntitySnapshot(input.newState, input.actionType, payload, textSafe(actor.familyId, "", 120), textSafe(actor.personId, "", 120))
+    : null;
+  const sanitizedPayload = sanitizeLogValue(payload);
+  const sanitizedOldValues = input.oldValues !== undefined ? sanitizeLogValue(input.oldValues) : sanitizeLogValue(oldEntity);
+  const sanitizedNewValues = input.newValues !== undefined ? sanitizeLogValue(input.newValues) : sanitizeLogValue(newEntity);
   const body = {
     secret: googleSheetsWebhookSecret,
     timestamp: changedAt,
-    firstName: input.actor.firstName,
+    firstName: textSafe(actor.firstName, "", 80),
     lastName: "",
     phoneNumber: "",
-    personId: input.actor.personId,
-    familyId: input.actor.familyId,
+    personId: textSafe(actor.personId, "", 120),
+    familyId: textSafe(actor.familyId, "", 120),
     actionType: input.actionType,
     entityType,
     entityId,
-    entityLabel: entityLabelForSnapshot(entityType, newEntity || oldEntity, input.payload),
-    changedFields: Object.keys(input.payload || {}).join(", "),
-    oldValuesJson: safeJsonStringify(oldEntity),
-    newValuesJson: safeJsonStringify(newEntity),
-    payloadJson: safeJsonStringify(input.payload),
-    success: true,
+    entityLabel: textSafe(input.entityLabel || entityLabelForSnapshot(entityType, newEntity || oldEntity, payload), "", 180),
+    changedFields: Object.keys(payload || {}).join(", "),
+    oldValuesJson: safeJsonStringify(sanitizedOldValues),
+    newValuesJson: safeJsonStringify(sanitizedNewValues),
+    payloadJson: safeJsonStringify(sanitizedPayload),
+    success: input.success !== false,
     message: input.message,
     changedAt,
-    stateVersion: Number(input.newState.version || 0),
-    source: "trip-api",
-    clientId: textSafe(input.clientId, "", 180)
+    stateVersion: Number(input.newState?.version || 0),
+    source: textSafe(input.source, "trip-api", 120),
+    clientId: textSafe(input.clientId, "", 180),
+    ipAddress: ipMeta.ipAddress,
+    ipHeader: ipMeta.ipHeader,
+    forwardedFor: ipMeta.forwardedFor,
+    requestRoute: route,
+    requestMethod: textSafe(input.request.method, "", 16)
   };
 
   const response = await fetch(googleSheetsWebhookUrl, {
@@ -853,6 +951,38 @@ async function sendGoogleSheetsChangeLog(input: {
   if (!response.ok) {
     throw new Error(`Google Sheets webhook failed: ${response.status}`);
   }
+}
+
+async function trySendGoogleSheetsWebhookLog(input: Parameters<typeof sendGoogleSheetsWebhookLog>[0]) {
+  try {
+    await sendGoogleSheetsWebhookLog(input);
+  } catch (error) {
+    console.error("Google Sheets change log error", error);
+  }
+}
+
+async function sendGoogleSheetsChangeLog(input: {
+  request: Request;
+  actionType: string;
+  payload: Record<string, unknown>;
+  actor: { personId: string; firstName: string; familyId: string };
+  clientId: string;
+  oldState: Record<string, unknown>;
+  newState: Record<string, unknown>;
+  message: string;
+}) {
+  await sendGoogleSheetsWebhookLog({
+    request: input.request,
+    actionType: input.actionType,
+    payload: input.payload,
+    actor: input.actor,
+    clientId: input.clientId,
+    oldState: input.oldState,
+    newState: input.newState,
+    message: input.message,
+    success: true,
+    source: "trip-api"
+  });
 }
 
 function profileRowToUser(
@@ -1112,22 +1242,30 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
 
   if (action.type === "claimMeal") {
     const meal = (next.meals as Record<string, unknown>[]).find((item) => item.id === payload.id);
-    const familyId = familySafe(actorFamilyId);
+    const familyId = isPowerUser ? familySafe(payload.owner || actorFamilyId) : familySafe(actorFamilyId);
     if (!meal || !familyId) return { changed: false, message: "Choose a family first." };
     const owner = familySafe(meal.owner);
     if (owner && owner !== familyId && !isPowerUser) return { changed: false, message: "Meal already claimed." };
-    meal.owner = owner ? "" : familyId;
-    return { changed: true, message: owner ? "Meal moved back to open." : "Meal claimed.", state: next };
+    if (owner === familyId) {
+      meal.owner = "";
+      return { changed: true, message: "Meal moved back to open.", state: next };
+    }
+    meal.owner = familyId;
+    return { changed: true, message: "Meal claimed.", state: next };
   }
 
   if (action.type === "toggleSupply") {
     const item = (next.supplies as Record<string, unknown>[]).find((supply) => supply.id === payload.id);
-    const familyId = familySafe(actorFamilyId);
+    const familyId = isPowerUser ? familySafe(payload.owner || actorFamilyId) : familySafe(actorFamilyId);
     if (!item || !familyId) return { changed: false, message: "Choose a family first." };
     const owner = familySafe(item.owner);
     if (owner && owner !== familyId && !isPowerUser) return { changed: false, message: "Item already claimed." };
-    item.owner = owner ? "" : familyId;
-    return { changed: true, message: owner ? "Supply moved back to still needed." : "Supply claimed.", state: next };
+    if (owner === familyId) {
+      item.owner = "";
+      return { changed: true, message: "Supply moved back to still needed.", state: next };
+    }
+    item.owner = familyId;
+    return { changed: true, message: "Supply claimed.", state: next };
   }
 
   if (action.type === "voteActivity") {
@@ -1288,13 +1426,15 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     if (!name) return { changed: false, message: "Bringing item is empty." };
     const supplyQty = textSafe(payload.quantity ?? payload.qty ?? payload.amount, "", 160);
     const supplyNotes = textSafe(payload.notes, "", 300);
+    const owner = isPowerUser ? familySafe(payload.owner || actorFamilyId) : familySafe(actorFamilyId);
+    if (!owner) return { changed: false, message: "Choose a family first." };
     (next.supplies as Record<string, unknown>[]).push({
       id: `supply-${Date.now()}`,
       name,
       notes: supplyNotes,
       qty: supplyQty,
       type: bringingTypeSafe(payload.type),
-      owner: actorFamilyId,
+      owner,
       mealType: mealTypeSafe(payload.mealType),
       days: dayListSafe(payload.days),
       image: imageDataUrlSafe(payload.image),
@@ -1317,6 +1457,9 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     supply.notes = supplyNotes;
     supply.qty = supplyQty;
     supply.type = bringingTypeSafe(payload.type || supply.type);
+    if (isPowerUser && Object.hasOwn(payload, "owner")) {
+      supply.owner = familySafe(payload.owner) || "";
+    }
     supply.mealType = mealTypeSafe(payload.mealType || supply.mealType);
     supply.days = dayListSafe(payload.days, Array.isArray(supply.days) ? (supply.days as string[]) : []);
     supply.image = imageDataUrlSafe(payload.image) || String(supply.image || "");
@@ -1536,20 +1679,72 @@ function buildICS(state: Record<string, any>, info: Record<string, any>): string
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const url = new URL(request.url);
-  const route = url.pathname.split("/trip-api").pop() || "/";
+  const route = routeFromRequest(request);
 
   try {
     if (route === "/login" && request.method === "POST") {
       const body = await request.json() as Record<string, unknown>;
       const user = userFromLoginPayload(body);
-      if (!user) return json({ ok: false, message: "Enter your first name." }, 400);
+      const attemptedActor = user || {
+        personId: personSafe(body.personId),
+        firstName: textSafe(body.firstName, "", 80),
+        familyId: familySafe(body.familyId)
+      };
+      if (!user) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "authLogin",
+          payload: body,
+          actor: attemptedActor,
+          clientId: textSafe(body.clientId, "", 180),
+          message: "Enter your first name.",
+          success: false,
+          entityType: "session",
+          entityId: textSafe(body.personId, "", 120),
+          entityLabel: textSafe(body.firstName, "", 180),
+          source: "trip-api-auth"
+        });
+        return json({ ok: false, message: "Enter your first name." }, 400);
+      }
       if (!(await userPasswordMatches(user, body.password))) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "authLogin",
+          payload: body,
+          actor: attemptedActor,
+          clientId: textSafe(body.clientId, "", 180),
+          message: "Password did not match.",
+          success: false,
+          entityType: "session",
+          entityId: user.personId,
+          entityLabel: user.firstName,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "Password did not match." }, 401);
       }
       const session = await createSession(user);
       const hydratedUser = await saveTripProfile(user, {
         email: body.email
+      });
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "authLogin",
+        payload: body,
+        actor: hydratedUser,
+        clientId: textSafe(body.clientId, "", 180),
+        message: "Signed in.",
+        success: true,
+        entityType: "session",
+        entityId: hydratedUser.personId,
+        entityLabel: hydratedUser.displayName || hydratedUser.firstName,
+        newValues: {
+          personId: hydratedUser.personId,
+          firstName: hydratedUser.firstName,
+          familyId: hydratedUser.familyId,
+          email: hydratedUser.email,
+          displayName: hydratedUser.displayName
+        },
+        source: "trip-api-auth"
       });
       return json({ ok: true, token: session.token, user: hydratedUser, tripInfo, message: "Signed in." });
     }
@@ -1557,6 +1752,17 @@ Deno.serve(async (request) => {
     if (route === "/logout" && request.method === "POST") {
       const session = await currentSession(request);
       if (session?.token) await deleteSession(session.token);
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "authLogout",
+        actor: session?.user,
+        message: "Signed out.",
+        success: true,
+        entityType: "session",
+        entityId: textSafe(session?.user?.personId, "", 120),
+        entityLabel: textSafe(session?.user?.displayName || session?.user?.firstName, "", 180),
+        source: "trip-api-auth"
+      });
       return json({ ok: true, user: null, message: "Signed out." });
     }
 
@@ -1574,6 +1780,17 @@ Deno.serve(async (request) => {
         origin
       });
       const availableCount = await countPasskeysForRp(rpID);
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "passkeyAuthStart",
+        payload: { availableCount, rpID },
+        message: "Passkey sign-in options created.",
+        success: true,
+        entityType: "passkey",
+        entityId: rpID,
+        entityLabel: rpID,
+        source: "trip-api-auth"
+      });
       return json({ ok: true, options, availableCount });
     }
 
@@ -1581,13 +1798,47 @@ Deno.serve(async (request) => {
       await cleanupExpiredPasskeyChallenges();
       const body = await request.json();
       const challenge = textSafe(body.challenge);
-      if (!challenge) return json({ ok: false, message: "Passkey challenge missing." }, 400);
-      const challengeRow = await getPasskeyChallenge(challenge, "authenticate");
-      if (!challengeRow) return json({ ok: false, message: "Passkey sign-in expired. Try again." }, 400);
       const credentialId = textSafe(body.response?.id);
+      if (!challenge) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyAuthVerify",
+          payload: body,
+          message: "Passkey challenge missing.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
+        return json({ ok: false, message: "Passkey challenge missing." }, 400);
+      }
+      const challengeRow = await getPasskeyChallenge(challenge, "authenticate");
+      if (!challengeRow) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyAuthVerify",
+          payload: body,
+          message: "Passkey sign-in expired. Try again.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
+        return json({ ok: false, message: "Passkey sign-in expired. Try again." }, 400);
+      }
       const credentialRow = await getPasskeyCredential(credentialId, challengeRow.rp_id);
       if (!credentialRow) {
         await deletePasskeyChallenge(challenge);
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyAuthVerify",
+          payload: body,
+          message: "That passkey is not saved for this trip yet.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "That passkey is not saved for this trip yet." }, 404);
       }
       const verification = await verifyAuthenticationResponse({
@@ -1604,11 +1855,31 @@ Deno.serve(async (request) => {
       });
       if (!verification.verified) {
         await deletePasskeyChallenge(challenge);
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyAuthVerify",
+          payload: body,
+          message: "Passkey sign-in could not be verified.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "Passkey sign-in could not be verified." }, 400);
       }
       const user = userFromPersonId(credentialRow.person_id);
       if (!user) {
         await deletePasskeyChallenge(challenge);
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyAuthVerify",
+          payload: body,
+          message: "That saved passkey is no longer linked to a trip login.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "That saved passkey is no longer linked to a trip login." }, 400);
       }
       await touchPasskeyCredential({
@@ -1621,6 +1892,26 @@ Deno.serve(async (request) => {
       await deletePasskeyChallenge(challenge);
       const session = await createSession(user);
       const hydratedUser = await hydrateUserProfile(user);
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "passkeyAuthVerify",
+        payload: body,
+        actor: hydratedUser,
+        clientId: textSafe(body.clientId, "", 180),
+        message: "Signed in with passkey.",
+        success: true,
+        entityType: "passkey",
+        entityId: credentialRow.credential_id,
+        entityLabel: hydratedUser.displayName || hydratedUser.firstName,
+        newValues: {
+          personId: hydratedUser.personId,
+          firstName: hydratedUser.firstName,
+          familyId: hydratedUser.familyId,
+          credentialId: credentialRow.credential_id,
+          rpID: challengeRow.rp_id
+        },
+        source: "trip-api-auth"
+      });
       return json({ ok: true, token: session.token, user: hydratedUser, tripInfo, message: "Signed in with passkey." });
     }
 
@@ -1678,6 +1969,18 @@ Deno.serve(async (request) => {
         rpID,
         origin
       });
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "passkeyRegisterStart",
+        payload: { rpID, existingCount: existing.length },
+        actor: session.user,
+        message: "Passkey registration options created.",
+        success: true,
+        entityType: "passkey",
+        entityId: session.user.personId,
+        entityLabel: session.user.displayName || session.user.firstName,
+        source: "trip-api-auth"
+      });
       return json({ ok: true, options });
     }
 
@@ -1685,9 +1988,36 @@ Deno.serve(async (request) => {
       await cleanupExpiredPasskeyChallenges();
       const body = await request.json();
       const challenge = textSafe(body.challenge);
-      if (!challenge) return json({ ok: false, message: "Passkey challenge missing." }, 400);
+      const credentialId = textSafe(body.response?.id);
+      if (!challenge) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyRegisterVerify",
+          payload: body,
+          actor: session.user,
+          clientId: textSafe(body.clientId, "", 180),
+          message: "Passkey challenge missing.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
+        return json({ ok: false, message: "Passkey challenge missing." }, 400);
+      }
       const challengeRow = await getPasskeyChallenge(challenge, "register");
       if (!challengeRow || challengeRow.person_id !== session.user.personId) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyRegisterVerify",
+          payload: body,
+          actor: session.user,
+          clientId: textSafe(body.clientId, "", 180),
+          message: "Passkey setup expired. Start again.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "Passkey setup expired. Start again." }, 400);
       }
       const verification = await verifyRegistrationResponse({
@@ -1699,6 +2029,18 @@ Deno.serve(async (request) => {
       });
       if (!verification.verified || !verification.registrationInfo) {
         await deletePasskeyChallenge(challenge);
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "passkeyRegisterVerify",
+          payload: body,
+          actor: session.user,
+          clientId: textSafe(body.clientId, "", 180),
+          message: "Could not verify that passkey.",
+          success: false,
+          entityType: "passkey",
+          entityId: credentialId,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "Could not verify that passkey." }, 400);
       }
       await upsertPasskeyCredential({
@@ -1713,7 +2055,28 @@ Deno.serve(async (request) => {
         backedUp: Boolean(verification.registrationInfo.credentialBackedUp)
       });
       await deletePasskeyChallenge(challenge);
-      return json({ ok: true, message: "Passkey saved.", count: (await listPasskeysForPerson(session.user.personId, challengeRow.rp_id)).length });
+      const passkeyCount = (await listPasskeysForPerson(session.user.personId, challengeRow.rp_id)).length;
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "passkeyRegisterVerify",
+        payload: body,
+        actor: session.user,
+        clientId: textSafe(body.clientId, "", 180),
+        message: "Passkey saved.",
+        success: true,
+        entityType: "passkey",
+        entityId: verification.registrationInfo.credential.id,
+        entityLabel: session.user.displayName || session.user.firstName,
+        newValues: {
+          personId: session.user.personId,
+          familyId: session.user.familyId,
+          credentialId: verification.registrationInfo.credential.id,
+          rpID: challengeRow.rp_id,
+          count: passkeyCount
+        },
+        source: "trip-api-auth"
+      });
+      return json({ ok: true, message: "Passkey saved.", count: passkeyCount });
     }
 
     if (route === "/me" && request.method === "GET") {
@@ -1727,16 +2090,74 @@ Deno.serve(async (request) => {
       const wantsPasswordUpdate = hasOwn(body, "profilePassword") && Boolean(rawProfilePassword.trim());
       const wantsPhotoUpdate = hasOwn(body, "photo");
       if (wantsPasswordUpdate && !sharedPasswordSafe(rawProfilePassword)) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "profileUpdate",
+          payload: body,
+          actor: session.user,
+          clientId: textSafe(body.clientId, "", 180),
+          message: "Password must be at least 4 characters.",
+          success: false,
+          entityType: "profile",
+          entityId: session.user.personId,
+          entityLabel: session.user.displayName || session.user.firstName,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "Password must be at least 4 characters." }, 400);
       }
       if (wantsPhotoUpdate && rawPhoto && !imageDataUrlSafe(rawPhoto)) {
+        await trySendGoogleSheetsWebhookLog({
+          request,
+          actionType: "profileUpdate",
+          payload: body,
+          actor: session.user,
+          clientId: textSafe(body.clientId, "", 180),
+          message: "Profile photo is too large. Try a smaller image.",
+          success: false,
+          entityType: "profile",
+          entityId: session.user.personId,
+          entityLabel: session.user.displayName || session.user.firstName,
+          source: "trip-api-auth"
+        });
         return json({ ok: false, message: "Profile photo is too large. Try a smaller image." }, 400);
       }
+      const previousProfile = {
+        personId: session.user.personId,
+        firstName: session.user.firstName,
+        familyId: session.user.familyId,
+        email: session.user.email,
+        displayName: session.user.displayName,
+        hasPhoto: Boolean(session.user.photo),
+        hasPassword: Boolean(session.user.hasPassword)
+      };
       const updatedUser = await saveTripProfile(session.user, {
         displayName: body.displayName,
         photo: body.photo,
         email: body.email,
         passwordHash: wantsPasswordUpdate ? await sha256Hex(rawProfilePassword) : undefined
+      });
+      await trySendGoogleSheetsWebhookLog({
+        request,
+        actionType: "profileUpdate",
+        payload: body,
+        actor: updatedUser,
+        clientId: textSafe(body.clientId, "", 180),
+        message: wantsPasswordUpdate ? "Profile and password saved." : "Profile saved.",
+        success: true,
+        entityType: "profile",
+        entityId: updatedUser.personId,
+        entityLabel: updatedUser.displayName || updatedUser.firstName,
+        oldValues: previousProfile,
+        newValues: {
+          personId: updatedUser.personId,
+          firstName: updatedUser.firstName,
+          familyId: updatedUser.familyId,
+          email: updatedUser.email,
+          displayName: updatedUser.displayName,
+          hasPhoto: Boolean(updatedUser.photo),
+          hasPassword: Boolean(updatedUser.hasPassword)
+        },
+        source: "trip-api-auth"
       });
       return json({
         ok: true,
@@ -1779,6 +2200,7 @@ Deno.serve(async (request) => {
       const savedState = await saveStoredState(result.state as Record<string, unknown>);
       try {
         await sendGoogleSheetsChangeLog({
+          request,
           actionType,
           payload: actionPayload,
           actor: session.user,

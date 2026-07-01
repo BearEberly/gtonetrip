@@ -1218,6 +1218,16 @@ function handleAuthFamilyChange() {
   renderAuthPeople();
 }
 
+function handleAuthFirstNameInput() {
+  const firstName = document.querySelector("#authFirstName")?.value.trim().toLowerCase() || "";
+  const personInput = document.querySelector("#authPersonId");
+  const selectedPerson = attendeeById(personInput?.value || "");
+  if (selectedPerson && selectedPerson.firstName.toLowerCase() !== firstName && personInput) {
+    personInput.value = "";
+    renderAuthPeople();
+  }
+}
+
 function showAuthScreen(message = "") {
   const screen = document.querySelector("#authScreen");
   if (!screen) return;
@@ -1897,7 +1907,11 @@ async function submitAuthForm(event) {
   event.preventDefault();
   const firstName = document.querySelector("#authFirstName")?.value.trim() || "";
   const password = document.querySelector("#authPassword")?.value || "";
-  const personId = document.querySelector("#authPersonId")?.value || "";
+  const chosenPersonId = document.querySelector("#authPersonId")?.value || "";
+  const chosenPerson = attendeeById(chosenPersonId);
+  const personId = chosenPerson && chosenPerson.firstName.toLowerCase() === firstName.toLowerCase()
+    ? chosenPersonId
+    : "";
   const familyId = document.querySelector("#authFamily")?.value || "";
   if (!firstName) {
     updateAuthMessage("Enter your first name.");
@@ -2020,8 +2034,12 @@ async function logoutProfile() {
   stopStatePolling();
   const firstName = document.querySelector("#authFirstName");
   const password = document.querySelector("#authPassword");
+  const person = document.querySelector("#authPersonId");
+  const family = document.querySelector("#authFamily");
   if (firstName) firstName.value = "";
   if (password) password.value = "";
+  if (person) person.value = "";
+  if (family) family.value = "";
   setSyncStatus("offline", "Signed out");
   showAuthScreen("Signed out.");
   renderPasskeyUi();
@@ -2439,6 +2457,10 @@ function isBearPowerUser(user = api.user) {
   return String(user?.personId || "").trim().toLowerCase() === "bear";
 }
 
+function currentActorFamilyId() {
+  return api.user?.familyId || activeFamilyId() || "";
+}
+
 function canManageCustomItem(item) {
   const familyId = activeFamilyId();
   if (!item) return false;
@@ -2651,12 +2673,16 @@ function ownerMarkup(ownerId) {
 
 function mealClaimAction(meal) {
   const owner = meal.owner ? familyById(meal.owner) : null;
+  const familyId = activeFamilyId();
   const isOwnClaim = Boolean(meal.owner && meal.owner === activeFamilyId());
   if (!meal.owner) {
     return `<button class="claim-button" type="button" data-claim-meal="${meal.id}">Claim this meal</button>`;
   }
   if (isOwnClaim) {
     return `<button class="claim-button" type="button" data-claim-meal="${meal.id}" aria-label="Unclaim ${escapeText(meal.type)}">Unclaim</button>`;
+  }
+  if (isBearPowerUser() && familyId) {
+    return `<button class="claim-button" type="button" data-claim-meal="${meal.id}" aria-label="Assign ${escapeText(meal.type)} to ${escapeText(familyById(familyId)?.name || "selected family")}">Assign</button>`;
   }
   return `<button class="claim-button" type="button" disabled aria-label="Claimed by ${escapeText(owner?.name || "another family")}">Claimed</button>`;
 }
@@ -2990,7 +3016,9 @@ function renderSupplies() {
   container.innerHTML = sorted.map((item) => {
     const ownerId = supplyOwnerId(item);
     const owner = ownerId ? familyById(ownerId) : null;
+    const familyId = activeFamilyId();
     const isOwnClaim = Boolean(ownerId && ownerId === activeFamilyId());
+    const canPowerAssign = Boolean(isBearPowerUser() && familyId && ownerId && ownerId !== familyId);
     return `
       <article class="supply-row ${ownerId ? "is-claimed" : ""}">
         <div>
@@ -3003,9 +3031,9 @@ function renderSupplies() {
           class="claim-button"
           type="button"
           data-claim-supply="${item.id}"
-          ${owner && !isOwnClaim ? "disabled" : ""}
-          aria-label="${owner && !isOwnClaim ? `Claimed by ${owner.name}` : isOwnClaim ? "Unclaim item" : "Claim item"}">
-          ${isOwnClaim ? "Unclaim" : owner ? "Claimed" : "Claim"}
+          ${owner && !isOwnClaim && !canPowerAssign ? "disabled" : ""}
+          aria-label="${owner && !isOwnClaim && !canPowerAssign ? `Claimed by ${owner.name}` : isOwnClaim ? "Unclaim item" : canPowerAssign ? `Assign item to ${familyById(familyId)?.name || "selected family"}` : "Claim item"}">
+          ${isOwnClaim ? "Unclaim" : canPowerAssign ? "Assign" : owner ? "Claimed" : "Claim"}
         </button>
       </article>
     `;
@@ -3889,12 +3917,12 @@ function claimMeal(id) {
   }
   const meal = state.meals.find((item) => item.id === id);
   if (!meal) return;
-  if (meal.owner && meal.owner !== familyId) {
+  if (meal.owner && meal.owner !== familyId && !isBearPowerUser()) {
     showToast(`${meal.type} is already claimed by ${familyById(meal.owner)?.name || "another family"}.`);
     return;
   }
   const family = familyById(familyId);
-  const willClaim = !meal.owner;
+  const willClaim = meal.owner !== familyId;
   performAction("claimMeal", { id, owner: familyId }, () => {
     meal.owner = willClaim ? familyId : "";
   }, willClaim ? `${family.name} claimed ${meal.type}.` : `${meal.type} moved back to open.`);
@@ -3910,11 +3938,11 @@ function claimSupply(id) {
   const item = state.supplies.find((supply) => supply.id === id);
   if (!item) return;
   const ownerId = supplyOwnerId(item);
-  if (ownerId && ownerId !== familyId) {
+  if (ownerId && ownerId !== familyId && !isBearPowerUser()) {
     showToast(`${item.name} is already claimed by ${familyById(ownerId)?.name || "another family"}.`);
     return;
   }
-  const willClaim = !ownerId;
+  const willClaim = ownerId !== familyId;
   performAction("toggleSupply", { id, owner: familyId }, () => {
     item.owner = willClaim ? familyId : "";
   }, willClaim ? `${familyById(familyId).name} claimed ${item.name}.` : `${item.name} moved back to still needed.`);
@@ -4021,7 +4049,7 @@ function createMealIdea(payload) {
     kids: payload.kids || (payload.type === "Event" ? "" : "Add kid backup"),
     cold: [],
     custom: true,
-    createdBy: activeFamilyId(),
+    createdBy: currentActorFamilyId(),
     createdAt: new Date().toISOString()
   };
 }
@@ -4033,12 +4061,12 @@ function createSupplyItem(payload) {
     notes: payload.notes || "",
     qty: payload.quantity || payload.qty || "",
     type: payload.type || "food",
-    owner: activeFamilyId(),
+    owner: payload.owner || activeFamilyId(),
     mealType: payload.mealType || "any",
     days: dayListSafe(payload.days),
     image: payload.image || "",
     custom: true,
-    createdBy: activeFamilyId(),
+    createdBy: currentActorFamilyId(),
     createdAt: new Date().toISOString()
   };
 }
@@ -4733,7 +4761,8 @@ async function submitItemForm(event) {
       type: "food",
       mealType: "any",
       days: selectedSupplyDays(),
-      image: pendingSupplyImage
+      image: pendingSupplyImage,
+      owner: activeFamilyId()
     };
     const selectedPurpose = document.querySelector("#supplyMealType")?.value || "any";
     if (selectedPurpose === "non-food") {
@@ -4754,6 +4783,7 @@ async function submitItemForm(event) {
       supply.notes = payload.notes || "";
       supply.qty = payload.quantity || "";
       supply.type = supply.type || payload.type || "food";
+      if (payload.owner) supply.owner = payload.owner;
       supply.mealType = payload.mealType || "any";
       supply.days = dayListSafe(payload.days);
       supply.image = payload.image || "";
@@ -4778,7 +4808,8 @@ async function submitItemForm(event) {
       type: draft.type,
       mealType: draft.mealType,
       days: draft.days,
-      image: ""
+      image: "",
+      owner: activeFamilyId()
     };
     const saved = await performAction("addSupply", payload, () => {
       state.supplies.push(createSupplyItem(payload));
@@ -4864,6 +4895,7 @@ function addSupplyToSelectedMeal(id) {
     quantity: supply.qty || "",
     notes: supply.notes || "",
     type: supply.type || "food",
+    owner: supply.owner || activeFamilyId(),
     mealType,
     days: nextDays,
     image: supply.image || ""
@@ -5215,6 +5247,7 @@ function bindEvents() {
     }
   });
   document.querySelector("#authForm")?.addEventListener("submit", submitAuthForm);
+  document.querySelector("#authFirstName")?.addEventListener("input", handleAuthFirstNameInput);
   document.querySelector("#authFamily")?.addEventListener("change", handleAuthFamilyChange);
   document.querySelector("#passkeySignIn")?.addEventListener("click", signInWithPasskey);
   document.querySelector("#setupPasskey")?.addEventListener("click", setupPasskey);
