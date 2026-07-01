@@ -20,6 +20,8 @@ const icons = {
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>'
 };
 
+const SUPPLY_AI_IMAGE_MAX_LENGTH = 4500000;
+
 const families = [
   { id: "shell", name: "Shell", shortName: "Shell", color: "#c0392b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
   { id: "nick", name: "G6", shortName: "G6", color: "#6d4aa7", status: "Needs timing", details: "Nick, Marissa, Luca, Sophia, Rocco, Gio" },
@@ -2091,6 +2093,12 @@ function imageDataUrlSafe(value) {
   return raw.length <= 400000 ? raw : "";
 }
 
+function supplyAiImageDataUrlSafe(value) {
+  const raw = String(value || "").trim();
+  if (!raw.startsWith("data:image/")) return "";
+  return raw.length <= SUPPLY_AI_IMAGE_MAX_LENGTH ? raw : "";
+}
+
 function hasProfilePhotoSizeError(value) {
   const raw = String(value || "").trim();
   return Boolean(raw && raw.startsWith("data:image/") && !imageDataUrlSafe(raw));
@@ -4045,8 +4053,7 @@ function supplyDraftDefault(overrides = {}) {
 }
 
 function setPendingSupplyAiImage(dataUrl) {
-  const raw = String(dataUrl || "").trim();
-  pendingSupplyAiImage = raw.startsWith("data:image/") && raw.length <= 1800000 ? raw : "";
+  pendingSupplyAiImage = supplyAiImageDataUrlSafe(dataUrl);
   const wrap = document.querySelector("#supplyAiPreviewWrap");
   const preview = document.querySelector("#supplyAiPreview");
   if (preview) preview.src = pendingSupplyAiImage || "";
@@ -4206,16 +4213,57 @@ function changeSupplyDraftPurpose(row) {
   });
 }
 
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Could not read that photo file."));
+    reader.readAsDataURL(file);
+  });
+}
+
+function isHeicLikeFile(file, dataUrl = "") {
+  const type = String(file?.type || "").toLowerCase();
+  const name = String(file?.name || "").toLowerCase();
+  const prefix = String(dataUrl || "").slice(0, 40).toLowerCase();
+  return type.includes("heic") || type.includes("heif") || name.endsWith(".heic") || name.endsWith(".heif") || prefix.includes("image/heic") || prefix.includes("image/heif");
+}
+
+async function prepareSupplyAiImageFile(file) {
+  if (!file) return "";
+  if (!String(file.type || "").startsWith("image/")) {
+    throw new Error("Choose a photo file first.");
+  }
+  const original = await readFileAsDataUrl(file);
+  try {
+    const compressed = await compressImageFile(file, 1300, 0.78);
+    const safeCompressed = supplyAiImageDataUrlSafe(compressed);
+    if (safeCompressed) return safeCompressed;
+  } catch {
+    if (isHeicLikeFile(file, original)) {
+      throw new Error("This looks like a HEIC photo. Take a screenshot of it or choose a JPG/PNG photo, then upload again.");
+    }
+  }
+  if (isHeicLikeFile(file, original)) {
+    throw new Error("This looks like a HEIC photo. Take a screenshot of it or choose a JPG/PNG photo, then upload again.");
+  }
+  const safeOriginal = supplyAiImageDataUrlSafe(original);
+  if (safeOriginal) return safeOriginal;
+  throw new Error("That photo is too large to upload. Try a screenshot or a smaller JPG/PNG photo.");
+}
+
 async function handleSupplyAiImageFile(file) {
   if (!file) return;
   try {
     updateSupplyAiStatus("Preparing photo...");
-    const compressed = await compressImageFile(file, 1300, 0.78);
-    setPendingSupplyAiImage(compressed);
+    const prepared = await prepareSupplyAiImageFile(file);
+    setPendingSupplyAiImage(prepared);
     setSupplyImportBusy(false);
-  } catch {
+  } catch (error) {
     setPendingSupplyAiImage("");
-    showToast("Could not load that photo.");
+    const message = error instanceof Error ? error.message : "Could not load that photo.";
+    updateSupplyAiStatus(message);
+    showToast(message);
   }
 }
 
@@ -4283,16 +4331,12 @@ function updateSupplyDayAvailability() {
 
 async function compressImageFile(file, maxSize = 360, quality = 0.72) {
   if (!file) return "";
+  const dataUrl = await readFileAsDataUrl(file);
   const source = await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = reject;
-      image.src = String(reader.result || "");
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("The browser could not decode that photo."));
+    image.src = dataUrl;
   });
   const canvas = document.createElement("canvas");
   const ratio = Math.min(1, maxSize / Math.max(source.width, source.height));

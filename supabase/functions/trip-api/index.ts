@@ -25,6 +25,7 @@ const DEFAULT_SHARED_LOGIN_PASSWORD = Deno.env.get("TRIP_SHARED_LOGIN_PASSWORD")
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 const PASSKEY_CHALLENGE_TTL_MS = 1000 * 60 * 10;
 const PASSKEY_RP_NAME = "4th of July 2026";
+const AI_IMAGE_DATA_URL_MAX_LENGTH = 4500000;
 const tripInfo = Object.freeze({
   address: "1018 Wawona Way, Arnold, CA 95223",
   neighborhood: "Sequoia Woods",
@@ -209,7 +210,7 @@ function imageDataUrlSafe(value: unknown) {
 function aiImageDataUrlSafe(value: unknown) {
   const raw = String(value || "").trim();
   if (!raw.startsWith("data:image/")) return "";
-  return raw.length <= 1800000 ? raw : "";
+  return raw.length <= AI_IMAGE_DATA_URL_MAX_LENGTH ? raw : "";
 }
 
 function supplyImportItemSafe(value: unknown) {
@@ -1738,7 +1739,15 @@ Deno.serve(async (request) => {
 
     if (route === "/supply/import-photo" && request.method === "POST") {
       const body = await request.json();
-      const items = await importSupplyItemsFromPhoto(String(body.image || ""), session.user.familyId);
+      let items: unknown[] = [];
+      try {
+        items = await importSupplyItemsFromPhoto(String(body.image || ""), session.user.familyId);
+      } catch (error) {
+        const message = error instanceof Error && /clearer|smaller|configured/i.test(error.message)
+          ? error.message
+          : "Could not read that photo. Try again, or upload a clearer JPG or PNG.";
+        return json({ ok: false, message }, 400);
+      }
       return json({
         ok: true,
         items,
