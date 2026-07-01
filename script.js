@@ -84,11 +84,23 @@ const guideHighlights = [
 
 const cabinThingsToDo = [
   {
+    id: "copper-valley-stars-stripes",
+    category: "Holiday weekend",
+    name: "4th of July Stars & Stripes",
+    when: "Saturday, July 4 · 2:00 PM - 8:00 PM",
+    note: "Music, games, fireworks, local vendors, and a waterslide bouncehouse at Copper Valley Town Square.",
+    imageUrl: "https://coppervalley.com/wp-content/uploads/2026/02/702250296_1443355397825620_8681568446957306954_n-663x1024.jpg",
+    websiteUrl: "https://coppervalley.com/events/stars-and-stripes-4th-of-july-celebration/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=100+Town+Square+Road+Copperopolis+CA+95228",
+    icon: "sun"
+  },
+  {
     id: "arnold-parade",
     category: "Holiday weekend",
     name: "Arnold Independence Day Parade",
     when: "Saturday July 4 · 10:00 AM",
-    note: "Small-town Fourth of July parade through Arnold and the best family-specific holiday event nearby.",
+    note: "Small-town July 4 parade in Arnold.",
+    imageUrl: "https://www.gocalaveras.com/wp-content/uploads/2017/01/Arnold-Independence-Day-Parade.jpg",
     websiteUrl: "https://www.gocalaveras.com/business/festivals-events/arnold-independence-day-parade/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Independence+Day+Parade+Arnold+CA",
     icon: "sun"
@@ -99,6 +111,7 @@ const cabinThingsToDo = [
     name: "Sierra Nevada Arts & Crafts Festival",
     when: "Saturday July 4 · 10:00 AM - 5:00 PM · Sunday July 5 · 10:00 AM - 4:00 PM",
     note: "Holiday weekend arts-and-crafts event in Arnold if you want an easy family stop between meals and cabin time.",
+    imageUrl: "https://www.gocalaveras.com/wp-content/uploads/2026/06/54.jpg",
     websiteUrl: "https://www.gocalaveras.com/events/54th-annual-sierra-nevada-arts-crafts-festival/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Arts+and+Crafts+Festival+Arnold+CA",
     icon: "bag"
@@ -109,6 +122,7 @@ const cabinThingsToDo = [
     name: "White Pines Lake",
     when: "Best in daytime · check lake and parking conditions",
     note: "Closest easy lake option for beach time, picnics, paddling, and kid-friendly downtime.",
+    imageUrl: "https://www.gocalaveras.com/wp-content/uploads/2016/04/white-pines-lake-lisa-boulton.jpg",
     websiteUrl: "https://www.gocalaveras.com/business/outdoor-recreation/white-pines-lake/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=White+Pines+Lake+Arnold+CA",
     icon: "mountain"
@@ -119,6 +133,7 @@ const cabinThingsToDo = [
     name: "Calaveras Big Trees State Park",
     when: "Daily day-use park hours · easiest as a morning or early afternoon stop",
     note: "Best all-ages redwood-style outing nearby with shaded walks, giant trees, and easy sightseeing.",
+    imageUrl: "https://www.parks.ca.gov/pages/551/images/CalaverasBigTrees_Gallery_12.jpg",
     websiteUrl: "https://www.parks.ca.gov/?page_id=551",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Calaveras+Big+Trees+State+Park",
     icon: "mountain"
@@ -129,6 +144,7 @@ const cabinThingsToDo = [
     name: "Arnold Rim Trail",
     when: "Open in daylight · best in the morning or evening",
     note: "Best nearby trail system for scenic walks, overlook stops, and a more active family outing.",
+    imageUrl: "https://arnoldrimtrail.org/wp-content/uploads/2016/08/newrotation03.jpg",
     websiteUrl: "https://arnoldrimtrail.org/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Arnold+Rim+Trail+Arnold+CA",
     icon: "mountain"
@@ -139,6 +155,7 @@ const cabinThingsToDo = [
     name: "Sierra Nevada Logging Museum",
     when: "Check current museum hours before going",
     note: "Quick history stop that pairs well with White Pines Lake or the easier Arnold Rim Trail access.",
+    imageUrl: "https://www.gocalaveras.com/wp-content/uploads/2016/05/Sierra-Nevada-Logging-Museum_Dave-Jeffords-03.jpg",
     websiteUrl: "https://www.gocalaveras.com/business/attractions/sierra-nevada-logging-museum/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Sierra+Nevada+Logging+Museum+Arnold+CA",
     icon: "bag"
@@ -149,6 +166,7 @@ const cabinThingsToDo = [
     name: "Sequoia Woods Country Club",
     when: "Check current dining, tee time, and guest-access hours",
     note: "Closest golf and clubhouse option near the cabin if you want a low-drive adult outing or nearby meal stop.",
+    imageUrl: "https://lirp.cdn-website.com/0cc0b26c/dms3rep/multi/opt/DJI_0025-1920w.JPG",
     websiteUrl: "https://www.sequoiawoods.com/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Sequoia+Woods+Country+Club+Arnold+CA",
     icon: "grill"
@@ -159,6 +177,7 @@ const cabinThingsToDo = [
     name: "Lake Alpine",
     when: "Daylight outing · better as an early leave-and-return trip",
     note: "Higher-elevation lake day with cooler weather, mountain scenery, and a longer drive that feels like a real outing.",
+    imageUrl: "https://www.fs.usda.gov/Internet/FSE_MEDIA/fseprd477029.jpg",
     websiteUrl: "https://www.gocalaveras.com/business/lakes-rivers/lake-alpine-recreation-area/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Lake+Alpine+California",
     icon: "mountain"
@@ -169,6 +188,7 @@ const cabinThingsToDo = [
     name: "Bear Valley Mountain",
     when: "Check current summer activity and event hours",
     note: "Mountain base area with summer events and activities if you want to pair it with Lake Alpine or a scenic drive.",
+    imageUrl: "https://static.wixstatic.com/media/93e5c3_9c08ee8644ab4f77a5f2b8dc69d32722%7Emv2.png/v1/fit/w_2500,h_1330,al_c/93e5c3_9c08ee8644ab4f77a5f2b8dc69d32722%7Emv2.png",
     websiteUrl: "https://www.bearvalley.com/events-activities",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Bear+Valley+Mountain+Resort+CA",
     icon: "mountain"
@@ -179,6 +199,7 @@ const cabinThingsToDo = [
     name: "Moaning Caverns Adventure Park",
     when: "Guided tours daily · last tour is usually around 4:00 PM",
     note: "Good family detour for cave tours, zip lines, and something different from lake and trail time.",
+    imageUrl: "https://moaningcaverns.com/wp-content/uploads/2020/09/IMG_9010-768x512.jpeg",
     websiteUrl: "https://moaningcaverns.com/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Moaning+Caverns+Adventure+Park",
     icon: "flame"
@@ -189,6 +210,7 @@ const cabinThingsToDo = [
     name: "Mercer Caverns",
     when: "Guided tours daily · check current departure times",
     note: "Classic cave stop if the group wants a guided underground outing instead of more water or hiking.",
+    imageUrl: "https://mercercaverns.com/banner1.jpg",
     websiteUrl: "https://mercercaverns.com/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Mercer+Caverns+Murphys+CA",
     icon: "flame"
@@ -199,6 +221,7 @@ const cabinThingsToDo = [
     name: "California Cavern",
     when: "Guided tours daily · last tour is usually around 4:00 PM",
     note: "Another cave option in the county if you want a bigger outing beyond Arnold itself.",
+    imageUrl: "https://www.gocalaveras.com/wp-content/uploads/2016/12/California-Cavern-Jungle-Room-I-Photographer-Natalie-Warren.jpg",
     websiteUrl: "https://www.gocalaveras.com/business/caves/california-cavern/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=California+Cavern+Mountain+Ranch+CA",
     icon: "flame"
@@ -3466,8 +3489,38 @@ function renderTopNeeded() {
 }
 
 function activityIconMarkup(activity) {
+  if (activity?.imageUrl) {
+    return `<img src="${escapeText(activity.imageUrl)}" alt="${escapeText(activity.name || "Activity image")}" loading="lazy" decoding="async">`;
+  }
   const key = activity.icon === "lake" ? "mountain" : activity.icon === "trees" ? "mountain" : activity.icon;
   return icons[key] || icons.mountain;
+}
+
+function appleMapsUrlFromItem(item = {}) {
+  const source = String(item.mapUrl || item.websiteUrl || "");
+  const match = source.match(/[?&]query=([^&]+)/i);
+  const query = match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : String(item.name || "");
+  return `https://maps.apple.com/?q=${encodeURIComponent(query)}`;
+}
+
+function activityLinksMarkup(item) {
+  return `
+    <div class="cabin-activity-links">
+      <a class="text-mini-button cabin-link-button is-website" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
+      <a class="text-mini-button cabin-link-button is-google-maps" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
+      <a class="text-mini-button cabin-link-button is-apple-maps" href="${appleMapsUrlFromItem(item)}" target="_blank" rel="noreferrer">Apple Maps</a>
+    </div>
+  `;
+}
+
+function todoSummaryMarkup(item) {
+  if (!item?.note) return `<strong>${escapeText(item.name)}</strong>`;
+  return `
+    <details class="todo-activity-details">
+      <summary class="todo-activity-summary-toggle">${escapeText(item.name)}</summary>
+      <div class="todo-activity-summary-body">${escapeText(item.note)}</div>
+    </details>
+  `;
 }
 
 function renderGuideHighlights() {
@@ -3494,10 +3547,7 @@ function renderCabinActivityList() {
         <span class="cabin-activity-when">${escapeText(item.drive)} · ${escapeText(item.when || "Check current hours")}</span>
         <span class="cabin-activity-worth">${escapeText(item.verdict)}</span>
         <span>${escapeText(item.note)}</span>
-        <div class="cabin-activity-links">
-          <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
-          <a class="text-mini-button cabin-link-button" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
-        </div>
+        ${activityLinksMarkup(item)}
       </div>
     </article>
   `).join("");
@@ -3515,49 +3565,64 @@ function renderNearbyFoodList() {
         <span class="cabin-activity-when">${escapeText(item.drive)}</span>
         <span class="cabin-activity-worth">${escapeText(item.verdict)}</span>
         <span>${escapeText(item.note)}</span>
-        <div class="cabin-activity-links">
-          <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
-          <a class="text-mini-button cabin-link-button" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
-        </div>
+        ${activityLinksMarkup(item)}
       </div>
     </article>
   `).join("");
 }
 
-function renderTodoThingsToDo() {
-  const container = document.querySelector("#todoThingsToDoList");
-  if (!container) return;
-  const grouped = cabinThingsToDo.reduce((groups, item) => {
-    if (!groups.has(item.category)) groups.set(item.category, []);
-    groups.get(item.category).push(item);
-    return groups;
-  }, new Map());
+function todoStartMinutes(item = {}) {
+  const when = String(item.when || "");
+  const match = when.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/i);
+  if (!match) return null;
+  let hour = Number(match[1] || 0);
+  const minute = Number(match[2] || 0);
+  const meridiem = String(match[3] || "").toUpperCase();
+  if (meridiem === "AM" && hour === 12) hour = 0;
+  if (meridiem === "PM" && hour < 12) hour += 12;
+  return hour * 60 + minute;
+}
 
-  container.innerHTML = Array.from(grouped.entries()).map(([category, items]) => `
-    <section class="todo-activity-group" aria-label="${escapeText(category)}">
+function renderTodoThingsGroup(title, items) {
+  if (!items.length) return "";
+  return `
+    <section class="todo-activity-group" aria-label="${escapeText(title)}">
       <div class="todo-activity-group-heading">
-        <h3>${escapeText(category)}</h3>
-        <span>${items.length} ${items.length === 1 ? "idea" : "ideas"}</span>
+        <h3>${escapeText(title)}</h3>
       </div>
       <div class="todo-activity-list">
         ${items.map((item) => `
           <article class="cabin-activity-card todo-link-card">
             <span class="activity-thumb cabin-activity-thumb">${activityIconMarkup(item)}</span>
             <div class="cabin-activity-copy">
-              <span class="activity-rank">${escapeText(item.category)}</span>
-              <strong>${escapeText(item.name)}</strong>
-              <span class="cabin-activity-when">${escapeText(item.when || "Check current hours")}</span>
-              <span>${escapeText(item.note)}</span>
-              <div class="cabin-activity-links">
-                <a class="text-mini-button cabin-link-button" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
-                <a class="text-mini-button cabin-link-button" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
-              </div>
+              ${todoSummaryMarkup(item)}
+              <span class="cabin-activity-when">${escapeText(item.when || "Check website for hours")}</span>
+              ${activityLinksMarkup(item)}
             </div>
           </article>
         `).join("")}
       </div>
     </section>
-  `).join("");
+  `;
+}
+
+function renderTodoThingsToDo() {
+  const container = document.querySelector("#todoThingsToDoList");
+  if (!container) return;
+  const timedItems = cabinThingsToDo
+    .filter((item) => todoStartMinutes(item) !== null)
+    .sort((a, b) => {
+      const aMinutes = todoStartMinutes(a) ?? Number.MAX_SAFE_INTEGER;
+      const bMinutes = todoStartMinutes(b) ?? Number.MAX_SAFE_INTEGER;
+      if (aMinutes !== bMinutes) return aMinutes - bMinutes;
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+  const untimedItems = cabinThingsToDo.filter((item) => todoStartMinutes(item) === null);
+
+  container.innerHTML = [
+    renderTodoThingsGroup("Timed", timedItems),
+    renderTodoThingsGroup("Not Timed", untimedItems)
+  ].join("");
 }
 
 function isGameSupply(item = {}) {

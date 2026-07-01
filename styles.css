@@ -1864,6 +1864,13 @@ svg {
   height: 28px;
 }
 
+.activity-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .vote-button {
   display: inline-flex;
   min-width: 86px;
@@ -2324,7 +2331,34 @@ svg {
 }
 
 .cabin-link-button {
+  display: inline-flex;
+  min-width: 84px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   text-decoration: none;
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 18px rgba(19, 32, 27, 0.12);
+  white-space: nowrap;
+}
+
+.cabin-link-button.is-website {
+  background: #7b2d3a;
+}
+
+.cabin-link-button.is-google-maps {
+  background: #2f8f4e;
+}
+
+.cabin-link-button.is-apple-maps {
+  background: #2b6ee7;
+}
+
+.cabin-link-button:hover,
+.cabin-link-button:focus-visible {
+  color: #fff;
+  filter: brightness(1.04);
 }
 
 .activity-grid {
@@ -4519,8 +4553,8 @@ button { -webkit-tap-highlight-color: transparent; }
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  gap: 10px;
+  padding: 10px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.92);
@@ -4547,10 +4581,46 @@ button { -webkit-tap-highlight-color: transparent; }
   font-size: 0.96rem;
 }
 
+.todo-activity-details {
+  display: grid;
+  gap: 6px;
+}
+
+.todo-activity-summary-toggle {
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.todo-activity-summary-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.todo-activity-summary-body {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
 .todo-activity-copy > span:not(.activity-rank) {
   color: var(--muted);
   font-size: 0.82rem;
   line-height: 1.35;
+}
+
+.todo-activity-copy .cabin-activity-links {
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.todo-activity-copy .cabin-link-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 30px !important;
+  padding: 0 5px;
+  font-size: 0.62rem;
+  letter-spacing: 0.01em;
 }
 
 .todo-activity-card .vote-button {
@@ -5162,7 +5232,65 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 
 .home-destination-stack {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+  aspect-ratio: auto;
+  min-height: 0;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.home-destination-stack.is-food {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.home-destination-stack.is-food::before {
+  content: none;
+}
+
+.destination-card-main.is-cabin-link {
+  align-content: start;
+  gap: 8px;
+  justify-items: start;
+  min-height: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 197, 141, 0.42);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #de7a2b, #cb6620);
+  color: #fff8f2;
+  backdrop-filter: none;
+  box-shadow: 0 10px 24px rgba(111, 45, 11, 0.2);
+}
+
+.destination-card-main.is-cabin-link .destination-card-copy {
+  gap: 4px;
+}
+
+.destination-card-main.is-cabin-link .destination-card-note {
+  margin-top: 2px;
+}
+
+.home-destination-stack.is-food .destination-card-main.is-cabin-link h3,
+.home-destination-stack.is-food .destination-card-main.is-cabin-link .destination-card-copy,
+.home-destination-stack.is-food .destination-card-main.is-cabin-link .destination-card-note {
+  color: #fff8f2;
+}
+
+.destination-card-main {
+  display: grid;
   align-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
 }
 
 .destination-card-actions-stack {
@@ -5318,6 +5446,29 @@ button { -webkit-tap-highlight-color: transparent; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.destination-card-map-shell {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border: 1px solid rgba(255, 205, 170, 0.32);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #b95a23, #9e4717);
+  box-shadow: 0 10px 24px rgba(88, 34, 10, 0.18);
+  backdrop-filter: none;
+}
+
+.destination-card-map-label {
+  position: relative;
+  z-index: 2;
+  color: rgba(255, 247, 240, 0.92);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .destination-card-map-link {
@@ -5337,11 +5488,18 @@ button { -webkit-tap-highlight-color: transparent; }
   backdrop-filter: blur(8px);
 }
 
+.home-destination-stack .destination-card-map-link:first-child {
+  background: rgba(38, 123, 211, 0.78);
+}
+
+.home-destination-stack .destination-card-map-link:last-child {
+  background: rgba(44, 62, 145, 0.78);
+}
+
 .destination-card-map-link:hover,
 .destination-card-map-link:focus-visible {
   background: rgba(255, 255, 255, 0.24);
 }
-
 .destination-card-map-link:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.34);
   outline-offset: 2px;

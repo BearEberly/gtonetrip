@@ -26,7 +26,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=79">
+    <link rel="stylesheet" href="styles.css?v=87">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -265,7 +265,6 @@
           <div class="panel-heading">
             <div>
               <h1>Things To Do</h1>
-              <p>Hikes, swimming, golf, scenic drives, and easy things to do while we are up there.</p>
             </div>
           </div>
 
@@ -276,12 +275,6 @@
 
           <div id="todoThingsPane" data-todo-pane="things">
             <section class="board-panel todo-things-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>Pick Something To Do</h2>
-                  <p>Open the website for details, or tap Google Maps to route there.</p>
-                </div>
-              </div>
               <div class="todo-things-grid" id="todoThingsToDoList"></div>
             </section>
             <section class="board-panel">
@@ -350,20 +343,19 @@
               </button>
 
               <div class="destination-card home-destination-stack is-food">
-                <span class="destination-card-copy">
-                  <p class="destination-card-kicker">Trip board</p>
-                  <h3>4th of July cabin</h3>
-                  <p>Meals, supplies, trip schedule, and to-do.</p>
-                  <span class="destination-card-stat">July 1 - 6</span>
-                  <span class="destination-card-note">Arnold cabin planning</span>
-                </span>
-                <span class="destination-card-actions destination-card-actions-stack">
-                  <button class="destination-card-cta" type="button" id="openFourthOfJulyDestination" data-tab="trip-food" aria-label="Open 4th of July cabin">Open</button>
+                <button class="home-destination-button destination-card-main is-cabin-link" type="button" id="openFourthOfJulyDestination" data-tab="trip-food" aria-label="Open 4th of July cabin">
+                  <span class="destination-card-copy">
+                    <h3>4th of July cabin</h3>
+                    <span class="destination-card-note">Arnold cabin planning</span>
+                  </span>
+                </button>
+                <div class="destination-card-map-shell">
+                  <span class="destination-card-map-label">Directions to cabin</span>
                   <span class="destination-card-map-row">
                     <a class="destination-card-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=1018%20Wawona%20Way%2C%20Arnold%2C%20CA%2095223" target="_blank" rel="noreferrer">Google Maps</a>
                     <a class="destination-card-map-link" href="https://maps.apple.com/?daddr=1018%20Wawona%20Way,%20Arnold,%20CA%2095223" target="_blank" rel="noreferrer">Apple Maps</a>
                   </span>
-                </span>
+                 </div>
               </div>
 
               <button class="destination-card home-destination-button is-users is-hidden" type="button" id="openUsersDestination" aria-label="Open Users">
@@ -816,6 +808,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=85"></script>
+    <script src="script.js?v=91"></script>
   </body>
 </html>
