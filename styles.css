@@ -2642,6 +2642,30 @@ svg {
   background: #fff;
 }
 
+.supply-ai-preview-copy {
+  min-width: 0;
+}
+
+.supply-ai-preview-copy strong,
+.supply-ai-preview-copy span {
+  display: block;
+}
+
+.supply-ai-preview-copy strong {
+  color: var(--forest-800);
+  font-size: 0.9rem;
+}
+
+.supply-ai-preview-copy span {
+  margin-top: 3px;
+  font-size: 0.78rem;
+}
+
+.supply-ai-preview .primary-action {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
 .supply-ai-status {
   min-height: 18px;
   margin: 0;

@@ -649,7 +649,7 @@ let itemMode = "meal";
 let editingItemId = "";
 let editingFamilyEventId = "";
 let pendingSupplyImage = "";
-let pendingSupplyAiImage = "";
+let pendingSupplyAiImages = [];
 let supplyDraftItems = [];
 let supplyImportBusy = false;
 let smartUploadOpen = false;
@@ -4277,13 +4277,24 @@ function supplyDraftDefault(overrides = {}) {
   };
 }
 
-function setPendingSupplyAiImage(dataUrl) {
-  pendingSupplyAiImage = supplyAiImageDataUrlSafe(dataUrl);
+function setPendingSupplyAiImages(dataUrls = []) {
+  pendingSupplyAiImages = (Array.isArray(dataUrls) ? dataUrls : [dataUrls])
+    .map((dataUrl) => supplyAiImageDataUrlSafe(dataUrl))
+    .filter(Boolean)
+    .slice(0, 8);
   const wrap = document.querySelector("#supplyAiPreviewWrap");
   const preview = document.querySelector("#supplyAiPreview");
-  if (preview) preview.src = pendingSupplyAiImage || "";
-  wrap?.classList.toggle("is-hidden", !pendingSupplyAiImage);
-  updateSupplyAiStatus(pendingSupplyAiImage ? "Photo ready. Tap Use AI to add items." : "");
+  const count = document.querySelector("#supplyAiPhotoCount");
+  const hint = document.querySelector("#supplyAiPhotoHint");
+  const photoCount = pendingSupplyAiImages.length;
+  if (preview) preview.src = pendingSupplyAiImages[0] || "";
+  if (count) count.textContent = `${photoCount} photo${photoCount === 1 ? "" : "s"} ready`;
+  if (hint) hint.textContent = photoCount > 1
+    ? "AI will read each photo and combine the item drafts."
+    : "You can add more photos before running AI.";
+  wrap?.classList.toggle("is-hidden", !photoCount);
+  updateSupplyAiStatus(photoCount ? `${photoCount} photo${photoCount === 1 ? "" : "s"} ready. Tap Use AI to add items.` : "");
+  setSupplyImportBusy(supplyImportBusy);
 }
 
 function updateSupplyAiStatus(message = "") {
@@ -4293,7 +4304,7 @@ function updateSupplyAiStatus(message = "") {
 
 function setSupplyImportBusy(isBusy) {
   supplyImportBusy = Boolean(isBusy);
-  document.querySelector("#runSupplyAiImport")?.toggleAttribute("disabled", supplyImportBusy || !pendingSupplyAiImage);
+  document.querySelector("#runSupplyAiImport")?.toggleAttribute("disabled", supplyImportBusy || !pendingSupplyAiImages.length);
   document.querySelector("#supplyAiUpload")?.toggleAttribute("disabled", supplyImportBusy);
   document.querySelector("#supplyAiCamera")?.toggleAttribute("disabled", supplyImportBusy);
 }
@@ -4535,15 +4546,20 @@ async function prepareSupplyAiImageFile(file) {
   throw new Error("That photo is too large to upload. Try a screenshot or a smaller JPG/PNG photo.");
 }
 
-async function handleSupplyAiImageFile(file) {
-  if (!file) return;
+async function handleSupplyAiImageFiles(files) {
+  const selectedFiles = Array.from(files || []).filter(Boolean);
+  if (!selectedFiles.length) return;
   try {
-    updateSupplyAiStatus("Preparing photo...");
-    const prepared = await prepareSupplyAiImageFile(file);
-    setPendingSupplyAiImage(prepared);
+    updateSupplyAiStatus(selectedFiles.length === 1 ? "Preparing photo..." : `Preparing ${selectedFiles.length} photos...`);
+    const prepared = [];
+    for (let index = 0; index < selectedFiles.length; index += 1) {
+      updateSupplyAiStatus(`Preparing photo ${index + 1} of ${selectedFiles.length}...`);
+      prepared.push(await prepareSupplyAiImageFile(selectedFiles[index]));
+    }
+    setPendingSupplyAiImages([...pendingSupplyAiImages, ...prepared]);
     setSupplyImportBusy(false);
   } catch (error) {
-    setPendingSupplyAiImage("");
+    setPendingSupplyAiImages(pendingSupplyAiImages);
     const message = error instanceof Error ? error.message : "Could not load that photo.";
     updateSupplyAiStatus(message);
     showToast(message);
@@ -4551,17 +4567,28 @@ async function handleSupplyAiImageFile(file) {
 }
 
 async function runSupplyAiImport() {
-  if (!pendingSupplyAiImage || supplyImportBusy) return;
+  if (!pendingSupplyAiImages.length || supplyImportBusy) return;
   try {
     setSupplyImportBusy(true);
-    updateSupplyAiStatus("Reading photo...");
-    const response = await authAwareRequest("/supply/import-photo", {
-      method: "POST",
-      body: { image: pendingSupplyAiImage }
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not read that photo.");
-    const items = Array.isArray(payload.items) ? payload.items.map((item) => supplyDraftDefault(item)).filter((item) => item.name) : [];
+    const allItems = [];
+    for (let index = 0; index < pendingSupplyAiImages.length; index += 1) {
+      updateSupplyAiStatus(`Reading photo ${index + 1} of ${pendingSupplyAiImages.length}...`);
+      const response = await authAwareRequest("/supply/import-photo", {
+        method: "POST",
+        body: { image: pendingSupplyAiImages[index] }
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not read that photo.");
+      const items = Array.isArray(payload.items) ? payload.items.map((item) => supplyDraftDefault(item)).filter((item) => item.name) : [];
+      allItems.push(...items);
+    }
+    const seen = new Set();
+    const items = allItems.filter((item) => {
+      const key = [item.name, item.quantity, item.mealType, dayListSafe(item.days).join(",")].map((value) => String(value || "").toLowerCase().trim()).join("|");
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, 30);
     if (!items.length) {
       updateSupplyAiStatus("No clear items found. Add them manually below.");
       return;
@@ -4820,7 +4847,7 @@ function openItemDrawer(mode, itemId = "") {
   });
   document.querySelector("#itemForm")?.reset();
   setPendingSupplyImage("");
-  setPendingSupplyAiImage("");
+  setPendingSupplyAiImages([]);
   setSmartUploadOpen(false);
   setSupplyDaySelection([]);
   updateSupplyDayAvailability();
@@ -5356,11 +5383,11 @@ function bindEvents() {
   });
   document.querySelector("#runSupplyAiImport")?.addEventListener("click", runSupplyAiImport);
   document.querySelector("#supplyAiUpload")?.addEventListener("change", async (event) => {
-    await handleSupplyAiImageFile(event.target.files?.[0]);
+    await handleSupplyAiImageFiles(event.target.files);
     event.target.value = "";
   });
   document.querySelector("#supplyAiCamera")?.addEventListener("change", async (event) => {
-    await handleSupplyAiImageFile(event.target.files?.[0]);
+    await handleSupplyAiImageFiles(event.target.files);
     event.target.value = "";
   });
   document.querySelector("#mealIdeaDay")?.addEventListener("change", renderMealAvailablePanel);
