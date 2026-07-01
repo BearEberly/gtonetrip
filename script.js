@@ -950,12 +950,13 @@ function resetProfileCrop() {
 
 function renderProfileCropper() {
   const source = profileCropSource();
+  const shouldShowCropper = Boolean(profilePhotoChanged && source);
   const cropper = document.querySelector("#profileCropper");
   const image = document.querySelector("#profileCropImage");
   const zoom = document.querySelector("#profilePhotoZoom");
-  if (cropper) cropper.classList.toggle("is-hidden", !source);
+  if (cropper) cropper.classList.toggle("is-hidden", !shouldShowCropper);
   if (image) {
-    image.src = source || "";
+    image.src = shouldShowCropper ? source : "";
     image.style.transform = `translate(${profilePhotoCrop.x}px, ${profilePhotoCrop.y}px) scale(${profilePhotoCrop.zoom})`;
   }
   if (zoom) zoom.value = String(profilePhotoCrop.zoom);
@@ -1053,6 +1054,9 @@ async function saveProfileForm(event) {
     if (!response.ok || !payload.ok) throw new Error(payload.message || "Could not save profile.");
     applyProfile(payload.user);
     applyTripInfo(payload.tripInfo);
+    profilePhotoChanged = false;
+    pendingProfilePhotoSource = "";
+    renderProfileCropper();
     closeProfileDrawer();
     showToast(payload.message || "Profile saved.");
   } catch (error) {
