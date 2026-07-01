@@ -3970,7 +3970,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .food-days { justify-content: center; }
 
 .food-days {
-  padding-top: 62px;
+  padding-top: 38px;
 }
 
 .food-day {
@@ -3985,16 +3985,48 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 
 .food-day[data-food-day="sat"]::before {
-  top: -72px;
+  top: -34px;
   left: 50%;
   z-index: 2;
-  width: 46px;
-  height: 41px;
+  width: 44px;
+  height: 39px;
   border-radius: 0;
   background: url("assets/saturday-fireworks.png") center bottom / contain no-repeat;
   filter: drop-shadow(0 5px 8px rgba(17, 45, 68, 0.18));
   opacity: 0.98;
   transform: translateX(-50%);
+}
+
+.food-day[data-food-day="sun"]::before,
+.food-day[data-food-day="sun"]::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.food-day[data-food-day="sun"]::before {
+  top: -13px;
+  right: 2px;
+  z-index: 4;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #fff7d6;
+  box-shadow: 0 1px 3px rgba(53, 36, 10, 0.22);
+}
+
+.food-day[data-food-day="sun"]::after {
+  top: -7px;
+  right: -5px;
+  z-index: 3;
+  width: 24px;
+  height: 28px;
+  background:
+    repeating-linear-gradient(115deg, #ef4444 0 6px, #fff7d6 6px 11px, #2563eb 11px 17px);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  filter: drop-shadow(0 3px 4px rgba(24, 35, 55, 0.18));
+  transform: rotate(22deg);
+  transform-origin: 50% 100%;
 }
 
 .food-day[data-food-day="sat"].is-active {
