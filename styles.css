@@ -2561,6 +2561,38 @@ svg {
   -webkit-overflow-scrolling: touch;
 }
 
+.smart-upload-wrap {
+  display: grid;
+  gap: 10px;
+  padding: 4px 22px 8px;
+}
+
+.smart-upload-toggle {
+  width: 100%;
+  border: 0;
+  border-radius: 18px;
+  padding: 14px 16px;
+  background:
+    linear-gradient(135deg, rgba(253, 186, 116, 0.96), rgba(34, 122, 82, 0.94)),
+    var(--forest-700);
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(28, 122, 66, 0.2);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.smart-upload-toggle:focus-visible {
+  outline: 3px solid rgba(253, 186, 116, 0.55);
+  outline-offset: 3px;
+}
+
+.smart-upload-panel {
+  margin-top: 0;
+}
+
 .supply-multi-fields,
 .supply-single-fields {
   display: grid;

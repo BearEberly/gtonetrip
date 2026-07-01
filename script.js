@@ -673,6 +673,7 @@ let pendingSupplyImage = "";
 let pendingSupplyAiImage = "";
 let supplyDraftItems = [];
 let supplyImportBusy = false;
+let smartUploadOpen = false;
 let pendingScheduleImage = "";
 let pendingProfilePhoto = "";
 let pendingProfilePhotoSource = "";
@@ -4054,6 +4055,47 @@ function setSupplyImportBusy(isBusy) {
   document.querySelector("#supplyAiCamera")?.toggleAttribute("disabled", supplyImportBusy);
 }
 
+function smartUploadAvailable(mode = itemMode, isEdit = Boolean(editingItemId)) {
+  return !isEdit && (mode === "meal" || mode === "supply");
+}
+
+function setSmartUploadOpen(isOpen) {
+  smartUploadOpen = Boolean(isOpen) && smartUploadAvailable();
+  const wrap = document.querySelector("#smartUploadWrap");
+  const panel = document.querySelector("#smartUploadPanel");
+  const toggle = document.querySelector("#smartUploadToggle");
+  wrap?.classList.toggle("is-hidden", !smartUploadAvailable());
+  panel?.classList.toggle("is-hidden", !smartUploadOpen);
+  if (toggle) {
+    toggle.setAttribute("aria-expanded", smartUploadOpen ? "true" : "false");
+  }
+}
+
+function mealTypeFromImport(value) {
+  const normalized = mealTypeSafe(value);
+  if (normalized === "breakfast") return "Breakfast";
+  if (normalized === "lunch") return "Lunch";
+  if (normalized === "dessert" || normalized === "pack-up") return "Dessert / Snacks";
+  return "Dinner";
+}
+
+function applySmartUploadToMeal(items) {
+  const usable = items.filter((item) => item.name);
+  if (!usable.length) {
+    updateSupplyAiStatus("No clear meal ideas found. Add it manually below.");
+    return;
+  }
+  const first = usable[0];
+  const day = dayListSafe(first.days || [])[0];
+  const idea = usable.map((item) => item.name).join(", ");
+  const notes = usable.map((item) => item.notes).filter(Boolean).join("; ");
+  if (day && document.querySelector("#mealIdeaDay")) document.querySelector("#mealIdeaDay").value = day;
+  if (document.querySelector("#mealIdeaType")) document.querySelector("#mealIdeaType").value = mealTypeFromImport(first.mealType);
+  if (document.querySelector("#mealIdeaText")) document.querySelector("#mealIdeaText").value = idea;
+  if (notes && document.querySelector("#mealIdeaKids")) document.querySelector("#mealIdeaKids").value = notes;
+  updateSupplyAiStatus(`Filled the meal idea from ${usable.length} item${usable.length === 1 ? "" : "s"}. Review before saving.`);
+}
+
 function renderSupplyDraftRows() {
   const list = document.querySelector("#supplyDraftRows");
   if (!list) return;
@@ -4180,6 +4222,10 @@ async function runSupplyAiImport() {
     const items = Array.isArray(payload.items) ? payload.items.map((item) => supplyDraftDefault(item)).filter((item) => item.name) : [];
     if (!items.length) {
       updateSupplyAiStatus("No clear items found. Add them manually below.");
+      return;
+    }
+    if (itemMode === "meal") {
+      applySmartUploadToMeal(items);
       return;
     }
     syncSupplyDraftsFromDom();
@@ -4421,7 +4467,7 @@ function openItemDrawer(mode, itemId = "") {
   if (help) help.textContent = isEvent
     ? "Add a trip event that should show on the calendar but not under meals."
     : mode === "meal"
-      ? "Set the recipe for this meal. Bringing items link in automatically."
+      ? (isEdit ? "Set the recipe for this meal. Bringing items link in automatically." : "Add a meal manually or tap Smart Upload to read a photo.")
       : isSupplyAdd
         ? "Add one item manually, add another row, or use a photo to fill drafts."
         : "Start with the item name. Meal, day, and picture details are optional.";
@@ -4437,6 +4483,7 @@ function openItemDrawer(mode, itemId = "") {
   document.querySelector("#itemForm")?.reset();
   setPendingSupplyImage("");
   setPendingSupplyAiImage("");
+  setSmartUploadOpen(false);
   setSupplyDaySelection([]);
   updateSupplyDayAvailability();
   document.querySelector("#supplyMultiFields")?.classList.toggle("is-hidden", !isSupplyAdd);
@@ -4907,6 +4954,7 @@ function bindEvents() {
   document.querySelector("#addMealIdea")?.addEventListener("click", addMealIdea);
   document.querySelector("#addNonFoodEvent")?.addEventListener("click", addNonFoodEvent);
   document.querySelector("#addSupply")?.addEventListener("click", addSupply);
+  document.querySelector("#smartUploadToggle")?.addEventListener("click", () => setSmartUploadOpen(!smartUploadOpen));
   document.querySelector("#subscribeApple")?.addEventListener("click", () => {
     window.location.href = calendarFeedUrls().webcal;
   });
