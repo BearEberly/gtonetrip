@@ -2500,6 +2500,7 @@ svg {
 .drawer-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 18px;
   padding: 24px 22px 18px;
 }
@@ -2699,11 +2700,26 @@ svg {
   font-size: 2.2rem;
   font-weight: 850;
   box-shadow: var(--soft-shadow);
+  justify-self: center;
 }
 
 .profile-photo-preview img,
 .profile-photo-preview span {
   grid-area: 1 / 1;
+}
+
+.profile-upload-field {
+  display: grid;
+  gap: 10px;
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 700;
+  justify-items: center;
+  text-align: center;
+}
+
+.profile-upload-button {
+  justify-self: center;
 }
 
 .profile-cropper {
@@ -2732,16 +2748,8 @@ svg {
     var(--surface-soft);
 }
 
-.profile-admin-panel.is-hidden {
-  display: none;
-}
-
 .profile-admin-panel strong {
   font-size: 0.95rem;
-}
-
-.profile-admin-panel .auth-helper {
-  margin: 0;
 }
 
 .profile-crop-heading {

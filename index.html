@@ -479,7 +479,6 @@
       <div class="drawer-header">
         <div>
           <h2 id="profileDrawerTitle">Profile</h2>
-          <p>Name and picture only.</p>
         </div>
         <button class="icon-button dark" type="button" id="closeProfileDrawer" aria-label="Close profile">
           <span data-icon="x"></span>
@@ -497,10 +496,11 @@
           <input id="profileNameInput" type="text" autocomplete="name" placeholder="Your name">
         </label>
 
-        <label>
-          Picture (optional)
-          <input id="profilePhotoInput" type="file" accept="image/*">
-        </label>
+        <div class="profile-upload-field">
+          <span>Picture (optional)</span>
+          <label class="secondary-action compact-action profile-upload-button" for="profilePhotoInput">Choose photo</label>
+          <input class="sr-only" id="profilePhotoInput" type="file" accept="image/*">
+        </div>
 
         <div class="profile-cropper is-hidden" id="profileCropper">
           <div class="profile-crop-heading">
@@ -521,16 +521,15 @@
           </div>
         </div>
 
-        <section class="profile-admin-panel is-hidden" id="profilePasswordPanel" aria-label="Shared trip password">
-          <strong>Shared trip password</strong>
-          <p class="auth-helper">Organizer only. Changing this updates the sign-in password for everyone on every device.</p>
+        <section class="profile-admin-panel" id="profilePasswordPanel" aria-label="Password">
+          <strong>Password</strong>
           <label>
-            New trip password
-            <input id="profileSharedPassword" type="password" autocomplete="new-password" placeholder="New shared password">
+            Password
+            <input id="profilePassword" type="password" autocomplete="new-password" placeholder="Password">
           </label>
           <label>
-            Confirm new trip password
-            <input id="profileSharedPasswordConfirm" type="password" autocomplete="new-password" placeholder="Confirm new shared password">
+            Confirm password
+            <input id="profilePasswordConfirm" type="password" autocomplete="new-password" placeholder="Confirm password">
           </label>
         </section>
 
@@ -770,6 +769,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=73"></script>
+    <script src="script.js?v=74"></script>
   </body>
 </html>

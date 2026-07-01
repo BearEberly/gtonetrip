@@ -635,6 +635,7 @@ function normalizeSharedProfiles(value: unknown) {
       email: emailSafe(record.email),
       displayName: displayNameSafe(record.displayName),
       photo: imageDataUrlSafe(record.photo),
+      passwordHash: textSafe(record.passwordHash, "", 200),
       updatedAt: textSafe(record.updatedAt, "", 80)
     };
   }
@@ -857,7 +858,7 @@ function profileRowToUser(
 
 async function saveTripProfile(
   user: { personId: string; firstName: string; familyId: string },
-  patch: { email?: unknown; displayName?: unknown; photo?: unknown } = {}
+  patch: { email?: unknown; displayName?: unknown; photo?: unknown; passwordHash?: unknown } = {}
 ) {
   const state = await getStoredState();
   const profiles = normalizeSharedProfiles(state.sharedProfiles);
@@ -869,6 +870,7 @@ async function saveTripProfile(
     email: hasOwn(patch, "email") ? emailSafe(patch.email) : emailSafe(existing?.email),
     displayName: hasOwn(patch, "displayName") ? displayNameSafe(patch.displayName) : displayNameSafe(existing?.displayName),
     photo: hasOwn(patch, "photo") ? imageDataUrlSafe(patch.photo) : imageDataUrlSafe(existing?.photo),
+    passwordHash: hasOwn(patch, "passwordHash") ? textSafe(patch.passwordHash, "", 200) : textSafe(existing?.passwordHash, "", 200),
     updatedAt: new Date().toISOString()
   };
   const shouldWrite = !existing
@@ -876,7 +878,8 @@ async function saveTripProfile(
     || textSafe(existing.firstName) !== textSafe(nextRow.firstName)
     || textSafe(existing.email) !== textSafe(nextRow.email)
     || textSafe(existing.displayName) !== textSafe(nextRow.displayName)
-    || imageDataUrlSafe(existing.photo) !== imageDataUrlSafe(nextRow.photo);
+    || imageDataUrlSafe(existing.photo) !== imageDataUrlSafe(nextRow.photo)
+    || textSafe(existing.passwordHash) !== textSafe(nextRow.passwordHash);
   if (shouldWrite) {
     profiles[user.personId] = nextRow;
     state.sharedProfiles = profiles;
@@ -900,8 +903,21 @@ async function currentSharedPasswordHash() {
   return settings.sharedPasswordHash || await sha256Hex(DEFAULT_SHARED_LOGIN_PASSWORD);
 }
 
+async function currentPasswordHashForUser(user: { personId: string }) {
+  const state = await getStoredState();
+  const profiles = normalizeSharedProfiles(state.sharedProfiles);
+  const profileHash = textSafe(profiles[user.personId]?.passwordHash, "", 200);
+  if (profileHash) return profileHash;
+  const settings = normalizeSharedSettings(state.sharedSettings);
+  return settings.sharedPasswordHash || await sha256Hex(DEFAULT_SHARED_LOGIN_PASSWORD);
+}
+
 async function sharedPasswordMatches(password: unknown) {
   return (await sha256Hex(String(password ?? ""))) === (await currentSharedPasswordHash());
+}
+
+async function userPasswordMatches(user: { personId: string }, password: unknown) {
+  return (await sha256Hex(String(password ?? ""))) === (await currentPasswordHashForUser(user));
 }
 
 async function saveSharedPassword(password: unknown, actorPersonId: string) {
@@ -1513,7 +1529,7 @@ Deno.serve(async (request) => {
       const body = await request.json() as Record<string, unknown>;
       const user = userFromLoginPayload(body);
       if (!user) return json({ ok: false, message: "Enter your first name." }, 400);
-      if (!(await sharedPasswordMatches(body.password))) {
+      if (!(await userPasswordMatches(user, body.password))) {
         return json({ ok: false, message: "Password did not match." }, 401);
       }
       const session = await createSession(user);
@@ -1691,32 +1707,27 @@ Deno.serve(async (request) => {
 
     if (route === "/profile" && request.method === "POST") {
       const body = await request.json() as Record<string, unknown>;
-      const rawSharedPassword = String(body.sharedPassword ?? "");
+      const rawProfilePassword = String(body.profilePassword ?? "");
       const rawPhoto = String(body.photo ?? "").trim();
-      const wantsPasswordUpdate = hasOwn(body, "sharedPassword") && Boolean(rawSharedPassword.trim());
+      const wantsPasswordUpdate = hasOwn(body, "profilePassword") && Boolean(rawProfilePassword.trim());
       const wantsPhotoUpdate = hasOwn(body, "photo");
-      if (wantsPasswordUpdate && !sharedPasswordSafe(rawSharedPassword)) {
-        return json({ ok: false, message: "Trip password must be at least 4 characters." }, 400);
+      if (wantsPasswordUpdate && !sharedPasswordSafe(rawProfilePassword)) {
+        return json({ ok: false, message: "Password must be at least 4 characters." }, 400);
       }
       if (wantsPhotoUpdate && rawPhoto && !imageDataUrlSafe(rawPhoto)) {
         return json({ ok: false, message: "Profile photo is too large. Try a smaller image." }, 400);
       }
-      if (wantsPasswordUpdate && !isBearPowerUser(session.user.personId)) {
-        return json({ ok: false, message: "Only Bear can change the shared trip password." }, 403);
-      }
       const updatedUser = await saveTripProfile(session.user, {
         displayName: body.displayName,
         photo: body.photo,
-        email: body.email
+        email: body.email,
+        passwordHash: wantsPasswordUpdate ? await sha256Hex(rawProfilePassword) : undefined
       });
-      if (wantsPasswordUpdate) {
-        await saveSharedPassword(rawSharedPassword, session.user.personId);
-      }
       return json({
         ok: true,
         user: updatedUser,
         tripInfo,
-        message: wantsPasswordUpdate ? "Profile and trip password saved." : "Profile saved."
+        message: wantsPasswordUpdate ? "Profile and password saved." : "Profile saved."
       });
     }
 

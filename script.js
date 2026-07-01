@@ -865,6 +865,12 @@ function displayNameForUser(user = api.user) {
   return shortText(user?.displayName || saved.displayName || user?.firstName || "Profile", 60) || "Profile";
 }
 
+function profileTitleForUser(user = api.user) {
+  const firstName = shortText(user?.firstName, 60) || "Profile";
+  const familyName = shortText(familyById(user?.familyId)?.name, 60) || "Family";
+  return `${firstName} - ${familyName}`;
+}
+
 function profilePhotoForUser(user = api.user) {
   const saved = loadProfileSettings(user);
   return imageDataUrlSafe(user?.photo) || imageDataUrlSafe(saved.photo);
@@ -885,14 +891,11 @@ function normalizeSignedInUser(user) {
 
 function renderProfileAdminPanel() {
   const panel = document.querySelector("#profilePasswordPanel");
-  const password = document.querySelector("#profileSharedPassword");
-  const confirm = document.querySelector("#profileSharedPasswordConfirm");
-  const visible = isBearPowerUser();
-  panel?.classList.toggle("is-hidden", !visible);
-  if (!visible) {
-    if (password) password.value = "";
-    if (confirm) confirm.value = "";
-  }
+  const password = document.querySelector("#profilePassword");
+  const confirm = document.querySelector("#profilePasswordConfirm");
+  panel?.classList.remove("is-hidden");
+  if (password) password.value = "";
+  if (confirm) confirm.value = "";
 }
 
 function profileInitial(name = displayNameForUser()) {
@@ -958,10 +961,12 @@ function populateProfileForm() {
   pendingProfilePhoto = profilePhotoForUser();
   pendingProfilePhotoSource = pendingProfilePhoto;
   resetProfileCrop();
+  const titleNode = document.querySelector("#profileDrawerTitle");
   const nameInput = document.querySelector("#profileNameInput");
   const fileInput = document.querySelector("#profilePhotoInput");
-  const passwordInput = document.querySelector("#profileSharedPassword");
-  const passwordConfirmInput = document.querySelector("#profileSharedPasswordConfirm");
+  const passwordInput = document.querySelector("#profilePassword");
+  const passwordConfirmInput = document.querySelector("#profilePasswordConfirm");
+  if (titleNode) titleNode.textContent = profileTitleForUser();
   if (nameInput) nameInput.value = name;
   if (fileInput) fileInput.value = "";
   if (passwordInput) passwordInput.value = "";
@@ -1000,18 +1005,14 @@ async function saveProfileForm(event) {
   event?.preventDefault?.();
   if (!api.user) return;
   const displayName = document.querySelector("#profileNameInput")?.value.trim() || api.user.firstName || "Profile";
-  const sharedPassword = document.querySelector("#profileSharedPassword")?.value.trim() || "";
-  const sharedPasswordConfirm = document.querySelector("#profileSharedPasswordConfirm")?.value.trim() || "";
-  if ((sharedPassword || sharedPasswordConfirm) && !isBearPowerUser()) {
-    showToast("Only Bear can change the shared trip password.");
+  const profilePassword = document.querySelector("#profilePassword")?.value.trim() || "";
+  const profilePasswordConfirm = document.querySelector("#profilePasswordConfirm")?.value.trim() || "";
+  if (profilePassword !== profilePasswordConfirm) {
+    showToast("Password confirmation does not match.");
     return;
   }
-  if (sharedPassword !== sharedPasswordConfirm) {
-    showToast("Trip password confirmation does not match.");
-    return;
-  }
-  if (sharedPassword && sharedPassword.length < 4) {
-    showToast("Trip password must be at least 4 characters.");
+  if (profilePassword && profilePassword.length < 4) {
+    showToast("Password must be at least 4 characters.");
     return;
   }
   if (profileCropSource()) {
@@ -1032,7 +1033,7 @@ async function saveProfileForm(event) {
       body: {
         displayName,
         photo: pendingProfilePhoto,
-        sharedPassword
+        profilePassword
       }
     });
     const payload = await response.json().catch(() => ({}));
@@ -1255,6 +1256,8 @@ function renderProfile() {
   const photo = profilePhotoForUser();
   sessionBar?.classList.remove("is-hidden");
   document.querySelector("#profileAvatarButton")?.setAttribute("aria-label", `Open profile for ${name}`);
+  const titleNode = document.querySelector("#profileDrawerTitle");
+  if (titleNode) titleNode.textContent = profileTitleForUser();
   setProfilePhotoPreview(photo, name);
   renderProfileAdminPanel();
 }
