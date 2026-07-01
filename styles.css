@@ -3976,6 +3976,13 @@ button { -webkit-tap-highlight-color: transparent; }
 .food-day {
   position: relative;
   overflow: visible;
+  isolation: isolate;
+}
+
+.food-day b,
+.food-day small {
+  position: relative;
+  z-index: 2;
 }
 
 .food-day[data-food-day="sat"]::before {
@@ -3985,11 +3992,13 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 
 .food-day[data-food-day="sat"]::before {
-  top: -34px;
+  top: auto;
+  bottom: 16px;
   left: 50%;
-  z-index: 2;
-  width: 44px;
-  height: 39px;
+  z-index: 1;
+  width: calc(100% - 4px);
+  max-width: 72px;
+  height: 72px;
   border-radius: 0;
   background: url("assets/saturday-fireworks.png") center bottom / contain no-repeat;
   filter: drop-shadow(0 5px 8px rgba(17, 45, 68, 0.18));
