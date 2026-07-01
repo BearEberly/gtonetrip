@@ -27,7 +27,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=87">
+    <link rel="stylesheet" href="styles.css?v=88">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -658,33 +658,34 @@
       </div>
 
       <form class="item-form" id="itemForm">
-        <div class="smart-upload-wrap is-hidden" id="smartUploadWrap">
-          <button class="smart-upload-toggle" type="button" id="smartUploadToggle" aria-expanded="false" aria-controls="smartUploadPanel">
-            Smart Upload
-          </button>
-          <div class="supply-ai-card smart-upload-panel is-hidden" id="smartUploadPanel">
-            <div>
-              <strong>Use AI to add from photos</strong>
-              <span>Take a picture of a list or choose one or more from your camera roll. You can edit everything before saving.</span>
-            </div>
-            <div class="supply-ai-actions">
-              <label class="secondary-action compact-action" for="supplyAiUpload">Upload photos</label>
-              <label class="secondary-action compact-action" for="supplyAiCamera">Take photo</label>
-              <input class="sr-only" id="supplyAiUpload" type="file" accept="image/*" multiple>
-              <input class="sr-only" id="supplyAiCamera" type="file" accept="image/*" capture="environment">
-            </div>
-            <div class="supply-ai-preview is-hidden" id="supplyAiPreviewWrap">
-              <img id="supplyAiPreview" alt="Photo selected for AI item import">
-              <div class="supply-ai-preview-copy">
-                <strong id="supplyAiPhotoCount">1 photo ready</strong>
-                <span id="supplyAiPhotoHint">You can add more photos before running AI.</span>
+        <div class="item-form-scroll">
+          <div class="smart-upload-wrap is-hidden" id="smartUploadWrap">
+            <button class="smart-upload-toggle" type="button" id="smartUploadToggle" aria-expanded="false" aria-controls="smartUploadPanel">
+              Smart Upload
+            </button>
+            <div class="supply-ai-card smart-upload-panel is-hidden" id="smartUploadPanel">
+              <div>
+                <strong>Use AI to add from photos</strong>
+                <span>Take a picture of a list or choose one or more from your camera roll. You can edit everything before saving.</span>
               </div>
-              <button class="primary-action compact-action" type="button" id="runSupplyAiImport">Use AI to add items</button>
+              <div class="supply-ai-actions">
+                <label class="secondary-action compact-action" for="supplyAiUpload">Upload photos</label>
+                <label class="secondary-action compact-action" for="supplyAiCamera">Take photo</label>
+                <input class="sr-only" id="supplyAiUpload" type="file" accept="image/*" multiple>
+                <input class="sr-only" id="supplyAiCamera" type="file" accept="image/*" capture="environment">
+              </div>
+              <div class="supply-ai-preview is-hidden" id="supplyAiPreviewWrap">
+                <img id="supplyAiPreview" alt="Photo selected for AI item import">
+                <div class="supply-ai-preview-copy">
+                  <strong id="supplyAiPhotoCount">1 photo ready</strong>
+                  <span id="supplyAiPhotoHint">You can add more photos before running AI.</span>
+                </div>
+                <button class="primary-action compact-action" type="button" id="runSupplyAiImport">Use AI to add items</button>
+              </div>
+              <p class="supply-ai-status" id="supplyAiStatus" aria-live="polite"></p>
             </div>
-            <p class="supply-ai-status" id="supplyAiStatus" aria-live="polite"></p>
           </div>
-        </div>
-        <section class="item-form-section" data-item-section="meal">
+          <section class="item-form-section" data-item-section="meal">
           <label>
             Day
             <select id="mealIdeaDay">
@@ -714,9 +715,9 @@
             <input id="mealIdeaKids" type="text" placeholder="Butter pasta, nuggets, fruit">
           </label>
           <div class="meal-available-panel is-hidden" id="mealAvailablePanel" aria-live="polite"></div>
-        </section>
+          </section>
 
-        <section class="item-form-section is-hidden" data-item-section="supply">
+          <section class="item-form-section is-hidden" data-item-section="supply">
           <div class="supply-multi-fields" id="supplyMultiFields">
             <div class="supply-draft-head">
               <strong>Items to add</strong>
@@ -771,7 +772,8 @@
               </div>
             </div>
           </details>
-        </section>
+          </section>
+        </div>
 
         <div class="drawer-footer">
           <button type="button" class="secondary-action danger-outline is-hidden" id="deleteItem">Delete item</button>

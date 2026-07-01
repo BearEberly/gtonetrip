@@ -2585,14 +2585,19 @@ svg {
   min-height: 0;
 }
 
-.item-form-section {
+.item-form-scroll {
   display: grid;
-  gap: 14px;
+  flex: 1;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 4px 22px 22px;
   -webkit-overflow-scrolling: touch;
+}
+
+.item-form-section {
+  display: grid;
+  gap: 14px;
+  padding: 4px 22px 22px;
 }
 
 .smart-upload-wrap {
