@@ -1,4 +1,4 @@
-const cacheName = "guantonio-trip-v59";
+const cacheName = "guantonio-trip-v60";
 
 const cacheableUrls = [
   "/",
