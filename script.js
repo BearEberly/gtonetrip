@@ -4043,11 +4043,13 @@ function setPendingSupplyImage(dataUrl) {
 }
 
 function supplyDraftDefault(overrides = {}) {
+  const hasMealType = Object.hasOwn(overrides, "mealType") || Object.hasOwn(overrides, "purpose");
+  const rawMealType = overrides.mealType || overrides.purpose || "";
   return {
     name: shortText(overrides.name, 120),
     notes: shortText(overrides.notes || overrides.qty || "", 160),
     type: bringingTypeSafe(overrides.type || "food"),
-    mealType: mealTypeSafe(overrides.mealType || "any"),
+    mealType: hasMealType ? mealTypeSafe(rawMealType || "any") : "",
     days: dayListSafe(overrides.days || []),
     confidence: Number(overrides.confidence || 0)
   };
@@ -4122,7 +4124,9 @@ function renderSupplyDraftRows() {
   list.innerHTML = supplyDraftItems.map((item, index) => {
     const days = new Set(dayListSafe(item.days));
     const isNonFood = item.type === "table" || item.mealType === "non-food";
-    const purpose = isNonFood ? "non-food" : mealTypeSafe(item.mealType);
+    const purpose = isNonFood ? "non-food" : (item.mealType ? mealTypeSafe(item.mealType) : "");
+    const showDayPicker = Boolean(purpose && purpose !== "non-food");
+    const noSpecificDay = !days.size;
     const confidence = item.confidence ? `<span>${Math.round(item.confidence * 100)}% sure</span>` : "";
     return `
       <article class="supply-draft-row" data-supply-draft-index="${index}">
@@ -4144,6 +4148,7 @@ function renderSupplyDraftRows() {
         <label>
           What is it for?
           <select data-supply-draft-field="purpose">
+            <option value="" ${purpose === "" ? "selected" : ""}>Choose one</option>
             <option value="any" ${purpose === "any" ? "selected" : ""}>Any meal / shared</option>
             <option value="breakfast" ${purpose === "breakfast" ? "selected" : ""}>Breakfast</option>
             <option value="lunch" ${purpose === "lunch" ? "selected" : ""}>Lunch</option>
@@ -4153,11 +4158,12 @@ function renderSupplyDraftRows() {
             <option value="non-food" ${purpose === "non-food" ? "selected" : ""}>Non-food item</option>
           </select>
         </label>
-        <fieldset class="day-picker ${purpose === "non-food" ? "is-disabled" : ""}" aria-disabled="${purpose === "non-food" ? "true" : "false"}">
-          <legend>Days</legend>
+        <fieldset class="day-picker ${showDayPicker ? "" : "is-hidden"}" aria-disabled="${showDayPicker ? "false" : "true"}">
+          <legend>Is this for a specific day?</legend>
           <div class="day-chip-grid">
+            <button type="button" class="day-chip day-chip-no ${noSpecificDay ? "is-selected" : ""}" data-supply-draft-no-day aria-pressed="${noSpecificDay ? "true" : "false"}">No</button>
             ${allDayCodes.map((day) => `
-              <button type="button" class="day-chip ${days.has(day) ? "is-selected" : ""}" data-supply-draft-day="${day}" aria-pressed="${days.has(day) ? "true" : "false"}" ${purpose === "non-food" ? "disabled" : ""}>${escapeText(dayLabelShort(day))}</button>
+              <button type="button" class="day-chip ${days.has(day) ? "is-selected" : ""}" data-supply-draft-day="${day}" aria-pressed="${days.has(day) ? "true" : "false"}" ${showDayPicker ? "" : "disabled"}>${escapeText(dayLabelShort(day))}</button>
             `).join("")}
           </div>
         </fieldset>
@@ -4168,14 +4174,15 @@ function renderSupplyDraftRows() {
 
 function supplyDraftsFromDom() {
   return Array.from(document.querySelectorAll("[data-supply-draft-index]")).map((row) => {
-    const purpose = row.querySelector('[data-supply-draft-field="purpose"]')?.value || "any";
+    const purpose = row.querySelector('[data-supply-draft-field="purpose"]')?.value || "";
     const isNonFood = purpose === "non-food";
+    const hasSpecificDay = Boolean(purpose && !isNonFood);
     return supplyDraftDefault({
       name: row.querySelector('[data-supply-draft-field="name"]')?.value || "",
       notes: row.querySelector('[data-supply-draft-field="notes"]')?.value || "",
       type: isNonFood ? "table" : "food",
-      mealType: isNonFood ? "any" : purpose,
-      days: isNonFood ? [] : Array.from(row.querySelectorAll("[data-supply-draft-day].is-selected")).map((button) => button.dataset.supplyDraftDay)
+      mealType: isNonFood ? "any" : (purpose || "any"),
+      days: hasSpecificDay ? Array.from(row.querySelectorAll("[data-supply-draft-day].is-selected")).map((button) => button.dataset.supplyDraftDay) : []
     });
   });
 }
@@ -4200,18 +4207,23 @@ function removeSupplyDraftRow(index) {
 
 function changeSupplyDraftPurpose(row) {
   if (!row) return;
-  const purpose = row.querySelector('[data-supply-draft-field="purpose"]')?.value || "any";
-  const disabled = purpose === "non-food";
+  const purpose = row.querySelector('[data-supply-draft-field="purpose"]')?.value || "";
+  const showDayPicker = Boolean(purpose && purpose !== "non-food");
   const picker = row.querySelector(".day-picker");
-  picker?.classList.toggle("is-disabled", disabled);
-  picker?.setAttribute("aria-disabled", disabled ? "true" : "false");
+  picker?.classList.toggle("is-hidden", !showDayPicker);
+  picker?.setAttribute("aria-disabled", showDayPicker ? "false" : "true");
   row.querySelectorAll("[data-supply-draft-day]").forEach((button) => {
-    button.disabled = disabled;
-    if (disabled) {
+    button.disabled = !showDayPicker;
+    if (!showDayPicker) {
       button.classList.remove("is-selected");
       button.setAttribute("aria-pressed", "false");
     }
   });
+  const noDay = row.querySelector("[data-supply-draft-no-day]");
+  if (noDay) {
+    noDay.classList.add("is-selected");
+    noDay.setAttribute("aria-pressed", "true");
+  }
 }
 
 function readFileAsDataUrl(file) {
@@ -5074,10 +5086,26 @@ function bindEvents() {
       removeSupplyDraftRow(Number(remove.dataset.removeSupplyDraft || 0));
       return;
     }
+    const noDay = event.target.closest("[data-supply-draft-no-day]");
+    if (noDay) {
+      const row = noDay.closest("[data-supply-draft-index]");
+      row?.querySelectorAll("[data-supply-draft-day]").forEach((button) => {
+        button.classList.remove("is-selected");
+        button.setAttribute("aria-pressed", "false");
+      });
+      noDay.classList.add("is-selected");
+      noDay.setAttribute("aria-pressed", "true");
+      return;
+    }
     const day = event.target.closest("[data-supply-draft-day]");
     if (day) {
       day.classList.toggle("is-selected");
       day.setAttribute("aria-pressed", day.classList.contains("is-selected") ? "true" : "false");
+      const row = day.closest("[data-supply-draft-index]");
+      const hasSelectedDay = Boolean(row?.querySelector("[data-supply-draft-day].is-selected"));
+      const noSpecificDay = row?.querySelector("[data-supply-draft-no-day]");
+      noSpecificDay?.classList.toggle("is-selected", !hasSelectedDay);
+      noSpecificDay?.setAttribute("aria-pressed", hasSelectedDay ? "false" : "true");
     }
   });
   document.querySelector("#supplyDraftRows")?.addEventListener("change", (event) => {

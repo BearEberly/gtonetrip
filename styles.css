@@ -2657,6 +2657,10 @@ svg {
   gap: 10px;
 }
 
+.add-draft-row-action {
+  width: 100%;
+}
+
 .supply-draft-list {
   display: grid;
   gap: 12px;
@@ -3106,6 +3110,10 @@ svg {
   margin: 0;
   padding: 0;
   border: 0;
+}
+
+.day-picker.is-hidden {
+  display: none;
 }
 
 .day-picker legend {
