@@ -26,7 +26,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=59">
+    <link rel="stylesheet" href="styles.css?v=68">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -505,16 +505,10 @@
         <div class="profile-cropper is-hidden" id="profileCropper">
           <div class="profile-crop-heading">
             <strong>Crop picture</strong>
-            <span>Move it around and zoom before saving.</span>
+            <span>Drag the photo to move it. Pinch with two fingers or use zoom before saving.</span>
           </div>
-          <div class="profile-crop-frame">
+          <div class="profile-crop-frame" id="profileCropFrame">
             <img id="profileCropImage" alt="Picture crop preview">
-          </div>
-          <div class="profile-crop-pad" aria-label="Move picture">
-            <button class="secondary-action compact-action" type="button" data-profile-crop="up">Up</button>
-            <button class="secondary-action compact-action" type="button" data-profile-crop="left">Left</button>
-            <button class="secondary-action compact-action" type="button" data-profile-crop="right">Right</button>
-            <button class="secondary-action compact-action" type="button" data-profile-crop="down">Down</button>
           </div>
           <label class="profile-zoom-control">
             Zoom
@@ -642,14 +636,15 @@
               <option>Dessert / Snacks</option>
             </select>
           </label>
-          <label>
+          <label id="mealIdeaTextWrap">
             <span id="mealIdeaTextLabel">Idea</span>
             <input id="mealIdeaText" type="text" placeholder="Chili, tacos, pasta night">
           </label>
-          <label>
+          <label id="mealIdeaKidsWrap">
             <span id="mealIdeaKidsLabel">Kid backup</span>
             <input id="mealIdeaKids" type="text" placeholder="Butter pasta, nuggets, fruit">
           </label>
+          <div class="meal-available-panel is-hidden" id="mealAvailablePanel" aria-live="polite"></div>
         </section>
 
         <section class="item-form-section is-hidden" data-item-section="supply">
@@ -700,6 +695,7 @@
         </section>
 
         <div class="drawer-footer">
+          <button type="button" class="secondary-action danger-outline is-hidden" id="deleteItem">Delete item</button>
           <button type="button" class="secondary-action" id="cancelItem">Cancel</button>
           <button type="submit" class="primary-action" id="saveItem">Add</button>
         </div>
@@ -734,6 +730,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=60"></script>
+    <script src="script.js?v=70"></script>
   </body>
 </html>

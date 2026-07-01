@@ -24,7 +24,7 @@ const families = [
   { id: "shell", name: "Shell", shortName: "Shell", color: "#c0392b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
   { id: "nick", name: "G6", shortName: "G6", color: "#6d4aa7", status: "Needs timing", details: "Nick, Marissa, Luca, Sophia, Rocco, Gio" },
   { id: "bear", name: "Jear", shortName: "Jear", color: "#2f8f4e", status: "Needs timing", details: "Bear and Jessica" },
-  { id: "nat", name: "Riggs", shortName: "Riggs", color: "#1f7fa6", status: "Needs timing", details: "Andy, Natalie, Oli, Viv" }
+  { id: "nat", name: "Riggs", shortName: "Riggs", color: "#0f766e", status: "Needs timing", details: "Andy, Natalie, Oli, Viv" }
 ];
 
 const attendees = [
@@ -674,6 +674,9 @@ let pendingScheduleImage = "";
 let pendingProfilePhoto = "";
 let pendingProfilePhotoSource = "";
 let profilePhotoCrop = { x: 0, y: 0, zoom: 1 };
+const profileCropPointers = new Map();
+let profileCropDrag = null;
+let profileCropPinch = null;
 let familyScheduleDrafts = [];
 let familyScheduleSourceText = "";
 let familyScheduleScanBusy = false;
@@ -899,6 +902,7 @@ function profileCropSource() {
 
 function resetProfileCrop() {
   profilePhotoCrop = { x: 0, y: 0, zoom: 1 };
+  resetProfileCropGestureState();
 }
 
 function renderProfileCropper() {
@@ -944,6 +948,7 @@ function openProfileDrawer() {
 
 function closeProfileDrawer() {
   document.querySelector("#profileDrawer")?.classList.add("is-hidden");
+  resetProfileCropGestureState();
   const anotherDrawerOpen = Boolean(document.querySelector(".checkin-drawer:not(.is-hidden), .item-drawer:not(.is-hidden)"));
   if (!anotherDrawerOpen) {
     document.body.classList.remove("drawer-open");
@@ -2312,15 +2317,29 @@ function familyById(id) {
 }
 
 function activeFamilyId() {
+  if (isBearPowerUser()) return selectedFamily || api.user?.familyId || "";
   return api.user?.familyId || selectedFamily || "";
+}
+
+function isBearPowerUser(user = api.user) {
+  return String(user?.personId || "").trim().toLowerCase() === "bear";
 }
 
 function canManageCustomItem(item) {
   const familyId = activeFamilyId();
-  if (!item || !familyId) return false;
+  if (!item) return false;
+  if (isBearPowerUser()) return true;
+  if (!familyId) return false;
   const createdBy = item.createdBy || "";
   if (createdBy) return createdBy === familyId || item.owner === familyId;
   return !item.owner || item.owner === familyId;
+}
+
+function canAddSupplyForFamily(familyId) {
+  if (!familyById(familyId)) return false;
+  if (isBearPowerUser()) return true;
+  const lockedFamilyId = api.user?.familyId || "";
+  return lockedFamilyId ? familyId === lockedFamilyId : familyId === activeFamilyId();
 }
 
 function familyMembersLabel(familyId) {
@@ -2382,6 +2401,19 @@ function bringingItemsForFamily(familyId) {
   return state.supplies.filter((item) => supplyOwnerId(item) === familyId);
 }
 
+function isMealAssignableItem(item = {}) {
+  return ["food", "drink", "cold"].includes(String(item.type || "").toLowerCase());
+}
+
+function itemLinkedToMealSelection(item, day, mealType) {
+  if (!isMealAssignableItem(item)) return false;
+  const itemMealType = mealTypeSafe(item.mealType || "any");
+  const days = Array.isArray(item.days) ? item.days : [];
+  const matchesMeal = itemMealType === "any" || itemMealType === mealType;
+  const matchesDay = !days.length || days.includes(day);
+  return matchesMeal && matchesDay;
+}
+
 function bringingItemsForMeal(meal) {
   const mealType = meal.type.toLowerCase().includes("dessert")
     ? "dessert"
@@ -2393,10 +2425,7 @@ function bringingItemsForMeal(meal) {
           ? "pack-up"
           : "dinner";
   return state.supplies.filter((item) => {
-    if (String(item.type || "").toLowerCase() !== "food") return false;
-    if (!supplyOwnerId(item)) return false;
-    if (item.days.length && !item.days.includes(meal.day)) return false;
-    return item.mealType === "any" || item.mealType === mealType;
+    return itemLinkedToMealSelection(item, meal.day, mealType);
   });
 }
 
@@ -2422,6 +2451,74 @@ function mealPlanningItemsMarkup(meal) {
     return `<span class="meta-chip">No bringing items linked yet</span>`;
   }
   return items.map((item) => `<span class="meta-chip">${escapeText(item.name)}</span>`).join("");
+}
+
+function availableItemsForMealSelection(day, type) {
+  const mealType = mealTypeKey({ type });
+  return state.supplies
+    .filter((item) => {
+      const itemMealType = mealTypeSafe(item.mealType || "any");
+      if (!isMealAssignableItem(item)) return false;
+      if (itemMealType !== mealType) return false;
+      return !itemLinkedToMealSelection(item, day, mealType);
+    })
+    .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+}
+
+function mealAvailableRow(item, options = {}) {
+  const family = familyById(supplyOwnerId(item));
+  const familyName = family?.name || "Not assigned";
+  const familyColor = family?.color || "#6e6e73";
+  const action = options.action
+    ? `<span class="meal-add-actions">
+        <span class="meal-family-pill">${escapeText(familyName)}</span>
+        <button class="meal-add-button" type="button" data-add-meal-supply="${escapeText(item.id)}">${escapeText(options.action)}</button>
+      </span>`
+    : `<span class="meal-family-pill">${escapeText(familyName)}</span>`;
+  return `<li class="meal-available-row${options.muted ? " is-muted" : ""}" style="--owner-color:${escapeText(familyColor)}">
+    <span class="meal-available-dot" aria-hidden="true"></span>
+    <span class="meal-available-copy">
+      <strong>${escapeText(item.name)}</strong>
+      <small>${escapeText(options.status || familyName)}</small>
+    </span>
+    ${action}
+  </li>`;
+}
+
+function renderMealAvailablePanel() {
+  const panel = document.querySelector("#mealAvailablePanel");
+  if (!panel) return;
+  const day = document.querySelector("#mealIdeaDay")?.value || "sun";
+  const type = document.querySelector("#mealIdeaType")?.value || "Meal";
+  const mealType = mealTypeKey({ type });
+  const label = mealTypeDisplay(mealType).replace("Dessert / Snacks", "Dessert");
+  const alreadyItems = state.supplies
+    .filter((item) => itemLinkedToMealSelection(item, day, mealType))
+    .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+  const availableItems = availableItemsForMealSelection(day, type);
+  const dayLabel = dayMeta[day]?.dayLabel || "Selected day";
+  panel.innerHTML = `
+    <div class="meal-available-head">
+      <strong>${escapeText(dayLabel)} ${escapeText(label)}</strong>
+      <span>Edit what belongs to this meal</span>
+    </div>
+    <section class="meal-available-section is-current">
+      <h3>Already set up for ${escapeText(label)}</h3>
+      ${alreadyItems.length
+        ? `<ul class="meal-available-list">${alreadyItems.map((item) => mealAvailableRow(item, { status: familyById(supplyOwnerId(item))?.name || "Not assigned" })).join("")}</ul>`
+        : `<p class="meal-available-empty">Nothing is set up for this ${escapeText(label.toLowerCase())} yet.</p>`}
+    </section>
+    <section class="meal-available-section is-addable">
+      <h3>Available to add</h3>
+      ${availableItems.length
+        ? `<ul class="meal-available-list">${availableItems.map((item) => mealAvailableRow(item, {
+            muted: true,
+            status: `Unavailable for ${dayLabel}`,
+            action: "Add"
+          })).join("")}</ul>`
+        : `<p class="meal-available-empty">No extra ${escapeText(label.toLowerCase())} items are waiting to be added.</p>`}
+    </section>
+  `;
 }
 
 function insertIcons() {
@@ -3261,13 +3358,15 @@ function renderActivityGrid() {
 }
 
 function renderFamilies() {
-  const lockedFamilyId = api.user?.familyId || "";
+  const lockedFamilyId = isBearPowerUser() ? "" : (api.user?.familyId || "");
   const familyPanelTitle = document.querySelector("#familyPanelTitle");
   const familyPanelCopy = document.querySelector("#familyPanelCopy");
   const checkinFamilyTitle = document.querySelector("#checkinFamilyTitle");
   if (familyPanelTitle) familyPanelTitle.textContent = lockedFamilyId ? "Signed in family" : "Choose family";
   if (familyPanelCopy) {
-    familyPanelCopy.textContent = lockedFamilyId
+    familyPanelCopy.textContent = isBearPowerUser()
+      ? "Bear can manage every family from here."
+      : lockedFamilyId
       ? "Claims, votes, and check-ins use your profile family. Sign out to switch."
       : "Sign in, then confirm your household.";
   }
@@ -3399,30 +3498,6 @@ function foodDayName(day) {
   return String(label).split(/\s+/)[0] || "Day";
 }
 
-function mealNeeds(meal) {
-  return Array.isArray(meal.cold) ? meal.cold.map((s) => String(s || "").trim()).filter(Boolean) : [];
-}
-
-function ingredientCovered(ingredient, items) {
-  const ing = String(ingredient || "").toLowerCase().trim();
-  if (!ing) return true;
-  const ingWords = ing.split(/[^a-z]+/).filter((w) => w.length > 2);
-  return items.some((it) => {
-    const name = String(it.name || "").toLowerCase();
-    if (name.includes(ing) || ing.includes(name)) return true;
-    return ingWords.some((w) => name.includes(w));
-  });
-}
-
-// Typical cookout-trip items to suggest per meal type (tap to add).
-const MEAL_SUGGESTIONS = {
-  breakfast: ["Eggs", "Bacon", "Sausage", "Pancake mix", "Waffles", "Cinnamon rolls", "Bagels", "Cream cheese", "Butter", "Milk", "Coffee", "Orange juice", "Fresh fruit", "Yogurt"],
-  lunch: ["Sandwich bread", "Lunch meat", "Cheese", "Hot dogs", "Buns", "Chips", "Pasta salad", "Fresh fruit", "Condiments", "Pickles", "Veggies & dip", "Lemonade", "Watermelon"],
-  dinner: ["Burgers", "Buns", "Steaks", "Chicken", "Hot dogs", "Cheese slices", "Lettuce, tomato, onion", "Ketchup & mustard", "BBQ sauce", "Corn on the cob", "Green salad", "Baked beans", "Tortillas", "Chips & salsa"],
-  dessert: ["S'mores kit", "Ice cream", "Cookies", "Brownies", "Cake", "Watermelon", "Popsicles", "Pie", "Whipped cream", "Mixed berries"],
-  "pack-up": ["Trash bags", "Leftover containers", "Coffee for the road", "Drive snacks", "Water bottles"]
-};
-
 function renderFoodDays() {
   const el = document.querySelector("#foodDays");
   if (!el) return;
@@ -3450,51 +3525,33 @@ function renderFoodMealGrid() {
   }
   el.innerHTML = meals.map((meal) => {
     const items = bringingItemsForMeal(meal);
-    const needs = mealNeeds(meal);
-    const gaps = needs.filter((n) => !ingredientCovered(n, items));
     const bring = items.length
       ? `<ul class="fh-bring-list">${items.map((it) => {
           const fam = familyById(supplyOwnerId(it));
-          const familyName = fam ? fam.name : "Unassigned";
+          const familyName = fam ? fam.name : "Not assigned yet";
           const familyColor = fam?.color || "#6e6e73";
-          return `<li class="fh-bring fh-food-row" style="--owner-color:${escapeText(familyColor)}">
+          const editable = canManageCustomItem(it);
+          return `<li class="fh-bring fh-food-row fh-food-row-simple${editable ? " is-editable" : ""}" style="--owner-color:${escapeText(familyColor)}"${editable ? ` data-edit-supply="${escapeText(it.id)}"` : ""}>
             <span class="fh-owner-dot" aria-hidden="true"></span>
             <span class="fh-food-copy">
               <strong class="fh-bring-name">${escapeText(it.name)}</strong>
-              <span class="fh-who">Brought by ${escapeText(familyName)}</span>
+              <span class="fh-who">${escapeText(supplyPurposeLabel(it))}</span>
             </span>
             <span class="fh-owner-badge">${escapeText(familyName)}</span>
           </li>`;
         }).join("")}</ul>`
       : `<div class="fh-empty-line">No one has added anything for this meal yet.</div>`;
-
-    const suggestionPool = [];
-    gaps.forEach((gap) => {
-      if (!suggestionPool.some((item) => item.toLowerCase() === gap.toLowerCase())) suggestionPool.push(gap);
-    });
-    (MEAL_SUGGESTIONS[mealTypeKey(meal)] || []).forEach((suggestion) => {
-      if (ingredientCovered(suggestion, items)) return;
-      if (suggestionPool.some((item) => item.toLowerCase() === suggestion.toLowerCase())) return;
-      suggestionPool.push(suggestion);
-    });
-    const suggestions = suggestionPool.slice(0, 6);
-    const suggestMarkup = suggestions.length
-      ? `<div class="fh-sect fh-suggest-sect"><h4>Ideas to add</h4><div class="fh-needed">${suggestions.map((s) => `<button class="fh-suggest" type="button" data-gap-meal="${escapeText(meal.id)}" data-gap-name="${escapeText(s)}">+ ${escapeText(s)}</button>`).join("")}</div></div>`
-      : "";
     const mealTitle = `${foodDayName(meal.day)} ${mealTypeShort(meal)}`;
 
-    return `<article class="fh-meal">
+    return `<article class="fh-meal fh-meal-simple ${mealToneClass(meal)}">
       <header class="fh-top fh-meal-head">
-        <span class="fh-chip ${mealToneClass(meal)}">${escapeText(mealTypeShort(meal))}</span>
         <span class="fh-meal-title-wrap">
           <h3>${escapeText(mealTitle)}</h3>
           ${meal.time ? `<span class="fh-time">${escapeText(meal.time)}</span>` : ""}
         </span>
-        <span class="fh-meal-manage">${itemManageActions("meal", meal)}</span>
+        <span class="fh-meal-manage">${editIconButton("meal", meal.id, "Edit meal")}</span>
       </header>
       <div class="fh-meal-items">${bring}</div>
-      ${suggestMarkup}
-      <div class="fh-act"><button class="primary-action fh-bring-btn" type="button" data-bring-meal="${escapeText(meal.id)}">Add item</button></div>
     </article>`;
   }).join("");
   insertIcons();
@@ -3508,6 +3565,7 @@ function renderFoodFamilyGrid() {
   el.innerHTML = ordered.map((fam) => {
     const items = bringingItemsForFamily(fam.id);
     const isMine = fam.id === activeId;
+    const canAddForFamily = canAddSupplyForFamily(fam.id);
     const body = items.length
       ? `<ul class="fh-fam-list">${items.map((it) => {
           const editable = canManageCustomItem(it);
@@ -3522,6 +3580,7 @@ function renderFoodFamilyGrid() {
       <header class="fh-fam-head" style="background:${fam.color}">
         <b>${escapeText(fam.name)}</b>${isMine ? `<span class="fh-you">You</span>` : ""}
         <span class="fh-fam-count">${items.length} item${items.length === 1 ? "" : "s"}</span>
+        ${canAddForFamily ? `<button class="fh-add-family-item" type="button" data-add-family-supply="${escapeText(fam.id)}">Add items</button>` : ""}
       </header>
       <div class="fh-fam-body">${body}</div>
     </section>`;
@@ -3535,6 +3594,7 @@ function renderFoodHub() {
   const familyGrid = document.querySelector("#foodFamilyGrid");
   const foodDays = document.querySelector("#foodDays");
   const tabs = document.querySelector("#foodViewTabs");
+  const addBar = document.querySelector("#trip-food .food-add-bar");
   const isFamilyView = foodView === "family";
   tabs?.classList.toggle("at-family", isFamilyView);
   document.querySelectorAll("[data-food-view]").forEach((button) => {
@@ -3545,28 +3605,13 @@ function renderFoodHub() {
   foodDays?.classList.toggle("is-hidden", isFamilyView);
   mealGrid.classList.toggle("is-hidden", isFamilyView);
   familyGrid?.classList.toggle("is-hidden", !isFamilyView);
+  addBar?.classList.toggle("is-hidden", !isFamilyView);
   if (isFamilyView) {
     renderFoodFamilyGrid();
     return;
   }
   renderFoodDays();
   renderFoodMealGrid();
-}
-
-function openSupplyForMeal(mealId, prefillName) {
-  const meal = state.meals.find((m) => m.id === mealId);
-  openItemDrawer("supply");
-  if (meal) {
-    const typeSel = document.querySelector("#supplyMealType");
-    if (typeSel) typeSel.value = mealTypeKey(meal);
-    updateSupplyDayAvailability();
-    setSupplyDaySelection([meal.day]);
-    const details = document.querySelector(".optional-details");
-    if (details) details.open = true;
-  }
-  const nameInput = document.querySelector("#supplyName");
-  if (nameInput && prefillName) nameInput.value = prefillName;
-  window.setTimeout(() => document.querySelector("#supplyName")?.focus(), 0);
 }
 
 function renderAll() {
@@ -3976,17 +4021,109 @@ async function cropProfilePhoto() {
   return canvas.toDataURL("image/jpeg", 0.86);
 }
 
+function clampProfileZoom(value) {
+  return Math.round(Math.max(1, Math.min(3, Number(value) || 1)) * 100) / 100;
+}
+
+function profilePointerPoint(event) {
+  return { x: event.clientX, y: event.clientY };
+}
+
+function profilePointerDistance(points) {
+  if (points.length < 2) return 0;
+  return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+}
+
+function resetProfileCropGestureState() {
+  profileCropPointers.clear();
+  profileCropDrag = null;
+  profileCropPinch = null;
+  document.querySelector("#profileCropFrame")?.classList.remove("is-dragging");
+}
+
 function moveProfileCrop(action) {
-  const step = 12;
-  if (action === "up") profilePhotoCrop.y -= step;
-  if (action === "down") profilePhotoCrop.y += step;
-  if (action === "left") profilePhotoCrop.x -= step;
-  if (action === "right") profilePhotoCrop.x += step;
-  if (action === "zoom-in") profilePhotoCrop.zoom = Math.min(3, profilePhotoCrop.zoom + 0.1);
-  if (action === "zoom-out") profilePhotoCrop.zoom = Math.max(1, profilePhotoCrop.zoom - 0.1);
+  if (action === "zoom-in") profilePhotoCrop.zoom = clampProfileZoom(profilePhotoCrop.zoom + 0.1);
+  if (action === "zoom-out") profilePhotoCrop.zoom = clampProfileZoom(profilePhotoCrop.zoom - 0.1);
   if (action === "reset") resetProfileCrop();
-  profilePhotoCrop.zoom = Math.round(profilePhotoCrop.zoom * 100) / 100;
   renderProfileCropper();
+}
+
+function startProfileCropPointer(event) {
+  if (!profileCropSource()) return;
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+  const frame = document.querySelector("#profileCropFrame");
+  frame?.setPointerCapture?.(event.pointerId);
+  frame?.classList.add("is-dragging");
+  profileCropPointers.set(event.pointerId, profilePointerPoint(event));
+  if (profileCropPointers.size === 1) {
+    const point = profileCropPointers.get(event.pointerId);
+    profileCropDrag = {
+      pointerId: event.pointerId,
+      startX: point.x,
+      startY: point.y,
+      cropX: profilePhotoCrop.x,
+      cropY: profilePhotoCrop.y
+    };
+    profileCropPinch = null;
+  } else if (profileCropPointers.size === 2) {
+    profileCropPinch = {
+      distance: profilePointerDistance([...profileCropPointers.values()]),
+      zoom: profilePhotoCrop.zoom
+    };
+    profileCropDrag = null;
+  }
+  event.preventDefault();
+}
+
+function moveProfileCropPointer(event) {
+  if (!profileCropPointers.has(event.pointerId)) return;
+  profileCropPointers.set(event.pointerId, profilePointerPoint(event));
+  const points = [...profileCropPointers.values()];
+  if (points.length >= 2 && profileCropPinch?.distance) {
+    const nextDistance = profilePointerDistance(points);
+    profilePhotoCrop.zoom = clampProfileZoom(profileCropPinch.zoom * (nextDistance / profileCropPinch.distance));
+  } else if (profileCropDrag && profileCropDrag.pointerId === event.pointerId) {
+    const point = profileCropPointers.get(event.pointerId);
+    profilePhotoCrop.x = profileCropDrag.cropX + point.x - profileCropDrag.startX;
+    profilePhotoCrop.y = profileCropDrag.cropY + point.y - profileCropDrag.startY;
+  }
+  renderProfileCropper();
+  event.preventDefault();
+}
+
+function endProfileCropPointer(event) {
+  const frame = document.querySelector("#profileCropFrame");
+  profileCropPointers.delete(event.pointerId);
+  try {
+    frame?.releasePointerCapture?.(event.pointerId);
+  } catch {
+    // Some mobile browsers release capture before firing cleanup events.
+  }
+  if (profileCropPointers.size === 1) {
+    const [pointerId, point] = [...profileCropPointers.entries()][0];
+    profileCropDrag = {
+      pointerId,
+      startX: point.x,
+      startY: point.y,
+      cropX: profilePhotoCrop.x,
+      cropY: profilePhotoCrop.y
+    };
+    profileCropPinch = null;
+  } else if (profileCropPointers.size === 0) {
+    profileCropDrag = null;
+    profileCropPinch = null;
+    frame?.classList.remove("is-dragging");
+  }
+}
+
+function bindProfileCropperGestures() {
+  const frame = document.querySelector("#profileCropFrame");
+  if (!frame) return;
+  frame.addEventListener("pointerdown", startProfileCropPointer);
+  frame.addEventListener("pointermove", moveProfileCropPointer);
+  frame.addEventListener("pointerup", endProfileCropPointer);
+  frame.addEventListener("pointercancel", endProfileCropPointer);
+  frame.addEventListener("lostpointercapture", endProfileCropPointer);
 }
 
 function openItemDrawer(mode, itemId = "") {
@@ -3996,14 +4133,20 @@ function openItemDrawer(mode, itemId = "") {
   const title = document.querySelector("#itemDrawerTitle");
   const help = document.querySelector("#itemDrawerHelp");
   const save = document.querySelector("#saveItem");
+  const deleteItem = document.querySelector("#deleteItem");
   const typeWrap = document.querySelector("#mealIdeaTypeWrap");
   const typeLabel = document.querySelector("#mealIdeaTypeLabel");
   const textLabel = document.querySelector("#mealIdeaTextLabel");
   const kidsLabel = document.querySelector("#mealIdeaKidsLabel");
+  const textWrap = document.querySelector("#mealIdeaTextWrap");
+  const kidsWrap = document.querySelector("#mealIdeaKidsWrap");
   const ideaInput = document.querySelector("#mealIdeaText");
   const kidsInput = document.querySelector("#mealIdeaKids");
+  const availablePanel = document.querySelector("#mealAvailablePanel");
   const isEvent = mode === "event";
   const isEdit = Boolean(itemId);
+  const isMealEdit = mode === "meal" && isEdit;
+  const canDeleteSupply = mode === "supply" && isEdit && canManageCustomItem(state.supplies.find((item) => item.id === itemId));
   if (title) title.textContent = isEvent
     ? (isEdit ? "Edit non-food event" : "Add non-food event")
     : mode === "meal"
@@ -4015,6 +4158,9 @@ function openItemDrawer(mode, itemId = "") {
       ? "Set the recipe for this meal. Bringing items link in automatically."
       : "Start with the item name. Meal, day, and picture details are optional.";
   if (save) save.textContent = isEdit ? "Save changes" : (isEvent ? "Add event" : mode === "meal" ? "Add meal" : "Save item");
+  deleteItem?.classList.toggle("is-hidden", !canDeleteSupply);
+  deleteItem?.closest(".drawer-footer")?.classList.toggle("has-delete", canDeleteSupply);
+  if (deleteItem) deleteItem.dataset.deleteEditingSupply = canDeleteSupply ? itemId : "";
   document.querySelectorAll("[data-item-section]").forEach((section) => {
     const isMealSection = section.dataset.itemSection === "meal";
     const shouldShow = mode === "supply" ? section.dataset.itemSection === "supply" : isMealSection;
@@ -4030,6 +4176,9 @@ function openItemDrawer(mode, itemId = "") {
   if (kidsLabel) kidsLabel.textContent = isEvent ? "Time / details" : "Kid backup";
   if (ideaInput) ideaInput.placeholder = isEvent ? "Parade, lake day, golf tee time" : "Chili, tacos, pasta night";
   if (kidsInput) kidsInput.placeholder = isEvent ? "10:00 AM in Arnold, leave cabin by 9:15" : "Butter pasta, nuggets, fruit";
+  textWrap?.classList.toggle("is-hidden", isMealEdit);
+  kidsWrap?.classList.toggle("is-hidden", isMealEdit);
+  availablePanel?.classList.toggle("is-hidden", !isMealEdit);
   if (isEdit && (mode === "meal" || mode === "event")) {
     const meal = state.meals.find((item) => item.id === itemId);
     if (meal) {
@@ -4039,6 +4188,7 @@ function openItemDrawer(mode, itemId = "") {
       document.querySelector("#mealIdeaKids").value = isEvent ? (meal.kids || meal.time || "") : (meal.kids || "");
     }
   }
+  if (isMealEdit) renderMealAvailablePanel();
   if (isEdit && mode === "supply") {
     const supply = state.supplies.find((item) => item.id === itemId);
     if (supply) {
@@ -4087,20 +4237,23 @@ function submitItemForm(event) {
   event.preventDefault();
   if (itemMode === "meal" || itemMode === "event") {
     const isEvent = itemMode === "event";
+    const existingMeal = editingItemId ? state.meals.find((item) => item.id === editingItemId) : null;
     const payload = {
       day: document.querySelector("#mealIdeaDay")?.value || "sun",
       type: isEvent ? "Event" : (document.querySelector("#mealIdeaType")?.value || "Meal idea"),
-      idea: document.querySelector("#mealIdeaText")?.value.trim() || "",
+      idea: isEvent || !editingItemId
+        ? (document.querySelector("#mealIdeaText")?.value.trim() || "")
+        : (existingMeal?.idea || document.querySelector("#mealIdeaText")?.value.trim() || ""),
       kids: isEvent
         ? (document.querySelector("#mealIdeaKids")?.value.trim() || "Time TBD")
-        : (document.querySelector("#mealIdeaKids")?.value.trim() || "")
+        : (editingItemId ? (existingMeal?.kids || "") : (document.querySelector("#mealIdeaKids")?.value.trim() || ""))
     };
-    if (!payload.idea) {
+    if (!payload.idea && (isEvent || !editingItemId)) {
       showToast(isEvent ? "Add an event name first." : "Add a meal idea first.");
       return;
     }
     if (editingItemId) {
-      const meal = state.meals.find((item) => item.id === editingItemId);
+      const meal = existingMeal;
       performAction("updateMealIdea", { id: editingItemId, ...payload }, () => {
         if (!meal) return;
         const day = dayMeta[payload.day] ? payload.day : "sun";
@@ -4108,7 +4261,7 @@ function submitItemForm(event) {
         meal.dayLabel = dayMeta[day].dayLabel;
         meal.type = payload.type || "Meal";
         meal.idea = payload.idea;
-        meal.kids = isEvent ? (payload.kids || "Time TBD") : (payload.kids || "Add kid backup");
+        meal.kids = isEvent ? (payload.kids || "Time TBD") : (payload.kids || "");
         meal.updatedAt = new Date().toISOString();
       }, isEvent ? "Event updated." : "Meal updated.");
       closeItemDrawer();
@@ -4171,6 +4324,23 @@ function addSupply() {
   openItemDrawer("supply");
 }
 
+function addSupplyForFamily(familyId) {
+  const family = familyById(familyId);
+  if (!family) return;
+  if (!canAddSupplyForFamily(familyId)) {
+    showToast("Sign out to add items for another family.");
+    return;
+  }
+  selectedFamily = familyId;
+  saveSelectedFamily();
+  renderFamilies();
+  openItemDrawer("supply");
+  const title = document.querySelector("#itemDrawerTitle");
+  const help = document.querySelector("#itemDrawerHelp");
+  if (title) title.textContent = `Add item for ${family.name}`;
+  if (help) help.textContent = `Add food, drinks, supplies, games, or anything ${family.name} is bringing.`;
+}
+
 function addNonFoodEvent() {
   openItemDrawer("event");
 }
@@ -4204,17 +4374,54 @@ function editSupply(id) {
   openItemDrawer("supply", id);
 }
 
-function deleteSupply(id) {
+function addSupplyToSelectedMeal(id) {
   const supply = state.supplies.find((item) => item.id === id);
-  if (!supply) return;
+  if (!supply || !isMealAssignableItem(supply)) return;
+  const day = document.querySelector("#mealIdeaDay")?.value || "sun";
+  const type = document.querySelector("#mealIdeaType")?.value || "Meal";
+  const mealType = mealTypeKey({ type });
+  const days = dayListSafe(supply.days || []);
+  const nextDays = days.includes(day) ? days : [...days, day];
+  const payload = {
+    name: supply.name || "",
+    notes: supply.notes || supply.qty || "",
+    type: supply.type || "food",
+    mealType,
+    days: nextDays,
+    image: supply.image || ""
+  };
+  performAction("updateSupply", { id, ...payload }, () => {
+    supply.name = payload.name;
+    supply.notes = payload.notes;
+    supply.qty = payload.notes;
+    supply.type = payload.type;
+    supply.mealType = payload.mealType;
+    supply.days = dayListSafe(payload.days);
+    supply.image = payload.image;
+    supply.updatedAt = new Date().toISOString();
+    renderMealAvailablePanel();
+    renderFoodHub();
+  }, `${supply.name} added to ${dayMeta[day]?.dayLabel || "this day"} ${mealTypeDisplay(mealType).toLowerCase()}.`);
+}
+
+async function deleteSupply(id) {
+  const supply = state.supplies.find((item) => item.id === id);
+  if (!supply) return false;
   if (!canManageCustomItem(supply)) {
     showToast("Only your own family can delete this bringing item.");
-    return;
+    return false;
   }
-  if (!window.confirm(`Delete "${supply.name}"?`)) return;
-  performAction("deleteSupply", { id }, () => {
+  if (!window.confirm(`Delete "${supply.name}"?`)) return false;
+  return performAction("deleteSupply", { id }, () => {
     state.supplies = state.supplies.filter((item) => item.id !== id);
   }, "Bringing item deleted.");
+}
+
+async function deleteEditingSupplyFromDrawer() {
+  const id = document.querySelector("#deleteItem")?.dataset.deleteEditingSupply || editingItemId;
+  if (!id) return;
+  const deleted = await deleteSupply(id);
+  if (deleted) closeItemDrawer();
 }
 
 function calendarFeedUrls() {
@@ -4261,14 +4468,14 @@ function bindEvents() {
     const foodDayBtn = event.target.closest("[data-food-day]");
     if (foodDayBtn) { foodDay = foodDayBtn.dataset.foodDay; renderFoodHub(); }
 
-    const bringMealBtn = event.target.closest("[data-bring-meal]");
-    if (bringMealBtn) openSupplyForMeal(bringMealBtn.dataset.bringMeal, "");
-
-    const gapBtn = event.target.closest("[data-gap-meal]");
-    if (gapBtn) openSupplyForMeal(gapBtn.dataset.gapMeal, gapBtn.dataset.gapName || "");
+    const addFamilySupplyButton = event.target.closest("[data-add-family-supply]");
+    if (addFamilySupplyButton) addSupplyForFamily(addFamilySupplyButton.dataset.addFamilySupply);
 
     const editSupplyButton = event.target.closest("[data-edit-supply]");
     if (editSupplyButton) editSupply(editSupplyButton.dataset.editSupply);
+
+    const addMealSupplyButton = event.target.closest("[data-add-meal-supply]");
+    if (addMealSupplyButton) addSupplyToSelectedMeal(addMealSupplyButton.dataset.addMealSupply);
 
     const deleteSupplyButton = event.target.closest("[data-delete-supply]");
     if (deleteSupplyButton) deleteSupply(deleteSupplyButton.dataset.deleteSupply);
@@ -4278,7 +4485,7 @@ function bindEvents() {
 
     const family = event.target.closest("[data-family]");
     if (family) {
-      if (api.user?.familyId && family.dataset.family !== api.user.familyId) {
+      if (api.user?.familyId && !isBearPowerUser() && family.dataset.family !== api.user.familyId) {
         showToast("Sign out to switch to another family.");
         return;
       }
@@ -4289,7 +4496,7 @@ function bindEvents() {
 
     const familyCheckin = event.target.closest("[data-open-family-checkin]");
     if (familyCheckin) {
-      if (api.user?.familyId && familyCheckin.dataset.openFamilyCheckin !== api.user.familyId) {
+      if (api.user?.familyId && !isBearPowerUser() && familyCheckin.dataset.openFamilyCheckin !== api.user.familyId) {
         showToast("Sign out to check in another family.");
         return;
       }
@@ -4382,6 +4589,7 @@ function bindEvents() {
   document.querySelector("#closeItemDrawer")?.addEventListener("click", closeItemDrawer);
   document.querySelector("#closeProfileDrawer")?.addEventListener("click", closeProfileDrawer);
   document.querySelector("#cancelItem")?.addEventListener("click", closeItemDrawer);
+  document.querySelector("#deleteItem")?.addEventListener("click", deleteEditingSupplyFromDrawer);
   document.querySelector("#drawerBackdrop")?.addEventListener("click", closeAllDrawers);
   document.querySelector("#prevStep")?.addEventListener("click", () => {
     drawerStep = Math.max(1, drawerStep - 1);
@@ -4407,6 +4615,8 @@ function bindEvents() {
     catch { showToast(https); }
   });
   document.querySelector("#itemForm")?.addEventListener("submit", submitItemForm);
+  document.querySelector("#mealIdeaDay")?.addEventListener("change", renderMealAvailablePanel);
+  document.querySelector("#mealIdeaType")?.addEventListener("change", renderMealAvailablePanel);
   document.querySelector("#familyEventForm")?.addEventListener("submit", (event) => {
     event.preventDefault();
     saveFamilyEvent();
@@ -4459,9 +4669,10 @@ function bindEvents() {
     setProfilePhotoPreview(pendingProfilePhoto, event.target.value || displayNameForUser());
   });
   document.querySelector("#profilePhotoZoom")?.addEventListener("input", (event) => {
-    profilePhotoCrop.zoom = Math.max(1, Math.min(3, Number(event.target.value) || 1));
+    profilePhotoCrop.zoom = clampProfileZoom(event.target.value);
     renderProfileCropper();
   });
+  bindProfileCropperGestures();
   document.querySelectorAll("[data-profile-crop]").forEach((button) => {
     button.addEventListener("click", () => moveProfileCrop(button.dataset.profileCrop));
   });

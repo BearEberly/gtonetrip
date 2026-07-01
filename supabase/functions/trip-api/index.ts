@@ -222,9 +222,15 @@ function isCustomMealId(id: string) {
   return String(id || "").startsWith("meal-");
 }
 
-function canManageCustomItem(item: Record<string, unknown>, actorFamilyId: string) {
+function isBearPowerUser(actorPersonId: unknown) {
+  return String(actorPersonId || "").trim().toLowerCase() === "bear";
+}
+
+function canManageCustomItem(item: Record<string, unknown>, actorFamilyId: string, actorPersonId: string = "") {
   const familyId = familySafe(actorFamilyId);
-  if (!item || !familyId) return false;
+  if (!item) return false;
+  if (isBearPowerUser(actorPersonId)) return true;
+  if (!familyId) return false;
   const createdBy = familySafe(item.createdBy);
   const owner = familySafe(item.owner);
   if (createdBy) return createdBy === familyId || owner === familyId;
@@ -503,11 +509,11 @@ function actionEntityType(actionType: string) {
   return "state";
 }
 
-function actionEntityId(actionType: string, payload: Record<string, unknown>, actorFamilyId: string) {
+function actionEntityId(actionType: string, payload: Record<string, unknown>, actorFamilyId: string, actorPersonId: string = "") {
   if (["claimMeal", "toggleSupply", "updateMealIdea", "deleteMealIdea", "updateSupply", "deleteSupply", "updateFamilyEvent", "deleteFamilyEvent", "deleteSchedulePhotoDraft"].includes(actionType)) {
     return textSafe(payload.id, "", 120);
   }
-  if (actionType === "checkin") return familySafe(actorFamilyId || payload.familyId);
+  if (actionType === "checkin") return isBearPowerUser(actorPersonId) ? familySafe(payload.familyId || actorFamilyId) : familySafe(actorFamilyId || payload.familyId);
   if (actionType === "voteActivity") return textSafe(payload.id, "", 120);
   if (actionType === "toggleChecklist") return textSafe(payload.id, "", 120);
   if (actionType === "addFamilyEvent") return textSafe(payload.id, "", 120) || "new-family-event";
@@ -517,9 +523,9 @@ function actionEntityId(actionType: string, payload: Record<string, unknown>, ac
   return "";
 }
 
-function findEntitySnapshot(state: Record<string, unknown>, actionType: string, payload: Record<string, unknown>, actorFamilyId: string) {
+function findEntitySnapshot(state: Record<string, unknown>, actionType: string, payload: Record<string, unknown>, actorFamilyId: string, actorPersonId: string = "") {
   const entityType = actionEntityType(actionType);
-  const entityId = actionEntityId(actionType, payload, actorFamilyId);
+  const entityId = actionEntityId(actionType, payload, actorFamilyId, actorPersonId);
 
   if (entityType === "meal") {
     return Array.isArray(state.meals)
@@ -604,9 +610,9 @@ async function sendGoogleSheetsChangeLog(input: {
 
   const changedAt = new Date().toISOString();
   const entityType = actionEntityType(input.actionType);
-  const entityId = actionEntityId(input.actionType, input.payload, input.actor.familyId);
-  const oldEntity = findEntitySnapshot(input.oldState, input.actionType, input.payload, input.actor.familyId);
-  const newEntity = findEntitySnapshot(input.newState, input.actionType, input.payload, input.actor.familyId);
+  const entityId = actionEntityId(input.actionType, input.payload, input.actor.familyId, input.actor.personId);
+  const oldEntity = findEntitySnapshot(input.oldState, input.actionType, input.payload, input.actor.familyId, input.actor.personId);
+  const newEntity = findEntitySnapshot(input.newState, input.actionType, input.payload, input.actor.familyId, input.actor.personId);
   const body = {
     secret: googleSheetsWebhookSecret,
     timestamp: changedAt,
@@ -802,16 +808,17 @@ async function touchPasskeyCredential(input: {
   if (error) throw error;
 }
 
-function applyAction(state: Record<string, unknown>, action: { type: string; payload?: Record<string, unknown> }, actorFamilyId: string) {
+function applyAction(state: Record<string, unknown>, action: { type: string; payload?: Record<string, unknown> }, actorFamilyId: string, actorPersonId: string = "") {
   const payload = action.payload || {};
   const next = structuredClone(state);
+  const isPowerUser = isBearPowerUser(actorPersonId);
 
   if (action.type === "claimMeal") {
     const meal = (next.meals as Record<string, unknown>[]).find((item) => item.id === payload.id);
     const familyId = familySafe(actorFamilyId);
     if (!meal || !familyId) return { changed: false, message: "Choose a family first." };
     const owner = familySafe(meal.owner);
-    if (owner && owner !== familyId) return { changed: false, message: "Meal already claimed." };
+    if (owner && owner !== familyId && !isPowerUser) return { changed: false, message: "Meal already claimed." };
     meal.owner = owner ? "" : familyId;
     return { changed: true, message: owner ? "Meal moved back to open." : "Meal claimed.", state: next };
   }
@@ -821,7 +828,7 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     const familyId = familySafe(actorFamilyId);
     if (!item || !familyId) return { changed: false, message: "Choose a family first." };
     const owner = familySafe(item.owner);
-    if (owner && owner !== familyId) return { changed: false, message: "Item already claimed." };
+    if (owner && owner !== familyId && !isPowerUser) return { changed: false, message: "Item already claimed." };
     item.owner = owner ? "" : familyId;
     return { changed: true, message: owner ? "Supply moved back to still needed." : "Supply claimed.", state: next };
   }
@@ -850,7 +857,7 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
   }
 
   if (action.type === "checkin") {
-    const familyId = familySafe(actorFamilyId || payload.familyId);
+    const familyId = isPowerUser ? familySafe(payload.familyId || actorFamilyId) : familySafe(actorFamilyId || payload.familyId);
     if (!familyId) return { changed: false, message: "Choose a family first." };
     next.familyChecks ||= {};
     next.familyResponses ||= {};
@@ -898,7 +905,7 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     const index = events.findIndex((item) => item.id === textSafe(payload.id, "", 80));
     if (index < 0) return { changed: false, message: "Family event not found." };
     const existing = events[index];
-    if (familySafe(existing.createdBy) && familySafe(existing.createdBy) !== familySafe(actorFamilyId)) {
+    if (!isPowerUser && familySafe(existing.createdBy) && familySafe(existing.createdBy) !== familySafe(actorFamilyId)) {
       return { changed: false, message: "Only the family that added this event can edit it." };
     }
     const normalizedEvent = normalizeFamilyCalendarEvent({
@@ -923,7 +930,7 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     const index = events.findIndex((item) => item.id === textSafe(payload.id, "", 80));
     if (index < 0) return { changed: false, message: "Family event not found." };
     const existing = events[index];
-    if (familySafe(existing.createdBy) && familySafe(existing.createdBy) !== familySafe(actorFamilyId)) {
+    if (!isPowerUser && familySafe(existing.createdBy) && familySafe(existing.createdBy) !== familySafe(actorFamilyId)) {
       return { changed: false, message: "Only the family that added this event can delete it." };
     }
     events.splice(index, 1);
@@ -954,8 +961,9 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
 
   if (action.type === "updateMealIdea") {
     const meal = (next.meals as Record<string, unknown>[]).find((item) => item.id === payload.id);
-    if (!meal || !isCustomMealId(String(meal.id || ""))) return { changed: false, message: "Only added meal ideas can be edited." };
-    if (!canManageCustomItem(meal, actorFamilyId)) return { changed: false, message: "Only the family that added or owns this meal can edit it." };
+    if (!meal) return { changed: false, message: "Meal not found." };
+    if (!isCustomMealId(String(meal.id || "")) && !isPowerUser) return { changed: false, message: "Only added meal ideas can be edited." };
+    if (!canManageCustomItem(meal, actorFamilyId, actorPersonId)) return { changed: false, message: "Only the family that added or owns this meal can edit it." };
     const idea = textSafe(payload.idea);
     if (!idea) return { changed: false, message: "Meal idea is empty." };
     const day = daySafe(payload.day);
@@ -973,7 +981,7 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     const index = meals.findIndex((item) => item.id === payload.id);
     const meal = index >= 0 ? meals[index] : null;
     if (!meal || !isCustomMealId(String(meal.id || ""))) return { changed: false, message: "Only added meal ideas can be deleted." };
-    if (!canManageCustomItem(meal, actorFamilyId)) return { changed: false, message: "Only the family that added or owns this meal can delete it." };
+    if (!canManageCustomItem(meal, actorFamilyId, actorPersonId)) return { changed: false, message: "Only the family that added or owns this meal can delete it." };
     meals.splice(index, 1);
     return { changed: true, message: "Meal idea deleted.", state: next };
   }
@@ -1002,7 +1010,7 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
   if (action.type === "updateSupply") {
     const supply = (next.supplies as Record<string, unknown>[]).find((item) => item.id === payload.id);
     if (!supply) return { changed: false, message: "Bringing item not found." };
-    if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only your family can edit this bringing item." };
+    if (!canManageCustomItem(supply, actorFamilyId, actorPersonId)) return { changed: false, message: "Only your family can edit this bringing item." };
     const name = textSafe(payload.name);
     if (!name) return { changed: false, message: "Bringing item is empty." };
     const supplyNotes = textSafe(payload.notes ?? payload.qty);
@@ -1022,7 +1030,7 @@ function applyAction(state: Record<string, unknown>, action: { type: string; pay
     const index = supplies.findIndex((item) => item.id === payload.id);
     const supply = index >= 0 ? supplies[index] : null;
     if (!supply) return { changed: false, message: "Bringing item not found." };
-    if (!canManageCustomItem(supply, actorFamilyId)) return { changed: false, message: "Only your family can delete this bringing item." };
+    if (!canManageCustomItem(supply, actorFamilyId, actorPersonId)) return { changed: false, message: "Only your family can delete this bringing item." };
     supplies.splice(index, 1);
     return { changed: true, message: "Bringing item deleted.", state: next };
   }
@@ -1419,7 +1427,7 @@ Deno.serve(async (request) => {
       const state = await getStoredState();
       const actionType = textSafe(body.type);
       const actionPayload = body.payload && typeof body.payload === "object" ? body.payload as Record<string, unknown> : {};
-      const result = applyAction(state, { type: actionType, payload: actionPayload }, session.user.familyId);
+      const result = applyAction(state, { type: actionType, payload: actionPayload }, session.user.familyId, session.user.personId);
       if (!result.changed) return json({ ...result, state, tripInfo }, 409);
       const savedState = await saveStoredState(result.state as Record<string, unknown>);
       try {
