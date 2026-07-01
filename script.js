@@ -21,6 +21,7 @@ const icons = {
 };
 
 const SUPPLY_AI_IMAGE_MAX_LENGTH = 4500000;
+const HEIC_CONVERTER_SRC = "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js";
 
 const families = [
   { id: "shell", name: "Shell", shortName: "Shell", color: "#c0392b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
@@ -4229,9 +4230,56 @@ function isHeicLikeFile(file, dataUrl = "") {
   return type.includes("heic") || type.includes("heif") || name.endsWith(".heic") || name.endsWith(".heif") || prefix.includes("image/heic") || prefix.includes("image/heif");
 }
 
+async function ensureHeicConverter() {
+  if (typeof window.heic2any === "function") return window.heic2any;
+  await new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-heic-converter="true"]');
+    if (existing) {
+      existing.addEventListener("load", resolve, { once: true });
+      existing.addEventListener("error", reject, { once: true });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = HEIC_CONVERTER_SRC;
+    script.async = true;
+    script.dataset.heicConverter = "true";
+    script.addEventListener("load", resolve, { once: true });
+    script.addEventListener("error", reject, { once: true });
+    document.head.append(script);
+  });
+  if (typeof window.heic2any !== "function") {
+    throw new Error("HEIC converter did not load.");
+  }
+  return window.heic2any;
+}
+
+async function convertHeicFileToJpegDataUrl(file) {
+  updateSupplyAiStatus("Converting HEIC photo...");
+  try {
+    const heic2any = await ensureHeicConverter();
+    const converted = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.86 });
+    const blob = Array.isArray(converted) ? converted[0] : converted;
+    if (!blob) throw new Error("HEIC conversion failed.");
+    const compressed = await compressImageFile(blob, 1300, 0.78);
+    const safeCompressed = supplyAiImageDataUrlSafe(compressed);
+    if (safeCompressed) return safeCompressed;
+    const originalJpeg = await readFileAsDataUrl(blob);
+    const safeOriginal = supplyAiImageDataUrlSafe(originalJpeg);
+    if (safeOriginal) return safeOriginal;
+    throw new Error("Converted HEIC photo is too large.");
+  } catch {
+    throw new Error("Could not convert that HEIC photo. Take a screenshot of it or choose a JPG/PNG photo, then upload again.");
+  }
+}
+
 async function prepareSupplyAiImageFile(file) {
   if (!file) return "";
-  if (!String(file.type || "").startsWith("image/")) {
+  const looksHeic = isHeicLikeFile(file);
+  const fileType = String(file.type || "").toLowerCase();
+  if (looksHeic) {
+    return convertHeicFileToJpegDataUrl(file);
+  }
+  if (fileType && !fileType.startsWith("image/")) {
     throw new Error("Choose a photo file first.");
   }
   const original = await readFileAsDataUrl(file);
