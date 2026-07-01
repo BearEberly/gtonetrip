@@ -4682,15 +4682,16 @@ button { -webkit-tap-highlight-color: transparent; }
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 4px;
+  gap: 1px;
   min-width: 0;
   min-height: 58px;
-  padding: 4px 2px 2px;
+  padding: 8px 3px 7px;
   border-radius: 18px;
   color: #6f786f;
   font-size: 0.64rem;
   font-weight: 750;
   letter-spacing: 0.01em;
+  line-height: 1.05;
   transition: transform 160ms ease, color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
@@ -4738,7 +4739,7 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 
 .mobile-nav-item.is-active svg {
-  transform: translateY(-1px) scale(1.08);
+  transform: scale(1.06);
   filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.16));
 }
 
