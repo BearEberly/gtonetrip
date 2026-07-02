@@ -5121,6 +5121,8 @@ button { -webkit-tap-highlight-color: transparent; }
   margin-left: 8px;
 }
 .fh-fam-list li.fh-fam-item { display: flex; align-items: center; gap: 9px; padding: 9px 6px; }
+.fh-fam-copy { display: grid; gap: 2px; min-width: 0; }
+.fh-item-qty { color: var(--forest-800); font-size: 0.78rem; font-weight: 800; line-height: 1.2; }
 .fh-fam-item.is-editable { cursor: pointer; border-radius: 8px; transition: background-color .12s ease; }
 .fh-fam-item.is-editable:hover { background: rgba(0, 0, 0, 0.04); }
 .fh-fam-item.is-editable:active { background: rgba(0, 0, 0, 0.07); }

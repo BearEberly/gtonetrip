@@ -2789,6 +2789,11 @@ function bringingQuantityMarkup(item) {
   return `<span class="bringing-row-quantity">${escapeText(item.qty)}</span>`;
 }
 
+function foodItemQuantityMarkup(item) {
+  if (!item?.qty) return "";
+  return `<span class="fh-item-qty">${escapeText(item.qty)}</span>`;
+}
+
 function mealPlanningItemsMarkup(meal) {
   const items = bringingItemsForMeal(meal);
   if (!items.length) {
@@ -3967,7 +3972,10 @@ function renderFoodFamilyGrid() {
       ? `<ul class="fh-fam-list">${items.map((it) => {
           const editable = canManageCustomItem(it);
           return `<li class="fh-fam-item${editable ? " is-editable" : ""}"${editable ? ` data-edit-supply="${escapeText(it.id)}"` : ""}>
-            <span class="fh-bring-name">${escapeText(it.name)}</span>
+            <span class="fh-fam-copy">
+              <span class="fh-bring-name">${escapeText(it.name)}</span>
+              ${foodItemQuantityMarkup(it)}
+            </span>
             <span class="fh-tag">${escapeText(supplyPurposeLabel(it))}</span>
             ${editable ? `<span class="fh-edit-hint" data-icon="edit" aria-hidden="true"></span>` : ""}
           </li>`;
