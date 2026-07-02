@@ -2774,15 +2774,19 @@ function bringingImageMarkup(item) {
 }
 
 function bringingMetaMarkup(item) {
-  const quantity = item.qty ? ` · ${escapeText(item.qty)}` : "";
   const note = item.notes ? ` · ${escapeText(item.notes)}` : "";
   const toneClass = bringingMealToneClass(item.mealType);
   return `
     <div class="bringing-inline-meta">
       <span class="bringing-chip ${toneClass}">${escapeText(supplyPurposeLabel(item))}</span>
-      <span class="bringing-inline-summary">${escapeText(daysSummary(item.days))}${quantity}${note}</span>
+      <span class="bringing-inline-summary">${escapeText(daysSummary(item.days))}${note}</span>
     </div>
   `;
+}
+
+function bringingQuantityMarkup(item) {
+  if (!item?.qty) return "";
+  return `<span class="bringing-row-quantity">${escapeText(item.qty)}</span>`;
 }
 
 function mealPlanningItemsMarkup(meal) {
@@ -3266,8 +3270,9 @@ function renderBringingBoard() {
         <article class="bringing-row ${bringingMealToneClass(item.mealType)}">
           <div class="bringing-row-main">
             ${bringingImageMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
-            <div>
+            <div class="bringing-row-copy">
             <strong>${escapeText(item.title)}</strong>
+            ${bringingQuantityMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
             ${bringingMetaMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
             </div>
           </div>
@@ -3308,8 +3313,9 @@ function renderBringingBoard() {
                 <article class="bringing-row ${bringingMealToneClass(item.mealType)}">
                   <div class="bringing-row-main">
                     ${bringingImageMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
-                    <div>
+                    <div class="bringing-row-copy">
                     <strong>${escapeText(item.title)}</strong>
+                    ${bringingQuantityMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
                     ${bringingMetaMarkup(state.supplies.find((entry) => entry.id === item.id) || {})}
                     </div>
                   </div>
