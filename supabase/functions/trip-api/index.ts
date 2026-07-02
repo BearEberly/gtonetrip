@@ -133,12 +133,16 @@ function requestIpMetadata(request: Request) {
   const forwardedIp = forwardedFor.split(",").map((part) => part.trim()).find(Boolean) || "";
   const cfConnectingIp = textSafe(request.headers.get("cf-connecting-ip"), "", 120);
   const xRealIp = textSafe(request.headers.get("x-real-ip"), "", 120);
+  const trueClientIp = textSafe(request.headers.get("true-client-ip"), "", 120);
+  const xClientIp = textSafe(request.headers.get("x-client-ip"), "", 120);
   const flyClientIp = textSafe(request.headers.get("fly-client-ip"), "", 120);
   const fastlyClientIp = textSafe(request.headers.get("fastly-client-ip"), "", 120);
-  const ipAddress = cfConnectingIp || forwardedIp || xRealIp || flyClientIp || fastlyClientIp;
+  const ipAddress = cfConnectingIp || forwardedIp || xRealIp || trueClientIp || xClientIp || flyClientIp || fastlyClientIp;
   const ipHeader = cfConnectingIp ? "cf-connecting-ip"
     : forwardedIp ? "x-forwarded-for"
     : xRealIp ? "x-real-ip"
+    : trueClientIp ? "true-client-ip"
+    : xClientIp ? "x-client-ip"
     : flyClientIp ? "fly-client-ip"
     : fastlyClientIp ? "fastly-client-ip"
     : "";
