@@ -26,6 +26,7 @@ const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 const PASSKEY_CHALLENGE_TTL_MS = 1000 * 60 * 10;
 const PASSKEY_RP_NAME = "4th of July 2026";
 const AI_IMAGE_DATA_URL_MAX_LENGTH = 4500000;
+const SHEETS_TIMESTAMP_TIME_ZONE = "America/Los_Angeles";
 const tripInfo = Object.freeze({
   address: "1018 Wawona Way, Arnold, CA 95223",
   neighborhood: "Sequoia Woods",
@@ -873,6 +874,26 @@ function sanitizeLogValue(value: unknown, key = "", depth = 0): unknown {
   return textSafe(value, "", 500);
 }
 
+function googleSheetsPacificTimestamp(date = new Date()) {
+  try {
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: SHEETS_TIMESTAMP_TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+      timeZoneName: "short"
+    });
+    const parts = Object.fromEntries(formatter.formatToParts(date).map((part) => [part.type, part.value]));
+    return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second} ${parts.timeZoneName || "PT"}`;
+  } catch {
+    return date.toISOString();
+  }
+}
+
 async function sendGoogleSheetsWebhookLog(input: {
   request: Request;
   actionType: string;
@@ -893,7 +914,9 @@ async function sendGoogleSheetsWebhookLog(input: {
   if (!googleSheetsWebhookUrl) return;
 
   const payload = input.payload && typeof input.payload === "object" ? input.payload : {};
-  const changedAt = new Date().toISOString();
+  const changedAtDate = new Date();
+  const changedAt = changedAtDate.toISOString();
+  const timestamp = googleSheetsPacificTimestamp(changedAtDate);
   const actor = input.actor || {};
   const route = routeFromRequest(input.request);
   const ipMeta = requestIpMetadata(input.request);
@@ -914,7 +937,7 @@ async function sendGoogleSheetsWebhookLog(input: {
   const sanitizedNewValues = input.newValues !== undefined ? sanitizeLogValue(input.newValues) : sanitizeLogValue(newEntity);
   const body = {
     secret: googleSheetsWebhookSecret,
-    timestamp: changedAt,
+    timestamp,
     firstName: textSafe(actor.firstName, "", 80),
     lastName: "",
     phoneNumber: "",
