@@ -17,11 +17,13 @@ const icons = {
   sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.9 4.9 1.4 1.4"></path><path d="m17.7 17.7 1.4 1.4"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m4.9 19.1 1.4-1.4"></path><path d="m17.7 6.3 1.4-1.4"></path></svg>',
   moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>',
   dessert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14l-2 8H7l-2-8Z"></path><path d="M7 12c0-3 2-5 5-5s5 2 5 5"></path><path d="M12 7V3"></path><path d="M9 4h6"></path></svg>',
-  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>'
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>',
+  baseball: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.3 5.4c1.2 1.5 1.9 3.6 1.9 6.6s-.7 5.1-1.9 6.6"></path><path d="M15.7 5.4c-1.2 1.5-1.9 3.6-1.9 6.6s.7 5.1 1.9 6.6"></path><path d="m6.6 8.1 2 1.2"></path><path d="m6.2 11 2.4 1"></path><path d="m6.6 15.9 2-1.2"></path><path d="m17.4 8.1-2 1.2"></path><path d="m17.8 11-2.4 1"></path><path d="m17.4 15.9-2-1.2"></path></svg>'
 };
 
 const SUPPLY_AI_IMAGE_MAX_LENGTH = 4500000;
 const HEIC_CONVERTER_SRC = "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js";
+const LOCAL_PREVIEW_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 
 const families = [
   { id: "shell", name: "Shell", shortName: "Shell", color: "#c0392b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
@@ -381,6 +383,474 @@ const nearbyOutings = [
   }
 ];
 
+const giantsGameItinerary = [
+  {
+    id: "giants-drive-lodi",
+    category: "9:00 AM departure",
+    name: "Leave from 1333 Edgewood Drive, Lodi",
+    meta: "Start the day on the road instead of trying to improvise the morning.",
+    verdict: "Roll out at 9:00 AM so the Livermore stop does not squeeze parking or gate timing.",
+    note: "This first leg is the clean push from Lodi to Wingen Bakery in downtown Livermore.",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=1333+Edgewood+Drive+Lodi+CA+95240&destination=50+S+Livermore+Ave+Livermore+CA+94550&travelmode=driving",
+    appleMapsUrl: "https://maps.apple.com/?saddr=1333+Edgewood+Drive,+Lodi,+CA+95240&daddr=50+S+Livermore+Ave,+Livermore,+CA+94550&dirflg=d",
+    icon: "home"
+  },
+  {
+    id: "giants-pastry-stop-livermore",
+    category: "First stop",
+    name: "Wingen Bakery & Restaurant",
+    hours: "Wed-Sun cafe and coffee 8:00 AM - 2:30 PM · Wed-Sat dinner 4:30 PM - 10:00 PM",
+    menu: "Croissants, kouign amann, breads, coffee, breakfast, lunch, and sourdough pizza later in the day.",
+    meta: "50 S Livermore Ave, Livermore, CA 94550 · 4.7 stars on Google from the details you sent",
+    verdict: "This is the actual pastry stop before parking, not just a generic Livermore waypoint.",
+    note: "Official site says the cafe runs Wednesday through Sunday, with online ordering through Toast and a downtown Livermore storefront.",
+    websiteUrl: "https://www.wingenbakery.com/",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=50+S+Livermore+Ave+Livermore+CA+94550&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
+    appleMapsUrl: "https://maps.apple.com/?saddr=50+S+Livermore+Ave,+Livermore,+CA+94550&daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&dirflg=d",
+    icon: "dessert"
+  },
+  {
+    id: "giants-parking-spothero",
+    category: "SpotHero parking",
+    name: "Oracle Park - Lot A / Pier 48",
+    meta: "$64.35 total, effectively a $65 parking move. Enter after Jul 12 at 11:05 AM and exit before 5:05 PM.",
+    verdict: "This is the parking spot from your screenshots, and it keeps the last stretch simple.",
+    note: "Official Giants parking, self-park, uncovered lot, on-site staff, wheelchair accessible, and no in-and-out according to the listing you sent.",
+    appUrl: "https://spothero.com/get-spothero-app",
+    appLabel: "SpotHero App",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=50+S+Livermore+Ave+Livermore+CA+94550&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
+    appleMapsUrl: "https://maps.apple.com/?saddr=50+S+Livermore+Ave,+Livermore,+CA+94550&daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&dirflg=d",
+    icon: "pin"
+  },
+  {
+    id: "giants-walk-to-brick",
+    category: "Final walk",
+    name: "Brick first, then Lefty O'Doul Gate",
+    meta: "About 13 minutes or 0.6 miles from Lot A / Pier 48 to the brick, then continue to the Lefty O'Doul entrance.",
+    verdict: "This is the cleanest fun route if you are early: brick stop first, then go in and wander the ballpark from inside.",
+    note: "The brick pin is 37.7766557, -122.3878868 in China Basin Park Section 24. After that, use Lefty O'Doul Gate as the preferred entry instead of overthinking which gate is best.",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&destination=Oracle+Park+Lefty+O%27Doul+Gate+San+Francisco+CA&waypoints=37.7766557,-122.3878868&travelmode=walking",
+    appleMapsUrl: "https://maps.apple.com/?saddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&daddr=Oracle+Park+Lefty+O'Doul+Gate,+San+Francisco,+CA&dirflg=w",
+    icon: "baseball"
+  },
+  {
+    id: "giants-enjoy-the-game",
+    category: "Inside Oracle Park",
+    name: "Enjoy the game and wander",
+    meta: "Go in early, eat, walk around, and use the inside time instead of rushing straight to seats.",
+    verdict: "This is the stretch for the full ballpark lap: get food, roam, watch innings, and let the game day breathe.",
+    note: "You already picked the Lefty O'Doul Go-Ahead entry move, so once you are in, just enjoy the park until the game ends.",
+    icon: "utensils"
+  },
+  {
+    id: "giants-postgame-fikscue",
+    category: "After the game",
+    name: "Head to Fikscue Craft Barbecue",
+    hours: "Thu-Sun 12:00 PM - 8:00 PM or until sold out · Chase Center event days Mon-Wed 4:00 PM - 8:00 PM",
+    menu: "Indo-Tex barbecue with smoked brisket, dino ribs, nasi goreng, and soto padang.",
+    meta: "7 Warriors Way Suite 208, San Francisco, CA 94158",
+    verdict: "This is the barbecue stop you flagged earlier, so the day now ends with Fikscue instead of an open-ended maybe.",
+    note: "From Oracle Park it is the chef-favorite postgame move when you still want one more serious food stop.",
+    websiteUrl: "https://www.chasecenter.com/vendor/fikscue-craft-barbecue/",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=7+Warriors+Way+Suite+208+San+Francisco+CA+94158&travelmode=walking",
+    appleMapsUrl: "https://maps.apple.com/?saddr=Oracle+Park,+24+Willie+Mays+Plaza,+San+Francisco,+CA+94107&daddr=7+Warriors+Way+Suite+208,+San+Francisco,+CA+94158&dirflg=w",
+    icon: "flame"
+  }
+];
+
+const giantsGameQuickFacts = [
+  {
+    label: "Leave",
+    value: "9:00 AM",
+    detail: "1333 Edgewood Drive, Lodi"
+  },
+  {
+    label: "Pastry stop",
+    value: "Wingen",
+    detail: "50 S Livermore Ave in downtown Livermore"
+  },
+  {
+    label: "Parking",
+    value: "$64.35",
+    detail: "SpotHero Lot A / Pier 48 official Giants parking"
+  },
+  {
+    label: "Park after",
+    value: "11:05 AM",
+    detail: "SpotHero entry window from your parking screenshot"
+  },
+  {
+    label: "Walk",
+    value: "13 min",
+    detail: "Lot A to the brick, then into Lefty O'Doul Gate"
+  },
+  {
+    label: "Entry",
+    value: "Lefty O'Doul",
+    detail: "Go-Ahead Entry is the plan if you get there early and want to roam inside."
+  },
+  {
+    label: "First pitch",
+    value: "1:05 PM",
+    detail: "Oracle Park local game time"
+  },
+  {
+    label: "Tickets",
+    value: "Mobile only",
+    detail: "Use the MLB Ballpark app. Ticket screenshots are not accepted."
+  }
+];
+
+const giantsGameTimeline = [
+  {
+    kicker: "9:00 AM",
+    title: "Leave Lodi",
+    detail: "Start from Edgewood Drive and keep the Livermore stop short enough that you are not chasing the day."
+  },
+  {
+    kicker: "Mid-morning",
+    title: "Hit the Livermore pastry stop",
+    detail: "Make the bakery move here, then go straight to the official Giants parking lot."
+  },
+  {
+    kicker: "11:05 AM",
+    title: "Parking window opens",
+    detail: "That matches the SpotHero listing for Lot A / Pier 48 and also lines up with the Giants' normal Sunday gate timing."
+  },
+  {
+    kicker: "11:50-12:20 PM",
+    title: "Make the brick stop and go in",
+    detail: "Use the walk from Pier 48 for the China Basin Park brick in Section 24, then head to Lefty O'Doul Gate and start wandering the inside if you are early."
+  },
+  {
+    kicker: "Game time",
+    title: "Enjoy the game and roam inside",
+    detail: "Eat, walk around, catch innings, and use the park the way you described instead of treating it like a straight seat-to-car day."
+  },
+  {
+    kicker: "After the game",
+    title: "Walk to Fikscue",
+    detail: "When the game is over, head straight to Fikscue Craft Barbecue for the postgame stop you picked earlier."
+  }
+];
+
+const giantsGamePolicies = [
+  {
+    id: "giants-mobile-tickets-app",
+    category: "Tickets + app",
+    name: "Use the MLB Ballpark app before you leave",
+    meta: "Giants tickets are mobile only, and the official app also carries maps, Food Finder, and game-day alerts.",
+    verdict: "Best move is opening or forwarding tickets before walking up to Oracle Park.",
+    note: "The Giants explicitly say ticket screenshots are not accepted, so Apple Wallet or the app itself is the safer path.",
+    websiteUrl: "https://www.mlb.com/giants/apps/ballpark",
+    icon: "share"
+  },
+  {
+    id: "giants-gates-go-ahead",
+    category: "Entry flow",
+    name: "Use Lefty O'Doul Gate with Go-Ahead Entry",
+    meta: "All four main gates work, but Lefty O'Doul is the preferred move for this plan after the brick stop.",
+    verdict: "Since you already set up Go-Ahead Entry, this becomes the easiest way to get inside and start walking the park.",
+    note: "Tickets are still tied to the account even with face entry, so the default plan is your Go-Ahead scan at Lefty O'Doul and the rest of the group following through with their own tickets.",
+    websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
+    icon: "home"
+  },
+  {
+    id: "giants-bag-policy",
+    category: "Bag policy",
+    name: "No backpacks, even clear ones",
+    meta: "Other bags are allowed up to 16 x 16 x 8 inches. Bags do not need to be clear, but hard-sided coolers are not allowed and all bags are inspected.",
+    verdict: "Travel light and avoid the backpack problem entirely if you can.",
+    note: "If needed, the Giants list paid bag storage at the Marina Gate from gate-open until one hour after the event.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/information/guide/bag-storage",
+    icon: "bag"
+  },
+  {
+    id: "giants-outside-food-policy",
+    category: "Outside food",
+    name: "Outside food is allowed, but beverage rules matter",
+    meta: "The Giants say outside food and beverage are permitted except in Luxury Suites. Drinks should be sealed; no alcohol, glass, aluminum, or hard-sided coolers.",
+    verdict: "Since this trip is more restaurant-first, the main value here is knowing you still have flexibility if plans change.",
+    note: "The permitted-items page also allows empty plastic refillable water bottles and soft-sided juice containers.",
+    websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
+    icon: "utensils"
+  },
+  {
+    id: "giants-food-finder-map",
+    category: "Concessions + map",
+    name: "Use the official Food Finder instead of wandering",
+    meta: "The Giants point fans to the Food Finder and official directory by section for where each stand actually is on game day.",
+    verdict: "This is the cleanest way to check whether a specific in-park item is worth the detour from your seats.",
+    note: "The ballpark app and concourse map are the two official tools that matter most once you are inside.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    icon: "pin"
+  }
+];
+
+const giantsGameRestaurants = [
+  {
+    id: "giants-flour-water-pizza-shop",
+    category: "Closest pizza chef pick",
+    name: "Flour + Water Pizza Shop - Mission Rock",
+    walk: "About a 10-minute walk from Oracle Park",
+    hours: "Daily 11:30 AM - 9:00 PM",
+    menu: "Counter-service pizza shop with slices, pies, pickup, delivery, and catering.",
+    verdict: "Best fit if you want a chef-adjacent Mission Rock stop and pizza is the priority.",
+    note: "This is the strongest direct match for your wood-fired pizza lane, even though the Mission Rock format is the faster counter-service shop.",
+    websiteUrl: "https://www.fwpizzashop.com/mission-rock",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1090+Dr.+Maya+Angelou+Lane+Suite+100+San+Francisco+CA+94158&travelmode=walking",
+    icon: "utensils"
+  },
+  {
+    id: "giants-via-aurelia",
+    category: "Chef-driven dinner move",
+    name: "Via Aurelia",
+    walk: "About a 12-minute walk from Oracle Park",
+    hours: "Sun-Thu 5:00 PM - 9:00 PM · Fri-Sat 5:00 PM - 10:00 PM",
+    menu: "Cocktail bar, dinner, dessert, and wine list built around Tuscan seafood, housemade pastas, and bigger-format mains.",
+    verdict: "Best if you want the most chef-forward sit-down option in the immediate walk zone.",
+    note: "Back Home Hospitality's Mission Rock restaurant reads like the polished postgame choice when you care more about execution and wine than speed.",
+    websiteUrl: "https://www.viaaureliasf.com/contact",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=300+Toni+Stone+Xing+San+Francisco+CA+94158&travelmode=walking",
+    icon: "utensils"
+  },
+  {
+    id: "giants-fikscue",
+    category: "Worth-the-walk chef pick",
+    name: "Fikscue Craft Barbecue",
+    walk: "Longer Mission Bay walk from Oracle Park",
+    hours: "Chase Center event days Mon-Wed 4:00 PM - 8:00 PM · Thu-Sun 12:00 PM - 8:00 PM or until sold out",
+    menu: "Indo-Tex barbecue with smoked brisket, dino ribs, nasi goreng, and soto padang.",
+    verdict: "Best if Fixq/Fikscue was the actual target and you want the most distinctive chef-favorite barbecue stop in the wider area.",
+    note: "It is farther than the Mission Rock cluster, but the Indonesian-Texas barbecue angle makes it one of the most interesting neighborhood detours for cooks.",
+    websiteUrl: "https://www.chasecenter.com/vendor/fikscue-craft-barbecue/",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=7+Warriors+Way+Suite+208+San+Francisco+CA+94158&travelmode=walking",
+    icon: "flame"
+  },
+  {
+    id: "giants-arsicault",
+    category: "Morning pastry move",
+    name: "Arsicault Bakery - Mission Bay",
+    walk: "About a 10-minute walk from Oracle Park",
+    hours: "Mon-Sun 8:00 AM - 3:00 PM",
+    menu: "Croissants, pastries, coffee, and baked goods from the Mission Bay menu.",
+    verdict: "Best if you want a serious bakery stop before the ballpark crowds build.",
+    note: "This is the easy chef-favorite breakfast or late-morning snack move in Mission Rock, not a full sit-down meal.",
+    websiteUrl: "https://arsicault-bakery.com/locations/",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1070+Bridgeview+Way+Unit+B+San+Francisco+CA+94158&travelmode=walking",
+    icon: "bag"
+  },
+  {
+    id: "giants-quik-dog",
+    category: "Cult casual stop",
+    name: "Quik Dog",
+    walk: "About a 7-minute walk from Oracle Park",
+    hours: "Mon-Sat 11:30 AM - 9:00 PM · Sun 11:30 AM - 8:00 PM · Giants day games 10:30 AM - 9:00 PM",
+    menu: "Burgers, fries, cocktails, hot dogs, and other fast-moving pregame food.",
+    verdict: "Best if you want something looser and local-feeling without dropping into touristy generic stadium food.",
+    note: "This is not fine dining, but it is one of the more interesting new Mission Rock-adjacent casual options because it has a real point of view.",
+    websiteUrl: "https://www.quikdogsf.com/",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1023+3rd+Street+San+Francisco+CA&travelmode=walking",
+    icon: "flame"
+  },
+  {
+    id: "giants-mission-rock-resort",
+    category: "Waterfront sit-down fallback",
+    name: "Mission Rock Resort",
+    walk: "About a 20-minute walk from Oracle Park",
+    hours: "Mon closed except Chase Center event nights · Tue-Fri 11:30 AM - 8:30 PM · Sat 10:00 AM - 8:30 PM · Sun 10:00 AM - 7:30 PM",
+    menu: "Lunch, dinner, brunch, seafood, oysters, and waterfront drinks.",
+    verdict: "Best if you want water views and a fuller restaurant stop more than a hyper-chef-driven room.",
+    note: "Not as hidden as the others, but still worth keeping because it gives you the strongest bay-view table in the immediate wider walk zone.",
+    websiteUrl: "https://www.missionrockresort.com/location/mission-rock-resort/",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=817+Terry+A+Francois+Blvd+San+Francisco+CA+94158&travelmode=walking",
+    icon: "utensils"
+  }
+];
+
+const giantsGameBallparkFood = [
+  {
+    id: "giants-garlic-fries",
+    category: "Ballpark classic",
+    name: "Gilroy Garlic Fries",
+    meta: "Official Giants food guide pick",
+    verdict: "If you only do one iconic in-park food, this is the obvious one.",
+    note: "The Giants call these the iconic Oracle Park dish. It is the safest must-get for a first sweep of the park.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+San+Francisco+CA",
+    icon: "flame"
+  },
+  {
+    id: "giants-crazy-crab",
+    category: "Most San Francisco choice",
+    name: "Crazy Crab'z Sandwich",
+    meta: "Served at The Cove and Crazy Crab'z stands",
+    verdict: "Best if you want the in-park item that feels most tied to the bay and the stadium.",
+    note: "Official concession directory lists the Crazy Crab'z Sandwich across multiple Oracle Park locations, including The Cove.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+San+Francisco+CA",
+    icon: "bag"
+  },
+  {
+    id: "giants-tonys-pizza",
+    category: "Easiest crowd-pleaser",
+    name: "Tony's Pizza",
+    meta: "Oracle Park pizza stand with cheese, pepperoni, and veggie options",
+    verdict: "Best if the group just needs something dependable and easy to split.",
+    note: "The Giants food guide highlights Tony Gemignani's pizzas, and the concessions directory lists slices or whole pies.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+San+Francisco+CA",
+    icon: "utensils"
+  },
+  {
+    id: "giants-pacific-eats-bulgogi-banh-mi",
+    category: "Reel pick",
+    name: "Pacific Eats Banh Mi",
+    meta: "Section 127 · reel says Pacific Eats now has banh mi and rice bowls with bulgogi",
+    verdict: "Mixed. The reel says the sandwich falls apart fast, but it still looked worth the mess.",
+    note: "User-provided Infatuation SF reel shows this as a massive banh mi-style sandwich from Pacific Eats with a messy build and strong flavor payoff.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Pacific+Eats+Section+127+San+Francisco+CA",
+    icon: "utensils"
+  },
+  {
+    id: "giants-pacific-eats-chicken-rice-bowl",
+    category: "Reel skip",
+    name: "Pacific Eats Chicken Rice Bowl",
+    meta: "Section 127",
+    verdict: "Skip. The reel calls the chicken rice bowl bland.",
+    note: "This is the bowl specifically shown in the user-provided reel as the weak Pacific Eats item.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Pacific+Eats+Section+127+San+Francisco+CA",
+    icon: "bag"
+  },
+  {
+    id: "giants-peruchin-jerk-chicken",
+    category: "Reel pick",
+    name: "Peruchin Jerk Chicken Sandwich",
+    meta: "Orlando's Beach House / Scoreboard Plaza area · Dutch crunch · pineapple pico de gallo",
+    verdict: "Get. One of the reel's strongest endorsements.",
+    note: "The reel calls this massive sandwich worth the mess, with charred jerk chicken and lots of tangy pineapple pico de gallo.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Orlandos+Beach+House+Peruchin+San+Francisco+CA",
+    icon: "utensils"
+  },
+  {
+    id: "giants-sf-selects-brisket-mac",
+    category: "Reel pick",
+    name: "Brisket & Mac Loaded Grilled Cheese",
+    meta: "SF Selects · Scoreboard Plaza",
+    verdict: "Get. The reel says to choose this over the birria version.",
+    note: "The user-provided reel specifically praises the loaded brisket build with mac and cheese and sweet, tender brisket.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+SF+Selects+Scoreboard+Plaza+San+Francisco+CA",
+    icon: "utensils"
+  },
+  {
+    id: "giants-sf-selects-birria",
+    category: "Reel skip",
+    name: "Birria Loaded Grilled Cheese",
+    meta: "SF Selects · Scoreboard Plaza",
+    verdict: "Skip. The reel says it needs consommé.",
+    note: "This is the grilled cheese the video explicitly tells people to skip.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+SF+Selects+Scoreboard+Plaza+San+Francisco+CA",
+    icon: "flame"
+  },
+  {
+    id: "giants-doggie-diner-char-siu",
+    category: "Reel top pick",
+    name: "Doggie Diner Char Siu Dog",
+    meta: "Doggie Diner",
+    verdict: "Get. The reel calls this the best new addition in the stadium.",
+    note: "The Doggie Diner board is framed as the standout in the user-provided video, and the char siu dog is the hero item shown.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Doggie+Diner+San+Francisco+CA",
+    icon: "flame"
+  },
+  {
+    id: "giants-doggie-diner-bacon-wrapped",
+    category: "Reel menu board",
+    name: "Doggie Diner Bacon-Wrapped Hot Dog",
+    meta: "Doggie Diner",
+    verdict: "Featured on the reel's Doggie Diner board.",
+    note: "Shown on the menu board alongside the char siu dog and other sausage options.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Doggie+Diner+San+Francisco+CA",
+    icon: "flame"
+  },
+  {
+    id: "giants-doggie-diner-sheboygan",
+    category: "Reel menu board",
+    name: "Doggie Diner Sheboygan Bratwurst",
+    meta: "Doggie Diner",
+    verdict: "Featured on the reel's Doggie Diner board.",
+    note: "Listed on the board in the same reel segment as the char siu dog.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Doggie+Diner+San+Francisco+CA",
+    icon: "flame"
+  },
+  {
+    id: "giants-doggie-diner-evergood",
+    category: "Reel menu board",
+    name: "Doggie Diner Evergood Hot Link",
+    meta: "Doggie Diner",
+    verdict: "Featured on the reel's Doggie Diner board.",
+    note: "Another named option from the Doggie Diner menu board shown in the video.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Doggie+Diner+San+Francisco+CA",
+    icon: "flame"
+  }
+];
+
+const giantsGameAttractions = [
+  {
+    id: "giants-fan-lot",
+    category: "Inside the park",
+    name: "Fan Lot",
+    meta: "Promenade Level above left field bleachers",
+    verdict: "Best if kids are going or you want a real pregame wander instead of heading straight to seats.",
+    note: "The official Giants attraction page calls it an interactive play area with the Coca-Cola Slide, baseball glove, Toyota Fan Zone, and a bay-fish tank.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/fan-lot",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Fan+Lot+San+Francisco+CA",
+    icon: "baseball"
+  },
+  {
+    id: "giants-china-basin-park",
+    category: "Pregame waterfront walk",
+    name: "China Basin Park",
+    meta: "Across from Oracle Park with McCovey Cove views and the commemorative brick path in Section 24",
+    verdict: "Best easy move before the game if you want room to walk, gather, or take in the waterfront.",
+    note: "Your brick pin lands at 37.7766557, -122.3878868 on the waterfront curve, and the brick finder screenshot places the inscription in Section 24.",
+    websiteUrl: "https://missionrock.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=37.7766557,-122.3878868",
+    appleMapsUrl: "https://maps.apple.com/?q=37.7766557,-122.3878868",
+    icon: "mountain"
+  },
+  {
+    id: "giants-wall-of-fame",
+    category: "Quick stop on the way in",
+    name: "Giants Wall of Fame",
+    meta: "Exterior brick wall along King Street",
+    verdict: "Best if you want a five-minute baseball-specific stop before going through the gates.",
+    note: "The Giants say the bronze plaques honor the organization's greatest players and line the exterior ballpark wall.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/wall-of-fame",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+King+Street+Wall+of+Fame+San+Francisco+CA",
+    icon: "calendar"
+  },
+  {
+    id: "giants-garden",
+    category: "Inside the park",
+    name: "The Garden",
+    meta: "Lower centerfield garden space open to ticket holders on gamedays",
+    verdict: "Best if you want one in-park stop that feels different from standard concession concourses.",
+    note: "The Giants position The Garden as a one-of-a-kind space with aeroponic towers, garden beds, and garden-fresh food and drinks.",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/garden",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+The+Garden+San+Francisco+CA",
+    icon: "sun"
+  }
+];
+
 const activities = [
   {
     id: "white-pines-lake",
@@ -661,6 +1131,7 @@ let selectedDay = "wed";
 let foodView = "family";
 let foodDay = "";
 let todoView = "things";
+let giantsGameView = "overview";
 let currentActivePanel = "home";
 let selectedFamily = loadSelectedFamily();
 let sessionToken = loadSessionToken();
@@ -1083,6 +1554,11 @@ function updateAuthMessage(message) {
   if (node) node.textContent = message || "";
 }
 
+function isLocalReferencePreview() {
+  return LOCAL_PREVIEW_HOSTS.has(window.location.hostname)
+    && Boolean(document.querySelector("#homeLandingPanel.home-reference-shell"));
+}
+
 function passkeyClient() {
   return window.SimpleWebAuthnBrowser || null;
 }
@@ -1233,6 +1709,12 @@ function handleAuthFirstNameInput() {
 function showAuthScreen(message = "") {
   const screen = document.querySelector("#authScreen");
   if (!screen) return;
+  if (isLocalReferencePreview()) {
+    document.body.classList.remove("auth-open");
+    screen.classList.add("is-hidden");
+    updateAuthMessage(message);
+    return;
+  }
   const family = document.querySelector("#authFamily");
   if (family && selectedFamily && !family.value) family.value = selectedFamily;
   document.body.classList.add("auth-open");
@@ -1289,7 +1771,9 @@ function renderProfile() {
   sessionBar?.classList.remove("is-hidden");
   document.querySelector("#profileAvatarButton")?.setAttribute("aria-label", `Open profile for ${name}`);
   const titleNode = document.querySelector("#profileDrawerTitle");
+  const usersButton = document.querySelector("#openUsersFromProfile");
   if (titleNode) titleNode.textContent = profileTitleForUser();
+  usersButton?.classList.toggle("is-hidden", !(isBearPowerUser() || isLocalReferencePreview()));
   setProfilePhotoPreview(photo, name);
   renderProfileAdminPanel();
   renderAdminHomeAccess();
@@ -1593,11 +2077,9 @@ function renderHomeHub() {
 
 function renderAdminHomeAccess() {
   const grid = document.querySelector("#homeDestinationCards");
-  const usersButton = document.querySelector("#openUsersDestination");
   const usersCount = document.querySelector("#homeUsersCount");
-  const isAdmin = isBearPowerUser();
+  const isAdmin = isBearPowerUser() || isLocalReferencePreview();
   grid?.classList.toggle("has-admin-users", isAdmin);
-  usersButton?.classList.toggle("is-hidden", !isAdmin);
   if (usersCount) usersCount.textContent = String(adminUsers.length || attendees.length);
 }
 
@@ -2086,6 +2568,12 @@ async function authPost(path, body = {}) {
 }
 
 async function loadProfile() {
+  if (isLocalReferencePreview()) {
+    applyProfile(null);
+    hideAuthScreen();
+    setSyncStatus("offline", "Local preview");
+    return null;
+  }
   const response = await authAwareRequest("/me", { cache: "no-store" });
   const payload = await response.json().catch(() => ({}));
   if (payload.user) {
@@ -3508,18 +3996,36 @@ function activityIconMarkup(activity) {
 }
 
 function appleMapsUrlFromItem(item = {}) {
+  if (item.appleMapsUrl) return String(item.appleMapsUrl);
   const source = String(item.mapUrl || item.websiteUrl || "");
-  const match = source.match(/[?&]query=([^&]+)/i);
-  const query = match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : String(item.name || "");
+  const directionMatch = source.match(/[?&](?:destination|daddr)=([^&]+)/i);
+  if (directionMatch) {
+    const destination = decodeURIComponent(directionMatch[1].replace(/\+/g, " "));
+    return `https://maps.apple.com/?daddr=${encodeURIComponent(destination)}`;
+  }
+  const queryMatch = source.match(/[?&]query=([^&]+)/i);
+  const query = queryMatch ? decodeURIComponent(queryMatch[1].replace(/\+/g, " ")) : String(item.name || "");
   return `https://maps.apple.com/?q=${encodeURIComponent(query)}`;
 }
 
 function activityLinksMarkup(item) {
+  const links = [];
+  if (item.websiteUrl) {
+    links.push(`<a class="text-mini-button cabin-link-button is-website" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>`);
+  }
+  if (item.appUrl) {
+    links.push(`<a class="text-mini-button cabin-link-button is-website" href="${item.appUrl}" target="_blank" rel="noreferrer">${escapeText(item.appLabel || "App")}</a>`);
+  }
+  if (item.mapUrl) {
+    links.push(`<a class="text-mini-button cabin-link-button is-google-maps" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>`);
+  }
+  if (item.mapUrl || item.appleMapsUrl) {
+    links.push(`<a class="text-mini-button cabin-link-button is-apple-maps" href="${appleMapsUrlFromItem(item)}" target="_blank" rel="noreferrer">Apple Maps</a>`);
+  }
+  if (!links.length) return "";
   return `
     <div class="cabin-activity-links">
-      <a class="text-mini-button cabin-link-button is-website" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>
-      <a class="text-mini-button cabin-link-button is-google-maps" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>
-      <a class="text-mini-button cabin-link-button is-apple-maps" href="${appleMapsUrlFromItem(item)}" target="_blank" rel="noreferrer">Apple Maps</a>
+      ${links.join("")}
     </div>
   `;
 }
@@ -3580,6 +4086,99 @@ function renderNearbyFoodList() {
       </div>
     </article>
   `).join("");
+}
+
+function renderGiantsQuickFacts() {
+  const container = document.querySelector("#giantsQuickFacts");
+  if (!container) return;
+  container.innerHTML = giantsGameQuickFacts.map((item) => `
+    <article class="giants-fact-card">
+      <span>${escapeText(item.label)}</span>
+      <strong>${escapeText(item.value)}</strong>
+      <p>${escapeText(item.detail)}</p>
+    </article>
+  `).join("");
+}
+
+function renderGiantsTimeline() {
+  const container = document.querySelector("#giantsTimeline");
+  if (!container) return;
+  container.innerHTML = giantsGameTimeline.map((item) => `
+    <article class="giants-timeline-step">
+      <span class="giants-timeline-kicker">${escapeText(item.kicker)}</span>
+      <strong>${escapeText(item.title)}</strong>
+      <p>${escapeText(item.detail)}</p>
+    </article>
+  `).join("");
+}
+
+function renderGiantsHub() {
+  document.querySelectorAll("[data-giants-view]").forEach((button) => {
+    const isActive = button.dataset.giantsView === giantsGameView;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+  document.querySelectorAll("[data-giants-panel]").forEach((panel) => {
+    const isActive = panel.dataset.giantsPanel === giantsGameView;
+    panel.classList.toggle("is-hidden", !isActive);
+    panel.toggleAttribute("hidden", !isActive);
+  });
+}
+
+function renderGiantsGuideList(containerId, items) {
+  const container = document.querySelector(containerId);
+  if (!container) return;
+  container.innerHTML = items.map((item) => `
+    <article class="cabin-activity-card">
+      <span class="activity-thumb cabin-activity-thumb">${activityIconMarkup(item)}</span>
+      <div class="cabin-activity-copy">
+        <span class="activity-rank">${escapeText(item.category)}</span>
+        <strong>${escapeText(item.name)}</strong>
+        ${item.walk ? `<span class="cabin-activity-when">${escapeText(item.walk)}</span>` : ""}
+        ${item.hours ? `<span class="giants-guide-meta"><strong>Hours:</strong> ${escapeText(item.hours)}</span>` : ""}
+        ${item.menu ? `<span class="giants-guide-meta"><strong>Menu:</strong> ${escapeText(item.menu)}</span>` : ""}
+        ${item.meta ? `<span class="giants-guide-meta">${escapeText(item.meta)}</span>` : ""}
+        <span class="cabin-activity-worth">${escapeText(item.verdict || "")}</span>
+        <span>${escapeText(item.note || "")}</span>
+        ${activityLinksMarkup(item)}
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderGiantsItinerary() {
+  const container = document.querySelector("#giantsItineraryList");
+  if (!container) return;
+  container.innerHTML = giantsGameItinerary.map((item) => `
+    <article class="giants-itinerary-card">
+      <span class="activity-thumb giants-itinerary-thumb">${activityIconMarkup(item)}</span>
+      <div class="giants-itinerary-copy">
+        <span class="activity-rank">${escapeText(item.category)}</span>
+        <strong>${escapeText(item.name)}</strong>
+        ${item.meta ? `<span class="giants-guide-meta">${escapeText(item.meta)}</span>` : ""}
+        ${item.hours ? `<span class="giants-guide-meta"><strong>Hours:</strong> ${escapeText(item.hours)}</span>` : ""}
+        ${item.menu ? `<span class="giants-guide-meta"><strong>Menu:</strong> ${escapeText(item.menu)}</span>` : ""}
+        ${item.note ? `<span class="giants-itinerary-note">${escapeText(item.note)}</span>` : ""}
+        ${activityLinksMarkup(item)}
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderGiantsRestaurants() {
+  renderGiantsGuideList("#giantsRestaurantList", giantsGameRestaurants);
+}
+
+function renderGiantsBallparkFood() {
+  renderGiantsGuideList("#giantsBallparkFoodList", giantsGameBallparkFood);
+}
+
+function renderGiantsPolicies() {
+  renderGiantsGuideList("#giantsPolicyList", giantsGamePolicies);
+}
+
+function renderGiantsAttractions() {
+  renderGiantsGuideList("#giantsAttractionList", giantsGameAttractions);
 }
 
 function todoStartMinutes(item = {}) {
@@ -4039,6 +4638,14 @@ function renderAll() {
   renderFoodHub();
   renderTodoHub();
   renderNearbyFoodList();
+  renderGiantsQuickFacts();
+  renderGiantsTimeline();
+  renderGiantsItinerary();
+  renderGiantsRestaurants();
+  renderGiantsBallparkFood();
+  renderGiantsPolicies();
+  renderGiantsAttractions();
+  renderGiantsHub();
   renderCabinActivityList();
   renderGuideHighlights();
   renderActivityPreview();
@@ -4065,6 +4672,7 @@ const panelHashes = {
   home: "home",
   "g-family": "g-family",
   "trip-food": "july-event",
+  "giants-game": "giants-game",
   "trip-calendar": "calendar",
   todo: "todo",
   checkin: "checkin",
@@ -4089,6 +4697,15 @@ function updatePanelHash(tab, mode = "push") {
   window.history.pushState(null, "", nextUrl);
 }
 
+function updateSidebarTripCard(activeTab) {
+  const dateNode = document.querySelector("#sidebarTripDates");
+  const locationNode = document.querySelector("#sidebarTripLocation");
+  if (!dateNode || !locationNode) return;
+  const isGiantsGame = activeTab === "giants-game";
+  dateNode.textContent = isGiantsGame ? "Sunday Jul 12, 2026" : "July 1 - 6, 2026";
+  locationNode.textContent = isGiantsGame ? "Oracle Park, San Francisco" : "Arnold, California";
+}
+
 function updateHeroForPanel(activeTab) {
   const titleNode = document.querySelector("#heroTitle");
   const subtitleNode = document.querySelector("#heroSubtitle");
@@ -4099,6 +4716,7 @@ function updateHeroForPanel(activeTab) {
     home: { title: "GRE Family App", subtitle: "Guantonio, Riggs, Eberly", location: "Family hub" },
     "g-family": { title: "G Family", subtitle: "Family calendar", location: "Shared family calendar" },
     "trip-food": { title: "4th of July 2026", subtitle: "July 1 - 6, 2026", location: tripLocation },
+    "giants-game": { title: "Giants vs Rockies", subtitle: "Sunday Jul 12, 2026", location: "Oracle Park · San Francisco" },
     "trip-calendar": { title: "Calendar Events", ...tripHero },
     todo: { title: "Things To Do", ...tripHero }
   };
@@ -4116,7 +4734,10 @@ function setActivePanel(tab, options = {}) {
   document.querySelectorAll(".nav-item[data-tab], .mobile-nav-item[data-tab], .home-destination-button[data-tab]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.tab === tab);
   });
+  document.body.classList.toggle("home-reference-active", tab === "home");
+  document.querySelector(".app-shell")?.classList.toggle("is-home-reference", tab === "home");
   updateHeroForPanel(tab);
+  updateSidebarTripCard(tab);
   updateMobileNav(tab);
   if (!options.skipHash) updatePanelHash(tab, options.replaceHash ? "replace" : "push");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -5267,6 +5888,12 @@ function bindEvents() {
     const jump = event.target.closest("[data-tab-jump]");
     if (jump) setActivePanel(jump.dataset.tabJump);
 
+    const homeMenu = event.target.closest("#openHomeMenu");
+    if (homeMenu) setActivePanel("g-family");
+
+    const homeProfile = event.target.closest("#openHomeProfile");
+    if (homeProfile) openProfileDrawer();
+
     const usersDestination = event.target.closest("#openUsersDestination");
     if (usersDestination) openUsersDrawer();
 
@@ -5290,6 +5917,9 @@ function bindEvents() {
 
     const todoViewBtn = event.target.closest("[data-todo-view]");
     if (todoViewBtn) { todoView = todoViewBtn.dataset.todoView; renderTodoHub(); }
+
+    const giantsViewBtn = event.target.closest("[data-giants-view]");
+    if (giantsViewBtn) { giantsGameView = giantsViewBtn.dataset.giantsView; renderGiantsHub(); }
 
     const foodDayBtn = event.target.closest("[data-food-day]");
     if (foodDayBtn) { foodDay = foodDayBtn.dataset.foodDay; renderFoodHub(); }
@@ -5576,6 +6206,7 @@ function bindEvents() {
   document.querySelector("#passkeySignIn")?.addEventListener("click", signInWithPasskey);
   document.querySelector("#setupPasskey")?.addEventListener("click", setupPasskey);
   document.querySelector("#mobileSetupPasskey")?.addEventListener("click", setupPasskey);
+  document.querySelector("#openUsersFromProfile")?.addEventListener("click", openUsersDrawer);
   document.querySelector("#logoutProfile")?.addEventListener("click", logoutProfile);
   document.querySelector("#mobileLogoutProfile")?.addEventListener("click", logoutProfile);
   document.querySelector("#installApp")?.addEventListener("click", handleInstallAction);
@@ -5635,6 +6266,7 @@ async function initializeSession() {
 }
 
 insertIcons();
+if (isLocalReferencePreview()) hideAuthScreen();
 renderAll();
 const initialPanel = panelFromHash() || "home";
 setActivePanel(initialPanel, { replaceHash: !window.location.hash });

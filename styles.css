@@ -58,6 +58,10 @@ body.drawer-open {
   overflow: hidden;
 }
 
+body.home-reference-active {
+  background: #f6efe3;
+}
+
 button,
 input,
 select,
@@ -498,6 +502,16 @@ svg {
   margin: 0 auto;
   padding: 0 0 calc(108px + env(safe-area-inset-bottom));
   background: transparent;
+}
+
+.app-shell.is-home-reference .shared-hero,
+.app-shell.is-home-reference .mobile-nav {
+  display: none;
+}
+
+.app-shell.is-home-reference .main {
+  max-width: none;
+  padding: 0 0 28px;
 }
 
 .shared-hero {
@@ -2330,6 +2344,18 @@ svg {
   font-weight: 720;
 }
 
+.cabin-activity-copy .giants-guide-meta {
+  color: var(--forest-900);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.cabin-activity-copy .giants-guide-meta strong {
+  display: inline;
+  margin: 0;
+  font-size: inherit;
+}
+
 .cabin-activity-copy span {
   margin-top: 4px;
   color: var(--muted);
@@ -2342,6 +2368,125 @@ svg {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
+}
+
+.giants-itinerary-list {
+  gap: 8px;
+}
+
+.giants-itinerary-card {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.giants-itinerary-thumb {
+  width: 42px;
+  height: 42px;
+}
+
+.giants-itinerary-copy {
+  min-width: 0;
+}
+
+.giants-itinerary-copy strong,
+.giants-itinerary-copy span {
+  display: block;
+}
+
+.giants-itinerary-copy .activity-rank {
+  color: #9f4b1d;
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.giants-itinerary-copy strong {
+  margin-top: 2px;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.giants-itinerary-copy .giants-guide-meta,
+.giants-itinerary-copy .giants-itinerary-note {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.giants-itinerary-copy .giants-guide-meta strong {
+  display: inline;
+  margin: 0;
+  font-size: inherit;
+}
+
+.giants-itinerary-copy .cabin-activity-links {
+  margin-top: 8px;
+  gap: 6px;
+}
+
+.giants-itinerary-copy .text-mini-button {
+  padding: 5px 9px;
+}
+
+.giants-view-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.giants-fact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.giants-fact-card,
+.giants-timeline-step {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 247, 238, 0.98), #ffffff 72%);
+  padding: 16px;
+  box-shadow: var(--soft-shadow);
+}
+
+.giants-fact-card span,
+.giants-timeline-kicker {
+  display: block;
+  color: #9f4b1d;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.giants-fact-card strong,
+.giants-timeline-step strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--text);
+  font-size: 1.02rem;
+  line-height: 1.2;
+}
+
+.giants-fact-card p,
+.giants-timeline-step p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.38;
+}
+
+.giants-timeline {
+  display: grid;
+  gap: 10px;
 }
 
 .cabin-link-button {
@@ -3686,8 +3831,16 @@ button:focus-visible {
       url("assets/cabin-hero.png") center center / cover no-repeat;
   }
 
+  body.home-reference-active {
+    background: #f6efe3;
+  }
+
   .main {
     padding: 0 0 calc(108px + env(safe-area-inset-bottom));
+  }
+
+  .app-shell.is-home-reference .main {
+    padding: 0 0 20px;
   }
 
   .app-topbar {
@@ -4836,6 +4989,28 @@ button { -webkit-tap-highlight-color: transparent; }
   transition: transform 160ms ease, filter 160ms ease;
 }
 
+.mobile-nav-item-giants-view {
+  font-size: 0.68rem;
+  font-weight: 780;
+  letter-spacing: 0;
+  padding: 9px 8px;
+  line-height: 1.15;
+}
+
+.mobile-nav-item-giants-view::after {
+  display: none;
+}
+
+.mobile-nav-item-giants-view.is-active {
+  color: #fff !important;
+  transform: translateY(-2px);
+}
+
+.mobile-nav-item-giants-view.is-active::before {
+  background: linear-gradient(145deg, #ff8a3d, #1c1c1c);
+  box-shadow: 0 12px 22px rgba(88, 44, 18, 0.26);
+}
+
 .mobile-nav-item.is-active {
   color: #fff !important;
   transform: translateY(-2px);
@@ -5201,6 +5376,305 @@ button { -webkit-tap-highlight-color: transparent; }
   color: var(--muted);
   font-size: 0.92rem;
   line-height: 1.45;
+}
+
+.home-reference-panel {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.home-reference-shell {
+  display: grid;
+  gap: 0;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.home-reference-hero-art,
+.home-reference-forest-art {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.home-reference-hero-art {
+  position: relative;
+  height: 690px;
+  min-height: 690px;
+  overflow: hidden;
+  background: #f6efe3;
+}
+
+.home-reference-hero-photo,
+.home-reference-forest-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.home-reference-hero-photo {
+  min-height: 0;
+  object-fit: cover;
+  object-position: 58% 4%;
+  transform: translateY(-168px) scale(1.08);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 73%, rgba(0, 0, 0, 0.88) 80%, rgba(0, 0, 0, 0.5) 89%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 73%, rgba(0, 0, 0, 0.88) 80%, rgba(0, 0, 0, 0.5) 89%, transparent 100%);
+}
+
+.home-reference-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.home-reference-menu-icon,
+.home-reference-brand-lockup,
+.home-reference-notification {
+  position: absolute;
+  display: block;
+}
+
+.home-reference-menu-icon {
+  top: 104px;
+  left: 30px;
+  display: grid;
+  gap: 7px;
+  width: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.home-reference-menu-icon span {
+  display: block;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 247, 238, 0.94);
+  box-shadow: 0 1px 10px rgba(17, 9, 5, 0.22);
+}
+
+.home-reference-brand-lockup {
+  top: max(196px, env(safe-area-inset-top) + 188px);
+  left: 32px;
+  right: auto;
+  bottom: auto;
+  width: min(372px, calc(100vw - 64px));
+  color: #f8efe7;
+}
+
+.home-reference-brand-lockup span {
+  display: block;
+}
+
+.home-reference-brand-gre {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(5.25rem, 22vw, 7.55rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+}
+
+.home-reference-brand-family {
+  margin-top: 14px;
+  font-size: clamp(2.15rem, 8vw, 2.65rem);
+  letter-spacing: 0.28em;
+  line-height: 1;
+}
+
+.home-reference-brand-tagline {
+  margin-top: 26px;
+  font-size: 1.16rem;
+  letter-spacing: 0.23em;
+  line-height: 1;
+}
+
+.home-reference-brand-script {
+  margin-top: 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.home-reference-notification {
+  top: 82px;
+  right: 26px;
+  width: 72px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.home-reference-notification img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.home-reference-stack {
+  display: grid;
+  gap: 22px;
+  position: relative;
+  z-index: 2;
+  width: min(100%, 100vw);
+  margin: -176px auto 0;
+  padding: 0 28px;
+  box-sizing: border-box;
+}
+
+.home-reference-card,
+.home-reference-map-card {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-decoration: none;
+}
+
+.home-reference-card {
+  cursor: pointer;
+}
+
+.home-reference-giants-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 10px;
+  padding: 24px 22px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 190, 132, 0.34), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.12), transparent 30%),
+    linear-gradient(155deg, #121212 0%, #202020 38%, #f06a24 100%);
+  color: #fff7ef;
+  box-shadow: 0 22px 46px rgba(33, 21, 14, 0.22);
+  text-align: left;
+}
+
+.home-reference-giants-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -10% 18% auto;
+  width: 150px;
+  height: 150px;
+  border: 2px solid rgba(255, 243, 232, 0.28);
+  border-radius: 999px;
+  opacity: 0.9;
+}
+
+.home-reference-giants-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, transparent 0 45%, rgba(255, 255, 255, 0.08) 45% 48%, transparent 48% 100%);
+  pointer-events: none;
+}
+
+.home-reference-giants-card strong,
+.home-reference-giants-card p,
+.home-reference-giants-card span {
+  position: relative;
+  z-index: 1;
+}
+
+.home-reference-giants-kicker,
+.home-reference-giants-cta {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffe6d2;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-reference-giants-card strong {
+  font-size: clamp(1.65rem, 5vw, 2.05rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.home-reference-giants-date {
+  color: rgba(255, 237, 223, 0.88);
+  font-size: 0.95rem;
+  font-weight: 720;
+}
+
+.home-reference-giants-card p {
+  margin: 0;
+  max-width: 28rem;
+  color: rgba(255, 244, 235, 0.9);
+  font-size: 0.92rem;
+  line-height: 1.42;
+}
+
+.home-reference-giants-cta {
+  margin-top: 4px;
+  background: rgba(255, 247, 238, 0.94);
+  color: #7a320e;
+}
+
+.home-reference-card img,
+.home-reference-map-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.home-reference-map-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.home-reference-map-card {
+  overflow: hidden;
+  border-radius: 22px;
+  background: #f7f0e4;
+}
+
+.home-reference-map-card,
+.home-reference-map-card img {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.home-reference-map-card img {
+  transform: scale(1.035);
+  transform-origin: center;
+}
+
+.home-reference-trip-card:focus-visible,
+.home-reference-giants-card:focus-visible,
+.home-reference-map-card:focus-visible,
+.home-reference-menu-icon:focus-visible,
+.home-reference-notification:focus-visible {
+  outline: 3px solid rgba(196, 113, 42, 0.5);
+  outline-offset: 4px;
+  border-radius: 34px;
+}
+
+.home-reference-forest-art {
+  margin-top: 54px;
+}
+
+.home-reference-forest-art img {
+  height: auto;
+}
+
+@media (max-width: 720px) {
+  .giants-fact-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .home-destination-grid,

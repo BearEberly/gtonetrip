@@ -27,7 +27,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=89">
+    <link rel="stylesheet" href="styles.css?v=94">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -55,13 +55,17 @@
             <span data-icon="flame"></span>
             4th of July Event
           </button>
+          <button class="nav-item" type="button" data-tab="giants-game">
+            <span data-icon="baseball"></span>
+            Giants Game
+          </button>
         </nav>
 
         <div class="sidebar-card">
           <span class="dot"></span>
           <div>
-            <strong>July 1 - 6, 2026</strong>
-            <span>Arnold, California</span>
+            <strong id="sidebarTripDates">July 1 - 6, 2026</strong>
+            <span id="sidebarTripLocation">Arnold, California</span>
           </div>
         </div>
       </aside>
@@ -313,64 +317,57 @@
           </section>
         </section>
 
-        <section class="content-panel" id="home" data-panel="home">
-          <div class="panel-heading home-hub-header">
-            <div>
-              <h1>Home</h1>
-              <p>Pick the family calendar or the July trip board.</p>
-            </div>
-          </div>
-
-          <section class="board-panel home-landing-panel home-hub" id="homeLandingPanel" aria-labelledby="homeLandingTitle">
-            <div class="section-heading">
-              <div>
-                <h2 id="homeLandingTitle">Where Do You Want To Go?</h2>
-              </div>
-            </div>
-
-            <div class="destination-card-grid home-destination-grid" id="homeDestinationCards">
-              <button class="destination-card home-destination-button is-calendar is-disabled" type="button" id="openCalendarEventsDestination" aria-label="G Family under construction" disabled>
-                <span class="destination-card-overlay" aria-hidden="true">Under Construction</span>
-                <span class="destination-card-copy">
-                  <p class="destination-card-kicker">G Family</p>
-                  <h3 id="homeFamilyCalendarTitle">G Family Calendar</h3>
-                  <p id="homeFamilyCalendarCopy">Kids events, locations, schedule photos.</p>
-                  <span class="destination-card-stat"><strong id="homeStatUpcoming">0</strong> upcoming</span>
-                  <span class="destination-card-note" id="homeStatNext">No family events added yet</span>
-                </span>
-                <span class="destination-card-actions">
-                  <span class="destination-card-cta">Unavailable</span>
-                </span>
-              </button>
-
-              <div class="destination-card home-destination-stack is-food">
-                <button class="home-destination-button destination-card-main is-cabin-link" type="button" id="openFourthOfJulyDestination" data-tab="trip-food" aria-label="Open 4th of July cabin">
-                  <span class="destination-card-copy">
-                    <h3>4th of July cabin</h3>
-                    <span class="destination-card-note">Arnold cabin planning</span>
-                  </span>
+        <section class="content-panel home-reference-panel" id="home" data-panel="home">
+          <section class="home-reference-shell" id="homeLandingPanel" aria-label="GRE Family App home">
+            <div class="home-reference-hero-art">
+              <img class="home-reference-hero-photo" src="assets/homepage-mockup/21-hero-photo-1.jpg" alt="Lakeside cabin at sunset">
+              <div class="home-reference-hero-overlay">
+                <button class="home-reference-menu-icon" type="button" id="openHomeMenu" aria-label="Open G Family">
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </button>
-                <div class="destination-card-map-shell">
-                  <span class="destination-card-map-label">Directions to cabin</span>
-                  <span class="destination-card-map-row">
-                    <a class="destination-card-map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=1018%20Wawona%20Way%2C%20Arnold%2C%20CA%2095223" target="_blank" rel="noreferrer">Google Maps</a>
-                    <a class="destination-card-map-link" href="https://maps.apple.com/?daddr=1018%20Wawona%20Way,%20Arnold,%20CA%2095223" target="_blank" rel="noreferrer">Apple Maps</a>
-                  </span>
-                 </div>
+                <div class="home-reference-brand-lockup" aria-hidden="true">
+                  <span class="home-reference-brand-gre">GRE</span>
+                  <span class="home-reference-brand-family">FAMILY APP</span>
+                  <span class="home-reference-brand-tagline">TOGETHER. ORGANIZED.</span>
+                  <span class="home-reference-brand-script">Making memories that last.</span>
+                </div>
+                <button class="home-reference-notification" type="button" id="openHomeProfile" aria-label="Open Bear profile">
+                  <img src="assets/homepage-mockup/14-09-notification-button.png" alt="">
+                </button>
               </div>
+            </div>
 
-              <button class="destination-card home-destination-button is-users is-hidden" type="button" id="openUsersDestination" aria-label="Open Users">
-                <span class="destination-card-copy">
-                  <p class="destination-card-kicker">Power user</p>
-                  <h3>Users</h3>
-                  <p>See profiles, families, photos, and reset passwords.</p>
-                  <span class="destination-card-stat"><strong id="homeUsersCount">0</strong> users</span>
-                  <span class="destination-card-note">Bear only</span>
-                </span>
-                <span class="destination-card-actions">
-                  <span class="destination-card-cta">Manage</span>
-                </span>
+            <div class="home-reference-stack">
+              <button class="home-reference-card" type="button" id="openCalendarEventsDestination" data-tab="g-family" aria-label="Open G Family Calendar">
+                <img src="assets/homepage-mockup/12-03-family-calendar-card.png" alt="">
               </button>
+
+              <button class="home-reference-card home-reference-trip-card" type="button" id="openFourthOfJulyDestination" data-tab="trip-food" aria-label="Open 4th of July cabin trip board">
+                <img src="assets/homepage-mockup/2-04-fourth-of-july-trip-card.png" alt="">
+              </button>
+
+              <button class="home-reference-card home-reference-giants-card home-destination-button" type="button" id="openGiantsGameDestination" data-tab="giants-game" aria-label="Open Giants game trip guide">
+                <span class="home-reference-giants-kicker">Next Trip</span>
+                <strong>Giants vs Rockies</strong>
+                <span class="home-reference-giants-date">Sunday Jul 12, 2026 · Oracle Park</span>
+                <p>Restaurants, ballpark eats, and things to do around the stadium instead of a bring-food plan.</p>
+                <span class="home-reference-giants-cta">Open game plan</span>
+              </button>
+
+              <div class="home-reference-map-grid" aria-label="Directions to the cabin">
+                <a class="home-reference-map-card" href="https://www.google.com/maps/dir/?api=1&amp;destination=1018%20Wawona%20Way%2C%20Arnold%2C%20CA%2095223" target="_blank" rel="noreferrer" aria-label="Open Google Maps directions to the cabin">
+                  <img src="assets/homepage-mockup/11-05-google-maps-card.png" alt="">
+                </a>
+                <a class="home-reference-map-card" href="https://maps.apple.com/?daddr=1018%20Wawona%20Way,%20Arnold,%20CA%2095223" target="_blank" rel="noreferrer" aria-label="Open Apple Maps directions to the cabin">
+                  <img src="assets/homepage-mockup/3-06-apple-maps-card.png" alt="">
+                </a>
+              </div>
+            </div>
+
+            <div class="home-reference-forest-art" aria-hidden="true">
+              <img src="assets/homepage-mockup/13-07-footer-forest-silhouette.png" alt="">
             </div>
           </section>
         </section>
@@ -391,6 +388,96 @@
             <button class="secondary-action compact-action" type="button" id="addMealIdea">Add meal slot</button>
             <button class="primary-action compact-action" type="button" id="addSupply">Add item</button>
           </div>
+        </section>
+
+        <section class="content-panel is-hidden" id="giants-game" data-panel="giants-game">
+          <div class="panel-heading">
+            <div>
+              <h1>Giants Game Plan</h1>
+              <p>Sunday, July 12, 2026 at Oracle Park, starting from Lodi with a Wingen Bakery stop in Livermore and then straight to SpotHero parking.</p>
+            </div>
+            <div class="panel-actions">
+              <a class="secondary-action compact-action" href="https://www.google.com/maps/dir/?api=1&amp;origin=1333+Edgewood+Drive+Lodi+CA+95240&amp;destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&amp;waypoints=50+S+Livermore+Ave+Livermore+CA+94550&amp;travelmode=driving" target="_blank" rel="noreferrer">Trip Route</a>
+              <a class="primary-action compact-action" href="https://maps.apple.com/?saddr=50+S+Livermore+Ave,+Livermore,+CA+94550&amp;daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&amp;dirflg=d" target="_blank" rel="noreferrer">Parking Leg</a>
+            </div>
+          </div>
+
+          <div class="giants-view-panel" data-giants-panel="overview">
+            <section class="board-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Itinerary</h2>
+                  <p>The actual drive plan first: leave Lodi, stop at Wingen in downtown Livermore, then go straight to the parking lot you sent.</p>
+                </div>
+              </div>
+              <div class="cabin-activity-list giants-itinerary-list" id="giantsItineraryList"></div>
+            </section>
+
+            <section class="board-panel giants-overview-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Quick Facts</h2>
+                  <p>The fixed anchors for this version of the game day.</p>
+                </div>
+              </div>
+              <div class="giants-fact-grid" id="giantsQuickFacts"></div>
+            </section>
+
+            <section class="board-panel giants-timeline-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Simple Game-Day Flow</h2>
+                  <p>A low-friction plan: eat nearby, walk the waterfront, go in early, then explore inside.</p>
+                </div>
+              </div>
+              <div class="giants-timeline" id="giantsTimeline"></div>
+            </section>
+
+            <section class="board-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Official Park Logistics</h2>
+                  <p>Current Giants guidance for entry, bags, tickets, food finding, and wayfinding.</p>
+                </div>
+              </div>
+              <div class="cabin-activity-list" id="giantsPolicyList"></div>
+            </section>
+
+            <section class="board-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Things To Do Around the Ballpark</h2>
+                  <p>Pre-game and between-bites options that make the outing feel like more than just seat time.</p>
+                </div>
+              </div>
+              <div class="cabin-activity-list" id="giantsAttractionList"></div>
+            </section>
+          </div>
+
+          <div class="giants-view-panel is-hidden" data-giants-panel="outside-food" hidden>
+            <section class="board-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Walking-Distance Chef Picks</h2>
+                  <p>Mission Rock and waterfront spots worth your time if you care about newer openings, strong operators, and local point of view.</p>
+                </div>
+              </div>
+              <div class="cabin-activity-list" id="giantsRestaurantList"></div>
+            </section>
+          </div>
+
+          <div class="giants-view-panel is-hidden" data-giants-panel="inside-food" hidden>
+            <section class="board-panel">
+              <div class="section-heading">
+                <div>
+                  <h2>Inside Oracle Park If You Still Eat There</h2>
+                  <p>Fallback picks inside the stadium in case you want one iconic in-park stop instead of another full restaurant.</p>
+                </div>
+              </div>
+              <div class="cabin-activity-list" id="giantsBallparkFoodList"></div>
+            </section>
+          </div>
+
         </section>
 
         <section class="content-panel is-hidden" id="trip-calendar" data-panel="trip-calendar">
@@ -466,9 +553,18 @@
       </main>
 
       <nav class="mobile-nav" aria-label="Mobile primary">
-        <button class="mobile-nav-item is-active" type="button" data-tab="home" data-mobile-panels="home,g-family,trip-food,trip-calendar,todo">
+        <button class="mobile-nav-item is-active" type="button" data-tab="home" data-mobile-panels="home,g-family,trip-food,giants-game,trip-calendar,todo">
           <span data-icon="home"></span>
           Home
+        </button>
+        <button class="mobile-nav-item mobile-nav-item-giants-view is-hidden" type="button" data-giants-view="overview" data-mobile-panels="giants-game" aria-selected="true">
+          Quick Facts
+        </button>
+        <button class="mobile-nav-item mobile-nav-item-giants-view is-hidden" type="button" data-giants-view="outside-food" data-mobile-panels="giants-game" aria-selected="false">
+          Outside Food
+        </button>
+        <button class="mobile-nav-item mobile-nav-item-giants-view is-hidden" type="button" data-giants-view="inside-food" data-mobile-panels="giants-game" aria-selected="false">
+          Inside Food
         </button>
         <button class="mobile-nav-item" type="button" data-tab="trip-food" data-mobile-panels="trip-food,trip-calendar,todo">
           <span data-icon="utensils"></span>
@@ -551,6 +647,7 @@
       </form>
 
       <div class="drawer-footer profile-footer">
+        <button type="button" class="secondary-action is-hidden" id="openUsersFromProfile">Manage users</button>
         <button type="button" class="secondary-action" id="logoutProfile">Sign out</button>
       </div>
     </aside>
@@ -811,6 +908,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=92"></script>
+    <script src="script.js?v=98"></script>
   </body>
 </html>
