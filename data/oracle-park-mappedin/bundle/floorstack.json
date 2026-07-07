@@ -1,0 +1,28 @@
+[
+  {
+    "id": "fs_6760e5a74fc6d72b08bb51c4",
+    "externalId": "MG-KLNHZG22",
+    "maps": [
+      "f_67a40febb4748ec304312659"
+    ],
+    "name": "Outdoors",
+    "shortName": "O",
+    "type": "Outdoor"
+  },
+  {
+    "id": "fs_67a40ffe40a0cb1aa7d71c62",
+    "externalId": "MG-6DZFCBXU",
+    "maps": [
+      "f_67a4103590b13e2a80cc9a6e",
+      "f_67a4105d1a05ad42c13cd47a",
+      "f_67a4108afc9191deb55c6652",
+      "f_67a410ad9e6e974ed13e039a",
+      "f_67a410dacc5ab04059f36c6a",
+      "f_67a41332035e439696d79138"
+    ],
+    "name": "Oracle Park",
+    "shortName": "Oracle Park",
+    "type": "Building",
+    "defaultFloor": "f_67a4105d1a05ad42c13cd47a"
+  }
+]

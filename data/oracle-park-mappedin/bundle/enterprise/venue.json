@@ -1,0 +1,25 @@
+{
+  "name": "Oracle Park",
+  "slug": "mlb-san-francisco",
+  "externalId": "VENUE-DU0GCTMY",
+  "defaultLanguage": {
+    "name": "English",
+    "code": "en"
+  },
+  "languages": [
+    {
+      "name": "English",
+      "code": "en",
+      "enabled": true
+    }
+  ],
+  "logo": "https://cdn.mappedin.com/67373afbc860c46441cccce9/5faa78e95c2e22ec8cee1a80220e85237ce3cbb0.svg",
+  "defaultFloor": "f_67a40febb4748ec304312659",
+  "defaultMap": "f_67a40febb4748ec304312659",
+  "countrycode": "US",
+  "tzid": "America/Los_Angeles",
+  "type": "stadium-or-arena",
+  "extra": {
+    "georeferences": null
+  }
+}

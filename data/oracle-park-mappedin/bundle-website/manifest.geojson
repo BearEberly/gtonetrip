@@ -1,0 +1,142 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.38939572136589,
+          37.77845989042367
+        ]
+      },
+      "properties": {
+        "folder_struct": [
+          {
+            "type": "file",
+            "name": "connection.json"
+          },
+          {
+            "type": "file",
+            "name": "floor.geojson"
+          },
+          {
+            "type": "file",
+            "name": "map.geojson"
+          },
+          {
+            "type": "file",
+            "name": "mapstack.geojson"
+          },
+          {
+            "type": "file",
+            "name": "floorstack.json"
+          },
+          {
+            "type": "file",
+            "name": "node.geojson"
+          },
+          {
+            "type": "file",
+            "name": "facade"
+          },
+          {
+            "type": "folder",
+            "name": "space",
+            "children": [
+              {
+                "type": "file",
+                "name": "f_67a40febb4748ec304312659.geojson"
+              },
+              {
+                "type": "file",
+                "name": "f_67a4103590b13e2a80cc9a6e.geojson"
+              },
+              {
+                "type": "file",
+                "name": "f_67a4105d1a05ad42c13cd47a.geojson"
+              },
+              {
+                "type": "file",
+                "name": "f_67a4108afc9191deb55c6652.geojson"
+              },
+              {
+                "type": "file",
+                "name": "f_67a410ad9e6e974ed13e039a.geojson"
+              },
+              {
+                "type": "file",
+                "name": "f_67a410dacc5ab04059f36c6a.geojson"
+              },
+              {
+                "type": "file",
+                "name": "f_67a41332035e439696d79138.geojson"
+              }
+            ]
+          },
+          {
+            "type": "file",
+            "name": "styles.json"
+          },
+          {
+            "type": "folder",
+            "name": "enterprise",
+            "children": [
+              {
+                "type": "file",
+                "name": "locations.json"
+              },
+              {
+                "type": "file",
+                "name": "categories.json"
+              },
+              {
+                "type": "file",
+                "name": "venue.json"
+              },
+              {
+                "type": "file",
+                "name": "locationInstances.json"
+              },
+              {
+                "type": "file",
+                "name": "layers.json"
+              },
+              {
+                "type": "file",
+                "name": "categoryPriorities.json"
+              },
+              {
+                "type": "file",
+                "name": "enterpriseStyles.json"
+              },
+              {
+                "type": "file",
+                "name": "textures.json"
+              },
+              {
+                "type": "file",
+                "name": "floorText.json"
+              }
+            ]
+          },
+          {
+            "type": "file",
+            "name": "navigationFlags.json"
+          },
+          {
+            "type": "file",
+            "name": "tileset.json"
+          }
+        ],
+        "name": "Oracle Park",
+        "time": "2026-06-12T16:21:36.564Z",
+        "version": "2.0.0",
+        "naturalBearing": 314.89443930609355,
+        "language": "en",
+        "map": "mlb-san-francisco",
+        "org_id": "5df10a0ca5fdf5001a6b968e"
+      }
+    }
+  ]
+}

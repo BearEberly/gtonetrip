@@ -1,0 +1,2322 @@
+[
+  {
+    "group": "6760e5a74fc6d72b08bb51c4",
+    "name": "Outdoors",
+    "shortName": "Outdoors",
+    "width": 7344,
+    "height": 4752,
+    "tiles": "https://cdn.mappedin.com/priv-67373afbc860c46441cccce9/maps/67a40fd6594c1d5c048c128c_files/",
+    "georeference": [
+      {
+        "control": {
+          "x": 0,
+          "y": 0
+        },
+        "target": {
+          "x": 37.7780239218977,
+          "y": -122.39194640134437
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 0
+        },
+        "target": {
+          "x": 37.78047758631821,
+          "y": -122.38885367733812
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77889582452262,
+          "y": -122.38684500545946
+        }
+      },
+      {
+        "control": {
+          "x": 0,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.7764422854921,
+          "y": -122.38993773005897
+        }
+      }
+    ],
+    "layers": [
+      {
+        "layerId": "60d2deb29481af59b190428e",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Entrance"
+      },
+      {
+        "layerId": "5df117bd1942abaff8d1adec",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor"
+      },
+      {
+        "layerId": "5e280ac35b071a85c36d8e46",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Grass"
+      },
+      {
+        "layerId": "5e0df7a6283c1b3ee8b72880",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Field"
+      },
+      {
+        "layerId": "60d15dc1cc70b257cd4ca012",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Pitch"
+      },
+      {
+        "layerId": "60d23222b7c2e8fd374e3bf7",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Field"
+      },
+      {
+        "layerId": "66a93438bceee742320aad60",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Seats"
+      },
+      {
+        "layerId": "67aa288aa190a9947196478f",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Seats 2"
+      },
+      {
+        "layerId": "67aa28a60865acfb2fe1cc60",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Seats 3"
+      },
+      {
+        "layerId": "6796ddd4efa13c86e9b665a4",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Club"
+      },
+      {
+        "layerId": "66a8e84208e8018b428a04ba",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Floor"
+      },
+      {
+        "layerId": "66a8e5c4669c393df6f82ed5",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Wall"
+      },
+      {
+        "layerId": "66a93414518cbe272605e887",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Stadium"
+      },
+      {
+        "layerId": "674a15842ae458dba7114d58",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Entrance"
+      },
+      {
+        "layerId": "66a8e5ca518cbe272605e886",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dynamic - Roof"
+      },
+      {
+        "layerId": "67c60134b39af31c26379fb4",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Focus"
+      }
+    ],
+    "x_scale": 0.05243978545887936,
+    "scene": {
+      "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/a508d43a3140eb3b4c7e505a2e1ab842f2df1cd7.mtl",
+      "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/5dca45ffc0d047ae23b632a861d294c02a6fafaf.obj",
+      "images": [],
+      "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/64c2227501b28a88664402f9d2fc97fb7e07b47f.json"
+    },
+    "elevation": 0,
+    "id": "67a40febb4748ec304312659",
+    "perspective": {
+      "id": "67a4d4622df2c6151b816072",
+      "name": "Website",
+      "original": "https://resize-worker.mappedin.com/resize:fit:3500:3000:0/enlarge:1/ext:png/plain/https://cdn.mappedin.com/67373afbc860c46441cccce9/stitched/364ad3434c97d4b872c65fdbe442bdbf54ce9d0f.png",
+      "width": 3500,
+      "height": 3000,
+      "size": {
+        "width": 3500,
+        "height": 3000
+      },
+      "extents": {
+        "x": 0,
+        "y": 0,
+        "width": 3500,
+        "height": 3000
+      },
+      "tiled": true,
+      "tiles": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/67e2d58f3bbaa2a0969d78a7_files/",
+      "image": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/67e2d58f3bbaa2a0969d78a7_files/",
+      "camera": {
+        "type": "orthographic",
+        "position": {
+          "x": -60.045681680887505,
+          "y": -3.182732094745648,
+          "z": 1191.0856868952458
+        },
+        "rotation": {
+          "x": 0.0000010000000000630315,
+          "y": 0,
+          "z": 0
+        },
+        "target": {
+          "x": -60.045681680887505,
+          "y": -3.1815410090554956,
+          "z": -0.0000031815304824985087
+        },
+        "zoom": 4.658990676380595
+      },
+      "lights": [
+        {
+          "type": "hemisphere",
+          "intensity": 0.7,
+          "position": {
+            "x": 918,
+            "y": 594,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "type": "directional",
+          "intensity": 0.3,
+          "position": {
+            "x": -175,
+            "y": 100,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "renderSampling": 2,
+      "extrusionScale": 1,
+      "layers": [
+        "Floor",
+        "Entrance",
+        "Dynamic - Seats",
+        "Dynamic - Floor",
+        "Dynamic - Lights",
+        "Dynamic - Club",
+        "Dynamic - Steps",
+        "Dynamic - Wall",
+        "Dynamic - Stadium",
+        "Dynamic - Roof",
+        "Dynamic - Field",
+        "Dynamic - Grass",
+        "Dynamic - Baseball Field",
+        "Dynamic - Baseball Pitch",
+        "Dynamic - Entrance",
+        "Dynamic - Seats 2",
+        "Dynamic - Seats 3",
+        "Focus",
+        "Grass",
+        "Field",
+        "Baseball Pitch",
+        "Baseball Field"
+      ],
+      "x_generateBorders": false,
+      "reference": [
+        {
+          "control": {
+            "x": 0,
+            "y": 0
+          },
+          "target": {
+            "x": -299.7430670821255,
+            "y": -22.1432828436291
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 0
+          },
+          "target": {
+            "x": 4359.247609298469,
+            "y": -22.1432828436291
+          }
+        },
+        {
+          "control": {
+            "x": 0,
+            "y": 4752
+          },
+          "target": {
+            "x": -299.7430670821255,
+            "y": 2992.4977430481904
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 4752
+          },
+          "target": {
+            "x": 4359.247609298469,
+            "y": 2992.4977430481904
+          }
+        }
+      ],
+      "updatedAt": "2025-03-25T12:11:04-04:00",
+      "scene": {
+        "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/a508d43a3140eb3b4c7e505a2e1ab842f2df1cd7.mtl",
+        "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/5dca45ffc0d047ae23b632a861d294c02a6fafaf.obj",
+        "images": [],
+        "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/64c2227501b28a88664402f9d2fc97fb7e07b47f.json"
+      }
+    }
+  },
+  {
+    "group": "67a40ffe40a0cb1aa7d71c62",
+    "name": "Field Level",
+    "shortName": "FL",
+    "width": 7344,
+    "height": 4752,
+    "tiles": "https://cdn.mappedin.com/priv-67373afbc860c46441cccce9/maps/696a4d04236d8c57f6b48cb3_files/",
+    "georeference": [
+      {
+        "control": {
+          "x": 0,
+          "y": 0
+        },
+        "target": {
+          "x": 37.778023831644,
+          "y": -122.39194638219595
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 0
+        },
+        "target": {
+          "x": 37.780477580903074,
+          "y": -122.38885376594018
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77889587421065,
+          "y": -122.38684502460241
+        }
+      },
+      {
+        "control": {
+          "x": 0,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77644225034151,
+          "y": -122.38993764146242
+        }
+      }
+    ],
+    "elevation": 0,
+    "layers": [
+      {
+        "layerId": "66c8606d3fa713cb0534d730",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Dugout"
+      },
+      {
+        "layerId": "5df11769fd2f13d3af1ade8c",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Concessions"
+      },
+      {
+        "layerId": "5df11776283c1b74e9b7282f",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Restrooms"
+      },
+      {
+        "layerId": "6743bef60e77b4d6cb701f9a",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Connections"
+      },
+      {
+        "layerId": "5df117ad1942ab1036d1adea",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Ramp"
+      },
+      {
+        "layerId": "5df11785fd2f134c8d1ade8d",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Non Public"
+      },
+      {
+        "layerId": "60d2deb29481af59b190428e",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Entrance"
+      },
+      {
+        "layerId": "5e31f2bb119d5b6cdea5aa00",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Wall"
+      },
+      {
+        "layerId": "5df117bd1942abaff8d1adec",
+        "type": "polygon",
+        "locked": false,
+        "visible": false,
+        "snapLocked": false,
+        "id": "Floor"
+      },
+      {
+        "layerId": "5e280ac35b071a85c36d8e46",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Grass"
+      },
+      {
+        "layerId": "5e0df7a6283c1b3ee8b72880",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Field"
+      },
+      {
+        "layerId": "60d23222b7c2e8fd374e3bf7",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Field"
+      },
+      {
+        "layerId": "60d15dc1cc70b257cd4ca012",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Pitch"
+      }
+    ],
+    "x_scale": 0.05243978545887936,
+    "scene": {
+      "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/74d484f452156d151159334c284c513a97056ced.mtl",
+      "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/7bc1cccebed1841cfd76d0b3333d36cfef4f9f58.obj",
+      "images": [],
+      "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/dda2f37fe0c4341f5ed248b765f95578dd7baa26.json"
+    },
+    "id": "67a4103590b13e2a80cc9a6e",
+    "perspective": {
+      "id": "67a4d4622df2c6151b816072",
+      "name": "Website",
+      "original": "https://resize-worker.mappedin.com/resize:fit:3500:3000:0/enlarge:1/ext:png/plain/https://cdn.mappedin.com/67373afbc860c46441cccce9/stitched/929f0d3382cc6ec05438eb6cd15b253b03761aec.png",
+      "width": 3500,
+      "height": 3000,
+      "size": {
+        "width": 3500,
+        "height": 3000
+      },
+      "extents": {
+        "x": 0,
+        "y": 0,
+        "width": 3500,
+        "height": 3000
+      },
+      "tiled": true,
+      "tiles": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a0e7d3f169d7aaf8e8db_files/",
+      "image": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a0e7d3f169d7aaf8e8db_files/",
+      "camera": {
+        "type": "orthographic",
+        "position": {
+          "x": -59.88264264010177,
+          "y": -23.090816191517558,
+          "z": 1191.0856669871353
+        },
+        "rotation": {
+          "x": 0.000001000000000063059,
+          "y": 0,
+          "z": 0
+        },
+        "target": {
+          "x": -59.88264264010177,
+          "y": -23.089625105827405,
+          "z": -0.000023089608248483273
+        },
+        "zoom": 3.9945021311618114
+      },
+      "lights": [
+        {
+          "type": "hemisphere",
+          "intensity": 0.7,
+          "position": {
+            "x": 918,
+            "y": 594,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "type": "directional",
+          "intensity": 0.3,
+          "position": {
+            "x": -175,
+            "y": 100,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "renderSampling": 2,
+      "extrusionScale": 1,
+      "layers": [
+        "Concessions",
+        "Dugout",
+        "Restrooms",
+        "Connections",
+        "Ramp",
+        "Non Public",
+        "Wall",
+        "Entrance",
+        "Floor",
+        "Baseball Field",
+        "Baseball Pitch",
+        "Grass",
+        "Field"
+      ],
+      "x_generateBorders": false,
+      "reference": [
+        {
+          "control": {
+            "x": 0,
+            "y": 0
+          },
+          "target": {
+            "x": -8.049721935417974,
+            "y": 115.42951852000061
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 0
+          },
+          "target": {
+            "x": 3986.4524092263937,
+            "y": 115.42951852000061
+          }
+        },
+        {
+          "control": {
+            "x": 0,
+            "y": 4752
+          },
+          "target": {
+            "x": -8.049721935417974,
+            "y": 2700.1073680939976
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 4752
+          },
+          "target": {
+            "x": 3986.4524092263937,
+            "y": 2700.1073680939976
+          }
+        }
+      ],
+      "updatedAt": "2026-03-23T16:22:18-04:00",
+      "scene": {
+        "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/74d484f452156d151159334c284c513a97056ced.mtl",
+        "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/7bc1cccebed1841cfd76d0b3333d36cfef4f9f58.obj",
+        "images": [],
+        "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/dda2f37fe0c4341f5ed248b765f95578dd7baa26.json"
+      }
+    }
+  },
+  {
+    "group": "67a40ffe40a0cb1aa7d71c62",
+    "name": "Main Concourse",
+    "shortName": "MC",
+    "elevation": 1,
+    "width": 7344,
+    "height": 4752,
+    "tiles": "https://cdn.mappedin.com/priv-67373afbc860c46441cccce9/maps/67a4104b594c1d5c048c128d_files/",
+    "georeference": [
+      {
+        "control": {
+          "x": 0,
+          "y": 0
+        },
+        "target": {
+          "x": 37.77802374139149,
+          "y": -122.39194636304464
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 0
+        },
+        "target": {
+          "x": 37.780477575485385,
+          "y": -122.38885385454205
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.7788959238975,
+          "y": -122.38684504374821
+        }
+      },
+      {
+        "control": {
+          "x": 0,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.776442215193484,
+          "y": -122.38993755286607
+        }
+      }
+    ],
+    "layers": [
+      {
+        "layerId": "5df11754bc70864d400584a6",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating"
+      },
+      {
+        "layerId": "5df1175dbc70862d260584a7",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Room"
+      },
+      {
+        "layerId": "5e0e0ab553b57d344c46f0aa",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Steps"
+      },
+      {
+        "layerId": "5df11776283c1b74e9b7282f",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Restrooms"
+      },
+      {
+        "layerId": "5df11769fd2f13d3af1ade8c",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Concessions"
+      },
+      {
+        "layerId": "6743bef60e77b4d6cb701f9a",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Connections"
+      },
+      {
+        "layerId": "5df117ad1942ab1036d1adea",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Ramp"
+      },
+      {
+        "layerId": "5df117b81942ab4c25d1adeb",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Void"
+      },
+      {
+        "layerId": "5df11785fd2f134c8d1ade8d",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Non Public"
+      },
+      {
+        "layerId": "63d7f638235515676525605b",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Inner Wall"
+      },
+      {
+        "layerId": "5e31f2bb119d5b6cdea5aa00",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Wall"
+      },
+      {
+        "layerId": "5df117bd1942abaff8d1adec",
+        "type": "polygon",
+        "locked": false,
+        "visible": false,
+        "snapLocked": false,
+        "id": "Floor"
+      },
+      {
+        "layerId": "5e280ac35b071a85c36d8e46",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Grass"
+      },
+      {
+        "layerId": "5e0df7a6283c1b3ee8b72880",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Field"
+      },
+      {
+        "layerId": "60d23222b7c2e8fd374e3bf7",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Field"
+      },
+      {
+        "layerId": "60d15dc1cc70b257cd4ca012",
+        "type": "polygon",
+        "locked": false,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Pitch"
+      }
+    ],
+    "x_scale": 0.05243978545887936,
+    "scene": {
+      "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/16507624b9095388681ca2b4058fe3fe10820e31.mtl",
+      "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/804e38c1fd7cfc57f1c581213422ea42e27bb74f.obj",
+      "images": [],
+      "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/1159a82b495461b76bed4232aca181bb693292a5.json"
+    },
+    "id": "67a4105d1a05ad42c13cd47a",
+    "perspective": {
+      "id": "67a4d4622df2c6151b816072",
+      "name": "Website",
+      "original": "https://resize-worker.mappedin.com/resize:fit:3500:3000:0/enlarge:1/ext:png/plain/https://cdn.mappedin.com/67373afbc860c46441cccce9/stitched/10855865a56a5c78664cb89e32fa43a36c561f97.png",
+      "width": 3500,
+      "height": 3000,
+      "size": {
+        "width": 3500,
+        "height": 3000
+      },
+      "extents": {
+        "x": 0,
+        "y": 0,
+        "width": 3500,
+        "height": 3000
+      },
+      "tiled": true,
+      "tiles": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a0b0f3985b443e805918_files/",
+      "image": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a0b0f3985b443e805918_files/",
+      "camera": {
+        "type": "orthographic",
+        "position": {
+          "x": -60.176567109873545,
+          "y": -7.177029894842083,
+          "z": 1191.0856829009094
+        },
+        "rotation": {
+          "x": 0.0000010000000000630738,
+          "y": 0,
+          "z": 0
+        },
+        "target": {
+          "x": -60.176567109873545,
+          "y": -7.175838809151931,
+          "z": -0.0000071758165631763404
+        },
+        "zoom": 3.9945021311618114
+      },
+      "lights": [
+        {
+          "type": "hemisphere",
+          "intensity": 0.7,
+          "position": {
+            "x": 918,
+            "y": 594,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "type": "directional",
+          "intensity": 0.3,
+          "position": {
+            "x": -175,
+            "y": 100,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "renderSampling": 2,
+      "extrusionScale": 1,
+      "layers": [
+        "Baseball Field",
+        "Baseball Pitch",
+        "Grass",
+        "Field",
+        "Seating",
+        "Concessions",
+        "Restrooms",
+        "Steps",
+        "Connections",
+        "Ramp",
+        "Non Public",
+        "Wall",
+        "Inner Wall",
+        "Void",
+        "Floor",
+        "Room"
+      ],
+      "x_generateBorders": false,
+      "reference": [
+        {
+          "control": {
+            "x": 0,
+            "y": 0
+          },
+          "target": {
+            "x": -6.87564001451435,
+            "y": 178.99717179695617
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 0
+          },
+          "target": {
+            "x": 3987.626491147297,
+            "y": 178.99717179695617
+          }
+        },
+        {
+          "control": {
+            "x": 0,
+            "y": 4752
+          },
+          "target": {
+            "x": -6.87564001451435,
+            "y": 2763.6750213709533
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 4752
+          },
+          "target": {
+            "x": 3987.626491147297,
+            "y": 2763.6750213709533
+          }
+        }
+      ],
+      "updatedAt": "2026-03-23T16:21:24-04:00",
+      "scene": {
+        "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/16507624b9095388681ca2b4058fe3fe10820e31.mtl",
+        "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/804e38c1fd7cfc57f1c581213422ea42e27bb74f.obj",
+        "images": [],
+        "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/1159a82b495461b76bed4232aca181bb693292a5.json"
+      }
+    }
+  },
+  {
+    "group": "67a40ffe40a0cb1aa7d71c62",
+    "name": "Club Level",
+    "shortName": "CL",
+    "elevation": 2,
+    "width": 7344,
+    "height": 4752,
+    "tiles": "https://cdn.mappedin.com/priv-67373afbc860c46441cccce9/maps/67a4107323951a0c9697ac36_files/",
+    "georeference": [
+      {
+        "control": {
+          "x": 0,
+          "y": 0
+        },
+        "target": {
+          "x": 37.77802365114013,
+          "y": -122.39194634389047
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 0
+        },
+        "target": {
+          "x": 37.78047757006517,
+          "y": -122.38885394314374
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77889597358316,
+          "y": -122.38684506289688
+        }
+      },
+      {
+        "control": {
+          "x": 0,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77644218004801,
+          "y": -122.38993746426989
+        }
+      }
+    ],
+    "layers": [
+      {
+        "layerId": "5df11754bc70864d400584a6",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating"
+      },
+      {
+        "layerId": "6743bf44d46ec89c03973c00",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Suites"
+      },
+      {
+        "layerId": "5df1175dbc70862d260584a7",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Room"
+      },
+      {
+        "layerId": "5df11769fd2f13d3af1ade8c",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Concessions"
+      },
+      {
+        "layerId": "5df11776283c1b74e9b7282f",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Restrooms"
+      },
+      {
+        "layerId": "6743bef60e77b4d6cb701f9a",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Connections"
+      },
+      {
+        "layerId": "5df117ad1942ab1036d1adea",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Ramp"
+      },
+      {
+        "layerId": "5df11785fd2f134c8d1ade8d",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Non Public"
+      },
+      {
+        "layerId": "5df117b81942ab4c25d1adeb",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Void"
+      },
+      {
+        "layerId": "63d7f638235515676525605b",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Inner Wall"
+      },
+      {
+        "layerId": "5e31f2bb119d5b6cdea5aa00",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Wall"
+      },
+      {
+        "layerId": "5df117bd1942abaff8d1adec",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor"
+      },
+      {
+        "layerId": "5e280ac35b071a85c36d8e46",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Grass"
+      },
+      {
+        "layerId": "5e0df7a6283c1b3ee8b72880",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Field"
+      },
+      {
+        "layerId": "60d23222b7c2e8fd374e3bf7",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Field"
+      },
+      {
+        "layerId": "60d15dc1cc70b257cd4ca012",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Pitch"
+      },
+      {
+        "layerId": "60d2ccc2b7c2e8a70f4e3ca3",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating Below"
+      },
+      {
+        "layerId": "63ebd1f614a45afa3cedd7cc",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Steps Below"
+      },
+      {
+        "layerId": "63d97de83c4f4e1e01900056",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Below"
+      },
+      {
+        "layerId": "5dfb278c1942ab1e88d1ae5e",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Shadow"
+      }
+    ],
+    "x_scale": 0.0524397854598718,
+    "scene": {
+      "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/c4f8c6a844f8951b7398d92d1318bc90d4cb23d8.mtl",
+      "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/e87c466fc9022748523957abae6258131715995e.obj",
+      "images": [],
+      "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/4dcdef9f79628ddb1339b126b28731982d2404d2.json"
+    },
+    "id": "67a4108afc9191deb55c6652",
+    "perspective": {
+      "id": "67a4d4622df2c6151b816072",
+      "name": "Website",
+      "original": "https://resize-worker.mappedin.com/resize:fit:3500:3000:0/enlarge:1/ext:png/plain/https://cdn.mappedin.com/67373afbc860c46441cccce9/stitched/5b3680c9e8bd59291d0a89f1cb4d0f6cfe3ee6ec.png",
+      "width": 3500,
+      "height": 3000,
+      "size": {
+        "width": 3500,
+        "height": 3000
+      },
+      "extents": {
+        "x": 0,
+        "y": 0,
+        "width": 3500,
+        "height": 3000
+      },
+      "tiled": true,
+      "tiles": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a085f3985b443e805917_files/",
+      "image": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a085f3985b443e805917_files/",
+      "camera": {
+        "type": "orthographic",
+        "position": {
+          "x": -60.14465531029833,
+          "y": -31.739846735085962,
+          "z": 1190.9805725270355
+        },
+        "rotation": {
+          "x": 0.013284689867187054,
+          "y": 0,
+          "z": 0
+        },
+        "target": {
+          "x": -60.14465531029833,
+          "y": -15.917108154103062,
+          "z": -0.000015917078826532816
+        },
+        "zoom": 4.658990676380595
+      },
+      "lights": [
+        {
+          "type": "hemisphere",
+          "intensity": 0.7,
+          "position": {
+            "x": 918,
+            "y": 594,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "type": "directional",
+          "intensity": 0.3,
+          "position": {
+            "x": -175,
+            "y": 100,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "renderSampling": 2,
+      "extrusionScale": 1,
+      "layers": [
+        "Baseball Field",
+        "Baseball Pitch",
+        "Grass",
+        "Field",
+        "Seating",
+        "Suites",
+        "Room",
+        "Concessions",
+        "Connections",
+        "Ramp",
+        "Non Public",
+        "Wall",
+        "Inner Wall",
+        "Floor",
+        "Seating Below",
+        "Steps Below",
+        "Floor Below",
+        "Floor Shadow",
+        "Restrooms",
+        "Void"
+      ],
+      "x_generateBorders": false,
+      "reference": [
+        {
+          "control": {
+            "x": 0,
+            "y": 0
+          },
+          "target": {
+            "x": -299.2819498654929,
+            "y": -81.33862247497059
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 0
+          },
+          "target": {
+            "x": 4359.708726515102,
+            "y": -81.33862247497059
+          }
+        },
+        {
+          "control": {
+            "x": 0,
+            "y": 4752
+          },
+          "target": {
+            "x": -299.2819498654929,
+            "y": 2933.0363909073376
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 4752
+          },
+          "target": {
+            "x": 4359.708726515102,
+            "y": 2933.0363909073376
+          }
+        }
+      ],
+      "updatedAt": "2026-03-23T16:20:40-04:00",
+      "scene": {
+        "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/c4f8c6a844f8951b7398d92d1318bc90d4cb23d8.mtl",
+        "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/e87c466fc9022748523957abae6258131715995e.obj",
+        "images": [],
+        "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/4dcdef9f79628ddb1339b126b28731982d2404d2.json"
+      }
+    }
+  },
+  {
+    "group": "67a40ffe40a0cb1aa7d71c62",
+    "name": "Suite Level",
+    "shortName": "SL",
+    "elevation": 3,
+    "width": 7344,
+    "height": 4752,
+    "tiles": "https://cdn.mappedin.com/priv-67373afbc860c46441cccce9/maps/67a4109823951a0c9697ac37_files/",
+    "georeference": [
+      {
+        "control": {
+          "x": 0,
+          "y": 0
+        },
+        "target": {
+          "x": 37.778023560889956,
+          "y": -122.39194632473334
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 0
+        },
+        "target": {
+          "x": 37.780477564642354,
+          "y": -122.3888540317453
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77889602326767,
+          "y": -122.38684508204851
+        }
+      },
+      {
+        "control": {
+          "x": 0,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77644214490513,
+          "y": -122.38993737567384
+        }
+      }
+    ],
+    "layers": [
+      {
+        "layerId": "5df1175dbc70862d260584a7",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Room"
+      },
+      {
+        "layerId": "6743bf44d46ec89c03973c00",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Suites"
+      },
+      {
+        "layerId": "5df11769fd2f13d3af1ade8c",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Concessions"
+      },
+      {
+        "layerId": "5df11776283c1b74e9b7282f",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Restrooms"
+      },
+      {
+        "layerId": "6743bef60e77b4d6cb701f9a",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Connections"
+      },
+      {
+        "layerId": "5df117ad1942ab1036d1adea",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Ramp"
+      },
+      {
+        "layerId": "5df11785fd2f134c8d1ade8d",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Non Public"
+      },
+      {
+        "layerId": "63d7f638235515676525605b",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Inner Wall"
+      },
+      {
+        "layerId": "5e31f2bb119d5b6cdea5aa00",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Wall"
+      },
+      {
+        "layerId": "5df117bd1942abaff8d1adec",
+        "type": "polygon",
+        "locked": true,
+        "visible": false,
+        "snapLocked": false,
+        "id": "Floor"
+      },
+      {
+        "layerId": "5e280ac35b071a85c36d8e46",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Grass"
+      },
+      {
+        "layerId": "5e0df7a6283c1b3ee8b72880",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Field"
+      },
+      {
+        "layerId": "60d23222b7c2e8fd374e3bf7",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Field"
+      },
+      {
+        "layerId": "60d15dc1cc70b257cd4ca012",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Pitch"
+      },
+      {
+        "layerId": "60d2ccc2b7c2e8a70f4e3ca3",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating Below"
+      },
+      {
+        "layerId": "63ebd1f614a45afa3cedd7cc",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Steps Below"
+      },
+      {
+        "layerId": "63d97de83c4f4e1e01900056",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Below"
+      },
+      {
+        "layerId": "5dfb278c1942ab1e88d1ae5e",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Shadow"
+      }
+    ],
+    "x_scale": 0.0524397854598718,
+    "scene": {
+      "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/5bf531516cebce7603567c9d52823f89eb1b7022.mtl",
+      "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/e9bc69fc64b455131d32dc6c46f8319be4659718.obj",
+      "images": [],
+      "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/0f217045306a19f8ccad8a49baa32be6d50514a5.json"
+    },
+    "id": "67a410ad9e6e974ed13e039a",
+    "perspective": {
+      "id": "67a4d4622df2c6151b816072",
+      "name": "Website",
+      "original": "https://resize-worker.mappedin.com/resize:fit:3500:3000:0/enlarge:1/ext:png/plain/https://cdn.mappedin.com/67373afbc860c46441cccce9/stitched/add6445f47e9bf8f711e68772ef478cf30e92c55.png",
+      "width": 3500,
+      "height": 3000,
+      "size": {
+        "width": 3500,
+        "height": 3000
+      },
+      "extents": {
+        "x": 0,
+        "y": 0,
+        "width": 3500,
+        "height": 3000
+      },
+      "tiled": true,
+      "tiles": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a11f0d164d7d5c7cda41_files/",
+      "image": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/69c1a11f0d164d7d5c7cda41_files/",
+      "camera": {
+        "type": "orthographic",
+        "position": {
+          "x": -56.347151160847005,
+          "y": -10.043019844006272,
+          "z": 1191.0856800348702
+        },
+        "rotation": {
+          "x": 9.999999999676782e-7,
+          "y": 0,
+          "z": 0
+        },
+        "target": {
+          "x": -56.347151160847005,
+          "y": -10.041828758316234,
+          "z": -0.000010041793331414944
+        },
+        "zoom": 4.204739085433486
+      },
+      "lights": [
+        {
+          "type": "hemisphere",
+          "intensity": 0.7,
+          "position": {
+            "x": 918,
+            "y": 594,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "type": "directional",
+          "intensity": 0.3,
+          "position": {
+            "x": -175,
+            "y": 100,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "renderSampling": 2,
+      "extrusionScale": 1,
+      "layers": [
+        "Baseball Field",
+        "Baseball Pitch",
+        "Grass",
+        "Field",
+        "Suites",
+        "Room",
+        "Concessions",
+        "Restrooms",
+        "Connections",
+        "Ramp",
+        "Non Public",
+        "Wall",
+        "Inner Wall",
+        "Floor",
+        "Seating Below",
+        "Steps Below",
+        "Floor Below",
+        "Floor Shadow"
+      ],
+      "x_generateBorders": false,
+      "reference": [
+        {
+          "control": {
+            "x": 0,
+            "y": 0
+          },
+          "target": {
+            "x": -115.4444738779008,
+            "y": 97.4199671969736
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 0
+          },
+          "target": {
+            "x": 4089.2946115555856,
+            "y": 97.4199671969736
+          }
+        },
+        {
+          "control": {
+            "x": 0,
+            "y": 4752
+          },
+          "target": {
+            "x": -115.4444738779008,
+            "y": 2818.1334930643397
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 4752
+          },
+          "target": {
+            "x": 4089.2946115555856,
+            "y": 2818.1334930643397
+          }
+        }
+      ],
+      "updatedAt": "2026-03-23T16:23:21-04:00",
+      "scene": {
+        "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/5bf531516cebce7603567c9d52823f89eb1b7022.mtl",
+        "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/e9bc69fc64b455131d32dc6c46f8319be4659718.obj",
+        "images": [],
+        "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/0f217045306a19f8ccad8a49baa32be6d50514a5.json"
+      }
+    }
+  },
+  {
+    "group": "67a40ffe40a0cb1aa7d71c62",
+    "name": "View Level Concourse",
+    "shortName": "UC",
+    "elevation": 4,
+    "width": 7344,
+    "height": 4752,
+    "tiles": "https://cdn.mappedin.com/priv-67373afbc860c46441cccce9/maps/67a410c3390f69c838a9f40d_files/",
+    "georeference": [
+      {
+        "control": {
+          "x": 0,
+          "y": 0
+        },
+        "target": {
+          "x": 37.77802347064095,
+          "y": -122.39194630557337
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 0
+        },
+        "target": {
+          "x": 37.78047755921696,
+          "y": -122.38885412034669
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.77889607295103,
+          "y": -122.38684510120301
+        }
+      },
+      {
+        "control": {
+          "x": 0,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.776442109764794,
+          "y": -122.38993728707798
+        }
+      }
+    ],
+    "layers": [
+      {
+        "layerId": "5df11754bc70864d400584a6",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating"
+      },
+      {
+        "layerId": "5df1175dbc70862d260584a7",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Room"
+      },
+      {
+        "layerId": "5e0e0ab553b57d344c46f0aa",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Steps"
+      },
+      {
+        "layerId": "5df11769fd2f13d3af1ade8c",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Concessions"
+      },
+      {
+        "layerId": "5df11776283c1b74e9b7282f",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Restrooms"
+      },
+      {
+        "layerId": "6743bef60e77b4d6cb701f9a",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Connections"
+      },
+      {
+        "layerId": "5df117ad1942ab1036d1adea",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Ramp"
+      },
+      {
+        "layerId": "5df11785fd2f134c8d1ade8d",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Non Public"
+      },
+      {
+        "layerId": "5e31f2bb119d5b6cdea5aa00",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Wall"
+      },
+      {
+        "layerId": "5df117bd1942abaff8d1adec",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor"
+      },
+      {
+        "layerId": "5e280ac35b071a85c36d8e46",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Grass"
+      },
+      {
+        "layerId": "5e0df7a6283c1b3ee8b72880",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Field"
+      },
+      {
+        "layerId": "60d23222b7c2e8fd374e3bf7",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Field"
+      },
+      {
+        "layerId": "60d15dc1cc70b257cd4ca012",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Pitch"
+      },
+      {
+        "layerId": "60d2ccc2b7c2e8a70f4e3ca3",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating Below"
+      },
+      {
+        "layerId": "63ebd1f614a45afa3cedd7cc",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Steps Below"
+      },
+      {
+        "layerId": "63d97de83c4f4e1e01900056",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Below"
+      },
+      {
+        "layerId": "5dfb278c1942ab1e88d1ae5e",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Shadow"
+      }
+    ],
+    "x_scale": 0.0524397854598718,
+    "scene": {
+      "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/cdaf2a4fe05ca92553a5022918b445eb8a7bf9e8.mtl",
+      "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/d0c9c6433ddbfae816885bfa53f8cee09cd16b7e.obj",
+      "images": [],
+      "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/d25b92d82c42e337a73a378f042f69afa1f04639.json"
+    },
+    "id": "67a410dacc5ab04059f36c6a",
+    "perspective": {
+      "id": "67a4d4622df2c6151b816072",
+      "name": "Website",
+      "original": "https://resize-worker.mappedin.com/resize:fit:3500:3000:0/enlarge:1/ext:png/plain/https://cdn.mappedin.com/67373afbc860c46441cccce9/stitched/35b2d42a99167269c658faa6d0c95fe23f1cf6d2.png",
+      "width": 3500,
+      "height": 3000,
+      "size": {
+        "width": 3500,
+        "height": 3000
+      },
+      "extents": {
+        "x": 0,
+        "y": 0,
+        "width": 3500,
+        "height": 3000
+      },
+      "tiled": true,
+      "tiles": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/67dc66c1f0e43a8909e50560_files/",
+      "image": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/67dc66c1f0e43a8909e50560_files/",
+      "camera": {
+        "type": "orthographic",
+        "position": {
+          "x": -58.9000951268647,
+          "y": -5.744034920259819,
+          "z": 1191.085684333832
+        },
+        "rotation": {
+          "x": 9.999999999677026e-7,
+          "y": 0,
+          "z": 0
+        },
+        "target": {
+          "x": -58.9000951268647,
+          "y": -5.74284383456978,
+          "z": -0.000005742802496090799
+        },
+        "zoom": 4.426041142561565
+      },
+      "lights": [
+        {
+          "type": "hemisphere",
+          "intensity": 0.7,
+          "position": {
+            "x": 918,
+            "y": 594,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "type": "directional",
+          "intensity": 0.3,
+          "position": {
+            "x": -175,
+            "y": 100,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "renderSampling": 2,
+      "extrusionScale": 1,
+      "layers": [
+        "Baseball Field",
+        "Baseball Pitch",
+        "Grass",
+        "Field",
+        "Seating",
+        "Room",
+        "Concessions",
+        "Restrooms",
+        "Steps",
+        "Connections",
+        "Ramp",
+        "Non Public",
+        "Wall",
+        "Floor",
+        "Seating Below",
+        "Steps Below",
+        "Floor Below",
+        "Floor Shadow"
+      ],
+      "x_generateBorders": false,
+      "reference": [
+        {
+          "control": {
+            "x": 0,
+            "y": 0
+          },
+          "target": {
+            "x": -202.3263269484891,
+            "y": 42.627449614261735
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 0
+          },
+          "target": {
+            "x": 4223.714815613075,
+            "y": 42.627449614261735
+          }
+        },
+        {
+          "control": {
+            "x": 0,
+            "y": 4752
+          },
+          "target": {
+            "x": -202.3263269484891,
+            "y": 2906.5364242114892
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 4752
+          },
+          "target": {
+            "x": 4223.714815613075,
+            "y": 2906.5364242114892
+          }
+        }
+      ],
+      "updatedAt": "2025-03-20T15:04:49-04:00",
+      "scene": {
+        "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/cdaf2a4fe05ca92553a5022918b445eb8a7bf9e8.mtl",
+        "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/d0c9c6433ddbfae816885bfa53f8cee09cd16b7e.obj",
+        "images": [],
+        "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/d25b92d82c42e337a73a378f042f69afa1f04639.json"
+      }
+    }
+  },
+  {
+    "group": "67a40ffe40a0cb1aa7d71c62",
+    "name": "View Level",
+    "shortName": "VL",
+    "elevation": 5,
+    "width": 7344,
+    "height": 4752,
+    "tiles": "https://cdn.mappedin.com/priv-67373afbc860c46441cccce9/maps/67a4131a594c1d5c048c128e_files/",
+    "georeference": [
+      {
+        "control": {
+          "x": 0,
+          "y": 0
+        },
+        "target": {
+          "x": 37.7780233803931,
+          "y": -122.39194628641043
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 0
+        },
+        "target": {
+          "x": 37.78047755378892,
+          "y": -122.38885420894825
+        }
+      },
+      {
+        "control": {
+          "x": 7344,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.778896122633284,
+          "y": -122.38684512036079
+        }
+      },
+      {
+        "control": {
+          "x": 0,
+          "y": 4752
+        },
+        "target": {
+          "x": 37.776442074627205,
+          "y": -122.38993719848231
+        }
+      }
+    ],
+    "layers": [
+      {
+        "layerId": "5df11754bc70864d400584a6",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating"
+      },
+      {
+        "layerId": "5e0e0ab553b57d344c46f0aa",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Steps"
+      },
+      {
+        "layerId": "6743bef60e77b4d6cb701f9a",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": true,
+        "id": "Connections"
+      },
+      {
+        "layerId": "5e31f2bb119d5b6cdea5aa00",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Wall"
+      },
+      {
+        "layerId": "5df117bd1942abaff8d1adec",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": true,
+        "id": "Floor"
+      },
+      {
+        "layerId": "5e280ac35b071a85c36d8e46",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Grass"
+      },
+      {
+        "layerId": "5e0df7a6283c1b3ee8b72880",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Field"
+      },
+      {
+        "layerId": "60d23222b7c2e8fd374e3bf7",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Field"
+      },
+      {
+        "layerId": "60d15dc1cc70b257cd4ca012",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Baseball Pitch"
+      },
+      {
+        "layerId": "60d2ccc2b7c2e8a70f4e3ca3",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Seating Below"
+      },
+      {
+        "layerId": "63ebd1f614a45afa3cedd7cc",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Steps Below"
+      },
+      {
+        "layerId": "63d97de83c4f4e1e01900056",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Below"
+      },
+      {
+        "layerId": "5dfb278c1942ab1e88d1ae5e",
+        "type": "polygon",
+        "locked": true,
+        "visible": true,
+        "snapLocked": false,
+        "id": "Floor Shadow"
+      }
+    ],
+    "x_scale": 0.05243978545611478,
+    "scene": {
+      "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/dc69bb64c6414b027dc938815627253d45265618.mtl",
+      "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/db6d5d9482ca356b2bca00e3e4849c6a76965ef2.obj",
+      "images": [],
+      "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/11387d480db46d852ba2d5d89d76b42e68a0ed85.json"
+    },
+    "id": "67a41332035e439696d79138",
+    "perspective": {
+      "id": "67a4d4622df2c6151b816072",
+      "name": "Website",
+      "original": "https://resize-worker.mappedin.com/resize:fit:3500:3000:0/enlarge:1/ext:png/plain/https://cdn.mappedin.com/67373afbc860c46441cccce9/stitched/46fe2a80ba9f21249159de58f872be10abe7ec46.png",
+      "width": 3500,
+      "height": 3000,
+      "size": {
+        "width": 3500,
+        "height": 3000
+      },
+      "extents": {
+        "x": 0,
+        "y": 0,
+        "width": 3500,
+        "height": 3000
+      },
+      "tiled": true,
+      "tiles": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/67c86ca42b9012dae4a10e65_files/",
+      "image": "https://cdn.mappedin.com/67373afbc860c46441cccce9/maps/67c86ca42b9012dae4a10e65_files/",
+      "camera": {
+        "type": "orthographic",
+        "position": {
+          "x": -42.03724413463015,
+          "y": -5.980836312294824,
+          "z": 1191.0856840969445
+        },
+        "rotation": {
+          "x": 0.0000010000000000632377,
+          "y": 0,
+          "z": 0
+        },
+        "target": {
+          "x": -42.03724413463015,
+          "y": -5.979645226604672,
+          "z": -0.0000059795861488964874
+        },
+        "zoom": 3.7947770246037207
+      },
+      "lights": [
+        {
+          "type": "hemisphere",
+          "intensity": 0.7,
+          "position": {
+            "x": 918,
+            "y": 594,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "type": "directional",
+          "intensity": 0.3,
+          "position": {
+            "x": -175,
+            "y": 100,
+            "z": -190
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "renderSampling": 2,
+      "extrusionScale": 1,
+      "layers": [
+        "Baseball Field",
+        "Baseball Pitch",
+        "Grass",
+        "Field",
+        "Steps",
+        "Seating",
+        "Connections",
+        "Wall",
+        "Floor",
+        "Seating Below",
+        "Steps Below",
+        "Floor Below",
+        "Floor Shadow"
+      ],
+      "x_generateBorders": false,
+      "reference": [
+        {
+          "control": {
+            "x": 0,
+            "y": 0
+          },
+          "target": {
+            "x": 12.133455917891862,
+            "y": 249.58660113113922
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 0
+          },
+          "target": {
+            "x": 3806.910480521612,
+            "y": 249.58660113113922
+          }
+        },
+        {
+          "control": {
+            "x": 0,
+            "y": 4752
+          },
+          "target": {
+            "x": 12.133455917891862,
+            "y": 2705.0305582264364
+          }
+        },
+        {
+          "control": {
+            "x": 7344,
+            "y": 4752
+          },
+          "target": {
+            "x": 3806.910480521612,
+            "y": 2705.0305582264364
+          }
+        }
+      ],
+      "updatedAt": "2025-03-05T10:24:29-05:00",
+      "scene": {
+        "mtl": "https://cdn.mappedin.com/67373afbc860c46441cccce9/dc69bb64c6414b027dc938815627253d45265618.mtl",
+        "obj": "https://cdn.mappedin.com/67373afbc860c46441cccce9/db6d5d9482ca356b2bca00e3e4849c6a76965ef2.obj",
+        "images": [],
+        "polygons": "https://cdn.mappedin.com/67373afbc860c46441cccce9/11387d480db46d852ba2d5d89d76b42e68a0ed85.json"
+      }
+    }
+  }
+]

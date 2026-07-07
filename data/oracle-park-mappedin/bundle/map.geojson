@@ -1,0 +1,51 @@
+[
+  {
+    "id": "f_67a40febb4748ec304312659",
+    "externalId": "MAP-5NIB1ZOO",
+    "elevation": 0,
+    "name": "Outdoors",
+    "shortName": "Outdoors"
+  },
+  {
+    "id": "f_67a4103590b13e2a80cc9a6e",
+    "externalId": "MAP-QSHQPU60",
+    "elevation": 0,
+    "name": "Field Level",
+    "shortName": "FL"
+  },
+  {
+    "id": "f_67a4105d1a05ad42c13cd47a",
+    "externalId": "MAP-DSKMSNR6",
+    "elevation": 1,
+    "name": "Main Concourse",
+    "shortName": "MC"
+  },
+  {
+    "id": "f_67a4108afc9191deb55c6652",
+    "externalId": "MAP-0SSMBPIS",
+    "elevation": 2,
+    "name": "Club Level",
+    "shortName": "CL"
+  },
+  {
+    "id": "f_67a410ad9e6e974ed13e039a",
+    "externalId": "MAP-XH8R6ZQF",
+    "elevation": 3,
+    "name": "Suite Level",
+    "shortName": "SL"
+  },
+  {
+    "id": "f_67a410dacc5ab04059f36c6a",
+    "externalId": "MAP-PF42DHZW",
+    "elevation": 4,
+    "name": "View Level Concourse",
+    "shortName": "UC"
+  },
+  {
+    "id": "f_67a41332035e439696d79138",
+    "externalId": "MAP-02JNC8L5",
+    "elevation": 5,
+    "name": "View Level",
+    "shortName": "VL"
+  }
+]

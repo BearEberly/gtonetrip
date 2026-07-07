@@ -24,6 +24,10 @@ const icons = {
 const SUPPLY_AI_IMAGE_MAX_LENGTH = 4500000;
 const HEIC_CONVERTER_SRC = "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js";
 const LOCAL_PREVIEW_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
+const GIANTS_BALLPARK_ROUTE_DATA_URL = "data/oracle-park-mappedin/food-and-drink-from-section-228.json";
+const GIANTS_BALLPARK_MAP_DATA_URL = "data/oracle-park-mappedin/map-view-model.json";
+const GIANTS_BALLPARK_ROUTE_SOURCE_SEAT = "228";
+const GIANTS_BALLPARK_DEFAULT_ZOOM = 0.74;
 
 const families = [
   { id: "shell", name: "Shell", shortName: "Shell", color: "#c0392b", status: "Needs timing", details: "Michelle / Shell · arrives Wednesday" },
@@ -387,23 +391,23 @@ const giantsGameItinerary = [
   {
     id: "giants-drive-lodi",
     category: "9:00 AM departure",
-    name: "Leave from 1333 Edgewood Drive, Lodi",
-    meta: "Start the day on the road instead of trying to improvise the morning.",
-    verdict: "Roll out at 9:00 AM so the Livermore stop does not squeeze parking or gate timing.",
-    note: "This first leg is the clean push from Lodi to Wingen Bakery in downtown Livermore.",
+    name: "Leave 1333",
+    meta: "Plan on a 58-minute drive so the first stop lands right at 10:00 AM.",
+    verdict: "Leave at 9:00 AM and treat 10:00 AM at Wingen as the target, not just a loose morning idea.",
+    note: "This first leg is the clean push from Lodi to Wingen Bakery in downtown Livermore before heading straight toward Oracle Park.",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=1333+Edgewood+Drive+Lodi+CA+95240&destination=50+S+Livermore+Ave+Livermore+CA+94550&travelmode=driving",
     appleMapsUrl: "https://maps.apple.com/?saddr=1333+Edgewood+Drive,+Lodi,+CA+95240&daddr=50+S+Livermore+Ave,+Livermore,+CA+94550&dirflg=d",
     icon: "home"
   },
   {
     id: "giants-pastry-stop-livermore",
-    category: "First stop",
-    name: "Wingen Bakery & Restaurant",
+    category: "10:00 AM arrival · 10:45 AM departure",
+    name: "Wingen Bakery Shop",
     hours: "Wed-Sun cafe and coffee 8:00 AM - 2:30 PM · Wed-Sat dinner 4:30 PM - 10:00 PM",
     menu: "Croissants, kouign amann, breads, coffee, breakfast, lunch, and sourdough pizza later in the day.",
-    meta: "50 S Livermore Ave, Livermore, CA 94550 · 4.7 stars on Google from the details you sent",
-    verdict: "This is the actual pastry stop before parking, not just a generic Livermore waypoint.",
-    note: "Official site says the cafe runs Wednesday through Sunday, with online ordering through Toast and a downtown Livermore storefront.",
+    meta: "50 S Livermore Ave, Livermore, CA 94550 · plan on about 45 minutes here",
+    verdict: "Arrive around 10:00 AM, take the pastry stop seriously, and leave at 10:45 AM so the rest of the timing stays easy.",
+    note: "This is the real morning stop: about 45 minutes at Wingen, then straight toward Pier 48.",
     websiteUrl: "https://www.wingenbakery.com/",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=50+S+Livermore+Ave+Livermore+CA+94550&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
     appleMapsUrl: "https://maps.apple.com/?saddr=50+S+Livermore+Ave,+Livermore,+CA+94550&daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&dirflg=d",
@@ -411,11 +415,11 @@ const giantsGameItinerary = [
   },
   {
     id: "giants-parking-spothero",
-    category: "SpotHero parking",
-    name: "Oracle Park - Lot A / Pier 48",
-    meta: "$64.35 total, effectively a $65 parking move. Enter after Jul 12 at 11:05 AM and exit before 5:05 PM.",
-    verdict: "This is the parking spot from your screenshots, and it keeps the last stretch simple.",
-    note: "Official Giants parking, self-park, uncovered lot, on-site staff, wheelchair accessible, and no in-and-out according to the listing you sent.",
+    category: "11:45 AM arrival",
+    name: "Lot A",
+    meta: "$64.35 parking plus the $8.50 bridge toll on the way into San Francisco.",
+    verdict: "Leave Wingen at 10:45 AM, give this leg the full hour, and expect to park around 11:45-ish.",
+    note: "The drive is about 51 minutes in ideal conditions, but your plan now uses a full hour and includes the bridge toll so you are not cutting it tight.",
     appUrl: "https://spothero.com/get-spothero-app",
     appLabel: "SpotHero App",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=50+S+Livermore+Ave+Livermore+CA+94550&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
@@ -424,22 +428,22 @@ const giantsGameItinerary = [
   },
   {
     id: "giants-walk-to-brick",
-    category: "Final walk",
-    name: "Brick first, then Lefty O'Doul Gate",
-    meta: "About 13 minutes or 0.6 miles from Lot A / Pier 48 to the brick, then continue to the Lefty O'Doul entrance.",
-    verdict: "This is the cleanest fun route if you are early: brick stop first, then go in and wander the ballpark from inside.",
-    note: "The brick pin is 37.7766557, -122.3878868 in China Basin Park Section 24. After that, use Lefty O'Doul Gate as the preferred entry instead of overthinking which gate is best.",
+    category: "Noon-ish",
+    name: "Brick Stop",
+    meta: "About a 15-minute walk from Pier 48 to the brick, depending on the exact parking spot.",
+    verdict: "Parking around 11:45 puts you at the brick around noon-ish, which gives you room to take your time there.",
+    note: "The brick pin is 37.7766557, -122.3878868 in China Basin Park Section 24. Take your time at the brick, then head into the game at your choosing through Lefty O'Doul Gate or the main gate.",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&destination=Oracle+Park+Lefty+O%27Doul+Gate+San+Francisco+CA&waypoints=37.7766557,-122.3878868&travelmode=walking",
     appleMapsUrl: "https://maps.apple.com/?saddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&daddr=Oracle+Park+Lefty+O'Doul+Gate,+San+Francisco,+CA&dirflg=w",
     icon: "baseball"
   },
   {
     id: "giants-enjoy-the-game",
-    category: "Inside Oracle Park",
-    name: "Enjoy the game and wander",
-    meta: "Go in early, eat, walk around, and use the inside time instead of rushing straight to seats.",
-    verdict: "This is the stretch for the full ballpark lap: get food, roam, watch innings, and let the game day breathe.",
-    note: "You already picked the Lefty O'Doul Go-Ahead entry move, so once you are in, just enjoy the park until the game ends.",
+    category: "Entry",
+    name: "Enter at Lefty O'Doul's Gate",
+    meta: "Use the Lefty O'Doul entrance once you are done at the brick.",
+    verdict: "This is the cleanest move after the brick stop if you want to get inside and start roaming.",
+    note: "You already set up Go-Ahead Entry, so Lefty O'Doul stays the preferred gate for getting into the park.",
     icon: "utensils"
   },
   {
@@ -465,29 +469,29 @@ const giantsGameQuickFacts = [
     detail: "1333 Edgewood Drive, Lodi"
   },
   {
-    label: "Pastry stop",
-    value: "Wingen",
-    detail: "50 S Livermore Ave in downtown Livermore"
+    label: "Wingen",
+    value: "10:00 AM",
+    detail: "Arrive around 10:00, stay about 45 minutes"
   },
   {
     label: "Parking",
-    value: "$64.35",
-    detail: "SpotHero Lot A / Pier 48 official Giants parking"
+    value: "11:45-ish",
+    detail: "Plan on parking at Lot A / Pier 48 around 11:45 AM"
   },
   {
-    label: "Park after",
-    value: "11:05 AM",
-    detail: "SpotHero entry window from your parking screenshot"
+    label: "Bridge toll",
+    value: "$8.50",
+    detail: "Bay Bridge toll on the Livermore to San Francisco leg"
   },
   {
-    label: "Walk",
-    value: "13 min",
-    detail: "Lot A to the brick, then into Lefty O'Doul Gate"
+    label: "Brick",
+    value: "Noon-ish",
+    detail: "About a 15-minute walk from Pier 48 to the brick"
   },
   {
     label: "Entry",
-    value: "Lefty O'Doul",
-    detail: "Go-Ahead Entry is the plan if you get there early and want to roam inside."
+    value: "Your choosing",
+    detail: "Do the brick first, then head into the game through Lefty O'Doul or the main gate."
   },
   {
     label: "First pitch",
@@ -505,27 +509,27 @@ const giantsGameTimeline = [
   {
     kicker: "9:00 AM",
     title: "Leave Lodi",
-    detail: "Start from Edgewood Drive and keep the Livermore stop short enough that you are not chasing the day."
+    detail: "Leave 1333 Edgewood Drive at 9:00 AM and use the 58-minute drive to line up a 10:00 AM Wingen arrival."
   },
   {
-    kicker: "Mid-morning",
-    title: "Hit the Livermore pastry stop",
-    detail: "Make the bakery move here, then go straight to the official Giants parking lot."
+    kicker: "10:00-10:45 AM",
+    title: "Do the Wingen stop",
+    detail: "Arrive at Wingen Bakery around 10:00 AM, stay about 45 minutes, and leave at 10:45 AM."
   },
   {
-    kicker: "11:05 AM",
-    title: "Parking window opens",
-    detail: "That matches the SpotHero listing for Lot A / Pier 48 and also lines up with the Giants' normal Sunday gate timing."
+    kicker: "10:45-11:45 AM",
+    title: "Drive into the city and park",
+    detail: "Head from Wingen toward Pier 48, cross the bridge with the $8.50 toll, and just treat it as a one-hour drive even though the map says about 51 minutes."
   },
   {
-    kicker: "11:50-12:20 PM",
-    title: "Make the brick stop and go in",
-    detail: "Use the walk from Pier 48 for the China Basin Park brick in Section 24, then head to Lefty O'Doul Gate and start wandering the inside if you are early."
+    kicker: "Noon-ish",
+    title: "Make the brick stop",
+    detail: "After parking around 11:45-ish, use the roughly 15-minute walk to reach the brick around noon and take your time there."
   },
   {
-    kicker: "Game time",
-    title: "Enjoy the game and roam inside",
-    detail: "Eat, walk around, catch innings, and use the park the way you described instead of treating it like a straight seat-to-car day."
+    kicker: "After the brick",
+    title: "Head into the game at your choosing",
+    detail: "When you are done at the brick, go into the park through the gate you want, then eat, walk around, and enjoy the park before and during the game."
   },
   {
     kicker: "After the game",
@@ -543,6 +547,7 @@ const giantsGamePolicies = [
     verdict: "Best move is opening or forwarding tickets before walking up to Oracle Park.",
     note: "The Giants explicitly say ticket screenshots are not accepted, so Apple Wallet or the app itself is the safer path.",
     websiteUrl: "https://www.mlb.com/giants/apps/ballpark",
+    imageUrl: "assets/giants-web-previews/policy-ballpark-app.png",
     icon: "share"
   },
   {
@@ -553,6 +558,7 @@ const giantsGamePolicies = [
     verdict: "Since you already set up Go-Ahead Entry, this becomes the easiest way to get inside and start walking the park.",
     note: "Tickets are still tied to the account even with face entry, so the default plan is your Go-Ahead scan at Lefty O'Doul and the rest of the group following through with their own tickets.",
     websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
+    imageUrl: "assets/giants-web-previews/policy-gameday.png",
     icon: "home"
   },
   {
@@ -563,6 +569,7 @@ const giantsGamePolicies = [
     verdict: "Travel light and avoid the backpack problem entirely if you can.",
     note: "If needed, the Giants list paid bag storage at the Marina Gate from gate-open until one hour after the event.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/information/guide/bag-storage",
+    imageUrl: "assets/giants-web-previews/policy-bag-storage.png",
     icon: "bag"
   },
   {
@@ -573,6 +580,7 @@ const giantsGamePolicies = [
     verdict: "Since this trip is more restaurant-first, the main value here is knowing you still have flexibility if plans change.",
     note: "The permitted-items page also allows empty plastic refillable water bottles and soft-sided juice containers.",
     websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
+    imageUrl: "assets/giants-web-previews/policy-gameday.png",
     icon: "utensils"
   },
   {
@@ -583,6 +591,7 @@ const giantsGamePolicies = [
     verdict: "This is the cleanest way to check whether a specific in-park item is worth the detour from your seats.",
     note: "The ballpark app and concourse map are the two official tools that matter most once you are inside.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
+    imageUrl: "assets/giants-web-previews/policy-food-finder.png",
     icon: "pin"
   }
 ];
@@ -598,6 +607,7 @@ const giantsGameRestaurants = [
     verdict: "Best fit if you want a chef-adjacent Mission Rock stop and pizza is the priority.",
     note: "This is the strongest direct match for your wood-fired pizza lane, even though the Mission Rock format is the faster counter-service shop.",
     websiteUrl: "https://www.fwpizzashop.com/mission-rock",
+    imageUrl: "assets/giants-web-previews/restaurant-flour-water-pizza-shop.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1090+Dr.+Maya+Angelou+Lane+Suite+100+San+Francisco+CA+94158&travelmode=walking",
     icon: "utensils"
   },
@@ -611,6 +621,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want the most chef-forward sit-down option in the immediate walk zone.",
     note: "Back Home Hospitality's Mission Rock restaurant reads like the polished postgame choice when you care more about execution and wine than speed.",
     websiteUrl: "https://www.viaaureliasf.com/contact",
+    imageUrl: "assets/giants-web-previews/restaurant-via-aurelia.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=300+Toni+Stone+Xing+San+Francisco+CA+94158&travelmode=walking",
     icon: "utensils"
   },
@@ -624,6 +635,7 @@ const giantsGameRestaurants = [
     verdict: "Best if Fixq/Fikscue was the actual target and you want the most distinctive chef-favorite barbecue stop in the wider area.",
     note: "It is farther than the Mission Rock cluster, but the Indonesian-Texas barbecue angle makes it one of the most interesting neighborhood detours for cooks.",
     websiteUrl: "https://www.chasecenter.com/vendor/fikscue-craft-barbecue/",
+    imageUrl: "assets/giants-web-previews/restaurant-fikscue.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=7+Warriors+Way+Suite+208+San+Francisco+CA+94158&travelmode=walking",
     icon: "flame"
   },
@@ -637,6 +649,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want a serious bakery stop before the ballpark crowds build.",
     note: "This is the easy chef-favorite breakfast or late-morning snack move in Mission Rock, not a full sit-down meal.",
     websiteUrl: "https://arsicault-bakery.com/locations/",
+    imageUrl: "assets/giants-web-previews/restaurant-arsicault.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1070+Bridgeview+Way+Unit+B+San+Francisco+CA+94158&travelmode=walking",
     icon: "bag"
   },
@@ -650,6 +663,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want something looser and local-feeling without dropping into touristy generic stadium food.",
     note: "This is not fine dining, but it is one of the more interesting new Mission Rock-adjacent casual options because it has a real point of view.",
     websiteUrl: "https://www.quikdogsf.com/",
+    imageUrl: "assets/giants-web-previews/restaurant-quik-dog.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1023+3rd+Street+San+Francisco+CA&travelmode=walking",
     icon: "flame"
   },
@@ -663,6 +677,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want water views and a fuller restaurant stop more than a hyper-chef-driven room.",
     note: "Not as hidden as the others, but still worth keeping because it gives you the strongest bay-view table in the immediate wider walk zone.",
     websiteUrl: "https://www.missionrockresort.com/location/mission-rock-resort/",
+    imageUrl: "assets/giants-web-previews/restaurant-mission-rock-resort.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=817+Terry+A+Francois+Blvd+San+Francisco+CA+94158&travelmode=walking",
     icon: "utensils"
   }
@@ -812,6 +827,7 @@ const giantsGameAttractions = [
     verdict: "Best if kids are going or you want a real pregame wander instead of heading straight to seats.",
     note: "The official Giants attraction page calls it an interactive play area with the Coca-Cola Slide, baseball glove, Toyota Fan Zone, and a bay-fish tank.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/fan-lot",
+    imageUrl: "assets/giants-web-previews/attraction-fan-lot.png",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Fan+Lot+San+Francisco+CA",
     icon: "baseball"
   },
@@ -822,7 +838,8 @@ const giantsGameAttractions = [
     meta: "Across from Oracle Park with McCovey Cove views and the commemorative brick path in Section 24",
     verdict: "Best easy move before the game if you want room to walk, gather, or take in the waterfront.",
     note: "Your brick pin lands at 37.7766557, -122.3878868 on the waterfront curve, and the brick finder screenshot places the inscription in Section 24.",
-    websiteUrl: "https://missionrock.com/",
+    websiteUrl: "https://www.mlb.com/giants/ballpark/china-basin",
+    imageUrl: "assets/giants-web-previews/attraction-china-basin-mlb.png",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=37.7766557,-122.3878868",
     appleMapsUrl: "https://maps.apple.com/?q=37.7766557,-122.3878868",
     icon: "mountain"
@@ -835,6 +852,7 @@ const giantsGameAttractions = [
     verdict: "Best if you want a five-minute baseball-specific stop before going through the gates.",
     note: "The Giants say the bronze plaques honor the organization's greatest players and line the exterior ballpark wall.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/wall-of-fame",
+    imageUrl: "assets/giants-web-previews/attraction-wall-of-fame.png",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+King+Street+Wall+of+Fame+San+Francisco+CA",
     icon: "calendar"
   },
@@ -846,6 +864,7 @@ const giantsGameAttractions = [
     verdict: "Best if you want one in-park stop that feels different from standard concession concourses.",
     note: "The Giants position The Garden as a one-of-a-kind space with aeroponic towers, garden beds, and garden-fresh food and drinks.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/garden",
+    imageUrl: "assets/giants-web-previews/attraction-garden.png",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+The+Garden+San+Francisco+CA",
     icon: "sun"
   }
@@ -1132,6 +1151,41 @@ let foodView = "family";
 let foodDay = "";
 let todoView = "things";
 let giantsGameView = "overview";
+const GIANTS_SCORE_TICKER_CONFIG = {
+  teamId: 137,
+  opponentId: 115,
+  venueId: 2395,
+  gameDate: "2026-07-12",
+  fallbackGameDateTime: "2026-07-12T20:05:00Z",
+  refreshMs: 60000
+};
+let giantsScoreTickerState = {
+  poller: 0,
+  loading: false,
+  lastFetchedAt: 0,
+  lastGame: null
+};
+let giantsBallparkFoodRouteData = {
+  loading: false,
+  loaded: false,
+  sourceSeat: GIANTS_BALLPARK_ROUTE_SOURCE_SEAT,
+  items: null,
+  unroutableCount: 0
+};
+let giantsBallparkMapData = {
+  loading: false,
+  loaded: false,
+  model: null
+};
+let giantsBallparkMapView = {
+  selectedDestinationId: "",
+  activeFloorId: "",
+  mode: "directions",
+  stepIndex: 0,
+  routeStarted: false,
+  zoom: GIANTS_BALLPARK_DEFAULT_ZOOM,
+  pendingCenterPoint: null
+};
 let currentActivePanel = "home";
 let selectedFamily = loadSelectedFamily();
 let sessionToken = loadSessionToken();
@@ -1555,7 +1609,12 @@ function updateAuthMessage(message) {
 }
 
 function isLocalReferencePreview() {
-  return LOCAL_PREVIEW_HOSTS.has(window.location.hostname)
+  const host = String(window.location.hostname || "").trim().toLowerCase();
+  const isPrivateIpv4 = /^10\.\d+\.\d+\.\d+$/.test(host)
+    || /^192\.168\.\d+\.\d+$/.test(host)
+    || /^172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+$/.test(host);
+  const isLocalHostname = host.endsWith(".local");
+  return (LOCAL_PREVIEW_HOSTS.has(host) || isPrivateIpv4 || isLocalHostname)
     && Boolean(document.querySelector("#homeLandingPanel.home-reference-shell"));
 }
 
@@ -2991,6 +3050,10 @@ function escapeText(value) {
     .replaceAll("'", "&#39;");
 }
 
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 function defaultActivityVotes() {
   return Object.fromEntries(activities.map((item) => [item.id, item.votes]));
 }
@@ -3989,7 +4052,7 @@ function renderTopNeeded() {
 
 function activityIconMarkup(activity) {
   if (activity?.imageUrl) {
-    return `<img src="${escapeText(activity.imageUrl)}" alt="${escapeText(activity.name || "Activity image")}" loading="lazy" decoding="async">`;
+    return `<img src="${escapeText(activity.imageUrl)}" alt="${escapeText(activity.name || "Activity image")}" loading="eager" decoding="sync">`;
   }
   const key = activity.icon === "lake" ? "mountain" : activity.icon === "trees" ? "mountain" : activity.icon;
   return icons[key] || icons.mountain;
@@ -4008,19 +4071,30 @@ function appleMapsUrlFromItem(item = {}) {
   return `https://maps.apple.com/?q=${encodeURIComponent(query)}`;
 }
 
+function guideSourceLabelFromItem(item = {}) {
+  if (item.sourceLabel) return String(item.sourceLabel);
+  const source = item.websiteUrl || item.appUrl || item.mapUrl || "";
+  if (!source) return "";
+  try {
+    return new URL(source).hostname.replace(/^www\./i, "");
+  } catch {
+    return "";
+  }
+}
+
 function activityLinksMarkup(item) {
   const links = [];
   if (item.websiteUrl) {
-    links.push(`<a class="text-mini-button cabin-link-button is-website" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>`);
+    links.push(`<a class="text-mini-button cabin-link-button is-website" href="${item.websiteUrl}" target="_blank" rel="noreferrer">${escapeText(item.websiteLabel || "Website")}</a>`);
   }
   if (item.appUrl) {
     links.push(`<a class="text-mini-button cabin-link-button is-website" href="${item.appUrl}" target="_blank" rel="noreferrer">${escapeText(item.appLabel || "App")}</a>`);
   }
   if (item.mapUrl) {
-    links.push(`<a class="text-mini-button cabin-link-button is-google-maps" href="${item.mapUrl}" target="_blank" rel="noreferrer">Google Maps</a>`);
+    links.push(`<a class="text-mini-button cabin-link-button is-google-maps" href="${item.mapUrl}" target="_blank" rel="noreferrer">${escapeText(item.mapLabel || "Google Maps")}</a>`);
   }
-  if (item.mapUrl || item.appleMapsUrl) {
-    links.push(`<a class="text-mini-button cabin-link-button is-apple-maps" href="${appleMapsUrlFromItem(item)}" target="_blank" rel="noreferrer">Apple Maps</a>`);
+  if (!item.disableAppleMaps && (item.mapUrl || item.appleMapsUrl)) {
+    links.push(`<a class="text-mini-button cabin-link-button is-apple-maps" href="${appleMapsUrlFromItem(item)}" target="_blank" rel="noreferrer">${escapeText(item.appleMapsLabel || "Apple Maps")}</a>`);
   }
   if (!links.length) return "";
   return `
@@ -4112,7 +4186,226 @@ function renderGiantsTimeline() {
   `).join("");
 }
 
+function defaultGiantsCountdownChipText() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const gameDay = new Date(2026, 6, 12);
+  const days = Math.round((gameDay - today) / 86400000);
+  if (days > 1) return `In ${days} days`;
+  if (days === 1) return "Tomorrow";
+  if (days === 0) return "Game day";
+  return "Final";
+}
+
+function giantsScoreTickerUrl() {
+  const params = new URLSearchParams({
+    sportId: "1",
+    date: GIANTS_SCORE_TICKER_CONFIG.gameDate,
+    teamId: String(GIANTS_SCORE_TICKER_CONFIG.teamId),
+    opponentId: String(GIANTS_SCORE_TICKER_CONFIG.opponentId),
+    hydrate: "linescore,team,venue"
+  });
+  return `https://statsapi.mlb.com/api/v1/schedule?${params.toString()}`;
+}
+
+function formatGiantsPacificDate(dateString, options) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles",
+    ...options
+  }).format(new Date(dateString));
+}
+
+function splitGiantsPacificTime(dateString) {
+  const formatted = formatGiantsPacificDate(dateString, {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  });
+  const match = formatted.match(/^(.+)\s([AP]M)$/);
+  return {
+    primary: match?.[1] || formatted,
+    secondary: `${match?.[2] || ""} PT`.trim()
+  };
+}
+
+function findGiantsTickerGame(payload) {
+  const games = payload?.dates?.flatMap((date) => date.games || []) || [];
+  return games.find((game) => {
+    const homeId = game?.teams?.home?.team?.id;
+    const awayId = game?.teams?.away?.team?.id;
+    const venueId = game?.venue?.id;
+    return homeId === GIANTS_SCORE_TICKER_CONFIG.teamId
+      && awayId === GIANTS_SCORE_TICKER_CONFIG.opponentId
+      && (!venueId || venueId === GIANTS_SCORE_TICKER_CONFIG.venueId);
+  }) || games[0] || null;
+}
+
+function buildGiantsTickerView(game) {
+  const gameDate = game?.gameDate || GIANTS_SCORE_TICKER_CONFIG.fallbackGameDateTime;
+  const timeParts = splitGiantsPacificTime(gameDate);
+  const formattedDate = formatGiantsPacificDate(gameDate, {
+    weekday: "short",
+    month: "short",
+    day: "numeric"
+  }).replace(", ", " · ");
+  const formattedLongDate = formatGiantsPacificDate(gameDate, {
+    weekday: "short",
+    month: "short",
+    day: "numeric"
+  });
+  const detailedState = game?.status?.detailedState || "Scheduled";
+  const abstractState = game?.status?.abstractGameState || "";
+  const statusCode = game?.status?.statusCode || "";
+  const detailedLower = detailedState.toLowerCase();
+  const isFinal = abstractState === "Final" || ["F", "O", "C"].includes(statusCode) || detailedLower.startsWith("final");
+  const isLive = abstractState === "Live" || ["I", "M", "N"].includes(statusCode) || detailedLower.includes("progress");
+  const isAlert = detailedLower.includes("delay") || detailedLower.includes("postpon") || detailedLower.includes("suspend");
+  const awayScore = Number.isFinite(game?.teams?.away?.score) ? String(game.teams.away.score) : "-";
+  const homeScore = Number.isFinite(game?.teams?.home?.score) ? String(game.teams.home.score) : "-";
+  const inningState = game?.linescore?.inningState || "";
+  const inningOrdinal = game?.linescore?.currentInningOrdinal || (game?.linescore?.currentInning ? `${game.linescore.currentInning}` : "");
+  const outs = Number.isFinite(game?.linescore?.outs) ? game.linescore.outs : null;
+  const balls = Number.isFinite(game?.linescore?.balls) ? game.linescore.balls : null;
+  const strikes = Number.isFinite(game?.linescore?.strikes) ? game.linescore.strikes : null;
+  const scoreLineCompact = `COL ${awayScore} · SF ${homeScore}`;
+  const scoreLine = `Rockies ${awayScore}, Giants ${homeScore}`;
+  const venueName = game?.venue?.name || "Oracle Park";
+  const venueText = venueName === "Oracle Park" ? "Oracle Park · 24 Willie Mays Plaza" : `${venueName} · 24 Willie Mays Plaza`;
+
+  if (isLive) {
+    const inningText = [inningState, inningOrdinal].filter(Boolean).join(" ").trim() || "Live";
+    const countText = outs === null
+      ? detailedState
+      : `${outs} out${outs === 1 ? "" : "s"}${balls !== null && strikes !== null ? ` · ${balls}-${strikes}` : ""}`;
+    return {
+      badgeText: "Live",
+      badgeTone: "is-live",
+      countdownText: "Live",
+      awayScore,
+      homeScore,
+      primaryText: inningText,
+      secondaryText: scoreLineCompact,
+      detailText: countText,
+      venueText,
+      tickerText: `Live · ${inningText} · ${scoreLine}`
+    };
+  }
+
+  if (isFinal) {
+    return {
+      badgeText: "Final",
+      badgeTone: "is-final",
+      countdownText: "Final",
+      awayScore,
+      homeScore,
+      primaryText: "Final",
+      secondaryText: scoreLineCompact,
+      detailText: detailedState === "Final" ? formattedDate : detailedState,
+      venueText,
+      tickerText: `Final · ${scoreLine}`
+    };
+  }
+
+  if (isAlert) {
+    return {
+      badgeText: "Update",
+      badgeTone: "is-alert",
+      countdownText: defaultGiantsCountdownChipText(),
+      awayScore,
+      homeScore,
+      primaryText: timeParts.primary,
+      secondaryText: timeParts.secondary,
+      detailText: formattedDate,
+      venueText,
+      tickerText: `${detailedState} · ${formattedLongDate} · ${timeParts.primary} ${timeParts.secondary}`
+    };
+  }
+
+  return {
+    badgeText: "GRE Game Day",
+    badgeTone: "",
+    countdownText: defaultGiantsCountdownChipText(),
+    awayScore,
+    homeScore,
+    primaryText: timeParts.primary,
+    secondaryText: timeParts.secondary,
+    detailText: formattedDate,
+    venueText,
+    tickerText: `Scheduled · ${formattedLongDate} · ${timeParts.primary} ${timeParts.secondary}`
+  };
+}
+
+function renderGiantsScoreTicker(game = giantsScoreTickerState.lastGame) {
+  const heroCard = document.querySelector("#giants-game .bp-hero");
+  const badgeNode = document.querySelector("#giantsGameBadge");
+  const countdownNode = document.querySelector("#giantsCountdownChip");
+  const awayScoreNode = document.querySelector("#giantsAwayScore");
+  const homeScoreNode = document.querySelector("#giantsHomeScore");
+  const primaryNode = document.querySelector("#giantsGameStatusPrimary");
+  const secondaryNode = document.querySelector("#giantsGameStatusSecondary");
+  const detailNode = document.querySelector("#giantsGameStatusDetail");
+  const venueNode = document.querySelector("#giantsGameVenue");
+  const tickerNode = document.querySelector("#giantsLiveTicker");
+  if (!heroCard || !badgeNode) return;
+
+  const view = buildGiantsTickerView(game);
+  heroCard.classList.toggle("is-live", view.badgeTone === "is-live");
+  heroCard.classList.toggle("is-final", view.badgeTone === "is-final");
+  heroCard.classList.toggle("is-alert", view.badgeTone === "is-alert");
+
+  badgeNode.textContent = view.badgeText;
+  badgeNode.classList.remove("is-live", "is-final", "is-alert");
+  if (view.badgeTone) badgeNode.classList.add(view.badgeTone);
+  if (countdownNode) countdownNode.textContent = view.countdownText;
+  if (primaryNode) primaryNode.textContent = view.primaryText;
+  if (secondaryNode) secondaryNode.textContent = view.secondaryText;
+  if (detailNode) detailNode.textContent = view.detailText;
+  if (venueNode) venueNode.textContent = view.venueText;
+  if (tickerNode) tickerNode.textContent = view.tickerText;
+  if (awayScoreNode) {
+    awayScoreNode.textContent = view.awayScore;
+    awayScoreNode.classList.toggle("is-empty", view.awayScore === "-");
+  }
+  if (homeScoreNode) {
+    homeScoreNode.textContent = view.homeScore;
+    homeScoreNode.classList.toggle("is-empty", view.homeScore === "-");
+  }
+}
+
+async function refreshGiantsScoreTicker({ force = false } = {}) {
+  const now = Date.now();
+  if (giantsScoreTickerState.loading) return;
+  if (!force && now - giantsScoreTickerState.lastFetchedAt < 15000) return;
+  giantsScoreTickerState.loading = true;
+  try {
+    const response = await fetch(giantsScoreTickerUrl(), {
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) throw new Error(`Ticker request failed with ${response.status}`);
+    const payload = await response.json();
+    giantsScoreTickerState.lastGame = findGiantsTickerGame(payload);
+    giantsScoreTickerState.lastFetchedAt = Date.now();
+    renderGiantsScoreTicker();
+  } catch (error) {
+    console.warn("Could not refresh Giants live ticker.", error);
+    renderGiantsScoreTicker();
+  } finally {
+    giantsScoreTickerState.loading = false;
+  }
+}
+
+function ensureGiantsScoreTickerPolling() {
+  if (giantsScoreTickerState.poller) return;
+  giantsScoreTickerState.poller = window.setInterval(() => {
+    if (document.visibilityState === "hidden") return;
+    refreshGiantsScoreTicker();
+  }, GIANTS_SCORE_TICKER_CONFIG.refreshMs);
+}
+
 function renderGiantsHub() {
+  renderGiantsScoreTicker();
+  ensureGiantsScoreTickerPolling();
+  refreshGiantsScoreTicker();
   document.querySelectorAll("[data-giants-view]").forEach((button) => {
     const isActive = button.dataset.giantsView === giantsGameView;
     button.classList.toggle("is-active", isActive);
@@ -4123,15 +4416,23 @@ function renderGiantsHub() {
     panel.classList.toggle("is-hidden", !isActive);
     panel.toggleAttribute("hidden", !isActive);
   });
+  if (giantsGameView === "inside-food") {
+    const liveMap = document.querySelector("#giantsLiveMap");
+    if (liveMap && !liveMap.getAttribute("src") && liveMap.dataset.src) {
+      liveMap.setAttribute("src", liveMap.dataset.src);
+    }
+  }
+  updateAppShellModes();
 }
 
 function renderGiantsGuideList(containerId, items) {
   const container = document.querySelector(containerId);
   if (!container) return;
   container.innerHTML = items.map((item) => `
-    <article class="cabin-activity-card">
-      <span class="activity-thumb cabin-activity-thumb">${activityIconMarkup(item)}</span>
+    <article class="cabin-activity-card${item.imageUrl ? " is-web-result" : ""}">
+      <span class="activity-thumb cabin-activity-thumb${item.imageUrl ? " is-web-result" : ""}">${activityIconMarkup(item)}</span>
       <div class="cabin-activity-copy">
+        ${guideSourceLabelFromItem(item) ? `<span class="giants-guide-source">${escapeText(guideSourceLabelFromItem(item))}</span>` : ""}
         <span class="activity-rank">${escapeText(item.category)}</span>
         <strong>${escapeText(item.name)}</strong>
         ${item.walk ? `<span class="cabin-activity-when">${escapeText(item.walk)}</span>` : ""}
@@ -4146,30 +4447,713 @@ function renderGiantsGuideList(containerId, items) {
   `).join("");
 }
 
+const GOOGLE_MAPS_ICON_SVG = `<svg class="bp-gmaps-icon" viewBox="0 0 48 66" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="gmapsPinClipMini"><path d="M24 0C10.75 0 0 10.75 0 24c0 6.2 2.6 11.9 6.4 17.3C12 49 24 66 24 66s12-17 17.6-24.7C45.4 35.9 48 30.2 48 24 48 10.75 37.25 0 24 0Z"/></clipPath></defs><g clip-path="url(#gmapsPinClipMini)"><rect width="48" height="66" fill="#34a853"/><polygon points="0,0 48,0 24,24" fill="#4285f4"/><polygon points="0,0 24,24 0,38" fill="#ea4335"/><polygon points="0,38 24,24 31,33 12,55 0,52" fill="#fbbc04"/></g><circle cx="24" cy="24" r="8.5" fill="#ffffff"/></svg>`;
+
+const APPLE_MAPS_ICON_SVG = `<svg class="bp-amaps-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="amapsClipMini"><rect width="60" height="60" rx="13.5"/></clipPath></defs><g clip-path="url(#amapsClipMini)"><rect width="60" height="60" fill="#ffffff"/><polygon points="18,0 60,0 60,60 30,60" fill="#2ecc57"/><line x1="22" y1="-2" x2="62" y2="38" stroke="#ffffff" stroke-width="5"/><line x1="61" y1="43" x2="29" y2="62" stroke="#ffffff" stroke-width="4"/><polygon points="30,60 40,47 48,60" fill="#ffd60a"/><polygon points="0,20 10,20 10,60 0,60" fill="#f973b6"/><polygon points="15,0 25,0 20,60 10,60" fill="#4d8dff"/><circle cx="47" cy="12" r="6.5" fill="none" stroke="#ffffff" stroke-width="2.4" opacity="0.9"/><circle cx="47" cy="12" r="11.5" fill="none" stroke="#ffffff" stroke-width="2.4" opacity="0.9"/><circle cx="28" cy="30" r="13" fill="#ffffff"/><circle cx="28" cy="30" r="10.5" fill="#1e6ef5"/><path d="M28 22.5 34.5 38 28 34.4 21.5 38 Z" fill="#ffffff"/></g><rect width="60" height="60" rx="13.5" fill="none" stroke="#e5e5ea" stroke-width="1"/></svg>`;
+
+const giantsItineraryShortNames = {
+  "giants-drive-lodi": "Leave 1333",
+  "giants-pastry-stop-livermore": "Wingen Bakery Shop",
+  "giants-parking-spothero": "Lot A",
+  "giants-walk-to-brick": "Brick Stop",
+  "giants-enjoy-the-game": "Enter at Lefty O'Doul's Gate",
+  "giants-postgame-fikscue": "Fikscue BBQ after"
+};
+
+const giantsItineraryDetails = {
+  "giants-drive-lodi": "Departure · 9:00 AM · 1333 Edgewood Drive, Lodi",
+  "giants-pastry-stop-livermore": "Arrival · 10:00 AM · departure · 10:45 AM",
+  "giants-parking-spothero": "Arrival · 11:45 AM-ish · Lot A / Pier 48 official parking",
+  "giants-walk-to-brick": "Noon-ish · take your time at the brick before heading in",
+  "giants-enjoy-the-game": "After the brick · use Lefty O'Doul Gate and your Go-Ahead Entry setup",
+  "giants-postgame-fikscue": "7 Warriors Way Suite 208 · Thu-Sun 12:00-8:00 PM or until sold out"
+};
+
+let giantsOpenItineraryStep = "";
+
 function renderGiantsItinerary() {
   const container = document.querySelector("#giantsItineraryList");
   if (!container) return;
-  container.innerHTML = giantsGameItinerary.map((item) => `
-    <article class="giants-itinerary-card">
-      <span class="activity-thumb giants-itinerary-thumb">${activityIconMarkup(item)}</span>
-      <div class="giants-itinerary-copy">
-        <span class="activity-rank">${escapeText(item.category)}</span>
-        <strong>${escapeText(item.name)}</strong>
-        ${item.meta ? `<span class="giants-guide-meta">${escapeText(item.meta)}</span>` : ""}
-        ${item.hours ? `<span class="giants-guide-meta"><strong>Hours:</strong> ${escapeText(item.hours)}</span>` : ""}
-        ${item.menu ? `<span class="giants-guide-meta"><strong>Menu:</strong> ${escapeText(item.menu)}</span>` : ""}
-        ${item.note ? `<span class="giants-itinerary-note">${escapeText(item.note)}</span>` : ""}
-        ${activityLinksMarkup(item)}
+  container.innerHTML = giantsGameItinerary.map((item, index) => {
+    const isOpen = giantsOpenItineraryStep === item.id;
+    const links = [];
+    if (item.mapUrl) {
+      links.push(`<a class="map-brand-button2" href="${item.mapUrl}" target="_blank" rel="noreferrer">${GOOGLE_MAPS_ICON_SVG}<span>Google Maps</span></a>`);
+    }
+    if (item.mapUrl || item.appleMapsUrl) {
+      links.push(`<a class="map-brand-button2" href="${appleMapsUrlFromItem(item)}" target="_blank" rel="noreferrer">${APPLE_MAPS_ICON_SVG}<span>Apple Maps</span></a>`);
+    }
+    if (item.websiteUrl) {
+      links.push(`<a class="bp-itin-link is-alt" href="${item.websiteUrl}" target="_blank" rel="noreferrer">Website</a>`);
+    }
+    if (item.appUrl) {
+      links.push(`<a class="bp-itin-link is-alt" href="${item.appUrl}" target="_blank" rel="noreferrer">${escapeText(item.appLabel || "App")}</a>`);
+    }
+    return `
+    <article class="bp-itin-row${isOpen ? " is-open" : ""}">
+      <button class="bp-itin-main" type="button" data-itin-toggle="${item.id}" aria-expanded="${isOpen ? "true" : "false"}">
+        <span class="bp-itin-num">${index + 1}</span>
+        <span class="bp-itin-copy">
+          <span class="bp-itin-kicker">${escapeText(item.category || "")}</span>
+          <strong>${escapeText(giantsItineraryShortNames[item.id] || item.name)}</strong>
+        </span>
+        <span class="bp-itin-chevron" aria-hidden="true"></span>
+      </button>
+      <div class="bp-itin-detail${isOpen ? "" : " is-hidden"}">
+        <p>${escapeText(giantsItineraryDetails[item.id] || item.meta || "")}</p>
+        ${links.length ? `<div class="bp-itin-detail-links">${links.join("")}</div>` : ""}
       </div>
     </article>
-  `).join("");
+  `;
+  }).join("");
+  container.querySelectorAll("[data-itin-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.itinToggle;
+      giantsOpenItineraryStep = giantsOpenItineraryStep === id ? "" : id;
+      renderGiantsItinerary();
+    });
+  });
 }
 
 function renderGiantsRestaurants() {
   renderGiantsGuideList("#giantsRestaurantList", giantsGameRestaurants);
 }
 
+function preferredGiantsBallparkDestination(destinations = []) {
+  const priorities = ["Doggie Diner", "Tony", "Gilroy Garlic Fries", "Crazy Crab", "Slugger Snacks", "Bayside Brews"];
+  for (const keyword of priorities) {
+    const match = destinations.find((destination) => String(destination.name || "").includes(keyword));
+    if (match) return match;
+  }
+  return destinations.find((destination) => destination.venueType !== "alcohol") || destinations[0] || null;
+}
+
+function ensureGiantsBallparkMapSelection() {
+  const model = giantsBallparkMapData.model;
+  if (!model?.destinations?.length) return null;
+  const selected = model.destinations.find((destination) => destination.id === giantsBallparkMapView.selectedDestinationId);
+  const nextSelected = selected || preferredGiantsBallparkDestination(model.destinations);
+  if (!nextSelected) return null;
+  if (!giantsBallparkMapView.selectedDestinationId) giantsBallparkMapView.selectedDestinationId = nextSelected.id;
+  if (!giantsBallparkMapView.activeFloorId) giantsBallparkMapView.activeFloorId = nextSelected.floorId || model.sourceSeat.floorId || model.floors?.[0]?.id || "";
+  return model.destinations.find((destination) => destination.id === giantsBallparkMapView.selectedDestinationId) || nextSelected;
+}
+
+function isGiantsBallparkMobileLayout() {
+  return window.matchMedia("(max-width: 720px)").matches;
+}
+
+function currentGiantsBallparkStep(destination = {}) {
+  const steps = Array.isArray(destination.steps) ? destination.steps : [];
+  const index = clamp(Number(giantsBallparkMapView.stepIndex || 0), 0, Math.max(steps.length - 1, 0));
+  giantsBallparkMapView.stepIndex = index;
+  return steps[index] || null;
+}
+
+function giantsBallparkMobileViewBox(model, activeFloor, routeSegments, selectedDestination, selectedStep) {
+  const routePoints = routeSegments.flatMap((segment) => Array.isArray(segment) ? segment : []);
+  const points = [...routePoints];
+  if (selectedDestination?.floorId === activeFloor.id && Array.isArray(selectedDestination.point)) {
+    points.push(selectedDestination.point);
+  }
+  if (model?.sourceSeat?.floorId === activeFloor.id && Array.isArray(model.sourceSeat.point)) {
+    points.push(model.sourceSeat.point);
+  }
+  if (selectedStep?.focusPoint && Array.isArray(selectedStep.focusPoint)) {
+    points.push(selectedStep.focusPoint);
+  }
+  if (!points.length) {
+    return `0 0 ${model.viewport.width} ${model.viewport.height}`;
+  }
+
+  const xs = points.map((point) => Number(point[0]) || 0);
+  const ys = points.map((point) => Number(point[1]) || 0);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  const padding = selectedStep ? 54 : 84;
+  const aspect = 0.66;
+  let width = Math.max((maxX - minX) + (padding * 2), 240);
+  let height = Math.max((maxY - minY) + (padding * 2), 240);
+  if ((width / height) < aspect) {
+    width = height * aspect;
+  } else {
+    height = width / aspect;
+  }
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+  const clampedX = clamp(centerX - (width / 2), 0, Math.max(model.viewport.width - width, 0));
+  const clampedY = clamp(centerY - (height / 2), 0, Math.max(model.viewport.height - height, 0));
+  return `${clampedX} ${clampedY} ${width} ${height}`;
+}
+
+function giantsBallparkFloorText(destination = {}) {
+  const floors = (destination.floors || [])
+    .map((floor) => floor.floorShortName || floor.floorName)
+    .filter(Boolean);
+  return floors.length ? floors.join(" · ") : "Stand listed, route node not published";
+}
+
+function giantsBallparkCategoryText(destination = {}) {
+  if (destination.venueType === "alcohol") return "Drink route from section 228";
+  if (destination.venueType === "food-and-drink") return "Food + drink route from section 228";
+  return "Food route from section 228";
+}
+
+function buildGiantsBallparkFoodItemsFromRoutes(payload = {}) {
+  const sourceSeat = String(payload.sourceSeat?.externalId || payload.sourceSeat?.name || GIANTS_BALLPARK_ROUTE_SOURCE_SEAT);
+  const routeable = Array.isArray(payload.destinations) ? payload.destinations : [];
+  const unroutable = Array.isArray(payload.unroutableDestinations) ? payload.unroutableDestinations : [];
+  const combined = [...routeable, ...unroutable].sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+
+  return {
+    sourceSeat,
+    unroutableCount: unroutable.length,
+    items: combined.map((destination) => {
+      const primaryRoute = destination.routeOptions?.[0] || null;
+      const floorText = giantsBallparkFloorText(destination);
+      const tagText = Array.isArray(destination.tags) && destination.tags.length ? destination.tags.join(" · ") : "";
+      const routeCount = Number(destination.routeOptionCount || 0);
+      const hasRoute = Boolean(primaryRoute);
+      const routeCountText = hasRoute
+        ? `${routeCount} route option${routeCount === 1 ? "" : "s"} from section ${sourceSeat}`
+        : `No route node published from section ${sourceSeat}`;
+
+      return {
+        id: `giants-ballpark-route-${destination.externalId || destination.id}`,
+        category: giantsBallparkCategoryText(destination),
+        name: destination.name,
+        walk: floorText,
+        meta: tagText ? `${routeCountText} · ${tagText}` : routeCountText,
+        verdict: hasRoute
+          ? `Use the in-park route link to jump straight from section ${sourceSeat} to this stand.`
+          : `This stand is in the Oracle Park data, but the public map bundle does not expose a clickable seat route yet.`,
+        note: hasRoute
+          ? `Primary route opens the Mappedin path on ${primaryRoute.floorName}. ${routeCount > 1 ? `There are also ${routeCount - 1} alternate stand nodes in the same venue data.` : "This one is the clearest published route target right now."}`
+          : `Kept here so the inside-food tab still reflects the full food and drink list even when Mappedin does not publish a destination node.`,
+        websiteUrl: destination.mappedinLocationUrl || "",
+        websiteLabel: "Stand page",
+        mapUrl: hasRoute ? primaryRoute.mappedinDirectionsUrl : "",
+        mapLabel: `Route from ${sourceSeat}`,
+        disableAppleMaps: true,
+        icon: destination.venueType === "alcohol" ? "flame" : "utensils"
+      };
+    })
+  };
+}
+
+function giantsBallparkDestinationLinkItem(destination = {}) {
+  return {
+    websiteUrl: destination.mappedinLocationUrl || "",
+    websiteLabel: "Stand page",
+    mapUrl: destination.mappedinDirectionsUrl || "",
+    mapLabel: `Live route`,
+    disableAppleMaps: true
+  };
+}
+
+function giantsBallparkDistanceText(feet = 0) {
+  if (!feet) return "";
+  return `${Math.round(feet)} ft`;
+}
+
+function giantsBallparkStepIcon(step = {}) {
+  if (step.type === "stairs") return "↕";
+  if (step.type === "elevator") return "⬍";
+  if (step.type === "escalator") return "⇵";
+  if (step.type === "arrive") return "●";
+  return "→";
+}
+
+function giantsBallparkCategoryLabel(destination = {}) {
+  if (destination.venueType === "alcohol") return "Drink";
+  if (Array.isArray(destination.categories) && destination.categories.length) return destination.categories.join(" · ");
+  return "Food";
+}
+
+function giantsBallparkFloorLabel(destination = {}) {
+  return destination.floorShortName ? `${destination.floorShortName} ${destination.floorName}` : destination.floorName || "";
+}
+
+function scheduleGiantsBallparkCenter(point) {
+  if (!Array.isArray(point)) return;
+  giantsBallparkMapView.pendingCenterPoint = point;
+  const applyCenter = () => {
+    const scroller = document.querySelector("#giantsBallparkMapScroll");
+    const svg = document.querySelector("#giantsBallparkSvg");
+    const target = giantsBallparkMapView.pendingCenterPoint;
+    if (!scroller || !svg || !Array.isArray(target)) return;
+    const zoom = giantsBallparkMapView.zoom || GIANTS_BALLPARK_DEFAULT_ZOOM;
+    const [x, y] = target;
+    const isMobile = isGiantsBallparkMobileLayout();
+    const xBias = isMobile ? 0.52 : 0.68;
+    const yBias = isMobile
+      ? (giantsBallparkMapView.routeStarted ? 0.48 : 0.3)
+      : 0.46;
+    const nextLeft = Math.max(0, (x * zoom) - (scroller.clientWidth * xBias));
+    const nextTop = Math.max(0, (y * zoom) - (scroller.clientHeight * yBias));
+    if (typeof scroller.scrollTo === "function") {
+      scroller.scrollTo({ left: nextLeft, top: nextTop, behavior: "auto" });
+    }
+    scroller.scrollLeft = nextLeft;
+    scroller.scrollTop = nextTop;
+  };
+  applyCenter();
+  window.requestAnimationFrame(applyCenter);
+  window.setTimeout(() => {
+    applyCenter();
+    giantsBallparkMapView.pendingCenterPoint = null;
+  }, 16);
+}
+
+function setGiantsBallparkZoom(nextZoom, anchor = null) {
+  const scroller = document.querySelector("#giantsBallparkMapScroll");
+  const svg = document.querySelector("#giantsBallparkSvg");
+  const model = giantsBallparkMapData.model;
+  if (!scroller || !svg || !model) return;
+  const previousZoom = giantsBallparkMapView.zoom || GIANTS_BALLPARK_DEFAULT_ZOOM;
+  const clampedZoom = clamp(nextZoom, 0.42, 1.8);
+  if (Math.abs(previousZoom - clampedZoom) < 0.001) return;
+
+  let contentX = model.viewport.width / 2;
+  let contentY = model.viewport.height / 2;
+  if (anchor && Number.isFinite(anchor.clientX) && Number.isFinite(anchor.clientY)) {
+    const rect = scroller.getBoundingClientRect();
+    const scrollAnchorX = anchor.clientX - rect.left + scroller.scrollLeft;
+    const scrollAnchorY = anchor.clientY - rect.top + scroller.scrollTop;
+    contentX = scrollAnchorX / previousZoom;
+    contentY = scrollAnchorY / previousZoom;
+  }
+
+  giantsBallparkMapView.zoom = clampedZoom;
+  svg.style.width = `${model.viewport.width * clampedZoom}px`;
+  svg.style.height = `${model.viewport.height * clampedZoom}px`;
+
+  if (anchor && Number.isFinite(anchor.clientX) && Number.isFinite(anchor.clientY)) {
+    const rect = scroller.getBoundingClientRect();
+    scroller.scrollLeft = (contentX * clampedZoom) - (anchor.clientX - rect.left);
+    scroller.scrollTop = (contentY * clampedZoom) - (anchor.clientY - rect.top);
+  }
+}
+
+function bindGiantsBallparkScrollDrag() {
+  const scroller = document.querySelector("#giantsBallparkMapScroll");
+  if (!scroller || scroller.dataset.dragBound === "true") return;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+  let touchMode = "";
+  let pinchStartDistance = 0;
+  let pinchStartZoom = GIANTS_BALLPARK_DEFAULT_ZOOM;
+  let panTouchId = null;
+  scroller.dataset.dragBound = "true";
+  scroller.addEventListener("pointerdown", (event) => {
+    if (event.target.closest?.("[data-giants-ballpark-destination]")) return;
+    isDragging = true;
+    startX = event.clientX;
+    startY = event.clientY;
+    startLeft = scroller.scrollLeft;
+    startTop = scroller.scrollTop;
+    scroller.classList.add("is-dragging");
+    scroller.setPointerCapture(event.pointerId);
+  });
+  scroller.addEventListener("pointermove", (event) => {
+    if (!isDragging) return;
+    scroller.scrollLeft = startLeft - (event.clientX - startX);
+    scroller.scrollTop = startTop - (event.clientY - startY);
+  });
+  const stopDragging = (event) => {
+    if (!isDragging) return;
+    isDragging = false;
+    scroller.classList.remove("is-dragging");
+    if (event?.pointerId != null && scroller.hasPointerCapture(event.pointerId)) {
+      scroller.releasePointerCapture(event.pointerId);
+    }
+  };
+  scroller.addEventListener("pointerup", stopDragging);
+  scroller.addEventListener("pointercancel", stopDragging);
+  scroller.addEventListener("pointerleave", stopDragging);
+
+  function touchDistance(touches) {
+    if (touches.length < 2) return 0;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt((dx ** 2) + (dy ** 2));
+  }
+
+  function touchMidpoint(touches) {
+    if (touches.length < 2) return null;
+    return {
+      clientX: (touches[0].clientX + touches[1].clientX) / 2,
+      clientY: (touches[0].clientY + touches[1].clientY) / 2
+    };
+  }
+
+  scroller.addEventListener("touchstart", (event) => {
+    if (event.touches.length === 2) {
+      touchMode = "pinch";
+      pinchStartDistance = touchDistance(event.touches);
+      pinchStartZoom = giantsBallparkMapView.zoom || GIANTS_BALLPARK_DEFAULT_ZOOM;
+      return;
+    }
+    if (event.touches.length === 1) {
+      touchMode = "pan";
+      panTouchId = event.touches[0].identifier;
+      startX = event.touches[0].clientX;
+      startY = event.touches[0].clientY;
+      startLeft = scroller.scrollLeft;
+      startTop = scroller.scrollTop;
+    }
+  }, { passive: true });
+
+  scroller.addEventListener("touchmove", (event) => {
+    if (touchMode === "pinch" && event.touches.length === 2) {
+      const currentDistance = touchDistance(event.touches);
+      const midpoint = touchMidpoint(event.touches);
+      if (!pinchStartDistance || !midpoint) return;
+      event.preventDefault();
+      setGiantsBallparkZoom(pinchStartZoom * (currentDistance / pinchStartDistance), midpoint);
+      return;
+    }
+    if (touchMode === "pan" && event.touches.length === 1 && event.touches[0].identifier === panTouchId) {
+      event.preventDefault();
+      scroller.scrollLeft = startLeft - (event.touches[0].clientX - startX);
+      scroller.scrollTop = startTop - (event.touches[0].clientY - startY);
+    }
+  }, { passive: false });
+
+  scroller.addEventListener("touchend", () => {
+    touchMode = "";
+    panTouchId = null;
+  }, { passive: true });
+
+  scroller.addEventListener("touchcancel", () => {
+    touchMode = "";
+    panTouchId = null;
+  }, { passive: true });
+}
+
+function renderGiantsBallparkMapPanel() {
+  const container = document.querySelector("#giantsBallparkMapPanel");
+  if (!container) return;
+  const model = giantsBallparkMapData.model;
+  if (giantsBallparkMapData.loading && !model) {
+    container.innerHTML = `<div class="giants-ballpark-loading">Loading Oracle Park map from the local extracted bundle…</div>`;
+    return;
+  }
+  if (!model?.floors?.length) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const selectedDestination = ensureGiantsBallparkMapSelection();
+  const isMobile = isGiantsBallparkMobileLayout();
+  const mobileDefaultZoom = 1.3;
+  if (isMobile && (!Number.isFinite(giantsBallparkMapView.zoom) || giantsBallparkMapView.zoom <= GIANTS_BALLPARK_DEFAULT_ZOOM + 0.02)) {
+    giantsBallparkMapView.zoom = mobileDefaultZoom;
+  }
+  const currentStepIndex = giantsBallparkMapView.stepIndex || 0;
+  const stepCount = Array.isArray(selectedDestination?.steps) ? selectedDestination.steps.length : 0;
+  const routeStarted = Boolean(isMobile && giantsBallparkMapView.routeStarted && selectedDestination);
+  const selectedStep = routeStarted ? currentGiantsBallparkStep(selectedDestination || {}) : null;
+  const mobileFloorId = routeStarted
+    ? (selectedStep?.floorId || model.sourceSeat.floorId)
+    : (selectedDestination?.floorId || model.sourceSeat.floorId);
+  const activeFloorId = isMobile ? mobileFloorId : giantsBallparkMapView.activeFloorId;
+  const activeFloor = model.floors.find((floor) => floor.id === activeFloorId) || model.floors[0];
+  const visibleDestinations = model.destinations.filter((destination) => destination.floorId === activeFloor.id);
+  const featuredDestinations = model.destinations.slice(0, isMobile ? model.destinations.length : 10);
+  const routeSegments = isMobile
+    ? (routeStarted
+      ? (selectedStep?.routeSegments?.[activeFloor.id] || [])
+      : (selectedDestination?.floorSegments?.[activeFloor.id] || []))
+    : (selectedDestination?.floorSegments?.[activeFloor.id] || []);
+  const selectedPoint = isMobile
+    ? (routeStarted
+      ? (selectedStep?.focusPoint || selectedDestination?.point || model.sourceSeat.point)
+      : (selectedDestination?.point || model.sourceSeat.point))
+    : (routeSegments.at(-1)?.at(-1) || (selectedDestination?.floorId === activeFloor.id ? selectedDestination.point : null) || (model.sourceSeat.floorId === activeFloor.id ? model.sourceSeat.point : null));
+  const zoom = giantsBallparkMapView.zoom || GIANTS_BALLPARK_DEFAULT_ZOOM;
+  const links = selectedDestination ? activityLinksMarkup(giantsBallparkDestinationLinkItem(selectedDestination)) : "";
+  const destinationOptions = model.destinations.map((destination) => `
+    <option value="${escapeText(destination.id)}" ${destination.id === selectedDestination?.id ? "selected" : ""}>${escapeText(destination.name)} · ${escapeText(destination.floorShortName)} · ${escapeText(destination.routeMinutes)} min</option>
+  `).join("");
+  const floorOptions = model.floors.map((floor) => `
+    <option value="${escapeText(floor.id)}" ${floor.id === activeFloor.id ? "selected" : ""}>${escapeText(floor.shortName)} · ${escapeText(floor.name)}</option>
+  `).join("");
+  const progressPercent = stepCount > 1 ? (currentStepIndex / (stepCount - 1)) * 100 : 0;
+  const topMapClass = isMobile ? "giants-ballpark-stage-shell is-mobile" : "giants-ballpark-stage-shell";
+  const mobileFloorChip = escapeText((routeStarted ? selectedStep?.floorName : selectedDestination?.floorName) || activeFloor.name || activeFloor.shortName || "");
+  const mobileViewBox = isMobile
+    ? giantsBallparkMobileViewBox(model, activeFloor, routeSegments, selectedDestination, selectedStep)
+    : `0 0 ${model.viewport.width} ${model.viewport.height}`;
+  const mobileInstructionTitle = routeStarted
+    ? escapeText(selectedStep?.title || selectedDestination?.name || "Route step")
+    : escapeText(selectedDestination?.name || "Choose a stop");
+  const mobileInstructionDetail = routeStarted
+    ? escapeText(selectedStep?.detail || "Follow the highlighted path.")
+    : escapeText(selectedDestination ? `${selectedDestination.routeMinutes} minutes total from section ${model.sourceSeat.externalId}` : "Pick a stand to preview the route.");
+  const mobileProgressMarkup = routeStarted && selectedDestination ? `
+    <div class="giants-ballpark-mobile-progress-track">
+      <span style="width:${escapeText(progressPercent)}%"></span>
+    </div>
+  ` : "";
+  const mobileTopBannerMarkup = routeStarted ? `
+    <div class="giants-ballpark-mobile-topbar">
+      <button type="button" class="giants-ballpark-mobile-close" data-giants-ballpark-close-route>Close</button>
+      <div class="giants-ballpark-mobile-instruction">
+        <strong>${mobileInstructionTitle}</strong>
+        <span>${mobileInstructionDetail}</span>
+      </div>
+      <span class="giants-ballpark-mobile-ellipsis" aria-hidden="true">•••</span>
+    </div>
+  ` : "";
+  const mobilePickerMarkup = `
+    <div class="giants-ballpark-mobile-picker">
+      <div class="giants-ballpark-mobile-picker-handle" aria-hidden="true"></div>
+      <div class="giants-ballpark-mobile-picker-head">
+        <strong>Directions</strong>
+      </div>
+      <div class="giants-ballpark-mobile-field-stack">
+        <label class="giants-ballpark-mobile-field">
+          <span>From</span>
+          <input type="text" value="${escapeText(model.sourceSeat.externalId)}" readonly>
+        </label>
+        <label class="giants-ballpark-mobile-field">
+          <span>To</span>
+          <select data-giants-ballpark-destination-select>
+            ${destinationOptions}
+          </select>
+        </label>
+      </div>
+      <div class="giants-ballpark-mobile-route-option">
+        <div>
+          <strong>${escapeText(selectedDestination?.routeMinutes || 0)} minutes</strong>
+          <span>${escapeText(selectedDestination?.name || "Select a destination")}</span>
+        </div>
+        <button type="button" class="giants-ballpark-mobile-start" data-giants-ballpark-start-route ${selectedDestination ? "" : "disabled"}>Start</button>
+      </div>
+    </div>
+  `;
+  const mobileRouteFooterMarkup = routeStarted ? `
+    <div class="giants-ballpark-mobile-footer">
+      <div class="giants-ballpark-mobile-summary">
+        <span>${escapeText(`Directions to ${selectedDestination?.name || ""}`)}</span>
+        <strong>${escapeText(selectedDestination?.routeMinutes || 0)} minutes total</strong>
+        ${mobileProgressMarkup}
+      </div>
+      <div class="giants-ballpark-mobile-footer-actions">
+        <button type="button" data-giants-ballpark-step-nav="prev" ${currentStepIndex <= 0 ? "disabled" : ""} aria-label="Previous route step">←</button>
+        ${currentStepIndex >= stepCount - 1
+          ? `<button type="button" class="is-primary" data-giants-ballpark-done-route>I'm done</button>`
+          : `<button type="button" class="is-primary" data-giants-ballpark-step-nav="next" aria-label="Next route step">→</button>`}
+      </div>
+    </div>
+  ` : "";
+
+  container.innerHTML = `
+    <div class="giants-ballpark-explorer">
+      <div class="${topMapClass}">
+        <div class="giants-ballpark-map-scroll" id="giantsBallparkMapScroll" aria-label="Oracle Park map">
+          <svg class="giants-ballpark-svg" id="giantsBallparkSvg" viewBox="${escapeText(isMobile ? mobileViewBox : `0 0 ${model.viewport.width} ${model.viewport.height}`)}" style="${isMobile ? "width:100%;height:100%" : `width:${escapeText(model.viewport.width * zoom)}px;height:${escapeText(model.viewport.height * zoom)}px`}" role="img" aria-label="Oracle Park Club, concourse, and field map">
+            <g class="giants-ballpark-floor-layer">
+              ${activeFloor.polygons.map((polygon) => `<path d="${polygon.path}" fill="${escapeText(polygon.fill)}" fill-opacity="${escapeText(polygon.opacity)}"></path>`).join("")}
+            </g>
+            <g class="giants-ballpark-label-layer">
+              ${activeFloor.labels
+                .filter((label) => !/^(LOC|EL|n)[-_]/i.test(String(label.text || "").trim()) && String(label.text || "").trim().length <= 14)
+                .map((label) => `<text x="${escapeText(label.point[0])}" y="${escapeText(label.point[1])}" class="giants-ballpark-seat-label">${escapeText(label.text)}</text>`).join("")}
+            </g>
+            <g class="giants-ballpark-route-layer">
+              ${routeSegments.map((segment) => `
+                <polyline class="giants-ballpark-route-shadow" points="${segment.map((point) => `${point[0]},${point[1]}`).join(" ")}"></polyline>
+                <polyline class="giants-ballpark-route-line" points="${segment.map((point) => `${point[0]},${point[1]}`).join(" ")}"></polyline>
+              `).join("")}
+            </g>
+            <g class="giants-ballpark-marker-layer">
+              ${visibleDestinations.map((destination) => `
+                <g class="giants-ballpark-marker-button ${destination.id === selectedDestination?.id ? "is-active" : ""}" data-giants-ballpark-destination="${escapeText(destination.id)}" tabindex="0" role="button" aria-label="Show ${escapeText(destination.name)} on the Oracle Park map" transform="translate(${escapeText(destination.point[0])} ${escapeText(destination.point[1])})">
+                  <circle class="giants-ballpark-marker ${destination.venueType === "alcohol" ? "is-drink" : "is-food"}" r="8.5"></circle>
+                  <path class="giants-ballpark-marker-glyph" d="${destination.venueType === "alcohol" ? "M-2.6 -3.2 L0 -0.2 L2.6 -3.2 Z M0 -0.2 V3 M-1.7 3.2 H1.7" : "M-2.9 -3.3 V-0.9 M-1.7 -3.3 V-0.9 M-2.3 -3.3 V3.3 M2 -3.3 Q3.5 -1 2.2 0.3 V3.3"}"></path>
+                </g>
+              `).join("")}
+              ${model.sourceSeat.floorId === activeFloor.id && model.sourceSeat.point ? `
+                <circle class="giants-ballpark-source-dot" cx="${escapeText(model.sourceSeat.point[0])}" cy="${escapeText(model.sourceSeat.point[1])}" r="8" aria-label="Section ${escapeText(model.sourceSeat.externalId)} start point"></circle>
+              ` : ""}
+            </g>
+          </svg>
+        </div>
+
+        ${isMobile ? `
+          ${mobileTopBannerMarkup}
+          ${mobileFloorChip ? `<div class="giants-ballpark-mobile-floor-chip">${mobileFloorChip}</div>` : ""}
+          ${routeStarted ? mobileRouteFooterMarkup : mobilePickerMarkup}
+        ` : `
+          <article class="giants-ballpark-card">
+            <div class="giants-ballpark-card-head">
+              <span class="giants-ballpark-card-kicker">${escapeText(giantsBallparkMapView.mode === "directions" ? `Directions from ${model.sourceSeat.externalId}` : "Stand profile")}</span>
+              <strong>${escapeText(selectedDestination?.name || "Oracle Park food and drink")}</strong>
+              <p>${selectedDestination ? `${escapeText(giantsBallparkFloorLabel(selectedDestination))} · ${escapeText(giantsBallparkCategoryLabel(selectedDestination))} · ${escapeText(selectedDestination.routeMinutes)} min · ${escapeText(giantsBallparkDistanceText(selectedDestination.routeFeet))}` : `Routeable destinations: ${escapeText(model.destinations.length)} · still listed but not routeable in the public bundle: ${escapeText(model.unroutableDestinations.length)}`}</p>
+            </div>
+            ${selectedDestination ? `
+              <div class="giants-ballpark-card-toggle" role="tablist" aria-label="Oracle Park card mode">
+                <button class="${giantsBallparkMapView.mode === "directions" ? "is-active" : ""}" type="button" data-giants-ballpark-mode="directions" aria-selected="${giantsBallparkMapView.mode === "directions" ? "true" : "false"}">Route</button>
+                <button class="${giantsBallparkMapView.mode === "profile" ? "is-active" : ""}" type="button" data-giants-ballpark-mode="profile" aria-selected="${giantsBallparkMapView.mode === "profile" ? "true" : "false"}">Profile</button>
+              </div>
+            ` : ""}
+            ${selectedDestination && giantsBallparkMapView.mode === "directions" ? `
+              <div class="giants-ballpark-steps">
+                ${selectedDestination.steps.map((step) => `
+                  <div class="giants-ballpark-step">
+                    <span class="giants-ballpark-step-icon">${escapeText(giantsBallparkStepIcon(step))}</span>
+                    <div>
+                      <strong>${escapeText(step.title)}</strong>
+                      <span>${escapeText(step.detail)}</span>
+                    </div>
+                  </div>
+                `).join("")}
+              </div>
+            ` : ""}
+            ${selectedDestination && giantsBallparkMapView.mode === "profile" ? `
+              <div class="giants-ballpark-profile-copy">
+                <span>${escapeText(`Floor: ${giantsBallparkFloorLabel(selectedDestination)}`)}</span>
+                <span>${escapeText(`Type: ${giantsBallparkCategoryLabel(selectedDestination)}`)}</span>
+                <span>${escapeText(`Route options published: ${selectedDestination.routeOptionCount}`)}</span>
+              </div>
+            ` : ""}
+            ${links}
+          </article>
+
+          <div class="giants-ballpark-floor-pill">
+            <label class="sr-only" for="giantsBallparkFloorSelect">Choose a floor</label>
+            <select id="giantsBallparkFloorSelect" data-giants-ballpark-floor>
+              ${floorOptions}
+            </select>
+          </div>
+
+          <div class="giants-ballpark-controls" aria-label="Map zoom controls">
+            <button type="button" data-giants-ballpark-center aria-label="Recenter map">◎</button>
+            <button type="button" data-giants-ballpark-zoom="in" aria-label="Zoom in">+</button>
+            <button type="button" data-giants-ballpark-zoom="out" aria-label="Zoom out">−</button>
+          </div>
+        `}
+      </div>
+
+      ${isMobile ? "" : `
+        <div class="giants-ballpark-chip-row" aria-label="Quick route picks">
+          ${featuredDestinations.map((destination) => `
+            <button type="button" class="giants-ballpark-chip ${destination.id === selectedDestination?.id ? "is-active" : ""}" data-giants-ballpark-destination="${escapeText(destination.id)}">
+              <strong>${escapeText(destination.name)}</strong>
+              <span>${escapeText(destination.floorShortName)} · ${escapeText(destination.routeMinutes)} min</span>
+            </button>
+          `).join("")}
+        </div>
+      `}
+    </div>
+  `;
+
+  bindGiantsBallparkScrollDrag();
+  if (!isMobile && selectedPoint) scheduleGiantsBallparkCenter(selectedPoint);
+}
+
+async function loadGiantsBallparkFoodRouteData() {
+  if (giantsBallparkFoodRouteData.loading || giantsBallparkFoodRouteData.loaded) return;
+  giantsBallparkFoodRouteData.loading = true;
+  try {
+    const response = await fetch(GIANTS_BALLPARK_ROUTE_DATA_URL, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Failed to load Giants route data: ${response.status}`);
+    const payload = await response.json();
+    const mapped = buildGiantsBallparkFoodItemsFromRoutes(payload);
+    giantsBallparkFoodRouteData = {
+      loading: false,
+      loaded: true,
+      sourceSeat: mapped.sourceSeat,
+      items: mapped.items,
+      unroutableCount: mapped.unroutableCount
+    };
+    renderGiantsBallparkFood();
+  } catch (error) {
+    giantsBallparkFoodRouteData.loading = false;
+    console.warn("Could not load Giants ballpark food routes from section 228.", error);
+  }
+}
+
+async function loadGiantsBallparkMapData() {
+  if (giantsBallparkMapData.loading || giantsBallparkMapData.loaded) return;
+  giantsBallparkMapData.loading = true;
+  renderGiantsBallparkMapPanel();
+  try {
+    const response = await fetch(GIANTS_BALLPARK_MAP_DATA_URL, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Failed to load Giants map model: ${response.status}`);
+    const model = await response.json();
+    giantsBallparkMapData = {
+      loading: false,
+      loaded: true,
+      model
+    };
+    const selectedDestination = ensureGiantsBallparkMapSelection();
+    if (selectedDestination) giantsBallparkMapView.activeFloorId = selectedDestination.floorId;
+    renderGiantsBallparkMapPanel();
+    renderGiantsBallparkFood();
+  } catch (error) {
+    giantsBallparkMapData.loading = false;
+    console.warn("Could not load the local Oracle Park map model.", error);
+    renderGiantsBallparkMapPanel();
+  }
+}
+
 function renderGiantsBallparkFood() {
+  renderGiantsBallparkMapPanel();
+  const model = giantsBallparkMapData.model;
+  const items = giantsBallparkFoodRouteData.items;
+  const container = document.querySelector("#giantsBallparkFoodList");
+  if (!container) return;
+  if (model?.destinations?.length && isGiantsBallparkMobileLayout()) {
+    container.innerHTML = "";
+    return;
+  }
+  if (model?.destinations?.length) {
+    const selectedDestination = ensureGiantsBallparkMapSelection();
+    const routeableCards = model.destinations.map((destination) => {
+      const linkItem = giantsBallparkDestinationLinkItem(destination);
+      return `
+        <article class="giants-ballpark-list-card ${destination.id === selectedDestination?.id ? "is-active" : ""}">
+          <div class="giants-ballpark-list-copy">
+            <span class="activity-rank">${escapeText(destination.floorShortName)} · ${escapeText(giantsBallparkCategoryLabel(destination))}</span>
+            <strong>${escapeText(destination.name)}</strong>
+            <span class="giants-guide-meta">${escapeText(`${destination.routeMinutes} min from section ${GIANTS_BALLPARK_ROUTE_SOURCE_SEAT} · ${giantsBallparkDistanceText(destination.routeFeet)}`)}</span>
+          </div>
+          <div class="giants-ballpark-list-actions">
+            <button class="text-mini-button giants-ballpark-local-button" type="button" data-giants-ballpark-destination="${escapeText(destination.id)}">Show on map</button>
+            ${activityLinksMarkup(linkItem)}
+          </div>
+        </article>
+      `;
+    }).join("");
+    const unroutableCards = (model.unroutableDestinations || []).map((destination) => `
+      <article class="giants-ballpark-list-card is-muted">
+        <div class="giants-ballpark-list-copy">
+          <span class="activity-rank">Listed only</span>
+          <strong>${escapeText(destination.name)}</strong>
+          <span class="giants-guide-meta">${escapeText(`The public Oracle Park bundle lists this stand, but it does not expose a route node from section ${GIANTS_BALLPARK_ROUTE_SOURCE_SEAT} yet.`)}</span>
+        </div>
+      </article>
+    `).join("");
+    container.innerHTML = `
+      <div class="giants-ballpark-list-wrap">
+        ${routeableCards}
+        ${unroutableCards}
+      </div>
+    `;
+    return;
+  }
+  if (Array.isArray(items) && items.length) {
+    renderGiantsGuideList("#giantsBallparkFoodList", items);
+    return;
+  }
   renderGiantsGuideList("#giantsBallparkFoodList", giantsGameBallparkFood);
 }
 
@@ -4724,6 +5708,25 @@ function updateHeroForPanel(activeTab) {
   if (titleNode) titleNode.textContent = hero.title;
   if (subtitleNode) subtitleNode.textContent = hero.subtitle;
   if (locationNode) locationNode.textContent = hero.location;
+  const heroImage = document.querySelector(".shared-hero .hero-media img");
+  const heroCopy = document.querySelector(".shared-hero .hero-copy");
+  const isGiantsGame = activeTab === "giants-game";
+  if (heroImage) {
+    if (!heroImage.dataset.defaultSrc) heroImage.dataset.defaultSrc = heroImage.getAttribute("src");
+    if (isGiantsGame) {
+      heroImage.onerror = () => {
+        heroImage.onerror = null;
+        heroImage.src = heroImage.dataset.defaultSrc;
+      };
+      heroImage.src = "assets/oracle-park-hero.jpg";
+    } else {
+      heroImage.onerror = null;
+      if (heroImage.getAttribute("src") !== heroImage.dataset.defaultSrc) {
+        heroImage.src = heroImage.dataset.defaultSrc;
+      }
+    }
+  }
+  if (heroCopy) heroCopy.classList.toggle("is-hidden", isGiantsGame);
 }
 
 function setActivePanel(tab, options = {}) {
@@ -4735,13 +5738,24 @@ function setActivePanel(tab, options = {}) {
     button.classList.toggle("is-active", button.dataset.tab === tab);
   });
   document.body.classList.toggle("home-reference-active", tab === "home");
+  document.body.classList.toggle("giants-theme", tab === "giants-game");
   document.querySelector(".app-shell")?.classList.toggle("is-home-reference", tab === "home");
+  updateAppShellModes();
   updateHeroForPanel(tab);
   updateSidebarTripCard(tab);
   updateMobileNav(tab);
   if (!options.skipHash) updatePanelHash(tab, options.replaceHash ? "replace" : "push");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+}
+
+function updateAppShellModes() {
+  const appShell = document.querySelector(".app-shell");
+  const giantsPanel = document.querySelector("#giants-game");
+  if (!appShell || !giantsPanel) return;
+  const isGiantsMapOnly = currentActivePanel === "giants-game" && giantsGameView === "inside-food";
+  appShell.classList.toggle("is-giants-map-only", isGiantsMapOnly);
+  giantsPanel.classList.toggle("is-map-only", isGiantsMapOnly);
 }
 
 function registerServiceWorker() {
@@ -5921,6 +6935,68 @@ function bindEvents() {
     const giantsViewBtn = event.target.closest("[data-giants-view]");
     if (giantsViewBtn) { giantsGameView = giantsViewBtn.dataset.giantsView; renderGiantsHub(); }
 
+    const giantsBallparkDestinationBtn = event.target.closest("[data-giants-ballpark-destination]");
+    if (giantsBallparkDestinationBtn) {
+      giantsBallparkMapView.selectedDestinationId = giantsBallparkDestinationBtn.dataset.giantsBallparkDestination || "";
+      const selectedDestination = giantsBallparkMapData.model?.destinations?.find((destination) => destination.id === giantsBallparkMapView.selectedDestinationId);
+      if (selectedDestination?.floorId) giantsBallparkMapView.activeFloorId = selectedDestination.floorId;
+      giantsBallparkMapView.stepIndex = 0;
+      giantsBallparkMapView.routeStarted = false;
+      giantsBallparkMapView.mode = "directions";
+      renderGiantsBallparkFood();
+    }
+
+    const giantsBallparkModeBtn = event.target.closest("[data-giants-ballpark-mode]");
+    if (giantsBallparkModeBtn) {
+      giantsBallparkMapView.mode = giantsBallparkModeBtn.dataset.giantsBallparkMode || "directions";
+      renderGiantsBallparkMapPanel();
+    }
+
+    const giantsBallparkZoomBtn = event.target.closest("[data-giants-ballpark-zoom]");
+    if (giantsBallparkZoomBtn) {
+      const nextZoom = giantsBallparkZoomBtn.dataset.giantsBallparkZoom === "in"
+        ? giantsBallparkMapView.zoom + 0.12
+        : giantsBallparkMapView.zoom - 0.12;
+      giantsBallparkMapView.zoom = clamp(nextZoom, 0.42, 1.8);
+      renderGiantsBallparkMapPanel();
+    }
+
+    const giantsBallparkCenterBtn = event.target.closest("[data-giants-ballpark-center]");
+    if (giantsBallparkCenterBtn) {
+      giantsBallparkMapView.zoom = GIANTS_BALLPARK_DEFAULT_ZOOM;
+      renderGiantsBallparkMapPanel();
+    }
+
+    const giantsBallparkStepNavBtn = event.target.closest("[data-giants-ballpark-step-nav]");
+    if (giantsBallparkStepNavBtn) {
+      const selectedDestination = ensureGiantsBallparkMapSelection();
+      const steps = Array.isArray(selectedDestination?.steps) ? selectedDestination.steps : [];
+      const direction = giantsBallparkStepNavBtn.dataset.giantsBallparkStepNav === "next" ? 1 : -1;
+      giantsBallparkMapView.stepIndex = clamp((giantsBallparkMapView.stepIndex || 0) + direction, 0, Math.max(steps.length - 1, 0));
+      renderGiantsBallparkMapPanel();
+    }
+
+    const giantsBallparkStartRouteBtn = event.target.closest("[data-giants-ballpark-start-route]");
+    if (giantsBallparkStartRouteBtn) {
+      giantsBallparkMapView.routeStarted = true;
+      giantsBallparkMapView.stepIndex = 0;
+      renderGiantsBallparkMapPanel();
+    }
+
+    const giantsBallparkCloseRouteBtn = event.target.closest("[data-giants-ballpark-close-route]");
+    if (giantsBallparkCloseRouteBtn) {
+      giantsBallparkMapView.routeStarted = false;
+      giantsBallparkMapView.stepIndex = 0;
+      renderGiantsBallparkMapPanel();
+    }
+
+    const giantsBallparkDoneRouteBtn = event.target.closest("[data-giants-ballpark-done-route]");
+    if (giantsBallparkDoneRouteBtn) {
+      giantsBallparkMapView.routeStarted = false;
+      giantsBallparkMapView.stepIndex = 0;
+      renderGiantsBallparkMapPanel();
+    }
+
     const foodDayBtn = event.target.closest("[data-food-day]");
     if (foodDayBtn) { foodDay = foodDayBtn.dataset.foodDay; renderFoodHub(); }
 
@@ -6027,6 +7103,30 @@ function bindEvents() {
       if (!familyScheduleDrafts[index] || !field) return;
       familyScheduleDrafts[index][field] = draftField.value;
     }
+
+    const giantsBallparkFloor = event.target.closest("[data-giants-ballpark-floor]");
+    if (giantsBallparkFloor) {
+      giantsBallparkMapView.activeFloorId = giantsBallparkFloor.value || "";
+      renderGiantsBallparkMapPanel();
+    }
+
+    const giantsBallparkDestinationSelect = event.target.closest("[data-giants-ballpark-destination-select]");
+    if (giantsBallparkDestinationSelect) {
+      giantsBallparkMapView.selectedDestinationId = giantsBallparkDestinationSelect.value || "";
+      const selectedDestination = giantsBallparkMapData.model?.destinations?.find((destination) => destination.id === giantsBallparkMapView.selectedDestinationId);
+      giantsBallparkMapView.stepIndex = 0;
+      giantsBallparkMapView.routeStarted = false;
+      if (selectedDestination?.floorId) giantsBallparkMapView.activeFloorId = selectedDestination.floorId;
+      renderGiantsBallparkFood();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const marker = event.target.closest?.("[data-giants-ballpark-destination]");
+    if (!marker) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    marker.click();
   });
 
   document.addEventListener("submit", (event) => {
@@ -6275,6 +7375,8 @@ renderAuthPeople();
 resetFamilyEventForm();
 registerServiceWorker();
 initializeSession();
+loadGiantsBallparkFoodRouteData();
+loadGiantsBallparkMapData();
 
 window.addEventListener("hashchange", () => {
   setActivePanel(panelFromHash() || "home", { skipHash: true });

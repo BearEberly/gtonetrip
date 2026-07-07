@@ -1,0 +1,92 @@
+[
+  {
+    "id": "eli_3fe79145e075cf4e",
+    "parent": "el_67a6355d10184d6b4070ad0f",
+    "name": "Women's Restrooms",
+    "spaces": [
+      {
+        "floor": "f_67a4103590b13e2a80cc9a6e",
+        "id": "s_b01fcf4ffe05421d"
+      }
+    ],
+    "nodes": [
+      {
+        "map": "f_67a4103590b13e2a80cc9a6e",
+        "id": "n_67abf7b641730a3fab0b4b45"
+      }
+    ],
+    "polygons": []
+  },
+  {
+    "id": "eli_0bfdb01c1a98db8d",
+    "parent": "el_67a6355f69b3553abf7d6134",
+    "operationHours": [],
+    "spaces": [
+      {
+        "floor": "f_67a4103590b13e2a80cc9a6e",
+        "id": "s_b50f2a7c6ab245d1"
+      }
+    ],
+    "nodes": [
+      {
+        "map": "f_67a4103590b13e2a80cc9a6e",
+        "id": "n_69c187b9a1cf5e585c2746d8"
+      }
+    ],
+    "polygons": []
+  },
+  {
+    "id": "eli_36802ad4018acf72",
+    "parent": "el_67a6356069b3553abf7d615f",
+    "name": "Snoopy, Charlie Brown & Lucy Statues",
+    "spaces": [
+      {
+        "floor": "f_67a4103590b13e2a80cc9a6e",
+        "id": "s_86bfac096cdf27fd"
+      }
+    ],
+    "nodes": [
+      {
+        "map": "f_67a4103590b13e2a80cc9a6e",
+        "id": "n_67abf80f41730a3fab0b4b4b"
+      }
+    ],
+    "polygons": []
+  },
+  {
+    "id": "eli_18676d51d8246387",
+    "parent": "el_6998a5dcfa2d776fbdbf76a0",
+    "operationHours": [],
+    "spaces": [
+      {
+        "floor": "f_67a4108afc9191deb55c6652",
+        "id": "s_6f1e0a1fcd4d489d"
+      }
+    ],
+    "nodes": [
+      {
+        "map": "f_67a4108afc9191deb55c6652",
+        "id": "n_67ec656bd85006377677cebe"
+      }
+    ],
+    "polygons": []
+  },
+  {
+    "id": "eli_463cb60bd2162701",
+    "parent": "el_69bb19e00535e48a5bbfc446",
+    "name": "Women's Restrooms",
+    "spaces": [
+      {
+        "floor": "f_67a4103590b13e2a80cc9a6e",
+        "id": "s_b01fcf4ffe05421d"
+      }
+    ],
+    "nodes": [
+      {
+        "map": "f_67a4103590b13e2a80cc9a6e",
+        "id": "n_67abf7b641730a3fab0b4b45"
+      }
+    ],
+    "polygons": []
+  }
+]

@@ -1,0 +1,224 @@
+{
+  "generatedAt": "2026-07-06T22:44:40.921Z",
+  "venue": "mlb-san-francisco",
+  "sourceSeat": "228",
+  "sourceUrls": {
+    "mappedinVenue": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/",
+    "exampleDirections": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6daf6b100016205c7b50b&from=228&textDirectionsVisible=true&instruction=0"
+  },
+  "counts": {
+    "publicLocations": 336,
+    "publicEvents": 0,
+    "venueLocations": 336,
+    "foodAndDrinkDestinations": 89,
+    "routeableFoodAndDrinkDestinations": 64,
+    "unroutableFoodAndDrinkDestinations": 25,
+    "venueNodes": 1757,
+    "venueConnections": 73,
+    "floors": 7,
+    "categories": 16
+  },
+  "locationTypes": {
+    "building": 1,
+    "tenant": 128,
+    "amenities": 24,
+    "waypoints": 3,
+    "seating": 174,
+    "gate": 6
+  },
+  "floors": [
+    {
+      "id": "f_67a40febb4748ec304312659",
+      "externalId": "MAP-5NIB1ZOO",
+      "elevation": 0,
+      "name": "Outdoors",
+      "shortName": "Outdoors"
+    },
+    {
+      "id": "f_67a4103590b13e2a80cc9a6e",
+      "externalId": "MAP-QSHQPU60",
+      "elevation": 0,
+      "name": "Field Level",
+      "shortName": "FL"
+    },
+    {
+      "id": "f_67a4105d1a05ad42c13cd47a",
+      "externalId": "MAP-DSKMSNR6",
+      "elevation": 1,
+      "name": "Main Concourse",
+      "shortName": "MC"
+    },
+    {
+      "id": "f_67a4108afc9191deb55c6652",
+      "externalId": "MAP-0SSMBPIS",
+      "elevation": 2,
+      "name": "Club Level",
+      "shortName": "CL"
+    },
+    {
+      "id": "f_67a410ad9e6e974ed13e039a",
+      "externalId": "MAP-XH8R6ZQF",
+      "elevation": 3,
+      "name": "Suite Level",
+      "shortName": "SL"
+    },
+    {
+      "id": "f_67a410dacc5ab04059f36c6a",
+      "externalId": "MAP-PF42DHZW",
+      "elevation": 4,
+      "name": "View Level Concourse",
+      "shortName": "UC"
+    },
+    {
+      "id": "f_67a41332035e439696d79138",
+      "externalId": "MAP-02JNC8L5",
+      "elevation": 5,
+      "name": "View Level",
+      "shortName": "VL"
+    }
+  ],
+  "categories": [
+    {
+      "id": "ec_67a6308aac9ea99f29439b47",
+      "name": "ATM",
+      "externalId": "CAT-W44K7WRI",
+      "icon": "atm",
+      "locationCount": 2,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a63096ac9ea99f29439b48",
+      "name": "First Aid",
+      "externalId": "CAT-F7UR7JBM",
+      "icon": "hospital",
+      "locationCount": 1,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a630a4ac9ea99f29439b49",
+      "name": "Food & Drinks",
+      "externalId": "CAT-04RTQYCY",
+      "icon": "burger-and-drink",
+      "locationCount": 16,
+      "childCategoryIds": [
+        "ec_67a6344bac9ea99f29439b56",
+        "ec_67a63462ac9ea99f29439b57"
+      ]
+    },
+    {
+      "id": "ec_67a630b4ac9ea99f29439b4a",
+      "name": "Gate",
+      "externalId": "CAT-VVOHT3CP",
+      "icon": "stadium-gates",
+      "locationCount": 7,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a630caac9ea99f29439b4b",
+      "name": "Merchandise",
+      "externalId": "CAT-BM35J81E",
+      "icon": "shopping-bag",
+      "locationCount": 4,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a630daac9ea99f29439b4c",
+      "name": "Parking",
+      "externalId": "CAT-7T5OYRM6",
+      "icon": "location-parking",
+      "locationCount": 4,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a630f0ac9ea99f29439b4d",
+      "name": "Restrooms",
+      "externalId": "CAT-6Z9YUH71",
+      "icon": "amenities-washrooms",
+      "locationCount": 4,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a63100ac9ea99f29439b4e",
+      "name": "Seating",
+      "externalId": "CAT-5TVK854P",
+      "icon": "seat",
+      "locationCount": 105,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a63113ac9ea99f29439b4f",
+      "name": "Services",
+      "externalId": "CAT-6OC9B4KP",
+      "icon": "information",
+      "locationCount": 2,
+      "childCategoryIds": [
+        "ec_67a6355c10184d6b4070ad04",
+        "ec_67a6355c10184d6b4070ad07"
+      ]
+    },
+    {
+      "id": "ec_67a63127ac9ea99f29439b50",
+      "name": "Suite",
+      "externalId": "CAT-9FNIO6VD",
+      "icon": "special-seat",
+      "locationCount": 57,
+      "childCategoryIds": [
+        "ec_67a6355c10184d6b4070ad05"
+      ]
+    },
+    {
+      "id": "ec_67a6344bac9ea99f29439b56",
+      "name": "Food",
+      "externalId": "CAT-8ZC8FRRK",
+      "icon": "burger",
+      "locationCount": 39,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a63462ac9ea99f29439b57",
+      "name": "Alcohol",
+      "externalId": "CAT-MLENBSUO",
+      "icon": "liquor-alcohol",
+      "locationCount": 35,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a6355c10184d6b4070ad04",
+      "name": "Information",
+      "externalId": "CAT-UR30MNA4",
+      "icon": "information",
+      "locationCount": 5,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a6355c10184d6b4070ad05",
+      "name": "Premium Areas",
+      "externalId": "CAT-02SLR5YH",
+      "icon": "lounge",
+      "locationCount": 28,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a6355c10184d6b4070ad06",
+      "name": "Attraction",
+      "externalId": "CAT-JYNXQUH2",
+      "icon": "special",
+      "locationCount": 9,
+      "childCategoryIds": []
+    },
+    {
+      "id": "ec_67a6355c10184d6b4070ad07",
+      "name": "Ticketing",
+      "externalId": "CAT-XTDV998H",
+      "icon": "tickets",
+      "locationCount": 2,
+      "childCategoryIds": []
+    }
+  ],
+  "notes": [
+    "The live Mappedin bundle exposes floors, categories, locations, nodes, and graph connections.",
+    "No operation hours were present in the extracted location instance data for this venue bundle.",
+    "Route options below use section 228 as the source and each destination node as a route target.",
+    "Some food and drink records do not expose route nodes in the public venue bundle, so they are preserved separately as unroutable destinations."
+  ]
+}

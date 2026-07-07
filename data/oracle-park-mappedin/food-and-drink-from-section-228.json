@@ -1,0 +1,4055 @@
+{
+  "generatedAt": "2026-07-06T22:44:40.921Z",
+  "venue": "mlb-san-francisco",
+  "sourceSeat": {
+    "id": "el_67aaa02b23958d884b562dc3",
+    "name": "228",
+    "externalId": "228",
+    "type": "seating",
+    "nodes": [
+      {
+        "nodeId": "n_67a51eea2df2c6151b81634a",
+        "mapId": "f_67a4108afc9191deb55c6652",
+        "mapName": "Club Level",
+        "mapShortName": "CL",
+        "elevation": 2,
+        "coordinates": [
+          -122.38971551527729,
+          37.77911710477261
+        ]
+      }
+    ]
+  },
+  "destinations": [
+    {
+      "id": "el_696a7716f59efd7979f4a032",
+      "name": "58 Social",
+      "externalId": "LOC-GON67V3N",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-GON67V3N",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_699e0ab3263091e5a1a804bb",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39082746055176,
+            37.77825668921787
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_699e0ab3263091e5a1a804bb&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67e469c577371b1ef6f33d15",
+      "name": "Backstop Bar",
+      "externalId": "LOC-REVFE0QO",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-REVFE0QO",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e4692c77371b1ef6f33d14",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39047997410826,
+            37.77835730436837
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e4692c77371b1ef6f33d14&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d610b",
+      "name": "Ballpark Snacks",
+      "externalId": "LOC-8SAOZ4PW",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options",
+        "vegan options",
+        "gluten-free options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-8SAOZ4PW",
+      "routeOptionCount": 4,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf12641730a3fab0b48cd",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3884337411718,
+            37.77904400789348
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf12641730a3fab0b48cd&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e466be77371b1ef6f33d10",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39083085344872,
+            37.778383772689246
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e466be77371b1ef6f33d10&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67ec60772763d77f3af50e42",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39071485468185,
+            37.778051216860845
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec60772763d77f3af50e42&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc572828c8d776347d07c",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38955997524677,
+            37.77942903958305
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc572828c8d776347d07c&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_69caf6bc5903eaf1796de0c6",
+      "name": "Bases Loaded Potato",
+      "externalId": "LOC-N9DOMOQC",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "Potato"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-N9DOMOQC",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_69caf6765903eaf1796de0c3",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39071440303792,
+            37.77861401021608
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_69caf6765903eaf1796de0c3&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d610f",
+      "name": "Bayside Brews",
+      "externalId": "LOC-VEH7YU2F",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-VEH7YU2F",
+      "routeOptionCount": 23,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e5b73851c8031f3a05cb24",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38829192997298,
+            37.778626448592014
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e5b73851c8031f3a05cb24&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a428fce11c3dd30be5a954",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38992814906429,
+            37.77762452107146
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a428fce11c3dd30be5a954&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a4fdc32df2c6151b816202",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39058914578163,
+            37.77864991401842
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a4fdc32df2c6151b816202&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aba39977e4b5e913a4aa79",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38964792476841,
+            37.777640775069955
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba39977e4b5e913a4aa79&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abec7f41730a3fab0b4754",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39024943691405,
+            37.77890187719633
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abec7f41730a3fab0b4754&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abeee141730a3fab0b476a",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38970527705212,
+            37.77925887542329
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abeee141730a3fab0b476a&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abf38f41730a3fab0b4b1d",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38802368125017,
+            37.77862857016294
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf38f41730a3fab0b4b1d&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e5b47d53c61a582a4f814a",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39077470622672,
+            37.77854572532379
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e5b47d53c61a582a4f814a&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6d9f920c269c2c5be0be0",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38922827860951,
+            37.77956012944564
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6d9f920c269c2c5be0be0&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6daf6b100016205c7b50b",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38901760027889,
+            37.779323676371355
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6daf6b100016205c7b50b&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6e2b87a099def695f48b9",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38974002753001,
+            37.77770705329024
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e2b87a099def695f48b9&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67eefb7f194fc262fabd9c59",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38849849947871,
+            37.779086013010655
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67eefb7f194fc262fabd9c59&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67eefc1a194fc262fabd9c5f",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38814286135461,
+            37.77874539581952
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67eefc1a194fc262fabd9c5f&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67ec650e2763d77f3af50e53",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39006015290695,
+            37.779045800733414
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec650e2763d77f3af50e53&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_69c187316ae679f89f18a425",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.3901517302901,
+            37.777756951697015
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_69c187316ae679f89f18a425&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aaa8e84e0da3f2f31fa519",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39011565029615,
+            37.777728514523126
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaa8e84e0da3f2f31fa519&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aaabba4e0da3f2f31fa52a",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39025054584786,
+            37.77898489780987
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaabba4e0da3f2f31fa52a&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aaac204e0da3f2f31fa52f",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39007948527079,
+            37.779120641549675
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaac204e0da3f2f31fa52f&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc1c6828c8d776347d052",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39083142364834,
+            37.778346177084
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc1c6828c8d776347d052&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc432828c8d776347d06f",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38999821189874,
+            37.779174308964215
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc432828c8d776347d06f&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc4e9828c8d776347d075",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38983769678146,
+            37.77926760117489
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc4e9828c8d776347d075&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc56f828c8d776347d07b",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38960818155051,
+            37.779404753534514
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc56f828c8d776347d07b&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc581828c8d776347d080",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.389443680619,
+            37.77949058166659
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc581828c8d776347d080&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        },
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d6114",
+      "name": "Boba Tea",
+      "externalId": "LOC-XEWWXKKW",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options",
+        "vegan options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-XEWWXKKW",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6e6dc99465b616ce4e707",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39032090775945,
+            37.777916806993176
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e6dc99465b616ce4e707&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc1fa828c8d776347d05b",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39078138199007,
+            37.7785448066439
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc1fa828c8d776347d05b&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_69c181e6a1cf5e585c2746cf",
+      "name": "Butcher & Batter",
+      "externalId": "LOC-LKX36EKI",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food & Drinks",
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-LKX36EKI",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e46eda77371b1ef6f33d22",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39074320219537,
+            37.77824870456403
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e46eda77371b1ef6f33d22&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e46ee077371b1ef6f33d23",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39075743726588,
+            37.778291534968886
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e46ee077371b1ef6f33d23&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_696a6dde535d6f347eb4cfae",
+      "name": "Caymus Terrace Bar",
+      "externalId": "LOC-HC9WN9EQ",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-HC9WN9EQ",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_696a6db6535d6f347eb4cfad",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39084082442037,
+            37.778235602061656
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_696a6db6535d6f347eb4cfad&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d611d",
+      "name": "Coors Light Landing",
+      "externalId": "LOC-4PPGVNFT",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-4PPGVNFT",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf49e41730a3fab0b4b29",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38820216954139,
+            37.778279378646715
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf49e41730a3fab0b4b29&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d611e",
+      "name": "Corona Bar",
+      "externalId": "LOC-40K52G80",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-40K52G80",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf82141730a3fab0b4b4c",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38842936428864,
+            37.778379186481786
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf82141730a3fab0b4b4c&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edbf4572984da87bb7091e",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39066993585868,
+            37.778021095621284
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edbf4572984da87bb7091e&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6120",
+      "name": "Crazy Crab'z",
+      "externalId": "LOC-X4GDSYTI",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "seafood"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-X4GDSYTI",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6df68b100016205c7b512",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38809196565168,
+            37.77845435486946
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6df68b100016205c7b512&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc164828c8d776347d04b",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39081349301595,
+            37.77826323715175
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc164828c8d776347d04b&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6121",
+      "name": "Cuervo Bar",
+      "externalId": "LOC-IN56UGTX",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-IN56UGTX",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ec6737ed45d933daa489ad",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.38929145271614,
+            37.77949332330948
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec6737ed45d933daa489ad&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6122",
+      "name": "Cuervo Corner Bar (outside)",
+      "externalId": "LOC-1NO4KNQ4",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-1NO4KNQ4",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ec66b69cf9cba3bb330ffb",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.3893078634647,
+            37.779370846846184
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec66b69cf9cba3bb330ffb&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67e6d78220c269c2c5be0bd8",
+      "name": "Cutwater Cocktail Bar",
+      "externalId": "LOC-JKVNRDSE",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-JKVNRDSE",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abef1141730a3fab0b476b",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39007010646259,
+            37.779094719917005
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abef1141730a3fab0b476b&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67e6d6f820c269c2c5be0bd7",
+      "name": "Cutwater Taqueria",
+      "externalId": "LOC-BTMMSPOZ",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "alcohol"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-BTMMSPOZ",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abef1141730a3fab0b476b",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39007010646259,
+            37.779094719917005
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abef1141730a3fab0b476b&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6123",
+      "name": "Da Poke Man",
+      "externalId": "LOC-HD87MYAF",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "seafood"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-HD87MYAF",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6e8b8cec4e5f82fb90413",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39053779000085,
+            37.777995715424225
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e8b8cec4e5f82fb90413&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6124",
+      "name": "Dippin Dots",
+      "externalId": "LOC-8GIQURL1",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-8GIQURL1",
+      "routeOptionCount": 4,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf34d41730a3fab0b4b1a",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38814373450133,
+            37.77857080969823
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf34d41730a3fab0b4b1a&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6e6d599465b616ce4e704",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39030443015902,
+            37.77790716092434
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e6d599465b616ce4e704&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67eefbad194fc262fabd9c5c",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38840542043145,
+            37.77897743845491
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67eefbad194fc262fabd9c5c&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc211828c8d776347d063",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39070685146825,
+            37.778603282566834
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc211828c8d776347d063&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d6126",
+      "name": "Doggie Diner",
+      "externalId": "LOC-1CACRXCO",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options",
+        "vegan options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-1CACRXCO",
+      "routeOptionCount": 14,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e5b61b51c8031f3a05cb1f",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38810996410824,
+            37.778574357420574
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e5b61b51c8031f3a05cb1f&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a4fdb52df2c6151b8161fb",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3904687997984,
+            37.778757523008274
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a4fdb52df2c6151b8161fb&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aba6d577e4b5e913a4aa96",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39043407995618,
+            37.77795865518124
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba6d577e4b5e913a4aa96&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abee4841730a3fab0b4762",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38941491380042,
+            37.779444803115126
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abee4841730a3fab0b4762&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abeff041730a3fab0b4775",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38906882709148,
+            37.77941926551557
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abeff041730a3fab0b4775&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abf61141730a3fab0b4b3d",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39000263878012,
+            37.777839153994144
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf61141730a3fab0b4b3d&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6dde9b100016205c7b511",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38819425836722,
+            37.77853489783978
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6dde9b100016205c7b511&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aaaec54e0da3f2f31fa537",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.38995956261833,
+            37.77767520971835
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaaec54e0da3f2f31fa537&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aab3ca4e0da3f2f31fa57a",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.38965917858123,
+            37.779329529821425
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aab3ca4e0da3f2f31fa57a&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a42565e11c3dd30be5a8ac",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39010550753879,
+            37.778983042526406
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a42565e11c3dd30be5a8ac&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a425f8e11c3dd30be5a8ce",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39060769512392,
+            37.77840075406103
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a425f8e11c3dd30be5a8ce&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a42650e11c3dd30be5a8e8",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39020558406557,
+            37.77788867346812
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a42650e11c3dd30be5a8e8&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a42656e11c3dd30be5a8eb",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39014353491783,
+            37.77774381031849
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a42656e11c3dd30be5a8eb&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc568828c8d776347d078",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38966278179684,
+            37.77937285419815
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc568828c8d776347d078&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        },
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_69c1de75a1cf5e585c2746dc",
+      "name": "Doggie Diner Express",
+      "externalId": "LOC-6KMYECYC",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-6KMYECYC",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aba6d577e4b5e913a4aa96",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39043407995618,
+            37.77795865518124
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba6d577e4b5e913a4aa96&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d10184d6b4070ad0d",
+      "name": "Far Niente Wine Bar",
+      "externalId": "LOC-6P0MDYX2",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-6P0MDYX2",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67a4fdc22df2c6151b816201",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39064527071679,
+            37.77867180576239
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a4fdc22df2c6151b816201&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aaabde4e0da3f2f31fa52e",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39019528019165,
+            37.77902875350669
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaabde4e0da3f2f31fa52e&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67e6d9b020c269c2c5be0bde",
+      "name": "Field Works Bar",
+      "externalId": "LOC-XPOOIISL",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-XPOOIISL",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6d95820c269c2c5be0bdd",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38941527005093,
+            37.779594198842915
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6d95820c269c2c5be0bdd&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d612d",
+      "name": "Fresh Popcorn",
+      "externalId": "LOC-49NNYB0V",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-49NNYB0V",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ec64cf2763d77f3af50e50",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.3900941800418,
+            37.779071593141815
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec64cf2763d77f3af50e50&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d10184d6b4070ad12",
+      "name": "fuku",
+      "externalId": "LOC-RL086GBU",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-RL086GBU",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e5b48753c61a582a4f814c",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39075367869225,
+            37.77857403531312
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e5b48753c61a582a4f814c&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67ec5f222763d77f3af50e3a",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39017504823737,
+            37.777803269034365
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec5f222763d77f3af50e3a&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d612f",
+      "name": "Ghirardelli",
+      "externalId": "LOC-2OXT421D",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "ice cream",
+        "hot chocolate",
+        "sundae",
+        "dessert",
+        "snack"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-2OXT421D",
+      "routeOptionCount": 4,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf0f641730a3fab0b48cb",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38881938229213,
+            37.77931438344332
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf0f641730a3fab0b48cb&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6e3fa7a099def695f48ba",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38996117629945,
+            37.777488831290796
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e3fa7a099def695f48ba&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aab2a24e0da3f2f31fa573",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39027696478736,
+            37.778937591650035
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aab2a24e0da3f2f31fa573&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc390828c8d776347d06a",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39047143365065,
+            37.778807340807056
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc390828c8d776347d06a&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d6136",
+      "name": "Gilroy Garlic Fries",
+      "externalId": "LOC-MMW6M8WA",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "vegetarian options",
+        "kid-friendly"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-MMW6M8WA",
+      "routeOptionCount": 4,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf8af41730a3fab0b4b51",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38804441730798,
+            37.778577331330375
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf8af41730a3fab0b4b51&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aba8d177e4b5e913a4aaaa",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39053479140044,
+            37.778529526018836
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba8d177e4b5e913a4aaaa&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aab25e4e0da3f2f31fa56d",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39037712713294,
+            37.778833728564976
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aab25e4e0da3f2f31fa56d&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a424d3e11c3dd30be5a89b",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38957103834248,
+            37.77931527424495
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a424d3e11c3dd30be5a89b&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        },
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67e6e51399465b616ce4e6fb",
+      "name": "Golden Gate Greats",
+      "externalId": "LOC-I0BYRD0N",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-I0BYRD0N",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aba5f777e4b5e913a4aa8b",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39013457267347,
+            37.77762663017561
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba5f777e4b5e913a4aa8b&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d6138",
+      "name": "Grab & Go presented by ExtraMile",
+      "externalId": "LOC-URNXUROI",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-URNXUROI",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67a416e8e11c3dd30be5a6fe",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.390665265202,
+            37.778213249293216
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a416e8e11c3dd30be5a6fe&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d6139",
+      "name": "Greathouse of Brews",
+      "externalId": "LOC-NM5OY6LL",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-NM5OY6LL",
+      "routeOptionCount": 4,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aba7e577e4b5e913a4aa9e",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3905125018983,
+            37.77811226907777
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba7e577e4b5e913a4aa9e&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6e02cb100016205c7b514",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38818129779548,
+            37.77840686307964
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e02cb100016205c7b514&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a4258fe11c3dd30be5a8b8",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39055062358985,
+            37.77868929923143
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a4258fe11c3dd30be5a8b8&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a42590e11c3dd30be5a8b9",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39048968146193,
+            37.778657298739326
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a42590e11c3dd30be5a8b9&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67e5b37d746d232a08decaf5",
+      "name": "Hearth Table",
+      "externalId": "LOC-0VPBLCQ2",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "kid-friendly",
+        "gluten free options",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-0VPBLCQ2",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf80e41730a3fab0b4b4a",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38841980441869,
+            37.77825981677339
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf80e41730a3fab0b4b4a&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d613d",
+      "name": "Heineken Bar",
+      "externalId": "LOC-OOPNP19U",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-OOPNP19U",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6e49a7a099def695f48bc",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3901202940469,
+            37.77751333716966
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e49a7a099def695f48bc&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_69c186a4a1cf5e585c2746d5",
+      "name": "King St. Classics",
+      "externalId": "LOC-FPLVHSA6",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-FPLVHSA6",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ab955b77e4b5e913a4aa68",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39064809067467,
+            37.77811631229988
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ab955b77e4b5e913a4aa68&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6149",
+      "name": "McGraws Derby Grill",
+      "externalId": "LOC-TU9JW0E1",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options",
+        "vegan options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-TU9JW0E1",
+      "routeOptionCount": 6,
+      "routeOptions": [
+        {
+          "nodeId": "n_67a4bd21e11c3dd30be5a9ff",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38966059281138,
+            37.77931938421327
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a4bd21e11c3dd30be5a9ff&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6e1cc7a099def695f48b5",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38984192499021,
+            37.77762153188049
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e1cc7a099def695f48b5&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a5060d2df2c6151b8162db",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39019416990854,
+            37.77785893002801
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a5060d2df2c6151b8162db&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67ec6561d85006377677cebc",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39032932043973,
+            37.77884947470724
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec6561d85006377677cebc&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a42570e11c3dd30be5a8b2",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39030790798212,
+            37.77881073386307
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a42570e11c3dd30be5a8b2&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aaa94e4e0da3f2f31fa51d",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39041684475283,
+            37.77800955752208
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaa94e4e0da3f2f31fa51d&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d614c",
+      "name": "Mission St. Nachos",
+      "externalId": "LOC-3E1LXNHB",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-3E1LXNHB",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ef014d194fc262fabd9c6d",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39023816597886,
+            37.777544774098956
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ef014d194fc262fabd9c6d&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d614d",
+      "name": "Mission St. Taqueria",
+      "externalId": "LOC-6W3KU16A",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-6W3KU16A",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ec5f572763d77f3af50e3c",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39023768418787,
+            37.77788254035868
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec5f572763d77f3af50e3c&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a424bbe11c3dd30be5a894",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38932261186942,
+            37.77943221393725
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a424bbe11c3dd30be5a894&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_69d3e1995744cbfd63542411",
+      "name": "Mister Softee Sugar Shack",
+      "externalId": "LOC-9NLEE5VG",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "ice cream",
+        "dessert",
+        "snack",
+        "sweet",
+        "soft serve",
+        "floats",
+        "sodas"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-9NLEE5VG",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf83e41730a3fab0b4b4d",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38844402128078,
+            37.77851322162378
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf83e41730a3fab0b4b4d&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d614f",
+      "name": "Murph's",
+      "externalId": "LOC-F7WSM8M2",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "kid-friendly"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-F7WSM8M2",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ec62ae2763d77f3af50e4b",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39075770549373,
+            37.778579540644934
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec62ae2763d77f3af50e4b&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a42675e11c3dd30be5a8f0",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.3897170857435,
+            37.77762474875295
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a42675e11c3dd30be5a8f0&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6151",
+      "name": "Organic Coup",
+      "externalId": "LOC-SY8HPMJ8",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-SY8HPMJ8",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abefeb41730a3fab0b4773",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3892386652872,
+            37.77949241880976
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abefeb41730a3fab0b4773&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6152",
+      "name": "Orlando's Caribbean Grill",
+      "externalId": "LOC-6KOH5D2O",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-6KOH5D2O",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6dca3b100016205c7b50d",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38796750008211,
+            37.778632607421066
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6dca3b100016205c7b50d&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6154",
+      "name": "Peet's Coffee",
+      "externalId": "LOC-UKCWW3MW",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-UKCWW3MW",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aba74d77e4b5e913a4aa97",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39034737151214,
+            37.778045693222225
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba74d77e4b5e913a4aa97&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abf19f41730a3fab0b48d2",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38822963234496,
+            37.77886298370676
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf19f41730a3fab0b48d2&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67edc06772984da87bb70924",
+      "name": "Peroni Nastro Azzurro",
+      "externalId": "LOC-WR7H3UE7",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-WR7H3UE7",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67edc01d72984da87bb70923",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39078335234532,
+            37.77809041203498
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc01d72984da87bb70923&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6155",
+      "name": "Pier 44 Chowder House",
+      "externalId": "LOC-WOTTD8EB",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-WOTTD8EB",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf45941730a3fab0b4b26",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38806654643197,
+            37.778456715893896
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf45941730a3fab0b4b26&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6156",
+      "name": "Pita Gyros",
+      "externalId": "LOC-0J6BIWKE",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "vegan options",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-0J6BIWKE",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67edc1f1828c8d776347d05a",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39083822424315,
+            37.77849903070017
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc1f1828c8d776347d05a&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67e6d7fc20c269c2c5be0bda",
+      "name": "Rah Rah Ramen",
+      "externalId": "LOC-PQDSBBVY",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "Vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-PQDSBBVY",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6d7dd20c269c2c5be0bd9",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38996122209258,
+            37.77914836352948
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6d7dd20c269c2c5be0bd9&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_69c1878aa1cf5e585c2746d7",
+      "name": "Reserve Bar",
+      "externalId": "LOC-IFNUZ2SZ",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-IFNUZ2SZ",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ab955f77e4b5e913a4aa6a",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39070161891853,
+            37.77809322376813
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ab955f77e4b5e913a4aa6a&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6159",
+      "name": "S'mores Cart",
+      "externalId": "LOC-AO0L61XV",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "smores",
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-AO0L61XV",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aba74e77e4b5e913a4aa98",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39037653840272,
+            37.77806865923169
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba74e77e4b5e913a4aa98&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d615b",
+      "name": "Say Hey Sausage Cart",
+      "externalId": "LOC-MHW19AP8",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-MHW19AP8",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67edc42b828c8d776347d06e",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39003654979021,
+            37.77915190575515
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc42b828c8d776347d06e&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d615c",
+      "name": "Say Hey Sausage Specialties",
+      "externalId": "LOC-VKCFKH5S",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-VKCFKH5S",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e6d53c619b62355d16b7fc",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39008045919903,
+            37.77906164882182
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6d53c619b62355d16b7fc&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6e8e0cec4e5f82fb90414",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39059939027918,
+            37.7779962900069
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e8e0cec4e5f82fb90414&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d615e",
+      "name": "Sierra Draught House",
+      "externalId": "LOC-BG86K6CF",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-BG86K6CF",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf7fa41730a3fab0b4b49",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38808844441354,
+            37.77840568267179
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf7fa41730a3fab0b4b49&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d612b",
+      "name": "Skyline Bar",
+      "externalId": "LOC-FU2M47RZ",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-FU2M47RZ",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abebf941730a3fab0b4752",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39039734904925,
+            37.77880977702545
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abebf941730a3fab0b4752&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abf42741730a3fab0b4b23",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38788968531111,
+            37.77855535644415
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf42741730a3fab0b4b23&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d6140",
+      "name": "Skyline Left Field Bar",
+      "externalId": "LOC-Y6FWUI43",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-Y6FWUI43",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aab1d54e0da3f2f31fa563",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39047145491591,
+            37.778759553468525
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aab1d54e0da3f2f31fa563&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d6116",
+      "name": "Skyline Right Field Bar",
+      "externalId": "LOC-R08J08JV",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-R08J08JV",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aaaf564e0da3f2f31fa53c",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39036770926671,
+            37.77794501132235
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaaf564e0da3f2f31fa53c&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67e46c2f77371b1ef6f33d1d",
+      "name": "Slugger Snacks",
+      "externalId": "LOC-0VOZQW29",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-0VOZQW29",
+      "routeOptionCount": 11,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aba67f77e4b5e913a4aa8f",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3902393738491,
+            37.77796318609152
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba67f77e4b5e913a4aa8f&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abf12641730a3fab0b48cd",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3884337411718,
+            37.77904400789348
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf12641730a3fab0b48cd&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6d65220c269c2c5be0bd6",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.39018903261764,
+            37.77896194452186
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6d65220c269c2c5be0bd6&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6d86520c269c2c5be0bdb",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38981641811027,
+            37.77920043499176
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6d86520c269c2c5be0bdb&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6daf6b100016205c7b50b",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38901760027889,
+            37.779323676371355
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6daf6b100016205c7b50b&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e6e24b7a099def695f48b7",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38962160710415,
+            37.77762259431635
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e6e24b7a099def695f48b7&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67aaa8e44e0da3f2f31fa517",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39011075370139,
+            37.7778353361779
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aaa8e44e0da3f2f31fa517&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edbecd72984da87bb7091d",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.3903735319327,
+            37.77786629890002
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edbecd72984da87bb7091d&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc21b828c8d776347d066",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.3906708020212,
+            37.77862948397432
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc21b828c8d776347d066&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc3db828c8d776347d06d",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39016987338127,
+            37.7790508529058
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc3db828c8d776347d06d&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67edc4e5828c8d776347d073",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.38987013636057,
+            37.779248542051256
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67edc4e5828c8d776347d073&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_69c1840fa1cf5e585c2746d1",
+      "name": "Snack Shack",
+      "externalId": "LOC-RSHD87KJ",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-RSHD87KJ",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_69c184e5a1cf5e585c2746d2",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39022898952777,
+            37.77864907388372
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_69c184e5a1cf5e585c2746d2&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6160",
+      "name": "Super Duper Burgers",
+      "externalId": "LOC-3PWQVE6N",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-3PWQVE6N",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abefff41730a3fab0b4778",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38897843265663,
+            37.77935341374647
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abefff41730a3fab0b4778&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67eefcac194fc262fabd9c62",
+      "name": "The Burger Kitchen",
+      "externalId": "LOC-GP4GVRB7",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "Kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-GP4GVRB7",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67abf42641730a3fab0b4b22",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38792626313055,
+            37.77850094619502
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abf42641730a3fab0b4b22&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6162",
+      "name": "The Carvery",
+      "externalId": "LOC-IT3DAE0V",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "vegetarian options",
+        "kid-friendly"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-IT3DAE0V",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aab1ac4e0da3f2f31fa55e",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39073349653722,
+            37.77860041975834
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aab1ac4e0da3f2f31fa55e&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6163",
+      "name": "The Cove",
+      "externalId": "LOC-Z7RRDGI6",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "seafood",
+        "crab"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-Z7RRDGI6",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ec5fa92763d77f3af50e3e",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39030685432465,
+            37.77787309765194
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec5fa92763d77f3af50e3e&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_69c18677a1cf5e585c2746d4",
+      "name": "The Grillhouse",
+      "externalId": "LOC-9UFKAIVJ",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-9UFKAIVJ",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67a4fc4b2df2c6151b8161c4",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39059118397718,
+            37.77813807188599
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a4fc4b2df2c6151b8161c4&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6356169b3553abf7d6165",
+      "name": "The Lumpia Company",
+      "externalId": "LOC-YGY5OJWE",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-YGY5OJWE",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e5b81953c61a582a4f814e",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.3907931901982,
+            37.77851235020908
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e5b81953c61a582a4f814e&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d10184d6b4070ad08",
+      "name": "The Plaza Bar",
+      "externalId": "LOC-6VEK18A1",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-6VEK18A1",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67c712dbfca2b38e20083f6d",
+          "mapId": "f_67a410ad9e6e974ed13e039a",
+          "floorName": "Suite Level",
+          "floorShortName": "SL",
+          "elevation": 3,
+          "coordinates": [
+            -122.39077889561266,
+            37.778437077548126
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67c712dbfca2b38e20083f6d&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a410ad9e6e974ed13e039a",
+          "floorName": "Suite Level",
+          "floorShortName": "SL",
+          "elevation": 3
+        }
+      ]
+    },
+    {
+      "id": "el_6998a5dcfa2d776fbdbf76a0",
+      "name": "Tony's Slice House",
+      "externalId": "LOC-XTRXB2Z0",
+      "type": "tenant",
+      "venueType": "food-and-drink",
+      "categories": [
+        "Food & Drinks"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-XTRXB2Z0",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ec656bd85006377677cebe",
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2,
+          "coordinates": [
+            -122.39029437241777,
+            37.77887854021141
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ec656bd85006377677cebe&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4108afc9191deb55c6652",
+          "floorName": "Club Level",
+          "floorShortName": "CL",
+          "elevation": 2
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d10184d6b4070ad0b",
+      "name": "Tony's Slice House Pizza",
+      "externalId": "LOC-ATIH5QGW",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-ATIH5QGW",
+      "routeOptionCount": 5,
+      "routeOptions": [
+        {
+          "nodeId": "n_67ab954177e4b5e913a4aa64",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39053132048156,
+            37.77816320642246
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67ab954177e4b5e913a4aa64&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e5b66751c8031f3a05cb21",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.38800999494104,
+            37.77858484014041
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e5b66751c8031f3a05cb21&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a428eee11c3dd30be5a952",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38980940314569,
+            37.777589266829956
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a428eee11c3dd30be5a952&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67abef9c41730a3fab0b4771",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38989365380156,
+            37.77918877312021
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67abef9c41730a3fab0b4771&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67a425ffe11c3dd30be5a8d3",
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4,
+          "coordinates": [
+            -122.39057565073215,
+            37.778242404665534
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67a425ffe11c3dd30be5a8d3&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        },
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        },
+        {
+          "mapId": "f_67a410dacc5ab04059f36c6a",
+          "floorName": "View Level Concourse",
+          "floorShortName": "UC",
+          "elevation": 4
+        }
+      ]
+    },
+    {
+      "id": "el_67e46a8b77371b1ef6f33d19",
+      "name": "Tunnel Bar",
+      "externalId": "LOC-DZML8SDW",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-DZML8SDW",
+      "routeOptionCount": 2,
+      "routeOptions": [
+        {
+          "nodeId": "n_67e46a6077371b1ef6f33d18",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39006824768671,
+            37.778005727759066
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e46a6077371b1ef6f33d18&from=228&textDirectionsVisible=true&instruction=0"
+        },
+        {
+          "nodeId": "n_67e46b5677371b1ef6f33d1c",
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0,
+          "coordinates": [
+            -122.39014119109908,
+            37.77870371461947
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67e46b5677371b1ef6f33d1c&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4103590b13e2a80cc9a6e",
+          "floorName": "Field Level",
+          "floorShortName": "FL",
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": "el_67a6355d10184d6b4070ad0e",
+      "name": "Wine Bar",
+      "externalId": "LOC-RCTO2Y1E",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-RCTO2Y1E",
+      "routeOptionCount": 1,
+      "routeOptions": [
+        {
+          "nodeId": "n_67aba3c577e4b5e913a4aa7b",
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1,
+          "coordinates": [
+            -122.38983990938884,
+            37.77774294144322
+          ],
+          "mappedinDirectionsUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?to=n_67aba3c577e4b5e913a4aa7b&from=228&textDirectionsVisible=true&instruction=0"
+        }
+      ],
+      "floors": [
+        {
+          "mapId": "f_67a4105d1a05ad42c13cd47a",
+          "floorName": "Main Concourse",
+          "floorShortName": "MC",
+          "elevation": 1
+        }
+      ]
+    }
+  ],
+  "unroutableDestinations": [
+    {
+      "id": "el_67a6355d69b3553abf7d6106",
+      "name": "Anchor Grill",
+      "externalId": "LOC-TBSEP1BM",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-TBSEP1BM",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d6107",
+      "name": "Anchor Plaza",
+      "externalId": "LOC-7UMY5H32",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-7UMY5H32",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d610a",
+      "name": "Bacon Wrapped Hot Dog Cart",
+      "externalId": "LOC-PZ0V7RB7",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-PZ0V7RB7",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d610c",
+      "name": "Barchetta",
+      "externalId": "LOC-J6MVSRBX",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-J6MVSRBX",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d6110",
+      "name": "Bayside Brews Truck",
+      "externalId": "LOC-CHNPQXLF",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-CHNPQXLF",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d6111",
+      "name": "Blue Moon Beer",
+      "externalId": "LOC-SSTO6KZ7",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-SSTO6KZ7",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355d69b3553abf7d6112",
+      "name": "Blue Moon Beer Cart",
+      "externalId": "LOC-N3H9GW3N",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-N3H9GW3N",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6119",
+      "name": "Carvery",
+      "externalId": "LOC-GZ9JVM1A",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-GZ9JVM1A",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d611a",
+      "name": "Chicago Dog cart",
+      "externalId": "LOC-PHY83U7E",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-PHY83U7E",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d611c",
+      "name": "Coors Light Cable Car Bar",
+      "externalId": "LOC-R7AJBFXF",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-R7AJBFXF",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6356169b3553abf7d6164",
+      "name": "Corona Bar @ The Garden",
+      "externalId": "LOC-T1KAJAAV",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-T1KAJAAV",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d611f",
+      "name": "Crazy Crab",
+      "externalId": "LOC-CGDPDB7B",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-CGDPDB7B",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6125",
+      "name": "Dog House",
+      "externalId": "LOC-UA5LXRXI",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-UA5LXRXI",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d6132",
+      "name": "Giants Brew House",
+      "externalId": "LOC-1LL55WZR",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-1LL55WZR",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d613e",
+      "name": "Homeplate Boba",
+      "externalId": "LOC-3FUOJE2U",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-3FUOJE2U",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d613f",
+      "name": "Hopps Valley Brewing Co.",
+      "externalId": "LOC-0LXNBOSH",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-0LXNBOSH",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355f69b3553abf7d6141",
+      "name": "Jim Beam Cable Car Bar",
+      "externalId": "LOC-LKNB7U90",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-LKNB7U90",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6148",
+      "name": "Margaritas",
+      "externalId": "LOC-VSLHVYTR",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-VSLHVYTR",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6356069b3553abf7d614b",
+      "name": "Michelada Cart",
+      "externalId": "LOC-512GK893",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-512GK893",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6153",
+      "name": "Outta Here Cheesesteaks",
+      "externalId": "LOC-MCVAV46G",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-MCVAV46G",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_69c186c9a1cf5e585c2746d6",
+      "name": "Reserve Bar",
+      "externalId": "LOC-ML9EOP30",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-ML9EOP30",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6356069b3553abf7d615d",
+      "name": "Say Hey! Sausage",
+      "externalId": "LOC-IDK4ORJE",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-IDK4ORJE",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6356069b3553abf7d6161",
+      "name": "Sweet Spot",
+      "externalId": "LOC-66VJ0XTU",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-66VJ0XTU",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355e69b3553abf7d6117",
+      "name": "Wine Bar",
+      "externalId": "LOC-PNFCZBJB",
+      "type": "tenant",
+      "venueType": "alcohol",
+      "categories": [
+        "Alcohol"
+      ],
+      "tags": [],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-PNFCZBJB",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    },
+    {
+      "id": "el_67a6355d10184d6b4070ad11",
+      "name": "Zach's Deli",
+      "externalId": "LOC-CDTIL13J",
+      "type": "tenant",
+      "venueType": "food",
+      "categories": [
+        "Food"
+      ],
+      "tags": [
+        "kid-friendly",
+        "vegetarian options"
+      ],
+      "logo": null,
+      "showLogo": false,
+      "mappedinLocationUrl": "https://web.mappedin.com/mlb/mlb-san-francisco.html#/location?location=LOC-CDTIL13J",
+      "routeOptionCount": 0,
+      "routeOptions": [],
+      "floors": []
+    }
+  ]
+}

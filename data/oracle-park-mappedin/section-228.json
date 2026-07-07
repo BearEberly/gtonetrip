@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-07-06T22:44:40.921Z",
+  "venue": "mlb-san-francisco",
+  "section": {
+    "id": "el_67aaa02b23958d884b562dc3",
+    "name": "228",
+    "externalId": "228",
+    "type": "seating",
+    "nodes": [
+      {
+        "nodeId": "n_67a51eea2df2c6151b81634a",
+        "mapId": "f_67a4108afc9191deb55c6652",
+        "mapName": "Club Level",
+        "mapShortName": "CL",
+        "elevation": 2,
+        "coordinates": [
+          -122.38971551527729,
+          37.77911710477261
+        ]
+      }
+    ]
+  }
+}

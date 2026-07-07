@@ -27,7 +27,7 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=94">
+    <link rel="stylesheet" href="styles.css?v=111">
   </head>
   <body class="auth-open">
     <div class="app-shell">
@@ -318,7 +318,7 @@
         </section>
 
         <section class="content-panel home-reference-panel" id="home" data-panel="home">
-          <section class="home-reference-shell" id="homeLandingPanel" aria-label="GRE Family App home">
+          <section class="home-reference-shell is-giants-only" id="homeLandingPanel" aria-label="GRE Family App home">
             <div class="home-reference-hero-art">
               <img class="home-reference-hero-photo" src="assets/homepage-mockup/21-hero-photo-1.jpg" alt="Lakeside cabin at sunset">
               <div class="home-reference-hero-overlay">
@@ -391,46 +391,68 @@
         </section>
 
         <section class="content-panel is-hidden" id="giants-game" data-panel="giants-game">
-          <div class="panel-heading">
-            <div>
-              <h1>Giants Game Plan</h1>
-              <p>Sunday, July 12, 2026 at Oracle Park, starting from Lodi with a Wingen Bakery stop in Livermore and then straight to SpotHero parking.</p>
+          <div class="bp-team-header">
+            <span class="bp-team-logo" aria-hidden="true">SF</span>
+            <strong>Giants</strong>
+            <span class="bp-team-sub">Oracle Park</span>
+          </div>
+
+          <div class="bp-game-card bp-hero">
+            <div class="bp-hero-top">
+              <span class="bp-game-badge" id="giantsGameBadge">GRE Game Day</span>
+              <span class="bp-hero-countdown" id="giantsCountdownChip">Sun, Jul 12</span>
             </div>
-            <div class="panel-actions">
-              <a class="secondary-action compact-action" href="https://www.google.com/maps/dir/?api=1&amp;origin=1333+Edgewood+Drive+Lodi+CA+95240&amp;destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&amp;waypoints=50+S+Livermore+Ave+Livermore+CA+94550&amp;travelmode=driving" target="_blank" rel="noreferrer">Trip Route</a>
-              <a class="primary-action compact-action" href="https://maps.apple.com/?saddr=50+S+Livermore+Ave,+Livermore,+CA+94550&amp;daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&amp;dirflg=d" target="_blank" rel="noreferrer">Parking Leg</a>
+            <div class="bp-hero-matchup">
+              <div class="bp-hero-team">
+                <span class="bp-logo-circle bp-logo-away" aria-hidden="true">
+                  <img class="bp-team-mark" src="assets/rockies-logo.png" alt="">
+                </span>
+                <strong>Rockies</strong>
+                <span class="bp-hero-score is-empty" id="giantsAwayScore">-</span>
+                <span class="bp-hero-locale">Colorado</span>
+              </div>
+              <div class="bp-hero-center">
+                <span class="bp-hero-time" id="giantsGameStatusPrimary">1:05</span>
+                <span class="bp-hero-ampm" id="giantsGameStatusSecondary">PM PT</span>
+                <span class="bp-hero-date" id="giantsGameStatusDetail">Sun &middot; Jul 12</span>
+              </div>
+              <div class="bp-hero-team">
+                <span class="bp-logo-circle bp-logo-home" aria-hidden="true">
+                  <img class="bp-team-mark" src="assets/giants-logo.png" alt="">
+                </span>
+                <strong>Giants</strong>
+                <span class="bp-hero-score is-empty" id="giantsHomeScore">-</span>
+                <span class="bp-hero-locale">San Francisco</span>
+              </div>
             </div>
+            <div class="bp-hero-venue">
+              <span data-icon="pin"></span>
+              <span id="giantsGameVenue">Oracle Park &middot; 24 Willie Mays Plaza</span>
+            </div>
+            <div class="bp-live-ticker" id="giantsLiveTicker" aria-live="polite">Scheduled · Sun, Jul 12 · 1:05 PM PT</div>
+          </div>
+
+          <div class="bp-tabs" role="tablist" aria-label="Giants game sections">
+            <button class="bp-tab is-active" type="button" role="tab" data-giants-view="overview" aria-selected="true">Park Info</button>
+            <button class="bp-tab" type="button" role="tab" data-giants-view="outside-food" aria-selected="false">Outside Food</button>
+            <button class="bp-tab" type="button" role="tab" data-giants-view="inside-food" aria-selected="false">Inside Food</button>
           </div>
 
           <div class="giants-view-panel" data-giants-panel="overview">
-            <section class="board-panel">
+            <section class="board-panel bp-itin-panel">
               <div class="section-heading">
                 <div>
                   <h2>Itinerary</h2>
-                  <p>The actual drive plan first: leave Lodi, stop at Wingen in downtown Livermore, then go straight to the parking lot you sent.</p>
                 </div>
               </div>
-              <div class="cabin-activity-list giants-itinerary-list" id="giantsItineraryList"></div>
-            </section>
-
-            <section class="board-panel giants-overview-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>Quick Facts</h2>
-                  <p>The fixed anchors for this version of the game day.</p>
-                </div>
+              <div class="bp-itin-list" id="giantsItineraryList"></div>
+              <div class="bp-itin-route-wrap">
+                <a class="bp-itin-route-card" href="https://www.google.com/maps/dir/?api=1&amp;origin=1333+Edgewood+Drive+Lodi+CA+95240&amp;destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&amp;waypoints=50+S+Livermore+Ave+Livermore+CA+94550&amp;travelmode=driving" target="_blank" rel="noreferrer">
+                  <span class="bp-itin-route-kicker">Trip Route</span>
+                  <strong><span data-icon="pin"></span>Trip Route &amp; Directions</strong>
+                  <span class="bp-itin-route-meta">Lodi to Wingen to Pier 48 parking</span>
+                </a>
               </div>
-              <div class="giants-fact-grid" id="giantsQuickFacts"></div>
-            </section>
-
-            <section class="board-panel giants-timeline-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>Simple Game-Day Flow</h2>
-                  <p>A low-friction plan: eat nearby, walk the waterfront, go in early, then explore inside.</p>
-                </div>
-              </div>
-              <div class="giants-timeline" id="giantsTimeline"></div>
             </section>
 
             <section class="board-panel">
@@ -467,15 +489,9 @@
           </div>
 
           <div class="giants-view-panel is-hidden" data-giants-panel="inside-food" hidden>
-            <section class="board-panel">
-              <div class="section-heading">
-                <div>
-                  <h2>Inside Oracle Park If You Still Eat There</h2>
-                  <p>Fallback picks inside the stadium in case you want one iconic in-park stop instead of another full restaurant.</p>
-                </div>
-              </div>
-              <div class="cabin-activity-list" id="giantsBallparkFoodList"></div>
-            </section>
+            <div class="giants-live-map-screen">
+              <iframe id="giantsLiveMap" data-src="https://web.mappedin.com/mlb/mlb-san-francisco.html#/?minimized=true" title="Oracle Park interactive map" allow="geolocation"></iframe>
+            </div>
           </div>
 
         </section>
@@ -908,6 +924,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=98"></script>
+    <script src="script.js?v=119"></script>
   </body>
 </html>
