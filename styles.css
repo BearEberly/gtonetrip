@@ -2376,6 +2376,103 @@ body.giants-theme .shared-hero {
   line-height: 1.35;
 }
 
+.giants-guide-card {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+}
+
+.giants-guide-card.is-web-result {
+  display: block;
+  padding: 0;
+  box-shadow: 0 6px 18px rgba(23, 24, 29, 0.04);
+}
+
+.giants-guide-main {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr) 12px;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.giants-guide-card .cabin-activity-thumb,
+.giants-guide-card.is-web-result .cabin-activity-thumb.is-web-result {
+  width: 78px;
+  height: 58px;
+  border-radius: 12px;
+}
+
+.giants-guide-card .cabin-activity-thumb.is-web-result img {
+  object-position: center center;
+}
+
+.giants-guide-compact-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.giants-guide-compact-copy .activity-rank {
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.giants-guide-compact-copy strong {
+  font-size: 0.92rem;
+  line-height: 1.18;
+}
+
+.giants-guide-summary {
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.22;
+}
+
+.giants-guide-chevron {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--line-strong);
+  border-bottom: 2px solid var(--line-strong);
+  transform: rotate(-45deg);
+  transition: transform 0.18s ease;
+}
+
+.giants-guide-card.is-open .giants-guide-chevron {
+  transform: rotate(45deg);
+}
+
+.giants-guide-detail {
+  display: grid;
+  gap: 6px;
+  padding: 0 10px 10px 98px;
+}
+
+.giants-guide-detail .cabin-activity-when,
+.giants-guide-detail .giants-guide-meta,
+.giants-guide-detail .cabin-activity-worth,
+.giants-guide-detail > span {
+  font-size: 0.76rem;
+  line-height: 1.34;
+}
+
+.giants-guide-detail .cabin-activity-links {
+  margin-top: 2px;
+  gap: 6px;
+}
+
+.giants-guide-detail .cabin-link-button,
+.giants-guide-detail .text-mini-button {
+  min-height: 34px;
+  padding: 5px 9px;
+  font-size: 0.71rem;
+}
+
 .cabin-activity-copy .giants-guide-meta strong {
   display: inline;
   margin: 0;

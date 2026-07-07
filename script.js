@@ -547,7 +547,7 @@ const giantsGamePolicies = [
     verdict: "Best move is opening or forwarding tickets before walking up to Oracle Park.",
     note: "The Giants explicitly say ticket screenshots are not accepted, so Apple Wallet or the app itself is the safer path.",
     websiteUrl: "https://www.mlb.com/giants/apps/ballpark",
-    imageUrl: "assets/giants-web-previews/policy-ballpark-app.png",
+    imageUrl: "assets/giants-site-media/policy-ballpark-app.jpg",
     icon: "share"
   },
   {
@@ -558,7 +558,7 @@ const giantsGamePolicies = [
     verdict: "Since you already set up Go-Ahead Entry, this becomes the easiest way to get inside and start walking the park.",
     note: "Tickets are still tied to the account even with face entry, so the default plan is your Go-Ahead scan at Lefty O'Doul and the rest of the group following through with their own tickets.",
     websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
-    imageUrl: "assets/giants-web-previews/policy-gameday.png",
+    imageUrl: "assets/giants-site-media/policy-gameday.jpg",
     icon: "home"
   },
   {
@@ -569,7 +569,7 @@ const giantsGamePolicies = [
     verdict: "Travel light and avoid the backpack problem entirely if you can.",
     note: "If needed, the Giants list paid bag storage at the Marina Gate from gate-open until one hour after the event.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/information/guide/bag-storage",
-    imageUrl: "assets/giants-web-previews/policy-bag-storage.png",
+    imageUrl: "assets/giants-site-media/policy-bag-storage.jpg",
     icon: "bag"
   },
   {
@@ -580,7 +580,7 @@ const giantsGamePolicies = [
     verdict: "Since this trip is more restaurant-first, the main value here is knowing you still have flexibility if plans change.",
     note: "The permitted-items page also allows empty plastic refillable water bottles and soft-sided juice containers.",
     websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
-    imageUrl: "assets/giants-web-previews/policy-gameday.png",
+    imageUrl: "assets/giants-site-media/policy-gameday.jpg",
     icon: "utensils"
   },
   {
@@ -591,7 +591,7 @@ const giantsGamePolicies = [
     verdict: "This is the cleanest way to check whether a specific in-park item is worth the detour from your seats.",
     note: "The ballpark app and concourse map are the two official tools that matter most once you are inside.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
-    imageUrl: "assets/giants-web-previews/policy-food-finder.png",
+    imageUrl: "assets/giants-site-media/policy-food-finder.jpg",
     icon: "pin"
   }
 ];
@@ -607,7 +607,7 @@ const giantsGameRestaurants = [
     verdict: "Best fit if you want a chef-adjacent Mission Rock stop and pizza is the priority.",
     note: "This is the strongest direct match for your wood-fired pizza lane, even though the Mission Rock format is the faster counter-service shop.",
     websiteUrl: "https://www.fwpizzashop.com/mission-rock",
-    imageUrl: "assets/giants-web-previews/restaurant-flour-water-pizza-shop.png",
+    imageUrl: "assets/giants-site-media/restaurant-flour-water.jpg",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1090+Dr.+Maya+Angelou+Lane+Suite+100+San+Francisco+CA+94158&travelmode=walking",
     icon: "utensils"
   },
@@ -621,7 +621,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want the most chef-forward sit-down option in the immediate walk zone.",
     note: "Back Home Hospitality's Mission Rock restaurant reads like the polished postgame choice when you care more about execution and wine than speed.",
     websiteUrl: "https://www.viaaureliasf.com/contact",
-    imageUrl: "assets/giants-web-previews/restaurant-via-aurelia.png",
+    imageUrl: "assets/giants-site-media/restaurant-via-aurelia.jpg",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=300+Toni+Stone+Xing+San+Francisco+CA+94158&travelmode=walking",
     icon: "utensils"
   },
@@ -635,7 +635,7 @@ const giantsGameRestaurants = [
     verdict: "Best if Fixq/Fikscue was the actual target and you want the most distinctive chef-favorite barbecue stop in the wider area.",
     note: "It is farther than the Mission Rock cluster, but the Indonesian-Texas barbecue angle makes it one of the most interesting neighborhood detours for cooks.",
     websiteUrl: "https://www.chasecenter.com/vendor/fikscue-craft-barbecue/",
-    imageUrl: "assets/giants-web-previews/restaurant-fikscue.png",
+    imageUrl: "assets/giants-site-media/restaurant-fikscue.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=7+Warriors+Way+Suite+208+San+Francisco+CA+94158&travelmode=walking",
     icon: "flame"
   },
@@ -649,7 +649,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want a serious bakery stop before the ballpark crowds build.",
     note: "This is the easy chef-favorite breakfast or late-morning snack move in Mission Rock, not a full sit-down meal.",
     websiteUrl: "https://arsicault-bakery.com/locations/",
-    imageUrl: "assets/giants-web-previews/restaurant-arsicault.png",
+    imageUrl: "assets/giants-site-media/restaurant-arsicault.webp",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1070+Bridgeview+Way+Unit+B+San+Francisco+CA+94158&travelmode=walking",
     icon: "bag"
   },
@@ -663,7 +663,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want something looser and local-feeling without dropping into touristy generic stadium food.",
     note: "This is not fine dining, but it is one of the more interesting new Mission Rock-adjacent casual options because it has a real point of view.",
     websiteUrl: "https://www.quikdogsf.com/",
-    imageUrl: "assets/giants-web-previews/restaurant-quik-dog.png",
+    imageUrl: "assets/giants-site-media/restaurant-quik-dog.png",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=1023+3rd+Street+San+Francisco+CA&travelmode=walking",
     icon: "flame"
   },
@@ -677,7 +677,7 @@ const giantsGameRestaurants = [
     verdict: "Best if you want water views and a fuller restaurant stop more than a hyper-chef-driven room.",
     note: "Not as hidden as the others, but still worth keeping because it gives you the strongest bay-view table in the immediate wider walk zone.",
     websiteUrl: "https://www.missionrockresort.com/location/mission-rock-resort/",
-    imageUrl: "assets/giants-web-previews/restaurant-mission-rock-resort.png",
+    imageUrl: "assets/giants-site-media/restaurant-mission-rock-resort.jpg",
     mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=817+Terry+A+Francois+Blvd+San+Francisco+CA+94158&travelmode=walking",
     icon: "utensils"
   }
@@ -827,7 +827,7 @@ const giantsGameAttractions = [
     verdict: "Best if kids are going or you want a real pregame wander instead of heading straight to seats.",
     note: "The official Giants attraction page calls it an interactive play area with the Coca-Cola Slide, baseball glove, Toyota Fan Zone, and a bay-fish tank.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/fan-lot",
-    imageUrl: "assets/giants-web-previews/attraction-fan-lot.png",
+    imageUrl: "assets/giants-site-media/attraction-fan-lot.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Fan+Lot+San+Francisco+CA",
     icon: "baseball"
   },
@@ -839,7 +839,7 @@ const giantsGameAttractions = [
     verdict: "Best easy move before the game if you want room to walk, gather, or take in the waterfront.",
     note: "Your brick pin lands at 37.7766557, -122.3878868 on the waterfront curve, and the brick finder screenshot places the inscription in Section 24.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/china-basin",
-    imageUrl: "assets/giants-web-previews/attraction-china-basin-mlb.png",
+    imageUrl: "assets/giants-site-media/attraction-china-basin.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=37.7766557,-122.3878868",
     appleMapsUrl: "https://maps.apple.com/?q=37.7766557,-122.3878868",
     icon: "mountain"
@@ -852,7 +852,7 @@ const giantsGameAttractions = [
     verdict: "Best if you want a five-minute baseball-specific stop before going through the gates.",
     note: "The Giants say the bronze plaques honor the organization's greatest players and line the exterior ballpark wall.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/wall-of-fame",
-    imageUrl: "assets/giants-web-previews/attraction-wall-of-fame.png",
+    imageUrl: "assets/giants-site-media/attraction-wall-of-fame.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+King+Street+Wall+of+Fame+San+Francisco+CA",
     icon: "calendar"
   },
@@ -864,7 +864,7 @@ const giantsGameAttractions = [
     verdict: "Best if you want one in-park stop that feels different from standard concession concourses.",
     note: "The Giants position The Garden as a one-of-a-kind space with aeroponic towers, garden beds, and garden-fresh food and drinks.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/garden",
-    imageUrl: "assets/giants-web-previews/attraction-garden.png",
+    imageUrl: "assets/giants-site-media/attraction-garden.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+The+Garden+San+Francisco+CA",
     icon: "sun"
   }
@@ -4082,6 +4082,14 @@ function guideSourceLabelFromItem(item = {}) {
   }
 }
 
+const giantsGuideOpenCards = Object.create(null);
+
+function giantsGuideSummaryText(item = {}) {
+  const raw = String(item.walk || item.hours || item.meta || "").trim();
+  if (!raw) return "";
+  return raw.length > 88 ? `${raw.slice(0, 85).trimEnd()}...` : raw;
+}
+
 function activityLinksMarkup(item) {
   const links = [];
   if (item.websiteUrl) {
@@ -4428,13 +4436,21 @@ function renderGiantsHub() {
 function renderGiantsGuideList(containerId, items) {
   const container = document.querySelector(containerId);
   if (!container) return;
-  container.innerHTML = items.map((item) => `
-    <article class="cabin-activity-card${item.imageUrl ? " is-web-result" : ""}">
-      <span class="activity-thumb cabin-activity-thumb${item.imageUrl ? " is-web-result" : ""}">${activityIconMarkup(item)}</span>
-      <div class="cabin-activity-copy">
-        ${guideSourceLabelFromItem(item) ? `<span class="giants-guide-source">${escapeText(guideSourceLabelFromItem(item))}</span>` : ""}
-        <span class="activity-rank">${escapeText(item.category)}</span>
-        <strong>${escapeText(item.name)}</strong>
+  container.innerHTML = items.map((item) => {
+    const isOpen = Boolean(giantsGuideOpenCards[`${containerId}:${item.id}`]);
+    const summary = giantsGuideSummaryText(item);
+    return `
+    <article class="cabin-activity-card giants-guide-card${item.imageUrl ? " is-web-result" : ""}${isOpen ? " is-open" : ""}">
+      <button class="giants-guide-main" type="button" data-giants-guide-toggle="${escapeText(containerId)}" data-giants-guide-id="${escapeText(item.id)}" aria-expanded="${isOpen ? "true" : "false"}">
+        <span class="activity-thumb cabin-activity-thumb${item.imageUrl ? " is-web-result" : ""}">${activityIconMarkup(item)}</span>
+        <span class="cabin-activity-copy giants-guide-compact-copy">
+          <span class="activity-rank">${escapeText(item.category)}</span>
+          <strong>${escapeText(item.name)}</strong>
+          ${summary ? `<span class="giants-guide-summary">${escapeText(summary)}</span>` : ""}
+        </span>
+        <span class="giants-guide-chevron" aria-hidden="true"></span>
+      </button>
+      <div class="giants-guide-detail${isOpen ? "" : " is-hidden"}">
         ${item.walk ? `<span class="cabin-activity-when">${escapeText(item.walk)}</span>` : ""}
         ${item.hours ? `<span class="giants-guide-meta"><strong>Hours:</strong> ${escapeText(item.hours)}</span>` : ""}
         ${item.menu ? `<span class="giants-guide-meta"><strong>Menu:</strong> ${escapeText(item.menu)}</span>` : ""}
@@ -4444,7 +4460,15 @@ function renderGiantsGuideList(containerId, items) {
         ${activityLinksMarkup(item)}
       </div>
     </article>
-  `).join("");
+  `;
+  }).join("");
+  container.querySelectorAll("[data-giants-guide-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const cardKey = `${button.dataset.giantsGuideToggle}:${button.dataset.giantsGuideId}`;
+      giantsGuideOpenCards[cardKey] = !giantsGuideOpenCards[cardKey];
+      renderGiantsGuideList(containerId, items);
+    });
+  });
 }
 
 const GOOGLE_MAPS_ICON_SVG = `<svg class="bp-gmaps-icon" viewBox="0 0 48 66" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="gmapsPinClipMini"><path d="M24 0C10.75 0 0 10.75 0 24c0 6.2 2.6 11.9 6.4 17.3C12 49 24 66 24 66s12-17 17.6-24.7C45.4 35.9 48 30.2 48 24 48 10.75 37.25 0 24 0Z"/></clipPath></defs><g clip-path="url(#gmapsPinClipMini)"><rect width="48" height="66" fill="#34a853"/><polygon points="0,0 48,0 24,24" fill="#4285f4"/><polygon points="0,0 24,24 0,38" fill="#ea4335"/><polygon points="0,38 24,24 31,33 12,55 0,52" fill="#fbbc04"/></g><circle cx="24" cy="24" r="8.5" fill="#ffffff"/></svg>`;
