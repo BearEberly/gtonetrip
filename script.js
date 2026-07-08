@@ -1440,6 +1440,8 @@ function setProfilePhotoPreview(photo, name = displayNameForUser()) {
   const initial = profileInitial(name);
   const avatarImage = document.querySelector("#profileAvatarImage");
   const avatarInitial = document.querySelector("#profileAvatarInitial");
+  const floatingImage = document.querySelector("#floatingProfilePhoto");
+  const floatingInitial = document.querySelector("#floatingProfileInitial");
   const previewImage = document.querySelector("#profilePhotoImage");
   const previewInitial = document.querySelector("#profilePhotoInitial");
   if (avatarImage) {
@@ -1453,6 +1455,15 @@ function setProfilePhotoPreview(photo, name = displayNameForUser()) {
   if (avatarInitial) {
     avatarInitial.textContent = initial;
     avatarInitial.classList.toggle("is-hidden", Boolean(safePhoto));
+  }
+  if (floatingImage) {
+    floatingImage.src = safePhoto || "";
+    floatingImage.alt = safePhoto ? `${name} profile photo` : "";
+    floatingImage.classList.toggle("is-hidden", !safePhoto);
+  }
+  if (floatingInitial) {
+    floatingInitial.textContent = initial;
+    floatingInitial.classList.toggle("is-hidden", Boolean(safePhoto));
   }
   if (previewInitial) {
     previewInitial.textContent = initial;
@@ -1819,8 +1830,11 @@ function applyProfile(user) {
 
 function renderProfile() {
   const sessionBar = document.querySelector("#appSessionBar");
+  const floatingProfileButton = document.querySelector("#openGlobalProfile");
   if (!api.user) {
     sessionBar?.classList.add("is-hidden");
+    floatingProfileButton?.setAttribute("aria-label", "Sign in or open profile");
+    setProfilePhotoPreview("", "Profile");
     closeProfileDrawer();
     closeUsersDrawer();
     return;
@@ -1829,6 +1843,7 @@ function renderProfile() {
   const photo = profilePhotoForUser();
   sessionBar?.classList.remove("is-hidden");
   document.querySelector("#profileAvatarButton")?.setAttribute("aria-label", `Open profile for ${name}`);
+  floatingProfileButton?.setAttribute("aria-label", `Open profile for ${name}`);
   const titleNode = document.querySelector("#profileDrawerTitle");
   const usersButton = document.querySelector("#openUsersFromProfile");
   if (titleNode) titleNode.textContent = profileTitleForUser();
@@ -5667,10 +5682,12 @@ function updateMobileNav(activeTab) {
   mobileNav.dataset.activePanel = activeTab;
   const visibleButtons = Array.from(document.querySelectorAll(".mobile-nav-item")).filter((button) => {
     const panels = String(button.dataset.mobilePanels || "").split(",").map((item) => item.trim()).filter(Boolean);
-    const visible = !panels.length || panels.includes(activeTab);
+    const isHomeButton = button.dataset.tab === "home";
+    const visible = !isHomeButton && (!panels.length || panels.includes(activeTab));
     button.classList.toggle("is-hidden", !visible);
     return visible;
   });
+  mobileNav.classList.toggle("is-hidden", visibleButtons.length === 0);
   const isHomeOnly = visibleButtons.length <= 1;
   mobileNav.classList.toggle("is-home-only", isHomeOnly);
   mobileNav.style.gridTemplateColumns = `repeat(${Math.max(visibleButtons.length, 1)}, 1fr)`;
@@ -6931,6 +6948,12 @@ function bindEvents() {
 
     const homeProfile = event.target.closest("#openHomeProfile");
     if (homeProfile) openProfileDrawer();
+
+    const globalHome = event.target.closest("#openGlobalHome");
+    if (globalHome) setActivePanel("home");
+
+    const globalProfile = event.target.closest("#openGlobalProfile");
+    if (globalProfile) openProfileDrawer();
 
     const usersDestination = event.target.closest("#openUsersDestination");
     if (usersDestination) openUsersDrawer();

@@ -27,10 +27,20 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=115">
+    <link rel="stylesheet" href="styles.css?v=123">
   </head>
   <body class="auth-open">
     <div class="app-shell">
+      <div class="global-floating-chrome" aria-label="Global app controls">
+        <button class="floating-home-button" type="button" id="openGlobalHome" aria-label="Go home">
+          <span data-icon="home"></span>
+        </button>
+        <button class="floating-profile-button" type="button" id="openGlobalProfile" aria-label="Open profile">
+          <img class="floating-profile-photo is-hidden" id="floatingProfilePhoto" alt="">
+          <span class="floating-profile-initial" id="floatingProfileInitial">P</span>
+        </button>
+      </div>
+
       <aside class="sidebar" aria-label="Primary">
         <a class="brand" href="#home" data-tab="home" aria-label="GRE Family App home">
           <span class="brand-mark" aria-hidden="true">
@@ -433,7 +443,9 @@
           </div>
 
           <div class="bp-tabs" role="tablist" aria-label="Giants game sections">
-            <button class="bp-tab is-active" type="button" role="tab" data-giants-view="overview" aria-selected="true">Park Info</button>
+            <button class="bp-tab is-active" type="button" role="tab" data-giants-view="overview" aria-selected="true">Quick Facts</button>
+            <button class="bp-tab" type="button" role="tab" data-giants-view="park-logistics" aria-selected="false">Park Logistics</button>
+            <button class="bp-tab" type="button" role="tab" data-giants-view="around-park" aria-selected="false">Around Park</button>
             <button class="bp-tab" type="button" role="tab" data-giants-view="outside-food" aria-selected="false">Outside Food</button>
             <button class="bp-tab" type="button" role="tab" data-giants-view="inside-food" aria-selected="false">Inside Food</button>
           </div>
@@ -454,7 +466,9 @@
                 </a>
               </div>
             </section>
+          </div>
 
+          <div class="giants-view-panel is-hidden" data-giants-panel="park-logistics" hidden>
             <section class="board-panel">
               <div class="section-heading">
                 <div>
@@ -464,7 +478,9 @@
               </div>
               <div class="cabin-activity-list" id="giantsPolicyList"></div>
             </section>
+          </div>
 
+          <div class="giants-view-panel is-hidden" data-giants-panel="around-park" hidden>
             <section class="board-panel">
               <div class="section-heading">
                 <div>
@@ -489,8 +505,13 @@
           </div>
 
           <div class="giants-view-panel is-hidden" data-giants-panel="inside-food" hidden>
-            <div class="giants-live-map-screen">
-              <iframe id="giantsLiveMap" data-src="https://web.mappedin.com/mlb/mlb-san-francisco.html#/?minimized=true" title="Oracle Park interactive map" allow="geolocation"></iframe>
+            <div class="giants-live-map-screen giants-ballpark-map-only-screen">
+              <iframe
+                id="giantsLiveMap"
+                data-src="https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?from=228&textDirectionsVisible=true"
+                title="Oracle Park interactive map from section 228"
+                allow="geolocation"
+              ></iframe>
             </div>
           </div>
 
@@ -575,6 +596,12 @@
         </button>
         <button class="mobile-nav-item mobile-nav-item-giants-view is-hidden" type="button" data-giants-view="overview" data-mobile-panels="giants-game" aria-selected="true">
           Quick Facts
+        </button>
+        <button class="mobile-nav-item mobile-nav-item-giants-view is-hidden" type="button" data-giants-view="park-logistics" data-mobile-panels="giants-game" aria-selected="false">
+          Logistics
+        </button>
+        <button class="mobile-nav-item mobile-nav-item-giants-view is-hidden" type="button" data-giants-view="around-park" data-mobile-panels="giants-game" aria-selected="false">
+          Around Park
         </button>
         <button class="mobile-nav-item mobile-nav-item-giants-view is-hidden" type="button" data-giants-view="outside-food" data-mobile-panels="giants-game" aria-selected="false">
           Outside Food
@@ -924,6 +951,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=120"></script>
+    <script src="script.js?v=122"></script>
   </body>
 </html>

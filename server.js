@@ -1161,6 +1161,7 @@ function isPublicStaticPath(pathname) {
   if (pathname === "/") return true;
   if (["/index.html", "/styles.css", "/script.js", "/app-config.js", "/service-worker.js", "/manifest.webmanifest"].includes(pathname)) return true;
   if (pathname.startsWith("/assets/")) return true;
+  if (pathname.startsWith("/data/")) return true;
   return false;
 }
 
@@ -1183,141 +1184,151 @@ async function serveStatic(request, response, pathname) {
 }
 
 const server = createServer(async (request, response) => {
-  const url = new URL(request.url, `http://${request.headers.host || "localhost"}`);
-  const providedPasscode = getProvidedPasscode(request, url);
-  const isWriteMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(request.method || "");
+  try {
+    const url = new URL(request.url, `http://${request.headers.host || "localhost"}`);
+    const providedPasscode = getProvidedPasscode(request, url);
+    const isWriteMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(request.method || "");
 
-  if (isWriteMethod && !isAllowedRequestOrigin(request)) {
-    sendJson(response, 403, { ok: false, message: "Origin not allowed." });
-    return;
-  }
-
-  if (request.method === "GET" && url.pathname === "/api/health") {
-    sendJson(response, 200, {
-      ok: true,
-      name: "Cabin Bring Board",
-      version: sharedState.version,
-      updatedAt: sharedState.updatedAt
-    });
-    return;
-  }
-
-  // Public, subscribable calendar feed (no auth) for Apple/Google Calendar.
-  if ((request.method === "GET" || request.method === "HEAD") &&
-      (url.pathname === "/trip.ics" || url.pathname === "/calendar.ics")) {
-    const ics = buildICS(sharedState, privateTripInfo);
-    response.writeHead(200, {
-      "Content-Type": "text/calendar; charset=utf-8",
-      "Content-Disposition": 'inline; filename="guantones-trip.ics"',
-      "Cache-Control": "public, max-age=900",
-      "Access-Control-Allow-Origin": "*"
-    });
-    response.end(request.method === "HEAD" ? undefined : ics);
-    return;
-  }
-
-  if (request.method === "GET" && url.pathname === "/api/me") {
-    await handleMe(request, response, providedPasscode);
-    return;
-  }
-
-  if (request.method === "POST" && url.pathname === "/api/auth/continue") {
-    try {
-      await handleProfileContinue(request, response);
-    } catch (error) {
-      sendJson(response, 400, { ok: false, message: error.message || "Profile request failed." });
-    }
-    return;
-  }
-
-  if (request.method === "POST" && url.pathname === "/api/auth/login") {
-    try {
-      await handlePasswordLogin(request, response);
-    } catch (error) {
-      sendJson(response, 400, { ok: false, message: error.message || "Sign-in failed." });
-    }
-    return;
-  }
-
-  if (request.method === "POST" && url.pathname === "/api/auth/logout") {
-    await handleLogout(request, response);
-    return;
-  }
-
-  if (request.method === "POST" && url.pathname === "/api/passkey/register/options") {
-    try {
-      await handlePasskeyRegisterOptions(request, response, providedPasscode);
-    } catch (error) {
-      sendJson(response, 400, { ok: false, message: error.message || "Could not start passkey setup." });
-    }
-    return;
-  }
-
-  if (request.method === "POST" && url.pathname === "/api/passkey/register/verify") {
-    try {
-      await handlePasskeyRegisterVerify(request, response);
-    } catch (error) {
-      sendJson(response, 400, { ok: false, message: error.message || "Could not verify passkey." });
-    }
-    return;
-  }
-
-  if (request.method === "POST" && url.pathname === "/api/passkey/auth/options") {
-    try {
-      await handlePasskeyAuthOptions(request, response);
-    } catch (error) {
-      sendJson(response, 400, { ok: false, message: error.message || "Could not start passkey sign-in." });
-    }
-    return;
-  }
-
-  if (request.method === "POST" && url.pathname === "/api/passkey/auth/verify") {
-    try {
-      await handlePasskeyAuthVerify(request, response);
-    } catch (error) {
-      sendJson(response, 400, { ok: false, message: error.message || "Could not verify passkey sign-in." });
-    }
-    return;
-  }
-
-  if (request.method === "GET" && url.pathname === "/api/state") {
-    if (!ensureApiAuth(request, response, { passcode: providedPasscode })) {
-      sendUnauthorized(response);
+    if (isWriteMethod && !isAllowedRequestOrigin(request)) {
+      sendJson(response, 403, { ok: false, message: "Origin not allowed." });
       return;
     }
-    if (!requireProfile(request, response)) return;
-    sendJson(response, 200, sharedStatePayload());
-    return;
-  }
 
-  if (request.method === "POST" && url.pathname === "/api/action") {
-    if (!ensureApiAuth(request, response, { passcode: providedPasscode })) {
-      sendUnauthorized(response);
+    if (request.method === "GET" && url.pathname === "/api/health") {
+      sendJson(response, 200, {
+        ok: true,
+        name: "Cabin Bring Board",
+        version: sharedState.version,
+        updatedAt: sharedState.updatedAt
+      });
       return;
     }
-    const actor = requireProfile(request, response);
-    if (!actor) return;
-    await handleAction(request, response, providedPasscode, actor);
-    return;
-  }
 
-  if (request.method === "GET" && url.pathname === "/api/events") {
-    if (!ensureApiAuth(request, response, { passcode: providedPasscode })) {
-      sendUnauthorized(response);
+    // Public, subscribable calendar feed (no auth) for Apple/Google Calendar.
+    if ((request.method === "GET" || request.method === "HEAD") &&
+        (url.pathname === "/trip.ics" || url.pathname === "/calendar.ics")) {
+      const ics = buildICS(sharedState, privateTripInfo);
+      response.writeHead(200, {
+        "Content-Type": "text/calendar; charset=utf-8",
+        "Content-Disposition": 'inline; filename="guantones-trip.ics"',
+        "Cache-Control": "public, max-age=900",
+        "Access-Control-Allow-Origin": "*"
+      });
+      response.end(request.method === "HEAD" ? undefined : ics);
       return;
     }
-    if (!requireProfile(request, response)) return;
-    handleEvents(request, response);
-    return;
-  }
 
-  if (request.method === "GET" || request.method === "HEAD") {
-    await serveStatic(request, response, url.pathname);
-    return;
-  }
+    if (request.method === "GET" && url.pathname === "/api/me") {
+      await handleMe(request, response, providedPasscode);
+      return;
+    }
 
-  response.writeHead(405, { "content-type": "text/plain; charset=utf-8" });
-  response.end("Method not allowed");
+    if (request.method === "POST" && url.pathname === "/api/auth/continue") {
+      try {
+        await handleProfileContinue(request, response);
+      } catch (error) {
+        sendJson(response, 400, { ok: false, message: error.message || "Profile request failed." });
+      }
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/auth/login") {
+      try {
+        await handlePasswordLogin(request, response);
+      } catch (error) {
+        sendJson(response, 400, { ok: false, message: error.message || "Sign-in failed." });
+      }
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/auth/logout") {
+      await handleLogout(request, response);
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/passkey/register/options") {
+      try {
+        await handlePasskeyRegisterOptions(request, response, providedPasscode);
+      } catch (error) {
+        sendJson(response, 400, { ok: false, message: error.message || "Could not start passkey setup." });
+      }
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/passkey/register/verify") {
+      try {
+        await handlePasskeyRegisterVerify(request, response);
+      } catch (error) {
+        sendJson(response, 400, { ok: false, message: error.message || "Could not verify passkey." });
+      }
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/passkey/auth/options") {
+      try {
+        await handlePasskeyAuthOptions(request, response);
+      } catch (error) {
+        sendJson(response, 400, { ok: false, message: error.message || "Could not start passkey sign-in." });
+      }
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/passkey/auth/verify") {
+      try {
+        await handlePasskeyAuthVerify(request, response);
+      } catch (error) {
+        sendJson(response, 400, { ok: false, message: error.message || "Could not verify passkey sign-in." });
+      }
+      return;
+    }
+
+    if (request.method === "GET" && url.pathname === "/api/state") {
+      if (!ensureApiAuth(request, response, { passcode: providedPasscode })) {
+        sendUnauthorized(response);
+        return;
+      }
+      if (!requireProfile(request, response)) return;
+      sendJson(response, 200, sharedStatePayload());
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/action") {
+      if (!ensureApiAuth(request, response, { passcode: providedPasscode })) {
+        sendUnauthorized(response);
+        return;
+      }
+      const actor = requireProfile(request, response);
+      if (!actor) return;
+      await handleAction(request, response, providedPasscode, actor);
+      return;
+    }
+
+    if (request.method === "GET" && url.pathname === "/api/events") {
+      if (!ensureApiAuth(request, response, { passcode: providedPasscode })) {
+        sendUnauthorized(response);
+        return;
+      }
+      if (!requireProfile(request, response)) return;
+      handleEvents(request, response);
+      return;
+    }
+
+    if (request.method === "GET" || request.method === "HEAD") {
+      await serveStatic(request, response, url.pathname);
+      return;
+    }
+
+    response.writeHead(405, { "content-type": "text/plain; charset=utf-8" });
+    response.end("Method not allowed");
+  } catch (error) {
+    console.error("Request handling failed:", error);
+    if (!response.headersSent) {
+      response.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
+      response.end("Server error");
+      return;
+    }
+    response.destroy(error);
+  }
 });
 
 server.listen(port, "0.0.0.0", () => {
