@@ -4181,14 +4181,14 @@ button:focus-visible {
   left: 50%;
   transform: translateX(-50%);
   right: auto;
-  width: min(calc(100% - 16px), var(--content-max));
+  width: min(calc(100% - 8px), var(--content-max));
   overflow: hidden;
-  bottom: 6px;
+  bottom: 0;
   z-index: 30;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   min-height: 78px;
-  padding: 8px 6px max(10px, env(safe-area-inset-bottom));
+  padding: 8px 6px max(6px, env(safe-area-inset-bottom));
   border: 1px solid rgba(235, 121, 46, 0.34);
   border-radius: 28px;
   background:
@@ -5789,25 +5789,25 @@ button { -webkit-tap-highlight-color: transparent; }
 .global-floating-chrome {
   position: fixed;
   top: clamp(0px, calc(env(safe-area-inset-top) - 28px), 48px);
-  left: 50%;
-  width: min(calc(100% - 84px), calc(var(--content-max) - 54px));
-  max-width: calc(var(--content-max) - 54px);
+  left: max(18px, calc((100vw - var(--content-max)) / 2 + 18px));
   z-index: 40;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
+  gap: 10px;
   padding: 0;
   pointer-events: none;
-  transform: translateX(-50%);
 }
 
-.floating-home-button,
-.floating-profile-button {
+.floating-menu-button {
   pointer-events: auto;
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   display: grid;
-  place-items: center;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
   padding: 0;
   border: 1px solid rgba(235, 121, 46, 0.42);
   border-radius: 999px;
@@ -5818,39 +5818,57 @@ button { -webkit-tap-highlight-color: transparent; }
   -webkit-backdrop-filter: blur(18px) saturate(1.04);
 }
 
-.floating-home-button svg {
-  width: 22px;
-  height: 22px;
-  filter: drop-shadow(0 2px 10px rgba(71, 30, 11, 0.28));
+.floating-menu-button span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 246, 241, 0.98);
+  box-shadow: 0 2px 10px rgba(71, 30, 11, 0.28);
 }
 
-.floating-profile-button {
-  overflow: hidden;
-  background: linear-gradient(180deg, rgba(39, 28, 24, 0.98), rgba(24, 21, 23, 0.98));
-}
-
-.floating-profile-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.floating-profile-initial {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  color: rgba(255, 246, 241, 0.98);
-  text-shadow: 0 2px 10px rgba(71, 30, 11, 0.28);
-}
-
-.floating-home-button:focus-visible,
-.floating-profile-button:focus-visible {
+.floating-menu-button:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.95);
   outline-offset: 2px;
+}
+
+.global-menu-panel {
+  pointer-events: auto;
+  display: grid;
+  gap: 8px;
+  width: min(210px, calc(100vw - 28px));
+  padding: 10px;
+  border: 1px solid rgba(235, 121, 46, 0.28);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(39, 28, 24, 0.98), rgba(24, 21, 23, 0.99));
+  box-shadow: 0 18px 36px rgba(19, 13, 12, 0.3), 0 6px 18px rgba(88, 44, 18, 0.18);
+}
+
+.global-menu-item {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(240, 138, 60, 0.2), rgba(130, 60, 27, 0.2));
+  color: rgba(255, 246, 241, 0.98);
+  text-align: left;
+  font-size: 0.88rem;
+  font-weight: 760;
+}
+
+.global-menu-item svg {
+  width: 16px;
+  height: 16px;
+}
+
+.global-menu-item:focus-visible,
+.global-menu-item:hover {
+  background: linear-gradient(145deg, rgba(240, 138, 60, 0.92), rgba(191, 84, 33, 0.9));
+  color: #fff;
 }
 
 .mobile-nav.is-hidden {
@@ -7524,26 +7542,26 @@ button { -webkit-tap-highlight-color: transparent; }
     display: none;
   }
 
-  .app-shell.is-giants-map-only #giants-game .giants-view-panel,
-  .app-shell.is-giants-map-only #giantsBallparkMapPanel,
-  .app-shell.is-giants-map-only .giants-ballpark-map-only-screen,
-  .app-shell.is-giants-map-only .giants-ballpark-explorer,
-  .app-shell.is-giants-map-only .giants-live-map-screen {
-    min-height: calc(100dvh - 78px - env(safe-area-inset-bottom));
-    height: calc(100dvh - 78px - env(safe-area-inset-bottom));
+.app-shell.is-giants-map-only #giants-game .giants-view-panel,
+.app-shell.is-giants-map-only #giantsBallparkMapPanel,
+.app-shell.is-giants-map-only .giants-ballpark-map-only-screen,
+.app-shell.is-giants-map-only .giants-ballpark-explorer,
+.app-shell.is-giants-map-only .giants-live-map-screen {
+    min-height: calc(100dvh - 68px - env(safe-area-inset-bottom));
+    height: calc(100dvh - 68px - env(safe-area-inset-bottom));
     margin: 0;
     gap: 0;
   }
 
   .app-shell.is-giants-map-only .giants-live-map-screen {
-    min-height: calc(100dvh - 78px - env(safe-area-inset-bottom));
+    min-height: calc(100dvh - 68px - env(safe-area-inset-bottom));
     border: 0;
     border-radius: 0;
     box-shadow: none;
   }
 
   .app-shell.is-giants-map-only .giants-live-map-screen iframe {
-    height: calc(100dvh - 78px - env(safe-area-inset-bottom));
+    height: calc(100dvh - 68px - env(safe-area-inset-bottom));
   }
 
   .app-shell.is-giants-map-only .giants-ballpark-stage-shell.is-mobile {
@@ -7612,7 +7630,7 @@ button { -webkit-tap-highlight-color: transparent; }
 /* Real Mappedin map embed - Inside Food */
 .giants-live-map-screen {
   position: relative;
-  height: calc(100dvh - 200px);
+  height: calc(100dvh - 132px - env(safe-area-inset-bottom));
   min-height: 480px;
   border-radius: 18px;
   overflow: hidden;

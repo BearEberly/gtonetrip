@@ -1830,11 +1830,12 @@ function applyProfile(user) {
 
 function renderProfile() {
   const sessionBar = document.querySelector("#appSessionBar");
-  const floatingProfileButton = document.querySelector("#openGlobalProfile");
+  const globalMenuProfileLabel = document.querySelector("#globalMenuProfileLabel");
+  const globalMenuUsersButton = document.querySelector("#globalMenuUsersButton");
   if (!api.user) {
     sessionBar?.classList.add("is-hidden");
-    floatingProfileButton?.setAttribute("aria-label", "Sign in or open profile");
-    setProfilePhotoPreview("", "Profile");
+    if (globalMenuProfileLabel) globalMenuProfileLabel.textContent = "My Account";
+    globalMenuUsersButton?.classList.add("is-hidden");
     closeProfileDrawer();
     closeUsersDrawer();
     return;
@@ -1843,14 +1844,29 @@ function renderProfile() {
   const photo = profilePhotoForUser();
   sessionBar?.classList.remove("is-hidden");
   document.querySelector("#profileAvatarButton")?.setAttribute("aria-label", `Open profile for ${name}`);
-  floatingProfileButton?.setAttribute("aria-label", `Open profile for ${name}`);
   const titleNode = document.querySelector("#profileDrawerTitle");
   const usersButton = document.querySelector("#openUsersFromProfile");
   if (titleNode) titleNode.textContent = profileTitleForUser();
-  usersButton?.classList.toggle("is-hidden", !(isBearPowerUser() || isLocalReferencePreview()));
+  const canManageUsers = isBearPowerUser() || isLocalReferencePreview();
+  usersButton?.classList.toggle("is-hidden", !canManageUsers);
+  if (globalMenuProfileLabel) globalMenuProfileLabel.textContent = `${name} Account`;
+  globalMenuUsersButton?.classList.toggle("is-hidden", !canManageUsers);
   setProfilePhotoPreview(photo, name);
   renderProfileAdminPanel();
   renderAdminHomeAccess();
+}
+
+function toggleGlobalMenu(forceOpen) {
+  const panel = document.querySelector("#globalMenuPanel");
+  const button = document.querySelector("#openGlobalMenu");
+  if (!panel || !button) return;
+  const nextOpen = typeof forceOpen === "boolean" ? forceOpen : panel.classList.contains("is-hidden");
+  panel.classList.toggle("is-hidden", !nextOpen);
+  button.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+}
+
+function closeGlobalMenu() {
+  toggleGlobalMenu(false);
 }
 
 function normalizeAdminUser(user) {
@@ -6937,6 +6953,9 @@ function calendarFeedUrls() {
 
 function bindEvents() {
   document.addEventListener("click", (event) => {
+    const clickedGlobalMenuSurface = event.target.closest("#openGlobalMenu, #globalMenuPanel");
+    if (!clickedGlobalMenuSurface) closeGlobalMenu();
+
     const nav = event.target.closest("[data-tab]");
     if (nav) setActivePanel(nav.dataset.tab);
 
@@ -6949,11 +6968,17 @@ function bindEvents() {
     const homeProfile = event.target.closest("#openHomeProfile");
     if (homeProfile) openProfileDrawer();
 
-    const globalHome = event.target.closest("#openGlobalHome");
-    if (globalHome) setActivePanel("home");
+    const globalMenu = event.target.closest("#openGlobalMenu");
+    if (globalMenu) toggleGlobalMenu();
 
-    const globalProfile = event.target.closest("#openGlobalProfile");
-    if (globalProfile) openProfileDrawer();
+    const globalMenuAction = event.target.closest("[data-global-menu-action]");
+    if (globalMenuAction) {
+      const action = globalMenuAction.dataset.globalMenuAction;
+      closeGlobalMenu();
+      if (action === "home") setActivePanel("home");
+      if (action === "profile") openProfileDrawer();
+      if (action === "users") openUsersDrawer();
+    }
 
     const usersDestination = event.target.closest("#openUsersDestination");
     if (usersDestination) openUsersDrawer();

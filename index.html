@@ -27,18 +27,30 @@
     <link rel="icon" href="assets/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css?v=123">
+    <link rel="stylesheet" href="styles.css?v=127">
   </head>
   <body class="auth-open">
     <div class="app-shell">
       <div class="global-floating-chrome" aria-label="Global app controls">
-        <button class="floating-home-button" type="button" id="openGlobalHome" aria-label="Go home">
-          <span data-icon="home"></span>
+        <button class="floating-menu-button" type="button" id="openGlobalMenu" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-        <button class="floating-profile-button" type="button" id="openGlobalProfile" aria-label="Open profile">
-          <img class="floating-profile-photo is-hidden" id="floatingProfilePhoto" alt="">
-          <span class="floating-profile-initial" id="floatingProfileInitial">P</span>
-        </button>
+        <div class="global-menu-panel is-hidden" id="globalMenuPanel" aria-label="Global menu">
+          <button class="global-menu-item" type="button" data-global-menu-action="home">
+            <span data-icon="home"></span>
+            <span>Home</span>
+          </button>
+          <button class="global-menu-item" type="button" data-global-menu-action="profile">
+            <span data-icon="people"></span>
+            <span id="globalMenuProfileLabel">My Account</span>
+          </button>
+          <button class="global-menu-item is-hidden" type="button" id="globalMenuUsersButton" data-global-menu-action="users">
+            <span data-icon="settings"></span>
+            <span>Manage Users</span>
+          </button>
+        </div>
       </div>
 
       <aside class="sidebar" aria-label="Primary">
@@ -508,8 +520,8 @@
             <div class="giants-live-map-screen giants-ballpark-map-only-screen">
               <iframe
                 id="giantsLiveMap"
-                data-src="https://web.mappedin.com/mlb/mlb-san-francisco.html#/directions?from=228&textDirectionsVisible=true"
-                title="Oracle Park interactive map from section 228"
+                data-src="https://web.mappedin.com/mlb/mlb-san-francisco.html#/?floor=f_67a4105d1a05ad42c13cd47a&lat=37.77810&lon=-122.38958&zoom=17.0"
+                title="Oracle Park interactive food map"
                 allow="geolocation"
               ></iframe>
             </div>
@@ -951,6 +963,6 @@
 
     <script src="assets/vendor/simplewebauthn-browser.umd.min.js"></script>
     <script src="app-config.js"></script>
-    <script src="script.js?v=122"></script>
+    <script src="script.js?v=126"></script>
   </body>
 </html>
