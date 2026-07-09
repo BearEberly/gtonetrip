@@ -8071,6 +8071,46 @@ body.giants-theme #giants-game .bp-tabs {
   line-height: 1.35;
 }
 
+.bp-support-card {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(253, 90, 30, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 244, 0.94));
+  box-shadow: 0 14px 28px rgba(26, 24, 20, 0.08);
+}
+
+.bp-support-kicker {
+  color: var(--sf-orange);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bp-support-card strong {
+  color: var(--text);
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.bp-support-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.79rem;
+  line-height: 1.4;
+}
+
+.bp-support-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
 .bp-itin-link {
   padding: 6px 12px;
   border-radius: 999px;

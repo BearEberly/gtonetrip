@@ -395,8 +395,8 @@ const giantsGameItinerary = [
     meta: "Plan on a 58-minute drive so the first stop lands right at 10:00 AM.",
     verdict: "Leave at 9:00 AM and treat 10:00 AM at Wingen as the target, not just a loose morning idea.",
     note: "This first leg is the clean push from Lodi to Wingen Bakery in downtown Livermore before heading straight toward Oracle Park.",
-    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=1333+Edgewood+Drive+Lodi+CA+95240&destination=50+S+Livermore+Ave+Livermore+CA+94550&travelmode=driving",
-    appleMapsUrl: "https://maps.apple.com/?saddr=1333+Edgewood+Drive,+Lodi,+CA+95240&daddr=50+S+Livermore+Ave,+Livermore,+CA+94550&dirflg=d",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&destination=1333+Edgewood+Drive+Lodi+CA+95240&travelmode=driving",
+    appleMapsUrl: "https://maps.apple.com/?daddr=1333+Edgewood+Drive,+Lodi,+CA+95240&dirflg=d",
     icon: "home"
   },
   {
@@ -409,8 +409,8 @@ const giantsGameItinerary = [
     verdict: "Arrive around 10:00 AM, take the pastry stop seriously, and leave at 10:45 AM so the rest of the timing stays easy.",
     note: "This is the real morning stop: about 45 minutes at Wingen, then straight toward Pier 48.",
     websiteUrl: "https://www.wingenbakery.com/",
-    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=50+S+Livermore+Ave+Livermore+CA+94550&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
-    appleMapsUrl: "https://maps.apple.com/?saddr=50+S+Livermore+Ave,+Livermore,+CA+94550&daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&dirflg=d",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&destination=50+S+Livermore+Ave+Livermore+CA+94550&travelmode=driving",
+    appleMapsUrl: "https://maps.apple.com/?daddr=50+S+Livermore+Ave,+Livermore,+CA+94550&dirflg=d",
     icon: "dessert"
   },
   {
@@ -420,10 +420,10 @@ const giantsGameItinerary = [
     meta: "$64.35 parking plus the $8.50 bridge toll on the way into San Francisco.",
     verdict: "Leave Wingen at 10:45 AM, give this leg the full hour, and expect to park around 11:45-ish.",
     note: "The drive is about 51 minutes in ideal conditions, but your plan now uses a full hour and includes the bridge toll so you are not cutting it tight.",
-    appUrl: "https://spothero.com/get-spothero-app",
-    appLabel: "SpotHero App",
-    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=50+S+Livermore+Ave+Livermore+CA+94550&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
-    appleMapsUrl: "https://maps.apple.com/?saddr=50+S+Livermore+Ave,+Livermore,+CA+94550&daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&dirflg=d",
+    appUrl: "https://apps.apple.com/us/app/spothero-1-rated-parking-app/id499097243",
+    appLabel: "Download SpotHero",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
+    appleMapsUrl: "https://maps.apple.com/?daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&dirflg=d",
     icon: "pin"
   },
   {
@@ -433,8 +433,8 @@ const giantsGameItinerary = [
     meta: "About a 15-minute walk from Pier 48 to the brick, depending on the exact parking spot.",
     verdict: "Parking around 11:45 puts you at the brick around noon-ish, which gives you room to take your time there.",
     note: "The brick pin is 37.7766557, -122.3878868 in China Basin Park Section 24. Take your time at the brick, then head into the game at your choosing through Lefty O'Doul Gate or the main gate.",
-    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&destination=Oracle+Park+Lefty+O%27Doul+Gate+San+Francisco+CA&waypoints=37.7766557,-122.3878868&travelmode=walking",
-    appleMapsUrl: "https://maps.apple.com/?saddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&daddr=Oracle+Park+Lefty+O'Doul+Gate,+San+Francisco,+CA&dirflg=w",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&destination=37.7766557,-122.3878868&travelmode=walking",
+    appleMapsUrl: "https://maps.apple.com/?daddr=37.7766557,-122.3878868&dirflg=w",
     icon: "baseball"
   },
   {
@@ -444,6 +444,8 @@ const giantsGameItinerary = [
     meta: "Use the Lefty O'Doul entrance once you are done at the brick.",
     verdict: "This is the cleanest move after the brick stop if you want to get inside and start roaming.",
     note: "You already set up Go-Ahead Entry, so Lefty O'Doul stays the preferred gate for getting into the park.",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&destination=Oracle+Park+Lefty+O%27Doul+Gate+San+Francisco+CA&travelmode=walking",
+    appleMapsUrl: "https://maps.apple.com/?daddr=Oracle+Park+Lefty+O'Doul+Gate,+San+Francisco,+CA&dirflg=w",
     icon: "utensils"
   },
   {
@@ -456,8 +458,8 @@ const giantsGameItinerary = [
     verdict: "This is the barbecue stop you flagged earlier, so the day now ends with Fikscue instead of an open-ended maybe.",
     note: "From Oracle Park it is the chef-favorite postgame move when you still want one more serious food stop.",
     websiteUrl: "https://www.chasecenter.com/vendor/fikscue-craft-barbecue/",
-    mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Oracle+Park+24+Willie+Mays+Plaza+San+Francisco+CA+94107&destination=7+Warriors+Way+Suite+208+San+Francisco+CA+94158&travelmode=walking",
-    appleMapsUrl: "https://maps.apple.com/?saddr=Oracle+Park,+24+Willie+Mays+Plaza,+San+Francisco,+CA+94107&daddr=7+Warriors+Way+Suite+208,+San+Francisco,+CA+94158&dirflg=w",
+    mapUrl: "https://www.google.com/maps/dir/?api=1&destination=7+Warriors+Way+Suite+208+San+Francisco+CA+94158&travelmode=walking",
+    appleMapsUrl: "https://maps.apple.com/?daddr=7+Warriors+Way+Suite+208,+San+Francisco,+CA+94158&dirflg=w",
     icon: "flame"
   }
 ];
@@ -540,28 +542,6 @@ const giantsGameTimeline = [
 
 const giantsGamePolicies = [
   {
-    id: "giants-mobile-tickets-app",
-    category: "Tickets + app",
-    name: "Use the MLB Ballpark app before you leave",
-    meta: "Giants tickets are mobile only, and the official app also carries maps, Food Finder, and game-day alerts.",
-    verdict: "Best move is opening or forwarding tickets before walking up to Oracle Park.",
-    note: "The Giants explicitly say ticket screenshots are not accepted, so Apple Wallet or the app itself is the safer path.",
-    websiteUrl: "https://www.mlb.com/giants/apps/ballpark",
-    imageUrl: "assets/giants-site-media/policy-ballpark-app.jpg",
-    icon: "share"
-  },
-  {
-    id: "giants-gates-go-ahead",
-    category: "Entry flow",
-    name: "Use Lefty O'Doul Gate with Go-Ahead Entry",
-    meta: "All four main gates work, but Lefty O'Doul is the preferred move for this plan after the brick stop.",
-    verdict: "Since you already set up Go-Ahead Entry, this becomes the easiest way to get inside and start walking the park.",
-    note: "Tickets are still tied to the account even with face entry, so the default plan is your Go-Ahead scan at Lefty O'Doul and the rest of the group following through with their own tickets.",
-    websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
-    imageUrl: "assets/giants-site-media/policy-gameday.jpg",
-    icon: "home"
-  },
-  {
     id: "giants-bag-policy",
     category: "Bag policy",
     name: "No backpacks, even clear ones",
@@ -569,7 +549,6 @@ const giantsGamePolicies = [
     verdict: "Travel light and avoid the backpack problem entirely if you can.",
     note: "If needed, the Giants list paid bag storage at the Marina Gate from gate-open until one hour after the event.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/information/guide/bag-storage",
-    imageUrl: "assets/giants-site-media/policy-bag-storage.jpg",
     icon: "bag"
   },
   {
@@ -580,19 +559,7 @@ const giantsGamePolicies = [
     verdict: "Since this trip is more restaurant-first, the main value here is knowing you still have flexibility if plans change.",
     note: "The permitted-items page also allows empty plastic refillable water bottles and soft-sided juice containers.",
     websiteUrl: "https://www.mlb.com/giants/tickets/gameday",
-    imageUrl: "assets/giants-site-media/policy-gameday.jpg",
     icon: "utensils"
-  },
-  {
-    id: "giants-food-finder-map",
-    category: "Concessions + map",
-    name: "Use the official Food Finder instead of wandering",
-    meta: "The Giants point fans to the Food Finder and official directory by section for where each stand actually is on game day.",
-    verdict: "This is the cleanest way to check whether a specific in-park item is worth the detour from your seats.",
-    note: "The ballpark app and concourse map are the two official tools that matter most once you are inside.",
-    websiteUrl: "https://www.mlb.com/giants/ballpark/food/concessions-directory/sections",
-    imageUrl: "assets/giants-site-media/policy-food-finder.jpg",
-    icon: "pin"
   }
 ];
 
@@ -827,7 +794,6 @@ const giantsGameAttractions = [
     verdict: "Best if kids are going or you want a real pregame wander instead of heading straight to seats.",
     note: "The official Giants attraction page calls it an interactive play area with the Coca-Cola Slide, baseball glove, Toyota Fan Zone, and a bay-fish tank.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/fan-lot",
-    imageUrl: "assets/giants-site-media/attraction-fan-lot.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+Fan+Lot+San+Francisco+CA",
     icon: "baseball"
   },
@@ -839,7 +805,6 @@ const giantsGameAttractions = [
     verdict: "Best easy move before the game if you want room to walk, gather, or take in the waterfront.",
     note: "Your brick pin lands at 37.7766557, -122.3878868 on the waterfront curve, and the brick finder screenshot places the inscription in Section 24.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/china-basin",
-    imageUrl: "assets/giants-site-media/attraction-china-basin.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=37.7766557,-122.3878868",
     appleMapsUrl: "https://maps.apple.com/?q=37.7766557,-122.3878868",
     icon: "mountain"
@@ -852,7 +817,6 @@ const giantsGameAttractions = [
     verdict: "Best if you want a five-minute baseball-specific stop before going through the gates.",
     note: "The Giants say the bronze plaques honor the organization's greatest players and line the exterior ballpark wall.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/wall-of-fame",
-    imageUrl: "assets/giants-site-media/attraction-wall-of-fame.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+King+Street+Wall+of+Fame+San+Francisco+CA",
     icon: "calendar"
   },
@@ -864,7 +828,6 @@ const giantsGameAttractions = [
     verdict: "Best if you want one in-park stop that feels different from standard concession concourses.",
     note: "The Giants position The Garden as a one-of-a-kind space with aeroponic towers, garden beds, and garden-fresh food and drinks.",
     websiteUrl: "https://www.mlb.com/giants/ballpark/garden",
-    imageUrl: "assets/giants-site-media/attraction-garden.jpg",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Oracle+Park+The+Garden+San+Francisco+CA",
     icon: "sun"
   }
@@ -4518,7 +4481,7 @@ const giantsItineraryShortNames = {
 const giantsItineraryDetails = {
   "giants-drive-lodi": "Departure · 9:00 AM · 1333 Edgewood Drive, Lodi",
   "giants-pastry-stop-livermore": "Arrival · 10:00 AM · departure · 10:45 AM",
-  "giants-parking-spothero": "Arrival · 11:45 AM-ish · Lot A / Pier 48 official parking",
+  "giants-parking-spothero": "Arrival · 11:45 AM     Download SpotHero below",
   "giants-walk-to-brick": "Noon-ish · take your time at the brick before heading in",
   "giants-enjoy-the-game": "After the brick · use Lefty O'Doul Gate and your Go-Ahead Entry setup",
   "giants-postgame-fikscue": "7 Warriors Way Suite 208 · Thu-Sun 12:00-8:00 PM or until sold out"
@@ -4605,13 +4568,60 @@ function currentGiantsBallparkStep(destination = {}) {
   return steps[index] || null;
 }
 
+function giantsBallparkStepCameraPoints(destination = {}, selectedStep = {}, activeFloorId = "") {
+  const points = [];
+  const steps = Array.isArray(destination.steps) ? destination.steps : [];
+  const stepIndex = clamp(Number(giantsBallparkMapView.stepIndex || 0), 0, Math.max(steps.length - 1, 0));
+  const previousStep = steps[stepIndex - 1] || null;
+  const nextStep = steps[stepIndex + 1] || null;
+
+  function addPoint(point) {
+    if (!Array.isArray(point) || point.length < 2) return;
+    const [x, y] = point;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    const lastPoint = points.at(-1);
+    if (lastPoint && Math.abs(lastPoint[0] - x) < 0.5 && Math.abs(lastPoint[1] - y) < 0.5) return;
+    points.push([x, y]);
+  }
+
+  function addSegmentPoints(segments, sliceMode = "all") {
+    if (!Array.isArray(segments)) return;
+    for (const segment of segments) {
+      if (!Array.isArray(segment) || !segment.length) continue;
+      const segmentPoints = sliceMode === "tail"
+        ? segment.slice(Math.max(segment.length - 4, 0))
+        : sliceMode === "head"
+          ? segment.slice(0, 4)
+          : segment;
+      for (const point of segmentPoints) addPoint(point);
+    }
+  }
+
+  const currentSegments = selectedStep?.routeSegments?.[activeFloorId] || [];
+  addSegmentPoints(currentSegments, "all");
+
+  if (!points.length) {
+    addSegmentPoints(previousStep?.routeSegments?.[activeFloorId] || [], "tail");
+    addPoint(previousStep?.focusPoint);
+    addPoint(selectedStep?.focusPoint);
+    addSegmentPoints(nextStep?.routeSegments?.[activeFloorId] || [], "head");
+    addPoint(nextStep?.routeSegments?.[activeFloorId]?.[0]?.[0]);
+  } else {
+    addPoint(selectedStep?.focusPoint);
+  }
+
+  return points;
+}
+
 function giantsBallparkMobileViewBox(model, activeFloor, routeSegments, selectedDestination, selectedStep) {
   const routePoints = routeSegments.flatMap((segment) => Array.isArray(segment) ? segment : []);
-  const points = [...routePoints];
-  if (selectedDestination?.floorId === activeFloor.id && Array.isArray(selectedDestination.point)) {
+  const points = selectedStep
+    ? giantsBallparkStepCameraPoints(selectedDestination, selectedStep, activeFloor.id)
+    : [...routePoints];
+  if (!selectedStep && selectedDestination?.floorId === activeFloor.id && Array.isArray(selectedDestination.point)) {
     points.push(selectedDestination.point);
   }
-  if (model?.sourceSeat?.floorId === activeFloor.id && Array.isArray(model.sourceSeat.point)) {
+  if (!selectedStep && model?.sourceSeat?.floorId === activeFloor.id && Array.isArray(model.sourceSeat.point)) {
     points.push(model.sourceSeat.point);
   }
   if (selectedStep?.focusPoint && Array.isArray(selectedStep.focusPoint)) {
@@ -4627,14 +4637,23 @@ function giantsBallparkMobileViewBox(model, activeFloor, routeSegments, selected
   const maxX = Math.max(...xs);
   const minY = Math.min(...ys);
   const maxY = Math.max(...ys);
-  const padding = selectedStep ? 54 : 84;
+  const padding = selectedStep ? 26 : 84;
   const aspect = 0.66;
-  let width = Math.max((maxX - minX) + (padding * 2), 240);
-  let height = Math.max((maxY - minY) + (padding * 2), 240);
+  const minFrame = selectedStep ? 120 : 240;
+  const maxFrameWidth = selectedStep ? 260 : model.viewport.width;
+  const maxFrameHeight = selectedStep ? 360 : model.viewport.height;
+  let width = Math.max((maxX - minX) + (padding * 2), minFrame);
+  let height = Math.max((maxY - minY) + (padding * 2), minFrame);
   if ((width / height) < aspect) {
     width = height * aspect;
   } else {
     height = width / aspect;
+  }
+  if (selectedStep) {
+    width = Math.min(width, maxFrameWidth);
+    height = Math.min(height, maxFrameHeight);
+    if ((width / height) < aspect) width = height * aspect;
+    else height = width / aspect;
   }
   const centerX = (minX + maxX) / 2;
   const centerY = (minY + maxY) / 2;
