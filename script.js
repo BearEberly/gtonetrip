@@ -420,8 +420,8 @@ const giantsGameItinerary = [
     meta: "$64.35 parking plus the $8.50 bridge toll on the way into San Francisco.",
     verdict: "Leave Wingen at 10:45 AM, give this leg the full hour, and expect to park around 11:45-ish.",
     note: "The drive is about 51 minutes in ideal conditions, but your plan now uses a full hour and includes the bridge toll so you are not cutting it tight.",
-    appUrl: "https://apps.apple.com/us/app/spothero-1-rated-parking-app/id499097243",
-    appLabel: "Download SpotHero",
+    appUrl: "https://spothero.app.link/XhTMduWOC4b",
+    appLabel: "Open Giants Game in SpotHero",
     mapUrl: "https://www.google.com/maps/dir/?api=1&destination=Oracle+Park+-+Lot+A+%2F+Pier+48+San+Francisco+CA&travelmode=driving",
     appleMapsUrl: "https://maps.apple.com/?daddr=Oracle+Park+-+Lot+A+%2F+Pier+48,+San+Francisco,+CA&dirflg=d",
     icon: "pin"
@@ -4481,7 +4481,7 @@ const giantsItineraryShortNames = {
 const giantsItineraryDetails = {
   "giants-drive-lodi": "Departure · 9:00 AM · 1333 Edgewood Drive, Lodi",
   "giants-pastry-stop-livermore": "Arrival · 10:00 AM · departure · 10:45 AM",
-  "giants-parking-spothero": "Arrival · 11:45 AM     Download SpotHero below",
+  "giants-parking-spothero": "Arrival · 11:45 AM     Open Giants game parking below",
   "giants-walk-to-brick": "Noon-ish · take your time at the brick before heading in",
   "giants-enjoy-the-game": "After the brick · use Lefty O'Doul Gate and your Go-Ahead Entry setup",
   "giants-postgame-fikscue": "7 Warriors Way Suite 208 · Thu-Sun 12:00-8:00 PM or until sold out"
