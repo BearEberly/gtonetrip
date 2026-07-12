@@ -7654,10 +7654,36 @@ button { -webkit-tap-highlight-color: transparent; }
   --bp-charcoal-deep: #1c1c1f;
 }
 
+.giants-top-message {
+  display: grid;
+  place-items: center;
+  margin: -48px 0 20px;
+  padding: 14px 8px 10px;
+  text-align: center;
+}
+
+.giants-top-message h1 {
+  margin: 0;
+  color: var(--sf-orange);
+  font-family: Copperplate, "Copperplate Gothic Bold", Rockwell, "Rockwell Extra Bold", "American Typewriter", Georgia, serif;
+  font-size: clamp(2.4rem, 7.5vw, 5.4rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 0.96;
+  text-wrap: balance;
+  -webkit-text-stroke: clamp(2px, 0.32vw, 4px) #111111;
+  paint-order: stroke fill;
+  text-shadow:
+    0 4px 0 #111111,
+    0 9px 20px rgba(0, 0, 0, 0.24);
+  transform: scaleY(1.08);
+  transform-origin: center;
+}
+
 .giants-photo-opening {
   display: grid;
   gap: 12px;
-  margin: -48px 0 22px;
+  margin: 0 0 22px;
 }
 
 .giants-photo-frame {
@@ -7675,11 +7701,22 @@ button { -webkit-tap-highlight-color: transparent; }
   height: auto;
 }
 
+.app-shell.is-giants-map-only .giants-top-message,
 .app-shell.is-giants-map-only .giants-photo-opening {
   display: none;
 }
 
 @media (max-width: 600px) {
+  .giants-top-message {
+    margin-bottom: 16px;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .giants-top-message h1 {
+    font-size: clamp(2.35rem, 10.5vw, 3.2rem);
+  }
+
   .giants-photo-opening {
     gap: 10px;
     margin-bottom: 18px;
