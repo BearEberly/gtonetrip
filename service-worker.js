@@ -1,4 +1,4 @@
-const cacheName = "guantonio-trip-v92";
+const cacheName = "guantonio-trip-v93";
 
 const cacheableUrls = [
   "/",
@@ -13,6 +13,8 @@ const cacheableUrls = [
   "/assets/icon-512.png",
   "/assets/icon-1024.png",
   "/assets/cabin-hero.png",
+  "/assets/giants-oracle-park-family.jpg",
+  "/assets/giants-oracle-park-cove.jpg",
   "/assets/saturday-fireworks.png",
   "/assets/sunday-birthday-hat.svg",
   "/assets/vendor/simplewebauthn-browser.umd.min.js"

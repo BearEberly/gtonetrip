@@ -7654,6 +7654,42 @@ button { -webkit-tap-highlight-color: transparent; }
   --bp-charcoal-deep: #1c1c1f;
 }
 
+.giants-photo-opening {
+  display: grid;
+  gap: 12px;
+  margin: -48px 0 22px;
+}
+
+.giants-photo-frame {
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(35, 35, 38, 0.12);
+  border-radius: 20px;
+  background: #e8edf1;
+  box-shadow: 0 16px 34px rgba(26, 24, 20, 0.12);
+}
+
+.giants-photo-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.app-shell.is-giants-map-only .giants-photo-opening {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .giants-photo-opening {
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .giants-photo-frame {
+    border-radius: 16px;
+  }
+}
+
 .bp-team-header {
   display: flex;
   align-items: center;
