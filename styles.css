@@ -7680,6 +7680,10 @@ button { -webkit-tap-highlight-color: transparent; }
   transform-origin: center;
 }
 
+.bp-support-card.giants-top-food-finder {
+  margin: 0 0 18px;
+}
+
 .giants-photo-opening {
   display: grid;
   gap: 12px;
@@ -7702,6 +7706,7 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 
 .app-shell.is-giants-map-only .giants-top-message,
+.app-shell.is-giants-map-only .giants-top-food-finder,
 .app-shell.is-giants-map-only .giants-photo-opening {
   display: none;
 }
@@ -7715,6 +7720,10 @@ button { -webkit-tap-highlight-color: transparent; }
 
   .giants-top-message h1 {
     font-size: clamp(2.35rem, 10.5vw, 3.2rem);
+  }
+
+  .bp-support-card.giants-top-food-finder {
+    margin-bottom: 16px;
   }
 
   .giants-photo-opening {
